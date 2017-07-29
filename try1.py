@@ -107,6 +107,9 @@ ffi.cdef('''
 
 ''')
 
+def log(msg):
+    print msg
+
 def print_all(msg):
     gc.collect()
     print(msg)
@@ -129,46 +132,48 @@ class GValue:
     refstr_type = gobject.g_type_from_name('VipsRefString')
     blob_type = gobject.g_type_from_name('VipsBlob')
 
-    @staticmethod
-    def alloc():
-        # memory will be freed on GC
-        gvalue = ffi.new('GValue *')
+    def __init__(self):
+        # allocate memory for the gvalue which will be freed on GC
+        self.memory = ffi.new('GValue *')
+        log('GValue.__init__: memory = {0}'.format(self.memory))
 
-        # and be unset
-        gvalue = ffi.gc(gvalue, gobject.g_value_unset)
-
-        return gvalue
+        # and tag it to be unset on GC as well
+        self.gvalue = ffi.gc(self.memory, gobject.g_value_unset)
+        log('GValue.__init__: gvalue = {0}'.format(self.gvalue))
 
     @staticmethod
     def type_name(gtype):
         return(ffi.string(gobject.g_type_name(gtype)))
 
     def init(self, gtype):
-        gobject.g_value_init(self, gtype)
+        gobject.g_value_init(self.gvalue, gtype)
 
     def set(self, value):
-        gtype = self.gtype
+        log('GValue.set: self = {0}, value = {1}'.format(self, value))
+
+        gtype = self.gvalue.gtype
         fundamental = gobject.g_type_fundamental(gtype)
 
         if gtype == GValue.gbool_type:
-            gobject.g_value_set_boolean(gv, value)
+            gobject.g_value_set_boolean(self.gvalue, value)
         else:
             error('unsupported gtype for set ' + self.type_name(gtype))
 
     def get(self):
-        gtype = self.gtype
+        log('GValue.get: self = {0}'.format(self))
+
+        gtype = self.gvalue.gtype
         fundamental = gobject.g_type_fundamental(gtype)
 
         if gtype == GValue.gbool_type:
-            result = gobject.g_value_get_boolean(gv)
+            result = gobject.g_value_get_boolean(self.gvalue)
         else:
              error('unsupported gtype for get ' + gvalue.type_name(gtype))
 
         return result
 
-gv = GValue.alloc()
+gv = GValue()
 gv.init(GValue.gbool_type)
 gv.set(True)
-
-
+print 'gvalue =', gv.get()
 
