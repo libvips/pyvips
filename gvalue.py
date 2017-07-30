@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import sys
+import numbers
 
 from cffi import FFI
 
@@ -22,6 +23,10 @@ is_PY2 = sys.version_info.major == 2
 
 ffi.cdef('''
     int vips_init (const char* argv0);
+
+    // FIXME ... just for testing, remove these
+    int vips_interpretation_get_type (void);
+    int vips_operation_flags_get_type (void);
 
     const char* vips_error_buffer (void);
     void vips_error_clear (void);
@@ -183,7 +188,7 @@ class GValue:
             gobject.g_value_set_enum(self.gvalue, enum_value)
         elif fundamental == GValue.gflags_type:
             gobject.g_value_set_flags(self.gvalue, value)
-        elif gtype == GValue.gstr_type or gtype == gvalue.refstr_type:
+        elif gtype == GValue.gstr_type or gtype == GValue.refstr_type:
             gobject.g_value_set_string(self.gvalue, value)
         elif gtype == GValue.image_type:
             gobject.g_value_set_object(self.gvalue, value.vimage)
@@ -333,6 +338,7 @@ print 'gvalue =', value
 print ''
 
 print 'test gvalue enum'
+vips.vips_interpretation_get_type()
 interpretation_gtype = gobject.g_type_from_name('VipsInterpretation')
 print 'interpretation_gtype =', interpretation_gtype
 gv = GValue()
@@ -342,5 +348,38 @@ value = gv.get()
 print 'gvalue =', value
 print ''
 
+print 'test gvalue flags'
+vips.vips_operation_flags_get_type()
+operationflags_gtype = gobject.g_type_from_name('VipsOperationFlags')
+print 'operationflags_gtype =', operationflags_gtype
+gv = GValue()
+gv.init(operationflags_gtype)
+gv.set(12)
+value = gv.get()
+print 'gvalue =', value
+print ''
 
+print 'test gvalue str'
+gv = GValue()
+gv.init(GValue.gstr_type)
+gv.set("banana")
+value = gv.get()
+print 'gvalue =', value
+print ''
+
+print 'test gvalue array int'
+gv = GValue()
+gv.init(GValue.array_int_type)
+gv.set([1, 2, 3])
+value = gv.get()
+print 'gvalue =', value
+print ''
+
+print 'test gvalue array double'
+gv = GValue()
+gv.init(GValue.array_double_type)
+gv.set([1.1, 2.2, 3.3])
+value = gv.get()
+print 'gvalue =', value
+print ''
 
