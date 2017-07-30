@@ -30,8 +30,8 @@ print 'gvalue =', value
 print ''
 
 print 'test gvalue enum'
-Vips.vips.vips_interpretation_get_type()
-interpretation_gtype = Vips.gobject.g_type_from_name('VipsInterpretation')
+Vips.vips_lib.vips_interpretation_get_type()
+interpretation_gtype = Vips.gobject_lib.g_type_from_name('VipsInterpretation')
 print 'interpretation_gtype =', interpretation_gtype
 gv = Vips.GValue()
 gv.init(interpretation_gtype)
@@ -41,8 +41,8 @@ print 'gvalue =', value
 print ''
 
 print 'test gvalue flags'
-Vips.vips.vips_operation_flags_get_type()
-operationflags_gtype = Vips.gobject.g_type_from_name('VipsOperationFlags')
+Vips.vips_lib.vips_operation_flags_get_type()
+operationflags_gtype = Vips.gobject_lib.g_type_from_name('VipsOperationFlags')
 print 'operationflags_gtype =', operationflags_gtype
 gv = Vips.GValue()
 gv.init(operationflags_gtype)
