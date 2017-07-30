@@ -1,55 +1,8 @@
-#!/usr/bin/env python
+# wrap GValue
 
-import sys
 import numbers
 
-from cffi import FFI
-
-ffi = FFI()
-
-# possibly use ctypes.util.find_library() to locate the lib
-# need a different name on windows? or os x?
-# on win, may need to explcitly load other libraries as well
-vips = ffi.dlopen('libvips.so')
-gobject = ffi.dlopen('libgobject-2.0.so')
-
-print('Loaded lib {0}'.format(vips))
-print('Loaded lib {0}'.format(gobject))
-
-# apparently the best way to find out
-is_64bits = sys.maxsize > 2 ** 32
-
-is_PY2 = sys.version_info.major == 2
-
-ffi.cdef('''
-    int vips_init (const char* argv0);
-
-    // FIXME ... just for testing, remove these
-    int vips_interpretation_get_type (void);
-    int vips_operation_flags_get_type (void);
-
-    const char* vips_error_buffer (void);
-    void vips_error_clear (void);
-''')
-
-def error(msg):
-    print(msg)
-    sys.exit(-1)
-
-def vips_get_error():
-    errstr = ffi.string(vips.vips_error_buffer())
-    vips.vips_error_clear()
-
-    return errstr
-
-def vips_error():
-    error(vips_get_error())
-
-if vips.vips_init('') != 0:
-    vips_error()
-
-print 'Inited libvips'
-print ''
+from Vips import *
 
 # GType is an int the size of a pointer ... I don't think we can just use
 # size_t, sadly
@@ -67,14 +20,6 @@ ffi.cdef('''
         GType gtype;
         uint64_t data[2]; 
     } GValue;
-
-    typedef struct _VipsImage VipsImage;
-
-    void* g_malloc(size_t size);
-    void g_free(void* data);
-
-    void g_object_ref (void* object);
-    void g_object_unref (void* object);
 
     void g_value_init (GValue* value, GType gtype);
     void g_value_unset (GValue* value);
@@ -114,23 +59,11 @@ ffi.cdef('''
     VipsImage** vips_value_get_array_image (const GValue* value, int* n);
     void* vips_value_get_blob (const GValue* value, size_t* length);
 
-    void vips_object_print_all (void);
+    // just for testing
+    GType vips_interpretation_get_type (void);
+    GType vips_operation_flags_get_type (void);
 
 ''')
-
-def log(msg):
-    print msg
-
-def print_all(msg):
-    gc.collect()
-    print(msg)
-    vips.vips_object_print_all()
-    print()
-
-# a callback that triggers g_free()
-@ffi.callback('void(void*)')
-def g_free_callback(ptr):
-    glib.g_free(ptr)
 
 class GValue:
 
@@ -309,77 +242,3 @@ class GValue:
              error('unsupported gtype for get ' + gvalue.type_name(gtype))
 
         return result
-
-print 'test gvalue bool'
-gv = GValue()
-gv.init(GValue.gbool_type)
-gv.set(True)
-value = gv.get()
-print 'gvalue =', value
-gv.set(False)
-value = gv.get()
-print 'gvalue =', value
-print ''
-
-print 'test gvalue int'
-gv = GValue()
-gv.init(GValue.gint_type)
-gv.set(12)
-value = gv.get()
-print 'gvalue =', value
-print ''
-
-print 'test gvalue double'
-gv = GValue()
-gv.init(GValue.gdouble_type)
-gv.set(3.1415)
-value = gv.get()
-print 'gvalue =', value
-print ''
-
-print 'test gvalue enum'
-vips.vips_interpretation_get_type()
-interpretation_gtype = gobject.g_type_from_name('VipsInterpretation')
-print 'interpretation_gtype =', interpretation_gtype
-gv = GValue()
-gv.init(interpretation_gtype)
-gv.set("xyz")
-value = gv.get()
-print 'gvalue =', value
-print ''
-
-print 'test gvalue flags'
-vips.vips_operation_flags_get_type()
-operationflags_gtype = gobject.g_type_from_name('VipsOperationFlags')
-print 'operationflags_gtype =', operationflags_gtype
-gv = GValue()
-gv.init(operationflags_gtype)
-gv.set(12)
-value = gv.get()
-print 'gvalue =', value
-print ''
-
-print 'test gvalue str'
-gv = GValue()
-gv.init(GValue.gstr_type)
-gv.set("banana")
-value = gv.get()
-print 'gvalue =', value
-print ''
-
-print 'test gvalue array int'
-gv = GValue()
-gv.init(GValue.array_int_type)
-gv.set([1, 2, 3])
-value = gv.get()
-print 'gvalue =', value
-print ''
-
-print 'test gvalue array double'
-gv = GValue()
-gv.init(GValue.array_double_type)
-gv.set([1.1, 2.2, 3.3])
-value = gv.get()
-print 'gvalue =', value
-print ''
-
