@@ -63,3 +63,4 @@ def g_free_callback(ptr):
 from gvalue import GValue
 from gobject import GObject
 from vobject import VipsObject
+from operation import Operation

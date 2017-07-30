@@ -62,6 +62,7 @@ class VipsObject(GObject):
 
     def __init__(self, pointer):
         log('VipsObject.__init__: pointer = {0}'.format(pointer))
+        GObject.__init__(self, pointer)
 
     @staticmethod
     def print_all(msg):

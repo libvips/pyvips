@@ -75,4 +75,10 @@ value = gv.get()
 print 'gvalue =', value
 print ''
 
+print 'test Operation'
+result = Vips.Operation.call("embed", "", 1, 2, 3, 4, extend = "copy")
+print 'result =', result
+print ''
+
+
 
