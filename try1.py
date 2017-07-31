@@ -75,13 +75,13 @@ value = gv.get()
 print 'gvalue =', value
 print ''
 
-print 'test Operation'
-result = Vips.Operation.call('embed', 1, 2, 3, 4, 5, extend = 'copy')
+print 'test Image'
+result = Vips.Image.new_from_file('/home/john/pics/k2.jpg')
 print 'result =', result
 print ''
 
-print 'test Image'
-result = Vips.Image.new_from_file('/home/john/pics/k2.jpg')
+print 'test Operation'
+result = Vips.Operation.call('embed', 1, 2, 3, 4, 5, extend = 'copy')
 print 'result =', result
 print ''
 

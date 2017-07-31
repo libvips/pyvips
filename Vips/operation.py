@@ -117,18 +117,22 @@ class Operation(VipsObject):
         if vop == ffi.NULL:
             vips_error()
         op = Operation(vop)
+        vop = None
 
         arguments = op.getargs()
         log('arguments = {0}'.format(arguments))
 
+        # make a thing to quickly get flags from an arg name
+        flags_from_name = {}
+        for name, flags in arguments:
+            flags_from_name[name] = flags
+
         # count required input args
         n_required = 0
-        for i in arguments:
-            flags = i[1]
-
-            if ((i[1] & INPUT) != 0 and 
-                (i[1] & REQUIRED) != 0 and 
-                (i[1] & DEPRECATED) == 0):
+        for name, flags in arguments:
+            if ((flags & INPUT) != 0 and 
+                (flags & REQUIRED) != 0 and 
+                (flags & DEPRECATED) == 0):
                 n_required += 1
 
         if n_required != len(args):
@@ -138,5 +142,67 @@ class Operation(VipsObject):
         # the first image argument is the thing we expand constants to
         # match ... look inside tables for images, since we may be passing
         # an array of image as a single param
-        #match_image = find_inside(lambda x: instance(x, Image), args)
+        match_image = find_inside((lambda x: isinstance(x, Image)), args)
+        log('VipsOperation.call: match_image = {0}'.format(match_image))
+
+        # set any string options before any args so they can't be
+        # overridden
+        if vips_lib.vips_object_set_from_string(op.pointer, string_options) != 0:
+            error('unable to call {0}\n{1}'.format(name, vips_get_error()))
+
+        # set required and optional args
+        n = 0
+        for name, flags in arguments:
+            if ((flags & INPUT) != 0 and 
+                (flags & REQUIRED) != 0 and 
+                (flags & DEPRECATED) == 0):
+                if not op.set(name, flags, match_image, args[n]):
+                    error('unable to call {0}\n{1]'.
+                        format(name, vips_get_error()))
+
+                n += 1
+
+        for name, value in kwargs:
+            flags = flags_from_name[name]
+
+            if not op.set(name, flags, match_image, value):
+                error('unable to call {0}\n{1]'.format(name, vips_get_error()))
+
+        # build operation
+        vop2 = vips_lib.vips_cache_operation_build(op.pointer)
+        if vop2 == ffi.NULL:
+            error('unable to call {0}\n{1]'.format(name, vips_get_error()))
+        op2 = Operation(vop2)
+        op = op2
+        op2 = None
+        vop2 = None
+
+        result = []
+
+        # fetch required output args, plus modified input images
+        for name, flags in arguments:
+            if ((flags & OUTPUT) != 0 and 
+                (flags & REQUIRED) != 0 and 
+                (flags & DEPRECATED) == 0):
+                result.append(op.get(name))
+
+            if ((flags & INPUT) != 0 and 
+                (flags & MODIFY) != 0):
+                result.append(op.get(name))
+
+        # fetch optional output args
+        for name, value in kwargs:
+            flags = flags_from_name[name]
+
+            if ((flags & OUTPUT) != 0 and 
+                (flags & REQUIRED) == 0 and 
+                (flags & DEPRECATED) == 0):
+                result.append(op.get(name))
+
+        vips_lib.vips_object_unref_outputs(op.pointer)
+
+        if len(result) == 1:
+            result = result[0]
+
+        return result
 
