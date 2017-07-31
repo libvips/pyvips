@@ -1,8 +1,8 @@
 # wrapper for libvips
 
-# Our cvlasses need to refer to each other ... make them go via this
-# module-level global which we update at the end with the real classes
-class_index = {
+# Our classes need to refer to each other ... make them go via this
+# package-level global which we update at the end with the real classes
+package_index = {
     'Image': 'banana',
     'Operation': 'apple',
     'GValue': 'kumquat'
@@ -15,8 +15,8 @@ from vobject import VipsObject
 from voperation import Operation
 from vimage import Image
 
-class_index['Image'] = Image
-class_index['Operation'] = Operation
-class_index['GValue'] = GValue
+package_index['Image'] = Image
+package_index['Operation'] = Operation
+package_index['GValue'] = GValue
 
-__all__ = ['Image', 'Operation', 'GValue']
+__all__ = ['Error', 'Image', 'Operation', 'GValue']

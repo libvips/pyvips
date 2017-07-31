@@ -1,11 +1,16 @@
 # wrap GValue
 
+from __future__ import division
+
+import logging
 import sys
 import numbers
 
 from Vips import *
 
-is_PY2 = sys.version_info.major == 2
+logger = logging.getLogger(__name__)
+
+_is_PY2 = sys.version_info.major == 2
 
 ffi.cdef('''
     typedef struct _GValue {
@@ -76,11 +81,11 @@ class GValue(object):
     def __init__(self):
         # allocate memory for the gvalue which will be freed on GC
         self.pointer = ffi.new('GValue *')
-        log('GValue.__init__: pointer = {0}'.format(self.pointer))
+        logger.debug('GValue.__init__: pointer = {0}'.format(self.pointer))
 
         # and tag it to be unset on GC as well
         self.gvalue = ffi.gc(self.pointer, gobject_lib.g_value_unset)
-        log('GValue.__init__: gvalue = {0}'.format(self.gvalue))
+        logger.debug('GValue.__init__: gvalue = {0}'.format(self.gvalue))
 
     @staticmethod
     def type_name(gtype):
@@ -90,7 +95,7 @@ class GValue(object):
         gobject_lib.g_value_init(self.gvalue, gtype)
 
     def set(self, value):
-        log('GValue.set: self = {0}, value = {1}'.format(self, value))
+        logger.debug('GValue.set: self = {0}, value = {1}'.format(self, value))
 
         gtype = self.gvalue.gtype
         fundamental = gobject_lib.g_type_fundamental(gtype)
@@ -102,12 +107,11 @@ class GValue(object):
         elif gtype == GValue.gdouble_type:
             gobject_lib.g_value_set_double(self.gvalue, value)
         elif fundamental == GValue.genum_type:
-            if isinstance(value, basestring if is_PY2 else str):
+            if isinstance(value, basestring if _is_PY2 else str):
                 enum_value = vips_lib.vips_enum_from_nick('pyvips', gtype, value)
 
                 if enum_value < 0:
-                    error('no such enum {0}\n{1}'.
-                          format(value, vips_get_error()))
+                    raise Error('no such enum {0}')
             else:
                 enum_value = value
 
@@ -131,7 +135,7 @@ class GValue(object):
             array = ffi.new('double[]', value)
             vips_lib.vips_value_set_array_double(self.gvalue, array, len(value))
         elif gtype == GValue.array_image_type:
-            if isinstance(value, class_index['Image']):
+            if isinstance(value, package_index['Image']):
                 value = [value]
 
             # pull out all the VipsImage* pointers
@@ -151,11 +155,11 @@ class GValue(object):
             vips_lib.vips_value_set_blob(self.gvalue, 
                     g_free_callback, memory, len(value))
         else:
-            error('unsupported gtype for get {0}'.
-                  format(gvalue.type_name(gtype)))
+            raise Error('unsupported gtype for get {0}'.
+                        format(gvalue.type_name(gtype)))
 
     def get(self):
-        log('GValue.get: self = {0}'.format(self))
+        logger.debug('GValue.get: self = {0}'.format(self))
 
         gtype = self.gvalue.gtype
         fundamental = gobject_lib.g_type_fundamental(gtype)
@@ -173,7 +177,7 @@ class GValue(object):
 
             cstr = vips_lib.vips_enum_nick(gtype, enum_value)
             if cstr == 0:
-                error('value not in enum')
+                raise Error('value not in enum')
 
             result = ffi.string(cstr)
         elif fundamental == GValue.gflags_type:
@@ -202,7 +206,7 @@ class GValue(object):
             # by Image() 
             gobject_lib.g_object_ref(go)
 
-            result = class_index['Image'](vi)
+            result = package_index['Image'](vi)
         elif gtype == GValue.array_int_type:
             pint = ffi.new('int *')
 
@@ -226,14 +230,16 @@ class GValue(object):
                 # this will make a new cdata object 
                 vi = array[i]
 
-                result.append(class_index['Image'](vi))
+                result.append(package_index['Image'](vi))
         elif gtype == GValue.blob_type:
             psize = ffi.new('size_t *')
 
             array = vips_lib.vips_value_get_blob(self.gvalue, psize)
             result = ffi.string(array, psize[0])
         else:
-             error('unsupported gtype for get {0}'.
+             raise Error('unsupported gtype for get {0}'.
                    format(gvalue.type_name(gtype)))
 
         return result
+
+__all__ = ['GValue']

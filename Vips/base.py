@@ -1,11 +1,12 @@
 # basic defs and link to ffi
 
+from __future__ import division
+
+import logging
 import sys
 from cffi import FFI
 
-# so crappy!
-def log(msg):
-    print msg
+logger = logging.getLogger(__name__)
 
 ffi = FFI()
 
@@ -15,8 +16,8 @@ ffi = FFI()
 vips_lib = ffi.dlopen('libvips.so')
 gobject_lib = ffi.dlopen('libgobject-2.0.so')
 
-log('Loaded lib {0}'.format(vips_lib))
-log('Loaded lib {0}'.format(gobject_lib))
+logger.debug('Loaded lib {0}'.format(vips_lib))
+logger.debug('Loaded lib {0}'.format(gobject_lib))
 
 # apparently the best way to find out
 is_64bits = sys.maxsize > 2 ** 32
@@ -46,30 +47,33 @@ ffi.cdef('''
 
 ''')
 
-def error(msg):
-    print(msg)
-    sys.exit(-1)
+class Error(Exception):
+    """An error from vips.
 
-def vips_get_error():
-    errstr = ffi.string(vips_lib.vips_error_buffer())
-    vips_lib.vips_error_clear()
+    message -- a high-level description of the error
+    detail -- a string with some detailed diagnostics
+    """
+    def __init__(self, message, detail = None):
+        self.message = message
+        if detail == None or detail == "":
+            detail = ffi.string(vips_lib.vips_error_buffer())
+            vips_lib.vips_error_clear()
+        self.detail = detail
 
-    return errstr
+        logger.debug('Error %s %s', self.message, self.detail)
 
-def vips_error():
-    error(vips_get_error())
+    def __str__(self):
+        return '{0}\n  {1}'.format(self.message, self.detail)
 
 if vips_lib.vips_init(sys.argv[0]) != 0:
-    vips_error()
+    raise Error('unable to init Vips')
 
-log('Inited libvips')
-log('')
+logger.debug('Inited libvips')
+logger.debug('')
 
 # a callback that triggers g_free()
 @ffi.callback('void(void*)')
 def g_free_callback(ptr):
     gobject_lib.g_free(ptr)
 
-__all__ = ['ffi', 'g_free_callback', 'vips_lib', 'gobject_lib', 'error',
-           'vips_get_error', 'vips_error', 'log']
-
+__all__ = ['ffi', 'g_free_callback', 'vips_lib', 'gobject_lib', 'Error']

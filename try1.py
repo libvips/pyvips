@@ -78,6 +78,7 @@ print ''
 print 'test Image'
 image = Vips.Image.new_from_file('/data/john/pics/k2.jpg')
 print 'image =', image
+print 'image.width =', image.width
 print ''
 
 print 'test Operation'
@@ -85,6 +86,9 @@ image2 = Vips.Operation.call('embed', image, 1, 2, 3, 4, extend = 'copy')
 print 'image2 =', image2
 print ''
 
-
+print 'test getattr'
+image2 = image.embed(1, 2, 3, 4, extend = 'copy')
+print 'image2 =', image2
+print ''
 
 
