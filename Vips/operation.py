@@ -40,17 +40,16 @@ MODIFY = 128
 # search an array with a predicate, recursing into subarrays as we see them
 # used to find the match_image for an operation
 def find_inside(fn, array):
-    for i in array:
-        result = fn(i)
-        if result != None:
-            return result
-        elif isinstance(i, list):
-            result = find_inside(fn, i)
+    for x in array:
+        if fn(x):
+            return x
+        elif isinstance(x, list):
+            result = find_inside(fn, x)
 
             if result != None:
                 return result
 
-    return nil
+    return None
 
 class Operation(VipsObject):
 
@@ -73,7 +72,7 @@ class Operation(VipsObject):
 
         # MODIFY args need to be copied before they are set
         if (flags & MODIFY) != 0:
-            log("copying MODIFY arg " + name)
+            log('copying MODIFY arg ' + name)
             # make sure we have a unique copy
             value = value.copy().copy_memory()
 
@@ -88,24 +87,31 @@ class Operation(VipsObject):
             if (flags & CONSTRUCT) != 0:
                 name = ffi.string(pspec.name)
 
-                # libvips uses "-" to separate parts of arg names, but we
-                # need "_" for Python
-                name = name.replace("-", "_")
+                # libvips uses '-' to separate parts of arg names, but we
+                # need '_' for Python
+                name = name.replace('-', '_')
 
                 args.append([name, flags])
             
             return ffi.NULL
 
-        cb = ffi.callback("VipsArgumentMapFn", add_construct)
+        cb = ffi.callback('VipsArgumentMapFn', add_construct)
         vips_lib.vips_argument_map(self.pointer, cb, ffi.NULL, ffi.NULL)
 
         return args
 
     # string_options is any optional args coded as a string, perhaps
-    # "[strip,tile=true]"
+    # '[strip,tile=true]'
     @staticmethod
-    def call(name, string_options, *args, **kwargs):
-        log('VipsOperation.call: name = {0}, string_options = {1}, args = {2}, kwargs = {3}'.format(name, string_options, args, kwargs))
+    def call(name, *args, **kwargs):
+        log('VipsOperation.call: name = {0}, args = {1}, kwargs = {2}'.
+            format(name, args, kwargs))
+
+        # pull out the special string_options kwarg
+        string_options = kwargs.pop('string_options', '')
+
+        log('VipsOperation.call: string_options = {0}'.
+            format(string_options))
 
         vop = vips_lib.vips_operation_new(name)
         if vop == ffi.NULL:
@@ -120,11 +126,14 @@ class Operation(VipsObject):
         for i in arguments:
             flags = i[1]
 
-            if (i[1] & INPUT) != 0 and (i[1] & REQUIRED) != 0 and (i[1] & DEPRECATED) == 0:
+            if ((i[1] & INPUT) != 0 and 
+                (i[1] & REQUIRED) != 0 and 
+                (i[1] & DEPRECATED) == 0):
                 n_required += 1
 
         if n_required != len(args):
-            error('unable to call {0}: {1} arguments given, but {2} required'.format(name, len(args), n_required))
+            error(('unable to call {0}: {1} arguments given, ' +
+                   'but {2} required').format(name, len(args), n_required))
 
         # the first image argument is the thing we expand constants to
         # match ... look inside tables for images, since we may be passing

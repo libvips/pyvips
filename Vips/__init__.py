@@ -64,3 +64,4 @@ from gvalue import GValue
 from gobject import GObject
 from vobject import VipsObject
 from operation import Operation
+from image import Image

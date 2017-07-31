@@ -35,7 +35,7 @@ interpretation_gtype = Vips.gobject_lib.g_type_from_name('VipsInterpretation')
 print 'interpretation_gtype =', interpretation_gtype
 gv = Vips.GValue()
 gv.init(interpretation_gtype)
-gv.set("xyz")
+gv.set('xyz')
 value = gv.get()
 print 'gvalue =', value
 print ''
@@ -54,7 +54,7 @@ print ''
 print 'test gvalue str'
 gv = Vips.GValue()
 gv.init(Vips.GValue.gstr_type)
-gv.set("banana")
+gv.set('banana')
 value = gv.get()
 print 'gvalue =', value
 print ''
@@ -76,9 +76,15 @@ print 'gvalue =', value
 print ''
 
 print 'test Operation'
-result = Vips.Operation.call("embed", "", 1, 2, 3, 4, extend = "copy")
+result = Vips.Operation.call('embed', 1, 2, 3, 4, 5, extend = 'copy')
 print 'result =', result
 print ''
+
+print 'test Image'
+result = Vips.Image.new_from_file('/home/john/pics/k2.jpg')
+print 'result =', result
+print ''
+
 
 
 
