@@ -76,7 +76,7 @@ print 'gvalue =', value
 print ''
 
 print 'test Image'
-result = Vips.Image.new_from_file('/home/john/pics/k2.jpg')
+result = Vips.Image.new_from_file('/data/john/pics/k2.jpg')
 print 'result =', result
 print ''
 

@@ -80,7 +80,7 @@ class Image(VipsObject):
 
     def __init__(self, pointer):
         log('Image.__init__: pointer = {0}'.format(pointer))
-        VipsObject.__init__(self, pointer)
+        super(Image, self).__init__(pointer)
 
     @staticmethod
     def new_from_file(vips_filename, **kwargs):

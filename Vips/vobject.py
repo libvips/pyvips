@@ -56,13 +56,15 @@ ffi.cdef('''
 
     void vips_object_print_all (void);
 
+    int vips_object_set_from_string (VipsObject* object, const char* options);
+
 ''')
 
 class VipsObject(GObject):
 
     def __init__(self, pointer):
         log('VipsObject.__init__: pointer = {0}'.format(pointer))
-        GObject.__init__(self, pointer)
+        super(VipsObject, self).__init__(pointer)
 
     @staticmethod
     def print_all(msg):
@@ -74,10 +76,11 @@ class VipsObject(GObject):
     def get_typeof(self, name):
         log('VipsObject.get_typeof: self = {0}, name = {1}'.format(self, name))
 
-        pspec = ffi.new("(GParamSpec *)[1]");
-        argument_class = ffi.new("(VipsArgumentClass *)[1]");
-        argument_instance = ffi.new("(VipsArgumentInstance *)[1]");
-        result = vips_lib.vips_object_get_argument(self.gobject, name,
+        pspec = ffi.new("GParamSpec **");
+        argument_class = ffi.new("VipsArgumentClass **");
+        argument_instance = ffi.new("VipsArgumentInstance **");
+        vo = ffi.cast("VipsObject *", self.pointer)
+        result = vips_lib.vips_object_get_argument(vo, name,
             pspec, argument_class, argument_instance)
 
         if result != 0:
@@ -92,16 +95,24 @@ class VipsObject(GObject):
 
         gv = GValue()
         gv.init(gtype)
-        gobject_lib.g_object_get_property(self.pointer, name, gv.pointer)
+        go = ffi.cast("GObject *", self.pointer)
+        gobject_lib.g_object_get_property(go, name, gv.pointer)
 
         return gv.get()
 
     def set(self, name, value):
-        log('VipsObject.set: self = {0}, name = {1}, value = {2}'.format(self, name, value))
+        log('VipsObject.set: self = {0}, name = {1}, value = {2}'.
+            format(self, name, value))
 
         gtype = self.get_typeof(name)
 
         gv = GValue()
         gv.init(gtype)
         gv.set(value)
-        gobject_lib.g_object_set_property(self.pointer, name, gv.pointer)
+        go = ffi.cast("GObject *", self.pointer)
+        gobject_lib.g_object_set_property(go, name, gv.pointer)
+
+    # set a series of options using a string, perhaps "fred=12, tile"
+    def set_string(self, string_options):
+        vo = ffi.cast("VipsObject *", self.pointer)
+        return vips_lib.vips_object_set_from_string(vo, string_options) == 0

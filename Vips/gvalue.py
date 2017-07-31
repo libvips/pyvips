@@ -4,17 +4,6 @@ import numbers
 
 from Vips import *
 
-# GType is an int the size of a pointer ... I don't think we can just use
-# size_t, sadly
-if is_64bits:
-    ffi.cdef('''
-        typedef uint64_t GType;
-    ''')
-else:
-    ffi.cdef('''
-        typedef uint32_t GType;
-    ''')
-
 ffi.cdef('''
     typedef struct _GValue {
         GType gtype;
@@ -65,7 +54,7 @@ ffi.cdef('''
 
 ''')
 
-class GValue:
+class GValue(object):
 
     # look up some common gtypes at init for speed
     gbool_type = gobject_lib.g_type_from_name('gboolean')
@@ -205,10 +194,10 @@ class GValue:
 
             # we want a ref that will last with the life of the vimage: 
             # this ref is matched by the unref that's attached to finalize
-            # by Image.new() 
+            # by Image() 
             gobject_lib.g_object_ref(go)
 
-            result = Image.new(vi)
+            result = Image(vi)
         elif gtype == GValue.array_int_type:
             pint = ffi.new("int *")
 
@@ -232,7 +221,7 @@ class GValue:
                 # this will make a new cdata object 
                 vi = array[i]
 
-                result.append(Image.new(vi))
+                result.append(Image(vi))
         elif gtype == GValue.blob_type:
             psize = ffi.new("size_t *")
 

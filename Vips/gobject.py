@@ -30,7 +30,7 @@ ffi.cdef('''
 
 ''')
 
-class GObject:
+class GObject(object):
 
     def __init__(self, pointer):
         # record the pointer we were given to manage

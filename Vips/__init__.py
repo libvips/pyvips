@@ -22,6 +22,17 @@ is_64bits = sys.maxsize > 2 ** 32
 
 is_PY2 = sys.version_info.major == 2
 
+# GType is an int the size of a pointer ... I don't think we can just use
+# size_t, sadly
+if is_64bits:
+    ffi.cdef('''
+        typedef uint64_t GType;
+    ''')
+else:
+    ffi.cdef('''
+        typedef uint32_t GType;
+    ''')
+
 ffi.cdef('''
     const char* vips_error_buffer (void);
     void vips_error_clear (void);
@@ -29,10 +40,10 @@ ffi.cdef('''
     int vips_init (const char* argv0);
 
     typedef struct _VipsImage VipsImage;
+    typedef struct _GValue GValue;
 
     void* g_malloc(size_t size);
     void g_free(void* data);
-
 
 ''')
 

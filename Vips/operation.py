@@ -23,8 +23,6 @@ ffi.cdef('''
     VipsOperation* vips_cache_operation_build (VipsOperation* operation);
     void vips_object_unref_outputs (VipsOperation *operation);
 
-    int vips_object_set_from_string (VipsObject* object, const char* options);
-
 ''')
 
 # values for VipsOperationFlags
@@ -55,7 +53,7 @@ class Operation(VipsObject):
 
     def __init__(self, pointer):
         log('Operation.__init__: pointer = {0}'.format(pointer))
-        VipsObject.__init__(self, pointer)
+        super(Operation, self).__init__(pointer)
 
     def set(self, name, flags, match_image, value):
         # if the object wants an image and we have a constant, imageize it
@@ -76,7 +74,7 @@ class Operation(VipsObject):
             # make sure we have a unique copy
             value = value.copy().copy_memory()
 
-        return self.set(name, value)
+        super(Operation, self).set(name, value)
 
     # this is slow ... call as little as possible
     def getargs(self):
@@ -147,7 +145,7 @@ class Operation(VipsObject):
 
         # set any string options before any args so they can't be
         # overridden
-        if vips_lib.vips_object_set_from_string(op.pointer, string_options) != 0:
+        if not op.set_string(string_options):
             error('unable to call {0}\n{1}'.format(name, vips_get_error()))
 
         # set required and optional args
@@ -156,22 +154,16 @@ class Operation(VipsObject):
             if ((flags & INPUT) != 0 and 
                 (flags & REQUIRED) != 0 and 
                 (flags & DEPRECATED) == 0):
-                if not op.set(name, flags, match_image, args[n]):
-                    error('unable to call {0}\n{1]'.
-                        format(name, vips_get_error()))
-
+                op.set(name, flags, match_image, args[n])
                 n += 1
 
         for name, value in kwargs:
-            flags = flags_from_name[name]
-
-            if not op.set(name, flags, match_image, value):
-                error('unable to call {0}\n{1]'.format(name, vips_get_error()))
+            op.set(name, flags_from_name[name], match_image, value)
 
         # build operation
         vop2 = vips_lib.vips_cache_operation_build(op.pointer)
         if vop2 == ffi.NULL:
-            error('unable to call {0}\n{1]'.format(name, vips_get_error()))
+            error('unable to call {0}\n{1}'.format(name, vips_get_error()))
         op2 = Operation(vop2)
         op = op2
         op2 = None
