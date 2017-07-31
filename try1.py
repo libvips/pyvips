@@ -76,13 +76,13 @@ print 'gvalue =', value
 print ''
 
 print 'test Image'
-result = Vips.Image.new_from_file('/data/john/pics/k2.jpg')
-print 'result =', result
+image = Vips.Image.new_from_file('/data/john/pics/k2.jpg')
+print 'image =', image
 print ''
 
 print 'test Operation'
-result = Vips.Operation.call('embed', 1, 2, 3, 4, 5, extend = 'copy')
-print 'result =', result
+image2 = Vips.Operation.call('embed', image, 1, 2, 3, 4, extend = 'copy')
+print 'image2 =', image2
 print ''
 
 

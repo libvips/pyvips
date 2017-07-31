@@ -63,14 +63,15 @@ class Operation(VipsObject):
         if match_image:
             gtype = self.get_typeof(name)
 
-            if gtype == Vips.GValue.image_type:
-                value = match_image.imageize(value)
-            elif gtype == Vips.GValue.array_image_type:
-                value = [match_image.imageize(x) for x in value]
+            if gtype == GValue.image_type:
+                value = class_index['Image'].imageize(match_image, value)
+            elif gtype == GValue.array_image_type:
+                value = [class_index['Image'].imageize(match_image, x) 
+                         for x in value]
 
         # MODIFY args need to be copied before they are set
         if (flags & MODIFY) != 0:
-            log('copying MODIFY arg ' + name)
+            log('copying MODIFY arg {0}'.format(name))
             # make sure we have a unique copy
             value = value.copy().copy_memory()
 
@@ -140,7 +141,8 @@ class Operation(VipsObject):
         # the first image argument is the thing we expand constants to
         # match ... look inside tables for images, since we may be passing
         # an array of image as a single param
-        match_image = find_inside((lambda x: isinstance(x, Image)), args)
+        match_image = find_inside(lambda x: isinstance(x, class_index['Image']),
+                                  args)
         log('VipsOperation.call: match_image = {0}'.format(match_image))
 
         # set any string options before any args so they can't be
@@ -157,7 +159,7 @@ class Operation(VipsObject):
                 op.set(name, flags, match_image, args[n])
                 n += 1
 
-        for name, value in kwargs:
+        for name, value in kwargs.items():
             op.set(name, flags_from_name[name], match_image, value)
 
         # build operation
@@ -183,7 +185,7 @@ class Operation(VipsObject):
                 result.append(op.get(name))
 
         # fetch optional output args
-        for name, value in kwargs:
+        for name, value in kwargs.items():
             flags = flags_from_name[name]
 
             if ((flags & OUTPUT) != 0 and 

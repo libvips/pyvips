@@ -39,7 +39,7 @@ class GObject(object):
 
         # on GC, unref
         self.gobject = ffi.gc(self.pointer, gobject_lib.g_object_unref)
-        log('GValue.__init__: gobject = {0}'.format(self.gobject))
+        log('GObject.__init__: gobject = {0}'.format(self.gobject))
 
     @staticmethod
     def print_all(msg):

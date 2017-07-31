@@ -1,6 +1,7 @@
 # wrap VipsOperation
 
 import numbers
+
 from Vips import *
 
 ffi.cdef('''
@@ -34,16 +35,16 @@ ffi.cdef('''
 
 # either a single number, or a table of numbers
 def is_pixel(value):
-    return (instance(value, numbers.Number) or 
-            (instance(vaue, list) and not instance(value, Image)))
+    return (isinstance(value, numbers.Number) or 
+            (isinstance(vaue, list) and not isinstance(value, Image)))
 
 # test for rectangular array of something
 def is_2D(array):
-    if not instance(array, list):
+    if not isinstance(array, list):
         return False
 
     for x in array:
-        if not instance(x, list):
+        if not isinstance(x, list):
             return False
         if len(x) != len(array[0]):
             return False
@@ -51,15 +52,15 @@ def is_2D(array):
     return True
 
 def swap_Image_left(left, right):
-    if instance(left, Image):
+    if isinstance(left, Image):
         return left, right
-    elif instance(right, Image):
+    elif isinstance(right, Image):
         return right, left
     else:
         error('must have one image argument')
 
 def call_enum(image, other, base, operation):
-    if instance(other, numbers.Number):
+    if isinstance(other, numbers.Number):
         return Operation.call(base + '_const', image, operation, [other])
     elif is_pixel(other):
         return Operation.call(base + '_const', image, operation, other)
@@ -71,7 +72,7 @@ class Image(VipsObject):
     @staticmethod
     def imageize(self, value):
         # careful! self can be None if value is a 2D array
-        if instance(value, Image):
+        if isinstance(value, Image):
             return value
         elif is_2D(value):
             return Image.new_from_array(value)
@@ -92,3 +93,5 @@ class Image(VipsObject):
 
         return Operation.call(ffi.string(name), ffi.string(filename), 
                 string_options = ffi.string(options), **kwargs)
+
+banana = Image
