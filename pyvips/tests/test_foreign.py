@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # vim: set fileencoding=utf-8 :
 
 from __future__ import division
@@ -787,7 +786,4 @@ class TestForeign(unittest.TestCase):
 
         # we can't test the bytes are exactly equal, the timestamps will be
         # different
-
-if __name__ == '__main__':
-    unittest.main()
 

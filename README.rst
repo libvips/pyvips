@@ -48,7 +48,8 @@ Local user install::
 
 Run test suite::
 
-	$ nosetests
+	$ nosetests |& more
+	$ nosetests --logging-level=WARNING
 
 Converting old code
 -------------------

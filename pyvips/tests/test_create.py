@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 import unittest
 import math
 
@@ -453,5 +451,3 @@ class TestCreate(unittest.TestCase):
         self.assertEqual(im.bands, 1)
         self.assertEqual(im.format, pyvips.BandFormat.FLOAT)
 
-if __name__ == '__main__':
-    unittest.main()

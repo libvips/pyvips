@@ -1,6 +1,3 @@
-#!/usr/bin/python
-# vim: set fileencoding=utf-8 :
-
 from __future__ import division
 import unittest
 import math
@@ -831,6 +828,3 @@ class TestConversion(unittest.TestCase):
             before = test(50, 50)
             after = im(0, 0)
             self.assertAlmostEqualObjects(before, after)
-
-if __name__ == '__main__':
-    unittest.main()

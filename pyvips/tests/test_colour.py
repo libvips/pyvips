@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # vim: set fileencoding=utf-8 :
 
 import unittest
@@ -253,6 +252,3 @@ class TestColour(unittest.TestCase):
         self.assertEqual(im.interpretation, pyvips.Interpretation.XYZ)
         im = test.icc_import()
         self.assertEqual(im.interpretation, pyvips.Interpretation.LAB)
-
-if __name__ == '__main__':
-    unittest.main()

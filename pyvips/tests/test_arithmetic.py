@@ -1,11 +1,9 @@
-#!/usr/bin/env python
-
 from __future__ import division
 import unittest
 import math
 
-#import logging
-#logging.basicConfig(level = logging.DEBUG)
+# import logging
+# logging.basicConfig(level = logging.DEBUG)
 
 import pyvips
 
@@ -695,6 +693,3 @@ class TestArithmetic(unittest.TestCase):
             im2 = [(im + x).cast(fmt) for x in range(0, 100, 10)]
             im3 = pyvips.Image.sum(im2)
             self.assertAlmostEqual(im3.max(), sum(range(0, 100, 10)))
-
-if __name__ == '__main__':
-    unittest.main()

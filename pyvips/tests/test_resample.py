@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # vim: set fileencoding=utf-8 :
 
 import unittest
@@ -252,5 +251,3 @@ class TestResample(unittest.TestCase):
         b = im.crop(50, 0, im.width - 50, im.height).gaussblur(2)
         self.assertLess((a - b).abs().max(), 20)
 
-if __name__ == '__main__':
-    unittest.main()

@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 from __future__ import division
 import unittest
 import math
@@ -60,5 +58,3 @@ class TestIofuncs(unittest.TestCase):
         for case in cases:
             self.assertEqualObjects(split(case[0]), case[1])
 
-if __name__ == '__main__':
-    unittest.main()
