@@ -42,8 +42,10 @@ ffi.cdef('''
     typedef struct _VipsImage VipsImage;
     typedef struct _GValue GValue;
 
-    void* g_malloc(size_t size);
-    void g_free(void* data);
+    void* g_malloc (size_t size);
+    void g_free (void* data);
+
+    int vips_leak_set (int leak);
 
 ''')
 
@@ -76,4 +78,8 @@ logger.debug('')
 def g_free_callback(ptr):
     gobject_lib.g_free(ptr)
 
-__all__ = ['ffi', 'g_free_callback', 'vips_lib', 'gobject_lib', 'Error']
+def leak_set(leak):
+    return vips_lib.vips_leak_set(leak)
+
+__all__ = ['ffi', 'g_free_callback', 'vips_lib', 'gobject_lib', 'Error',
+           'leak_set']

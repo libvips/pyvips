@@ -1,7 +1,8 @@
 # wrapper for libvips
 
 # Our classes need to refer to each other ... make them go via this
-# package-level global which we update at the end with the real classes
+# package-level global which we update at the end with references to the real
+# classes
 package_index = {
     'Image': 'banana',
     'Operation': 'apple',
@@ -9,6 +10,7 @@ package_index = {
 }
 
 from base import *
+from enums import *
 from gvalue import GValue
 from gobject import GObject
 from vobject import VipsObject
