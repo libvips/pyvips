@@ -7,22 +7,20 @@ import math
 #import logging
 #logging.basicConfig(level = logging.DEBUG)
 
-import gi
-gi.require_version('Vips', '8.0')
-from gi.repository import Vips 
+import pyips
 
-Vips.leak_set(True)
+pyvips.leak_set(True)
 
-unsigned_formats = [Vips.BandFormat.UCHAR, 
-                    Vips.BandFormat.USHORT, 
-                    Vips.BandFormat.UINT] 
-signed_formats = [Vips.BandFormat.CHAR, 
-                  Vips.BandFormat.SHORT, 
-                  Vips.BandFormat.INT] 
-float_formats = [Vips.BandFormat.FLOAT, 
-                 Vips.BandFormat.DOUBLE]
-complex_formats = [Vips.BandFormat.COMPLEX, 
-                   Vips.BandFormat.DPCOMPLEX] 
+unsigned_formats = [pyvips.BandFormat.UCHAR, 
+                    pyvips.BandFormat.USHORT, 
+                    pyvips.BandFormat.UINT] 
+signed_formats = [pyvips.BandFormat.CHAR, 
+                  pyvips.BandFormat.SHORT, 
+                  pyvips.BandFormat.INT] 
+float_formats = [pyvips.BandFormat.FLOAT, 
+                 pyvips.BandFormat.DOUBLE]
+complex_formats = [pyvips.BandFormat.COMPLEX, 
+                   pyvips.BandFormat.DPCOMPLEX] 
 int_formats = unsigned_formats + signed_formats
 noncomplex_formats = int_formats + float_formats
 all_formats = int_formats + float_formats + complex_formats
@@ -50,7 +48,7 @@ def run_fn(fn, x):
 # run a 2-ary function on two things -- loop over elements pairwise if the 
 # things are lists
 def run_fn2(fn, x, y):
-    if isinstance(x, Vips.Image) or isinstance(y, Vips.Image):
+    if isinstance(x, pyvips.Image) or isinstance(y, pyvips.Image):
         return fn(x, y)
     elif isinstance(x, list) or isinstance(y, list):
         return [fn(i, j) for i, j in zip_expand(x, y)]
@@ -111,7 +109,7 @@ class TestArithmetic(unittest.TestCase):
          for x in self.all_images for y in fmt for z in fmt]
 
     def setUp(self):
-        im = Vips.Image.mask_ideal(100, 100, 0.5, reject = True, optical = True)
+        im = pyvips.Image.mask_ideal(100, 100, 0.5, reject = True, optical = True)
         self.colour = im * [1, 2, 3] + [2, 3, 4]
         self.mono = self.colour.extract_band(1)
         self.all_images = [self.mono, self.colour]
@@ -201,7 +199,7 @@ class TestArithmetic(unittest.TestCase):
 
     def test_more(self):
         def more(x, y):
-            if isinstance(x, Vips.Image) or isinstance(y, Vips.Image):
+            if isinstance(x, pyvips.Image) or isinstance(y, pyvips.Image):
                 return x > y
             else:
                 if x > y:
@@ -214,7 +212,7 @@ class TestArithmetic(unittest.TestCase):
 
     def test_moreeq(self):
         def moreeq(x, y):
-            if isinstance(x, Vips.Image) or isinstance(y, Vips.Image):
+            if isinstance(x, pyvips.Image) or isinstance(y, pyvips.Image):
                 return x >= y
             else:
                 if x >= y:
@@ -227,7 +225,7 @@ class TestArithmetic(unittest.TestCase):
 
     def test_less(self):
         def less(x, y):
-            if isinstance(x, Vips.Image) or isinstance(y, Vips.Image):
+            if isinstance(x, pyvips.Image) or isinstance(y, pyvips.Image):
                 return x < y
             else:
                 if x < y:
@@ -240,7 +238,7 @@ class TestArithmetic(unittest.TestCase):
 
     def test_lesseq(self):
         def lesseq(x, y):
-            if isinstance(x, Vips.Image) or isinstance(y, Vips.Image):
+            if isinstance(x, pyvips.Image) or isinstance(y, pyvips.Image):
                 return x <= y
             else:
                 if x <= y:
@@ -253,7 +251,7 @@ class TestArithmetic(unittest.TestCase):
 
     def test_equal(self):
         def equal(x, y):
-            if isinstance(x, Vips.Image) or isinstance(y, Vips.Image):
+            if isinstance(x, pyvips.Image) or isinstance(y, pyvips.Image):
                 return x == y
             else:
                 if x == y:
@@ -266,7 +264,7 @@ class TestArithmetic(unittest.TestCase):
 
     def test_noteq(self):
         def noteq(x, y):
-            if isinstance(x, Vips.Image) or isinstance(y, Vips.Image):
+            if isinstance(x, pyvips.Image) or isinstance(y, pyvips.Image):
                 return x != y
             else:
                 if x != y:
@@ -342,26 +340,26 @@ class TestArithmetic(unittest.TestCase):
         # ~image is trimmed to image max so it's hard to test for all formats
         # just test uchar
         self.run_unary(self.all_images, my_invert, 
-                       fmt = [Vips.BandFormat.UCHAR])
+                       fmt = [pyvips.BandFormat.UCHAR])
 
     # test the rest of VipsArithmetic
 
     def test_avg(self):
-        im = Vips.Image.black(50, 100)
+        im = pyvips.Image.black(50, 100)
         test = im.insert(im + 100, 50, 0, expand = True)
 
         for fmt in all_formats:
             self.assertAlmostEqual(test.cast(fmt).avg(), 50)
 
     def test_deviate(self):
-        im = Vips.Image.black(50, 100)
+        im = pyvips.Image.black(50, 100)
         test = im.insert(im + 100, 50, 0, expand = True)
 
         for fmt in noncomplex_formats:
             self.assertAlmostEqual(test.cast(fmt).deviate(), 50, places = 2)
 
     def test_polar(self):
-        im = Vips.Image.black(100, 100) + 100
+        im = pyvips.Image.black(100, 100) + 100
         im = im.complexform(im)
 
         im = im.polar()
@@ -370,7 +368,7 @@ class TestArithmetic(unittest.TestCase):
         self.assertAlmostEqual(im.imag().avg(), 45)
 
     def test_rect(self):
-        im = Vips.Image.black(100, 100)
+        im = pyvips.Image.black(100, 100)
         im = (im + 100 * 2 ** 0.5).complexform(im + 45)
 
         im = im.rect()
@@ -379,7 +377,7 @@ class TestArithmetic(unittest.TestCase):
         self.assertAlmostEqual(im.imag().avg(), 100)
 
     def test_conjugate(self):
-        im = Vips.Image.black(100, 100) + 100
+        im = pyvips.Image.black(100, 100) + 100
         im = im.complexform(im)
 
         im = im.conj()
@@ -388,7 +386,7 @@ class TestArithmetic(unittest.TestCase):
         self.assertAlmostEqual(im.imag().avg(), -100)
 
     def test_histfind(self):
-        im = Vips.Image.black(50, 100)
+        im = pyvips.Image.black(50, 100)
         test = im.insert(im + 10, 50, 0, expand = True)
 
         for fmt in all_formats:
@@ -411,12 +409,12 @@ class TestArithmetic(unittest.TestCase):
             self.assertAlmostEqualObjects(hist(5,0), [0])
 
     def test_histfind_indexed(self):
-        im = Vips.Image.black(50, 100)
+        im = pyvips.Image.black(50, 100)
         test = im.insert(im + 10, 50, 0, expand = True)
         index = test // 10
 
         for x in noncomplex_formats:
-            for y in [Vips.BandFormat.UCHAR, Vips.BandFormat.USHORT]:
+            for y in [pyvips.BandFormat.UCHAR, pyvips.BandFormat.USHORT]:
                 a = test.cast(x)
                 b = index.cast(y)
                 hist = a.hist_find_indexed(b)
@@ -425,7 +423,7 @@ class TestArithmetic(unittest.TestCase):
                 self.assertAlmostEqualObjects(hist(1,0), [50000])
 
     def test_histfind_ndim(self):
-        im = Vips.Image.black(100, 100) + [1, 2, 3]
+        im = pyvips.Image.black(100, 100) + [1, 2, 3]
 
         for fmt in noncomplex_formats:
             hist = im.cast(fmt).hist_find_ndim()
@@ -441,7 +439,7 @@ class TestArithmetic(unittest.TestCase):
             self.assertEqual(hist.bands, 1)
 
     def test_hough_circle(self):
-        test = Vips.Image.black(100, 100).draw_circle(100, 50, 50, 40)
+        test = pyvips.Image.black(100, 100).draw_circle(100, 50, 50, 40)
 
         for fmt in all_formats:
             im = test.cast(fmt)
@@ -456,7 +454,7 @@ class TestArithmetic(unittest.TestCase):
             self.assertAlmostEqual(r, 40)
 
     def test_hough_line(self):
-        test = Vips.Image.black(100, 100).draw_line(100, 10, 90, 90, 10)
+        test = pyvips.Image.black(100, 100).draw_line(100, 10, 90, 90, 10)
 
         for fmt in all_formats:
             im = test.cast(fmt)
@@ -472,7 +470,7 @@ class TestArithmetic(unittest.TestCase):
 
     def test_sin(self):
         def my_sin(x):
-            if isinstance(x, Vips.Image):
+            if isinstance(x, pyvips.Image):
                 return x.sin()
             else:
                 return math.sin(math.radians(x))
@@ -481,7 +479,7 @@ class TestArithmetic(unittest.TestCase):
 
     def test_cos(self):
         def my_cos(x):
-            if isinstance(x, Vips.Image):
+            if isinstance(x, pyvips.Image):
                 return x.cos()
             else:
                 return math.cos(math.radians(x))
@@ -490,7 +488,7 @@ class TestArithmetic(unittest.TestCase):
 
     def test_tan(self):
         def my_tan(x):
-            if isinstance(x, Vips.Image):
+            if isinstance(x, pyvips.Image):
                 return x.tan()
             else:
                 return math.tan(math.radians(x))
@@ -499,37 +497,37 @@ class TestArithmetic(unittest.TestCase):
 
     def test_asin(self):
         def my_asin(x):
-            if isinstance(x, Vips.Image):
+            if isinstance(x, pyvips.Image):
                 return x.asin()
             else:
                 return math.degrees(math.asin(x))
 
-        im = (Vips.Image.black(100, 100) + [1, 2, 3]) / 3.0
+        im = (pyvips.Image.black(100, 100) + [1, 2, 3]) / 3.0
         self.run_unary([im], my_asin, fmt = noncomplex_formats)
 
     def test_acos(self):
         def my_acos(x):
-            if isinstance(x, Vips.Image):
+            if isinstance(x, pyvips.Image):
                 return x.acos()
             else:
                 return math.degrees(math.acos(x))
 
-        im = (Vips.Image.black(100, 100) + [1, 2, 3]) / 3.0
+        im = (pyvips.Image.black(100, 100) + [1, 2, 3]) / 3.0
         self.run_unary([im], my_acos, fmt = noncomplex_formats)
 
     def test_atan(self):
         def my_atan(x):
-            if isinstance(x, Vips.Image):
+            if isinstance(x, pyvips.Image):
                 return x.atan()
             else:
                 return math.degrees(math.atan(x))
 
-        im = (Vips.Image.black(100, 100) + [1, 2, 3]) / 3.0
+        im = (pyvips.Image.black(100, 100) + [1, 2, 3]) / 3.0
         self.run_unary([im], my_atan, fmt = noncomplex_formats)
 
     def test_log(self):
         def my_log(x):
-            if isinstance(x, Vips.Image):
+            if isinstance(x, pyvips.Image):
                 return x.log()
             else:
                 return math.log(x)
@@ -538,7 +536,7 @@ class TestArithmetic(unittest.TestCase):
 
     def test_log10(self):
         def my_log10(x):
-            if isinstance(x, Vips.Image):
+            if isinstance(x, pyvips.Image):
                 return x.log10()
             else:
                 return math.log10(x)
@@ -547,7 +545,7 @@ class TestArithmetic(unittest.TestCase):
 
     def test_exp(self):
         def my_exp(x):
-            if isinstance(x, Vips.Image):
+            if isinstance(x, pyvips.Image):
                 return x.exp()
             else:
                 return math.exp(x)
@@ -556,7 +554,7 @@ class TestArithmetic(unittest.TestCase):
 
     def test_exp10(self):
         def my_exp10(x):
-            if isinstance(x, Vips.Image):
+            if isinstance(x, pyvips.Image):
                 return x.exp10()
             else:
                 return math.pow(10, x)
@@ -565,7 +563,7 @@ class TestArithmetic(unittest.TestCase):
 
     def test_floor(self):
         def my_floor(x):
-            if isinstance(x, Vips.Image):
+            if isinstance(x, pyvips.Image):
                 return x.floor()
             else:
                 return math.floor(x)
@@ -574,7 +572,7 @@ class TestArithmetic(unittest.TestCase):
 
     def test_ceil(self):
         def my_ceil(x):
-            if isinstance(x, Vips.Image):
+            if isinstance(x, pyvips.Image):
                 return x.ceil()
             else:
                 return math.ceil(x)
@@ -583,7 +581,7 @@ class TestArithmetic(unittest.TestCase):
 
     def test_rint(self):
         def my_rint(x):
-            if isinstance(x, Vips.Image):
+            if isinstance(x, pyvips.Image):
                 return x.rint()
             else:
                 return round(x)
@@ -592,7 +590,7 @@ class TestArithmetic(unittest.TestCase):
 
     def test_sign(self):
         def my_sign(x):
-            if isinstance(x, Vips.Image):
+            if isinstance(x, pyvips.Image):
                 return x.sign()
             else:
                 if x > 0:
@@ -605,7 +603,7 @@ class TestArithmetic(unittest.TestCase):
         self.run_unary(self.all_images, my_sign)
 
     def test_max(self):
-        test = Vips.Image.black(100, 100).draw_rect(100, 40, 50, 1, 1)
+        test = pyvips.Image.black(100, 100).draw_rect(100, 40, 50, 1, 1)
 
         for fmt in all_formats:
             v = test.cast(fmt).max()
@@ -617,7 +615,7 @@ class TestArithmetic(unittest.TestCase):
             self.assertAlmostEqual(y, 50)
 
     def test_min(self):
-        test = (Vips.Image.black(100, 100) + 100).draw_rect(0, 40, 50, 1, 1)
+        test = (pyvips.Image.black(100, 100) + 100).draw_rect(0, 40, 50, 1, 1)
 
         for fmt in all_formats:
             v = test.cast(fmt).min()
@@ -629,7 +627,7 @@ class TestArithmetic(unittest.TestCase):
             self.assertAlmostEqual(y, 50)
 
     def test_measure(self):
-        im = Vips.Image.black(50, 50)
+        im = pyvips.Image.black(50, 50)
         test = im.insert(im + 10, 50, 0, expand = True)
 
         for x in noncomplex_formats:
@@ -642,7 +640,7 @@ class TestArithmetic(unittest.TestCase):
             self.assertAlmostEqual(p2, 10)
 
     def test_profile(self):
-        test = Vips.Image.black(100, 100).draw_rect(100, 40, 50, 1, 1)
+        test = pyvips.Image.black(100, 100).draw_rect(100, 40, 50, 1, 1)
 
         for fmt in noncomplex_formats:
             columns, rows = test.cast(fmt).profile()
@@ -658,7 +656,7 @@ class TestArithmetic(unittest.TestCase):
             self.assertAlmostEqual(y, 50)
 
     def test_project(self):
-        im = Vips.Image.black(50, 50)
+        im = pyvips.Image.black(50, 50)
         test = im.insert(im + 10, 50, 0, expand = True)
 
         for fmt in noncomplex_formats:
@@ -670,7 +668,7 @@ class TestArithmetic(unittest.TestCase):
             self.assertAlmostEqualObjects(rows(0,10), [50 * 10])
 
     def test_stats(self):
-        im = Vips.Image.black(50, 50)
+        im = pyvips.Image.black(50, 50)
         test = im.insert(im + 10, 50, 0, expand = True)
 
         for x in noncomplex_formats:
@@ -693,9 +691,9 @@ class TestArithmetic(unittest.TestCase):
 
     def test_sum(self):
         for fmt in all_formats:
-            im = Vips.Image.black(50, 50)
+            im = pyvips.Image.black(50, 50)
             im2 = [(im + x).cast(fmt) for x in range(0, 100, 10)]
-            im3 = Vips.Image.sum(im2)
+            im3 = pyvips.Image.sum(im2)
             self.assertAlmostEqual(im3.max(), sum(range(0, 100, 10)))
 
 if __name__ == '__main__':

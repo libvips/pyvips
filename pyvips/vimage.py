@@ -5,7 +5,7 @@ from __future__ import division
 import logging
 import numbers
 
-from Vips import *
+from pyvips import *
 
 logger = logging.getLogger(__name__)
 

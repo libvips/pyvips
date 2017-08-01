@@ -4,87 +4,85 @@
 from __future__ import division
 import unittest
 import math
+from functools import reduce
 
 #import logging
 #logging.basicConfig(level = logging.DEBUG)
 
-import gi
-gi.require_version('Vips', '8.0')
-from gi.repository import Vips 
-from functools import reduce
+import pyvips
 
-Vips.leak_set(True)
+pyvips.leak_set(True)
 
-unsigned_formats = [Vips.BandFormat.UCHAR, 
-                    Vips.BandFormat.USHORT, 
-                    Vips.BandFormat.UINT] 
-signed_formats = [Vips.BandFormat.CHAR, 
-                  Vips.BandFormat.SHORT, 
-                  Vips.BandFormat.INT] 
-float_formats = [Vips.BandFormat.FLOAT, 
-                 Vips.BandFormat.DOUBLE]
-complex_formats = [Vips.BandFormat.COMPLEX, 
-                   Vips.BandFormat.DPCOMPLEX] 
+unsigned_formats = [pyvips.BandFormat.UCHAR, 
+                    pyvips.BandFormat.USHORT, 
+                    pyvips.BandFormat.UINT] 
+signed_formats = [pyvips.BandFormat.CHAR, 
+                  pyvips.BandFormat.SHORT, 
+                  pyvips.BandFormat.INT] 
+float_formats = [pyvips.BandFormat.FLOAT, 
+                 pyvips.BandFormat.DOUBLE]
+complex_formats = [pyvips.BandFormat.COMPLEX, 
+                   pyvips.BandFormat.DPCOMPLEX] 
 int_formats = unsigned_formats + signed_formats
 noncomplex_formats = int_formats + float_formats
 all_formats = int_formats + float_formats + complex_formats
 
-max_value = {Vips.BandFormat.UCHAR: 0xff,
-             Vips.BandFormat.USHORT: 0xffff,
-             Vips.BandFormat.UINT: 0xffffffff, 
-             Vips.BandFormat.CHAR: 0x7f,
-             Vips.BandFormat.SHORT: 0x7fff, 
-             Vips.BandFormat.INT: 0x7fffffff,
-             Vips.BandFormat.FLOAT: 1.0,
-             Vips.BandFormat.DOUBLE: 1.0,
-             Vips.BandFormat.COMPLEX: 1.0,
-             Vips.BandFormat.DPCOMPLEX: 1.0}
+max_value = {pyvips.BandFormat.UCHAR: 0xff,
+             pyvips.BandFormat.USHORT: 0xffff,
+             pyvips.BandFormat.UINT: 0xffffffff, 
+             pyvips.BandFormat.CHAR: 0x7f,
+             pyvips.BandFormat.SHORT: 0x7fff, 
+             pyvips.BandFormat.INT: 0x7fffffff,
+             pyvips.BandFormat.FLOAT: 1.0,
+             pyvips.BandFormat.DOUBLE: 1.0,
+             pyvips.BandFormat.COMPLEX: 1.0,
+             pyvips.BandFormat.DPCOMPLEX: 1.0}
 
-sizeof_format = {Vips.BandFormat.UCHAR: 1,
-                 Vips.BandFormat.USHORT: 2,
-                 Vips.BandFormat.UINT: 4,
-                 Vips.BandFormat.CHAR: 1,
-                 Vips.BandFormat.SHORT: 2,
-                 Vips.BandFormat.INT: 4,
-                 Vips.BandFormat.FLOAT: 4,
-                 Vips.BandFormat.DOUBLE: 8,
-                 Vips.BandFormat.COMPLEX: 8,
-                 Vips.BandFormat.DPCOMPLEX: 16}
+sizeof_format = {pyvips.BandFormat.UCHAR: 1,
+                 pyvips.BandFormat.USHORT: 2,
+                 pyvips.BandFormat.UINT: 4,
+                 pyvips.BandFormat.CHAR: 1,
+                 pyvips.BandFormat.SHORT: 2,
+                 pyvips.BandFormat.INT: 4,
+                 pyvips.BandFormat.FLOAT: 4,
+                 pyvips.BandFormat.DOUBLE: 8,
+                 pyvips.BandFormat.COMPLEX: 8,
+                 pyvips.BandFormat.DPCOMPLEX: 16}
 
-rot45_angles = [Vips.Angle45.D0,
-                Vips.Angle45.D45,
-                Vips.Angle45.D90,
-                Vips.Angle45.D135,
-                Vips.Angle45.D180,
-                Vips.Angle45.D225,
-                Vips.Angle45.D270,
-                Vips.Angle45.D315]
+rot45_angles = [pyvips.Angle45.D0,
+                pyvips.Angle45.D45,
+                pyvips.Angle45.D90,
+                pyvips.Angle45.D135,
+                pyvips.Angle45.D180,
+                pyvips.Angle45.D225,
+                pyvips.Angle45.D270,
+                pyvips.Angle45.D315]
 
-rot45_angle_bonds = [Vips.Angle45.D0,
-                     Vips.Angle45.D315,
-                     Vips.Angle45.D270,
-                     Vips.Angle45.D225,
-                     Vips.Angle45.D180,
-                     Vips.Angle45.D135,
-                     Vips.Angle45.D90,
-                     Vips.Angle45.D45]
+rot45_angle_bonds = [pyvips.Angle45.D0,
+                     pyvips.Angle45.D315,
+                     pyvips.Angle45.D270,
+                     pyvips.Angle45.D225,
+                     pyvips.Angle45.D180,
+                     pyvips.Angle45.D135,
+                     pyvips.Angle45.D90,
+                     pyvips.Angle45.D45]
 
-rot_angles = [Vips.Angle.D0,
-              Vips.Angle.D90,
-              Vips.Angle.D180,
-              Vips.Angle.D270]
+rot_angles = [pyvips.Angle.D0,
+              pyvips.Angle.D90,
+              pyvips.Angle.D180,
+              pyvips.Angle.D270]
 
-rot_angle_bonds = [Vips.Angle.D0,
-                   Vips.Angle.D270,
-                   Vips.Angle.D180,
-                   Vips.Angle.D90]
+rot_angle_bonds = [pyvips.Angle.D0,
+                   pyvips.Angle.D270,
+                   pyvips.Angle.D180,
+                   pyvips.Angle.D90]
 
 # an expanding zip ... if either of the args is not a list, duplicate it down
 # the other
 def zip_expand(x, y):
     if isinstance(x, list) and isinstance(y, list):
         if len(x) != len(y):
-            raise Vips.Error("zip_expand list args not equal length")
+            raise pyvips.Error("zip_expand list args not equal length")
         return list(zip(x, y))
     elif isinstance(x, list):
         return [[i, y] for i in x]
@@ -141,16 +139,16 @@ class TestConversion(unittest.TestCase):
          for x in images for y in fmt for z in fmt]
 
     def setUp(self):
-        im = Vips.Image.mask_ideal(100, 100, 0.5, reject = True, optical = True)
+        im = pyvips.Image.mask_ideal(100, 100, 0.5, reject = True, optical = True)
         self.colour = im * [1, 2, 3] + [2, 3, 4]
         self.mono = self.colour[1]
         self.all_images = [self.mono, self.colour]
         self.jpeg_file = "images/йцук.jpg"
-        self.image = Vips.Image.jpegload(self.jpeg_file)
+        self.image = pyvips.Image.jpegload(self.jpeg_file)
 
     def test_band_and(self):
         def band_and(x):
-            if isinstance(x, Vips.Image):
+            if isinstance(x, pyvips.Image):
                 return x.bandand()
             else:
                 return [reduce(lambda a, b: int(a) & int(b), x)]
@@ -159,7 +157,7 @@ class TestConversion(unittest.TestCase):
 
     def test_band_or(self):
         def band_or(x):
-            if isinstance(x, Vips.Image):
+            if isinstance(x, pyvips.Image):
                 return x.bandor()
             else:
                 return [reduce(lambda a, b: int(a) | int(b), x)]
@@ -168,7 +166,7 @@ class TestConversion(unittest.TestCase):
 
     def test_band_eor(self):
         def band_eor(x):
-            if isinstance(x, Vips.Image):
+            if isinstance(x, pyvips.Image):
                 return x.bandeor()
             else:
                 return [reduce(lambda a, b: int(a) ^ int(b), x)]
@@ -177,7 +175,7 @@ class TestConversion(unittest.TestCase):
 
     def test_bandjoin(self):
         def bandjoin(x, y):
-            if isinstance(x, Vips.Image) and isinstance(y, Vips.Image):
+            if isinstance(x, pyvips.Image) and isinstance(y, pyvips.Image):
                 return x.bandjoin(y)
             else:
                 return x + y
@@ -196,7 +194,7 @@ class TestConversion(unittest.TestCase):
 
     def test_bandmean(self):
         def bandmean(x):
-            if isinstance(x, Vips.Image):
+            if isinstance(x, pyvips.Image):
                 return x.bandmean()
             else:
                 return [sum(x) // len(x)]
@@ -212,7 +210,7 @@ class TestConversion(unittest.TestCase):
             return [x[len(x) // 2] for x in joined]
 
         def bandrank(x, y):
-            if isinstance(x, Vips.Image) and isinstance(y, Vips.Image):
+            if isinstance(x, pyvips.Image) and isinstance(y, pyvips.Image):
                 return x.bandrank([y])
             else:
                 return median(x, y)
@@ -226,7 +224,7 @@ class TestConversion(unittest.TestCase):
 
     def test_cache(self):
         def cache(x):
-            if isinstance(x, Vips.Image):
+            if isinstance(x, pyvips.Image):
                 return x.cache()
             else:
                 return x
@@ -234,8 +232,8 @@ class TestConversion(unittest.TestCase):
         self.run_unary(self.all_images, cache)
 
     def test_copy(self):
-        x = self.colour.copy(interpretation = Vips.Interpretation.LAB)
-        self.assertEqual(x.interpretation, Vips.Interpretation.LAB)
+        x = self.colour.copy(interpretation = pyvips.Interpretation.LAB)
+        self.assertEqual(x.interpretation, pyvips.Interpretation.LAB)
         x = self.colour.copy(xres = 42)
         self.assertEqual(x.xres, 42)
         x = self.colour.copy(yres = 42)
@@ -244,8 +242,8 @@ class TestConversion(unittest.TestCase):
         self.assertEqual(x.xoffset, 42)
         x = self.colour.copy(yoffset = 42)
         self.assertEqual(x.yoffset, 42)
-        x = self.colour.copy(coding = Vips.Coding.NONE)
-        self.assertEqual(x.coding, Vips.Coding.NONE)
+        x = self.colour.copy(coding = pyvips.Coding.NONE)
+        self.assertEqual(x.coding, pyvips.Coding.NONE)
 
     def test_bandfold(self):
         x = self.mono.bandfold()
@@ -291,7 +289,7 @@ class TestConversion(unittest.TestCase):
             im = test.embed(20, 20, 
                             self.colour.width + 40,
                             self.colour.height + 40,
-                            extend = Vips.Extend.COPY)
+                            extend = pyvips.Extend.COPY)
             pixel = im(10, 10)
             self.assertAlmostEqualObjects(pixel, [2, 3, 4])
             pixel = im(im.width - 10, im.height - 10)
@@ -300,7 +298,7 @@ class TestConversion(unittest.TestCase):
             im = test.embed(20, 20, 
                             self.colour.width + 40,
                             self.colour.height + 40,
-                            extend = Vips.Extend.BACKGROUND,
+                            extend = pyvips.Extend.BACKGROUND,
                             background = [7, 8, 9])
             pixel = im(10, 10)
             self.assertAlmostEqualObjects(pixel, [7, 8, 9])
@@ -310,7 +308,7 @@ class TestConversion(unittest.TestCase):
             im = test.embed(20, 20, 
                             self.colour.width + 40,
                             self.colour.height + 40,
-                            extend = Vips.Extend.WHITE)
+                            extend = pyvips.Extend.WHITE)
             pixel = im(10, 10)
             # uses 255 in all bytes of ints, 255.0 for float
             pixel = [int(x) & 0xff for x in pixel]
@@ -392,8 +390,8 @@ class TestConversion(unittest.TestCase):
             self.assertAlmostEqualObjects(pixel, [20, 0, 41])
 
     def test_flatten(self):
-        for fmt in unsigned_formats + [Vips.BandFormat.SHORT, 
-                Vips.BandFormat.INT] + float_formats:
+        for fmt in unsigned_formats + [pyvips.BandFormat.SHORT, 
+                pyvips.BandFormat.INT] + float_formats:
             mx = 255
             alpha = mx / 2.0
             nalpha = mx - alpha
@@ -423,8 +421,8 @@ class TestConversion(unittest.TestCase):
                 self.assertLess(abs(x - y), 2)
 
     def test_premultiply(self):
-        for fmt in unsigned_formats + [Vips.BandFormat.SHORT, 
-                Vips.BandFormat.INT] + float_formats:
+        for fmt in unsigned_formats + [pyvips.BandFormat.SHORT, 
+                pyvips.BandFormat.INT] + float_formats:
             mx = 255
             alpha = mx / 2.0
             nalpha = mx - alpha
@@ -443,8 +441,8 @@ class TestConversion(unittest.TestCase):
                 self.assertLess(abs(x - y), 2)
 
     def test_unpremultiply(self):
-        for fmt in unsigned_formats + [Vips.BandFormat.SHORT, 
-                Vips.BandFormat.INT] + float_formats:
+        for fmt in unsigned_formats + [pyvips.BandFormat.SHORT, 
+                pyvips.BandFormat.INT] + float_formats:
             mx = 255
             alpha = mx / 2.0
             nalpha = mx - alpha
@@ -654,17 +652,17 @@ class TestConversion(unittest.TestCase):
             if image.bands > max_bands:
                 max_bands = image.bands
 
-        im = Vips.Image.arrayjoin(self.all_images)
+        im = pyvips.Image.arrayjoin(self.all_images)
         self.assertEqual(im.width, max_width * len(self.all_images))
         self.assertEqual(im.height, max_height)
         self.assertEqual(im.bands, max_bands)
 
-        im = Vips.Image.arrayjoin(self.all_images, across = 1)
+        im = pyvips.Image.arrayjoin(self.all_images, across = 1)
         self.assertEqual(im.width, max_width)
         self.assertEqual(im.height, max_height * len(self.all_images))
         self.assertEqual(im.bands, max_bands)
 
-        im = Vips.Image.arrayjoin(self.all_images, shim = 10)
+        im = pyvips.Image.arrayjoin(self.all_images, shim = 10)
         self.assertEqual(im.width, max_width * len(self.all_images) + 
                          10 * (len(self.all_images) - 1))
         self.assertEqual(im.height, max_height)
@@ -723,7 +721,7 @@ class TestConversion(unittest.TestCase):
         array = [[0.2, 0.5, 0.3]]
 
         def recomb(x):
-            if isinstance(x, Vips.Image):
+            if isinstance(x, pyvips.Image):
                 return x.recomb(array)
             else:
                 sum = 0
@@ -772,7 +770,7 @@ class TestConversion(unittest.TestCase):
         for fmt in all_formats:
             im = test.cast(fmt)
 
-            im2 = im.rot(Vips.Angle.D90)
+            im2 = im.rot(pyvips.Angle.D90)
             before = im(50, 50)
             after = im2(0, 50)
             self.assertAlmostEqualObjects(before, after)

@@ -6,7 +6,7 @@ import logging
 import sys
 import numbers
 
-from Vips import *
+from pyvips import *
 
 logger = logging.getLogger(__name__)
 

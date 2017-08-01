@@ -11,22 +11,20 @@ import math
 #import logging
 #logging.basicConfig(level = logging.DEBUG)
 
-import gi
-gi.require_version('Vips', '8.0')
-from gi.repository import Vips 
+import pyvips
 
-Vips.leak_set(True)
+pyvips.leak_set(True)
 
-unsigned_formats = [Vips.BandFormat.UCHAR, 
-                    Vips.BandFormat.USHORT, 
-                    Vips.BandFormat.UINT] 
-signed_formats = [Vips.BandFormat.CHAR, 
-                  Vips.BandFormat.SHORT, 
-                  Vips.BandFormat.INT] 
-float_formats = [Vips.BandFormat.FLOAT, 
-                 Vips.BandFormat.DOUBLE]
-complex_formats = [Vips.BandFormat.COMPLEX, 
-                   Vips.BandFormat.DPCOMPLEX] 
+unsigned_formats = [pyvips.BandFormat.UCHAR, 
+                    pyvips.BandFormat.USHORT, 
+                    pyvips.BandFormat.UINT] 
+signed_formats = [pyvips.BandFormat.CHAR, 
+                  pyvips.BandFormat.SHORT, 
+                  pyvips.BandFormat.INT] 
+float_formats = [pyvips.BandFormat.FLOAT, 
+                 pyvips.BandFormat.DOUBLE]
+complex_formats = [pyvips.BandFormat.COMPLEX, 
+                   pyvips.BandFormat.DPCOMPLEX] 
 int_formats = unsigned_formats + signed_formats
 noncomplex_formats = int_formats + float_formats
 all_formats = int_formats + float_formats + complex_formats
@@ -60,7 +58,7 @@ def run_fn(fn, x):
 # run a 2-ary function on two things -- loop over elements pairwise if the 
 # things are lists
 def run_fn2(fn, x, y):
-    if isinstance(x, Vips.Image) or isinstance(y, Vips.Image):
+    if isinstance(x, pyvips.Image) or isinstance(y, pyvips.Image):
         return fn(x, y)
     elif isinstance(x, list) or isinstance(y, list):
         return [fn(i, j) for i, j in zip_expand(x, y)]
@@ -103,22 +101,22 @@ class TestConvolution(unittest.TestCase):
             self.assertLess(abs(x - y), diff)
 
     def setUp(self):
-        im = Vips.Image.mask_ideal(100, 100, 0.5, reject = True, optical = True)
+        im = pyvips.Image.mask_ideal(100, 100, 0.5, reject = True, optical = True)
         self.colour = im * [1, 2, 3] + [2, 3, 4]
-        self.colour = self.colour.copy(interpretation = Vips.Interpretation.SRGB)
+        self.colour = self.colour.copy(interpretation = pyvips.Interpretation.SRGB)
         self.mono = self.colour.extract_band(1)
-        self.mono = self.mono.copy(interpretation = Vips.Interpretation.B_W)
+        self.mono = self.mono.copy(interpretation = pyvips.Interpretation.B_W)
         self.all_images = [self.mono, self.colour]
-        self.sharp = Vips.Image.new_from_array([[-1, -1,  -1], 
+        self.sharp = pyvips.Image.new_from_array([[-1, -1,  -1], 
                                                 [-1,  16, -1], 
                                                 [-1, -1,  -1]], scale = 8)
-        self.blur = Vips.Image.new_from_array([[1, 1, 1], 
+        self.blur = pyvips.Image.new_from_array([[1, 1, 1], 
                                                [1, 1, 1], 
                                                [1, 1, 1]], scale = 9)
-        self.line = Vips.Image.new_from_array([[ 1,  1,  1], 
+        self.line = pyvips.Image.new_from_array([[ 1,  1,  1], 
                                                [-2, -2, -2], 
                                                [ 1,  1,  1]])
-        self.sobel = Vips.Image.new_from_array([[ 1,  2,  1], 
+        self.sobel = pyvips.Image.new_from_array([[ 1,  2,  1], 
                                                 [ 0,  0,  0], 
                                                 [-1, -2, -1]])
         self.all_masks = [self.sharp, self.blur, self.line, self.sobel]
@@ -126,7 +124,7 @@ class TestConvolution(unittest.TestCase):
     def test_conv(self):
         for im in self.all_images:
             for msk in self.all_masks:
-                for prec in [Vips.Precision.INTEGER, Vips.Precision.FLOAT]:
+                for prec in [pyvips.Precision.INTEGER, pyvips.Precision.FLOAT]:
                     convolved = im.conv(msk, precision = prec)
 
                     result = convolved(25, 50)
@@ -145,7 +143,7 @@ class TestConvolution(unittest.TestCase):
                 msk.matrixprint()
                 print("im.bands = %s" % im.bands)
 
-                convolved = im.conv(msk, precision = Vips.Precision.APPROXIMATE)
+                convolved = im.conv(msk, precision = pyvips.Precision.APPROXIMATE)
 
                 result = convolved(25, 50)
                 true = conv(im, msk, 24, 49)
@@ -160,12 +158,12 @@ class TestConvolution(unittest.TestCase):
     def test_compass(self):
         for im in self.all_images:
             for msk in self.all_masks:
-                for prec in [Vips.Precision.INTEGER, Vips.Precision.FLOAT]:
+                for prec in [pyvips.Precision.INTEGER, pyvips.Precision.FLOAT]:
                     for times in range(1, 4):
                         convolved = im.compass(msk, 
                                                times = times, 
-                                               angle = Vips.Angle45.D45,
-                                               combine = Vips.Combine.MAX,
+                                               angle = pyvips.Angle45.D45,
+                                               combine = pyvips.Combine.MAX,
                                                precision = prec)
 
                         result = convolved(25, 50)
@@ -174,12 +172,12 @@ class TestConvolution(unittest.TestCase):
 
         for im in self.all_images:
             for msk in self.all_masks:
-                for prec in [Vips.Precision.INTEGER, Vips.Precision.FLOAT]:
+                for prec in [pyvips.Precision.INTEGER, pyvips.Precision.FLOAT]:
                     for times in range(1, 4):
                         convolved = im.compass(msk, 
                                                times = times, 
-                                               angle = Vips.Angle45.D45,
-                                               combine = Vips.Combine.SUM,
+                                               angle = pyvips.Angle45.D45,
+                                               combine = pyvips.Combine.SUM,
                                                precision = prec)
 
                         result = convolved(25, 50)
@@ -188,10 +186,10 @@ class TestConvolution(unittest.TestCase):
 
     def test_convsep(self):
         for im in self.all_images:
-            for prec in [Vips.Precision.INTEGER, Vips.Precision.FLOAT]:
-                gmask = Vips.Image.gaussmat(2, 0.1, 
+            for prec in [pyvips.Precision.INTEGER, pyvips.Precision.FLOAT]:
+                gmask = pyvips.Image.gaussmat(2, 0.1, 
                                             precision = prec)
-                gmask_sep = Vips.Image.gaussmat(2, 0.1, 
+                gmask_sep = pyvips.Image.gaussmat(2, 0.1, 
                                                 separable = True,
                                                 precision = prec)
 
@@ -231,10 +229,10 @@ class TestConvolution(unittest.TestCase):
 
     def test_gaussblur(self):
         for im in self.all_images:
-            for prec in [Vips.Precision.INTEGER, Vips.Precision.FLOAT]:
+            for prec in [pyvips.Precision.INTEGER, pyvips.Precision.FLOAT]:
                 for i in range(5, 10):
                     sigma = i / 5.0
-                    gmask = Vips.Image.gaussmat(sigma, 0.2, 
+                    gmask = pyvips.Image.gaussmat(sigma, 0.2, 
                                                 precision = prec)
 
                     a = im.conv(gmask, precision = prec)

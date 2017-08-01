@@ -7,11 +7,9 @@ import math
 #import logging
 #logging.basicConfig(level = logging.DEBUG)
 
-import gi
-gi.require_version('Vips', '8.0')
-from gi.repository import Vips 
+import pyvips
 
-Vips.leak_set(True)
+pyvips.leak_set(True)
 
 # an expanding zip ... if either of the args is a scalar or a one-element list,
 # duplicate it down the other side 
@@ -39,7 +37,7 @@ class TestHistogram(unittest.TestCase):
             self.assertAlmostEqual(x, y, places = places, msg = msg)
 
     def test_hist_cum(self):
-        im = Vips.Image.identity()
+        im = pyvips.Image.identity()
 
         sum = im.avg() * 256
 
@@ -49,7 +47,7 @@ class TestHistogram(unittest.TestCase):
         self.assertEqual(p[0], sum)
 
     def test_hist_equal(self):
-        im = Vips.Image.new_from_file("images/йцук.jpg")
+        im = pyvips.Image.new_from_file("images/йцук.jpg")
 
         im2 = im.hist_equal()
 
@@ -60,11 +58,11 @@ class TestHistogram(unittest.TestCase):
         self.assertTrue(im.deviate() < im2.deviate())
 
     def test_hist_ismonotonic(self):
-        im = Vips.Image.identity()
+        im = pyvips.Image.identity()
         self.assertTrue(im.hist_ismonotonic())
 
     def test_hist_local(self):
-        im = Vips.Image.new_from_file("images/йцук.jpg")
+        im = pyvips.Image.new_from_file("images/йцук.jpg")
 
         im2 = im.hist_local(10, 10)
 
@@ -82,37 +80,37 @@ class TestHistogram(unittest.TestCase):
         self.assertTrue(im3.deviate() < im2.deviate())
 
     def test_hist_match(self):
-        im = Vips.Image.identity()
-        im2 = Vips.Image.identity()
+        im = pyvips.Image.identity()
+        im2 = pyvips.Image.identity()
 
         matched = im.hist_match(im2)
 
         self.assertEqual((im - matched).abs().max(), 0.0)
 
     def test_hist_norm(self):
-        im = Vips.Image.identity()
+        im = pyvips.Image.identity()
         im2 = im.hist_norm()
 
         self.assertEqual((im - im2).abs().max(), 0.0)
 
     def test_hist_plot(self):
-        im = Vips.Image.identity()
+        im = pyvips.Image.identity()
         im2 = im.hist_plot()
 
         self.assertEqual(im2.width, 256)
         self.assertEqual(im2.height, 256)
-        self.assertEqual(im2.format, Vips.BandFormat.UCHAR)
+        self.assertEqual(im2.format, pyvips.BandFormat.UCHAR)
         self.assertEqual(im2.bands, 1)
 
     def test_hist_map(self):
-        im = Vips.Image.identity()
+        im = pyvips.Image.identity()
 
         im2 = im.maplut(im)
 
         self.assertEqual((im - im2).abs().max(), 0.0)
 
     def test_percent(self):
-        im = Vips.Image.new_from_file("images/йцук.jpg").extract_band(1)
+        im = pyvips.Image.new_from_file("images/йцук.jpg").extract_band(1)
 
         pc = im.percent(90)
 
@@ -123,14 +121,14 @@ class TestHistogram(unittest.TestCase):
         self.assertAlmostEqual(pc_set, 90, places = 0)
 
     def test_hist_entropy(self):
-        im = Vips.Image.new_from_file("images/йцук.jpg").extract_band(1)
+        im = pyvips.Image.new_from_file("images/йцук.jpg").extract_band(1)
 
         ent = im.hist_find().hist_entropy()
 
         self.assertAlmostEqual(ent, 4.37, places = 2)
 
     def test_stdif(self):
-        im = Vips.Image.new_from_file("images/йцук.jpg")
+        im = pyvips.Image.new_from_file("images/йцук.jpg")
 
         im2 = im.stdif(10, 10)
 

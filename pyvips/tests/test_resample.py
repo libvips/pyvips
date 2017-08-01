@@ -7,32 +7,30 @@ import math
 #import logging
 #logging.basicConfig(level = logging.DEBUG)
 
-import gi
-gi.require_version('Vips', '8.0')
-from gi.repository import Vips 
+import pyvips
 
-Vips.leak_set(True)
+pyvips.leak_set(True)
 
-unsigned_formats = [Vips.BandFormat.UCHAR, 
-                    Vips.BandFormat.USHORT, 
-                    Vips.BandFormat.UINT] 
-signed_formats = [Vips.BandFormat.CHAR, 
-                  Vips.BandFormat.SHORT, 
-                  Vips.BandFormat.INT] 
-float_formats = [Vips.BandFormat.FLOAT, 
-                 Vips.BandFormat.DOUBLE]
-complex_formats = [Vips.BandFormat.COMPLEX, 
-                   Vips.BandFormat.DPCOMPLEX] 
+unsigned_formats = [pyvips.BandFormat.UCHAR, 
+                    pyvips.BandFormat.USHORT, 
+                    pyvips.BandFormat.UINT] 
+signed_formats = [pyvips.BandFormat.CHAR, 
+                  pyvips.BandFormat.SHORT, 
+                  pyvips.BandFormat.INT] 
+float_formats = [pyvips.BandFormat.FLOAT, 
+                 pyvips.BandFormat.DOUBLE]
+complex_formats = [pyvips.BandFormat.COMPLEX, 
+                   pyvips.BandFormat.DPCOMPLEX] 
 int_formats = unsigned_formats + signed_formats
 noncomplex_formats = int_formats + float_formats
 all_formats = int_formats + float_formats + complex_formats
 
 # Run a function expecting a complex image on a two-band image
 def run_cmplx(fn, image):
-    if image.format == Vips.BandFormat.FLOAT:
-        new_format = Vips.BandFormat.COMPLEX
-    elif image.format == Vips.BandFormat.DOUBLE:
-        new_format = Vips.BandFormat.DPCOMPLEX
+    if image.format == pyvips.BandFormat.FLOAT:
+        new_format = pyvips.BandFormat.COMPLEX
+    elif image.format == pyvips.BandFormat.DOUBLE:
+        new_format = pyvips.BandFormat.DPCOMPLEX
     else:
         raise "run_cmplx: not float or double"
 
@@ -50,7 +48,7 @@ def to_polar(image):
     horizontal straight lines become radial spokes.
     """
     # xy image, zero in the centre, scaled to fit image to a circle
-    xy = Vips.Image.xyz(image.width, image.height)
+    xy = pyvips.Image.xyz(image.width, image.height)
     xy -= [image.width / 2.0, image.height / 2.0]
     scale = min(image.width, image.height) / float(image.width)
     xy *= 2.0 / scale
@@ -69,7 +67,7 @@ def to_rectangular(image):
     radial lines become horizontal lines.
     """
     # xy image, vertical scaled to 360 degrees
-    xy = Vips.Image.xyz(image.width, image.height)
+    xy = pyvips.Image.xyz(image.width, image.height)
     xy *= [1, 360.0 / image.height]
 
     # to rect, scale to image rect
@@ -109,25 +107,25 @@ class TestResample(unittest.TestCase):
         self.jpeg_file = "images/йцук.jpg"
 
     def test_affine(self):
-        im = Vips.Image.new_from_file(self.jpeg_file)
+        im = pyvips.Image.new_from_file(self.jpeg_file)
 
         # vsqbs is non-interpolatory, don't test this way
         for name in ["nearest", "bicubic", "bilinear", "nohalo", "lbb"]:
             x = im
-            interpolate = Vips.Interpolate.new(name)
+            interpolate = pyvips.Interpolate.new(name)
             for i in range(4):
                 x = x.affine([0, 1, 1, 0], interpolate = interpolate)
  
             self.assertEqual((x - im).abs().max(), 0)
 
     def test_reduce(self):
-        im = Vips.Image.new_from_file(self.jpeg_file)
+        im = pyvips.Image.new_from_file(self.jpeg_file)
         # cast down to 0-127, the smallest range, so we aren't messed up by
         # clipping
-        im = im.cast(Vips.BandFormat.CHAR)
-        bicubic = Vips.Interpolate.new("bicubic")
-        bilinear = Vips.Interpolate.new("bilinear")
-        nearest = Vips.Interpolate.new("nearest")
+        im = im.cast(pyvips.BandFormat.CHAR)
+        bicubic = pyvips.Interpolate.new("bicubic")
+        bilinear = pyvips.Interpolate.new("bilinear")
+        nearest = pyvips.Interpolate.new("nearest")
 
         for fac in [1, 1.1, 1.5, 1.999]:
             for fmt in all_formats:
@@ -160,7 +158,7 @@ class TestResample(unittest.TestCase):
 
         # try constant images ... should not change the constant
         for const in [0, 1, 2, 254, 255]:
-            im = (Vips.Image.black(10, 10) + const).cast("uchar")
+            im = (pyvips.Image.black(10, 10) + const).cast("uchar")
             for kernel in ["nearest", "linear", "cubic", "lanczos2", "lanczos3"]:
                 # print "testing kernel =", kernel
                 # print "testing const =", const
@@ -169,19 +167,19 @@ class TestResample(unittest.TestCase):
                 self.assertEqual(d, 0)
 
     def test_resize(self):
-        im = Vips.Image.new_from_file(self.jpeg_file)
+        im = pyvips.Image.new_from_file(self.jpeg_file)
         im2 = im.resize(0.25)
         self.assertEqual(im2.width, round(im.width / 4.0))
         self.assertEqual(im2.height, round(im.height / 4.0))
 
         # test geometry rounding corner case
-        im = Vips.Image.black(100, 1);
+        im = pyvips.Image.black(100, 1);
         x = im.resize(0.5)
         self.assertEqual(x.width, 50)
         self.assertEqual(x.height, 1)
 
     def test_shrink(self):
-        im = Vips.Image.new_from_file(self.jpeg_file)
+        im = pyvips.Image.new_from_file(self.jpeg_file)
         im2 = im.shrink(4, 4)
         self.assertEqual(im2.width, round(im.width / 4.0))
         self.assertEqual(im2.height, round(im.height / 4.0))
@@ -193,43 +191,43 @@ class TestResample(unittest.TestCase):
         self.assertLess(abs(im.avg() - im2.avg()), 1)
 
     def test_thumbnail(self):
-        im = Vips.Image.thumbnail(self.jpeg_file, 100)
+        im = pyvips.Image.thumbnail(self.jpeg_file, 100)
 
         self.assertEqual(im.width, 100)
         self.assertEqual(im.bands, 3)
         self.assertEqual(im.bands, 3)
 
         # the average shouldn't move too much
-        im_orig = Vips.Image.new_from_file(self.jpeg_file)
+        im_orig = pyvips.Image.new_from_file(self.jpeg_file)
         self.assertLess(abs(im_orig.avg() - im.avg()), 1)
 
         # make sure we always get the right width
         for width in range(1000, 1, -13):
-            im = Vips.Image.thumbnail(self.jpeg_file, width)
+            im = pyvips.Image.thumbnail(self.jpeg_file, width)
             self.assertEqual(im.width, width)
 
         # should fit one of width or height
-        im = Vips.Image.thumbnail(self.jpeg_file, 100, height = 300)
+        im = pyvips.Image.thumbnail(self.jpeg_file, 100, height = 300)
         self.assertEqual(im.width, 100)
         self.assertNotEqual(im.height, 300)
-        im = Vips.Image.thumbnail(self.jpeg_file, 300, height = 100)
+        im = pyvips.Image.thumbnail(self.jpeg_file, 300, height = 100)
         self.assertNotEqual(im.width, 300)
         self.assertEqual(im.height, 100)
 
         # with @crop, should fit both width and height
-        im = Vips.Image.thumbnail(self.jpeg_file, 100, 
+        im = pyvips.Image.thumbnail(self.jpeg_file, 100, 
                                   height = 300, crop = True)
         self.assertEqual(im.width, 100)
         self.assertEqual(im.height, 300)
 
-        im1 = Vips.Image.thumbnail(self.jpeg_file, 100)
+        im1 = pyvips.Image.thumbnail(self.jpeg_file, 100)
         with open(self.jpeg_file, 'rb') as f:
             buf = f.read()
-        im2 = Vips.Image.thumbnail_buffer(buf, 100)
+        im2 = pyvips.Image.thumbnail_buffer(buf, 100)
         self.assertLess(abs(im1.avg() - im2.avg()), 1)
 
     def test_similarity(self):
-        im = Vips.Image.new_from_file(self.jpeg_file)
+        im = pyvips.Image.new_from_file(self.jpeg_file)
         im2 = im.similarity(angle = 90)
         im3 = im.affine([0, -1, 1, 0])
         # rounding in calculating the affine transform from the angle stops 
@@ -237,13 +235,13 @@ class TestResample(unittest.TestCase):
         self.assertLess((im2 - im3).abs().max(), 50)
 
     def test_similarity_scale(self):
-        im = Vips.Image.new_from_file(self.jpeg_file)
+        im = pyvips.Image.new_from_file(self.jpeg_file)
         im2 = im.similarity(scale = 2)
         im3 = im.affine([2, 0, 0, 2])
         self.assertEqual((im2 - im3).abs().max(), 0)
 
     def test_mapim(self):
-        im = Vips.Image.new_from_file(self.jpeg_file)
+        im = pyvips.Image.new_from_file(self.jpeg_file)
 
         p = to_polar(im)
         r = to_rectangular(p)

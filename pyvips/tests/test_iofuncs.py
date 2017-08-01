@@ -7,11 +7,9 @@ import math
 #import logging
 #logging.basicConfig(level = logging.DEBUG)
 
-import gi
-gi.require_version('Vips', '8.0')
-from gi.repository import Vips 
+import pyvips
 
-Vips.leak_set(True)
+pyvips.leak_set(True)
 
 # an expanding zip ... if either of the args is not a list, duplicate it down
 # the other
@@ -36,8 +34,8 @@ class TestIofuncs(unittest.TestCase):
     # code with lots of cases
     def test_split7(self):
         def split(path):
-            filename7 = Vips.path_filename7(path)
-            mode7 = Vips.path_mode7(path)
+            filename7 = pyvips.path_filename7(path)
+            mode7 = pyvips.path_mode7(path)
 
             return [filename7, mode7]
 

@@ -7,39 +7,37 @@ import math
 #import logging
 #logging.basicConfig(level = logging.DEBUG)
 
-import gi
-gi.require_version('Vips', '8.0')
-from gi.repository import Vips 
+import pyvips
 
-Vips.leak_set(True)
+pyvips.leak_set(True)
 
-unsigned_formats = [Vips.BandFormat.UCHAR, 
-                    Vips.BandFormat.USHORT, 
-                    Vips.BandFormat.UINT] 
-signed_formats = [Vips.BandFormat.CHAR, 
-                  Vips.BandFormat.SHORT, 
-                  Vips.BandFormat.INT] 
-float_formats = [Vips.BandFormat.FLOAT, 
-                 Vips.BandFormat.DOUBLE]
-complex_formats = [Vips.BandFormat.COMPLEX, 
-                   Vips.BandFormat.DPCOMPLEX] 
+unsigned_formats = [pyvips.BandFormat.UCHAR, 
+                    pyvips.BandFormat.USHORT, 
+                    pyvips.BandFormat.UINT] 
+signed_formats = [pyvips.BandFormat.CHAR, 
+                  pyvips.BandFormat.SHORT, 
+                  pyvips.BandFormat.INT] 
+float_formats = [pyvips.BandFormat.FLOAT, 
+                 pyvips.BandFormat.DOUBLE]
+complex_formats = [pyvips.BandFormat.COMPLEX, 
+                   pyvips.BandFormat.DPCOMPLEX] 
 int_formats = unsigned_formats + signed_formats
 noncomplex_formats = int_formats + float_formats
 all_formats = int_formats + float_formats + complex_formats
 
-colour_colourspaces = [Vips.Interpretation.XYZ,
-                       Vips.Interpretation.LAB,
-                       Vips.Interpretation.LCH,
-                       Vips.Interpretation.CMC,
-                       Vips.Interpretation.LABS,
-                       Vips.Interpretation.SCRGB,
-                       Vips.Interpretation.HSV,
-                       Vips.Interpretation.SRGB,
-                       Vips.Interpretation.YXY]
-coded_colourspaces = [Vips.Interpretation.LABQ]
-mono_colourspaces = [Vips.Interpretation.B_W]
-sixteenbit_colourspaces = [Vips.Interpretation.GREY16,
-                           Vips.Interpretation.RGB16]
+colour_colourspaces = [pyvips.Interpretation.XYZ,
+                       pyvips.Interpretation.LAB,
+                       pyvips.Interpretation.LCH,
+                       pyvips.Interpretation.CMC,
+                       pyvips.Interpretation.LABS,
+                       pyvips.Interpretation.SCRGB,
+                       pyvips.Interpretation.HSV,
+                       pyvips.Interpretation.SRGB,
+                       pyvips.Interpretation.YXY]
+coded_colourspaces = [pyvips.Interpretation.LABQ]
+mono_colourspaces = [pyvips.Interpretation.B_W]
+sixteenbit_colourspaces = [pyvips.Interpretation.GREY16,
+                           pyvips.Interpretation.RGB16]
 all_colourspaces = colour_colourspaces + mono_colourspaces + \
                     coded_colourspaces + sixteenbit_colourspaces
 
@@ -66,7 +64,7 @@ def run_fn(fn, x):
 # run a 2-ary function on two things -- loop over elements pairwise if the 
 # things are lists
 def run_fn2(fn, x, y):
-    if isinstance(x, Vips.Image) or isinstance(y, Vips.Image):
+    if isinstance(x, pyvips.Image) or isinstance(y, pyvips.Image):
         return fn(x, y)
     elif isinstance(x, list) or isinstance(y, list):
         return [fn(i, j) for i, j in zip_expand(x, y)]
@@ -108,7 +106,7 @@ class TestColour(unittest.TestCase):
                       lambda x, y: run_fn2(fn, x, y))
 
     def setUp(self):
-        im = Vips.Image.mask_ideal(100, 100, 0.5, reject = True, optical = True)
+        im = pyvips.Image.mask_ideal(100, 100, 0.5, reject = True, optical = True)
         self.colour = im * [1, 2, 3] + [2, 3, 4]
         self.mono = self.colour.extract_band(1)
         self.all_images = [self.mono, self.colour]
@@ -116,12 +114,12 @@ class TestColour(unittest.TestCase):
     def test_colourspace(self):
         # mid-grey in Lab ... put 42 in the extra band, it should be copied
         # unmodified
-        test = Vips.Image.black(100, 100) + [50, 0, 0, 42]
-        test = test.copy(interpretation = Vips.Interpretation.LAB)
+        test = pyvips.Image.black(100, 100) + [50, 0, 0, 42]
+        test = test.copy(interpretation = pyvips.Interpretation.LAB)
 
         # a long series should come in a circle
         im = test
-        for col in colour_colourspaces + [Vips.Interpretation.LAB]:
+        for col in colour_colourspaces + [pyvips.Interpretation.LAB]:
             im = im.colourspace(col)
             self.assertEqual(im.interpretation, col)
 
@@ -135,8 +133,8 @@ class TestColour(unittest.TestCase):
 
         # alpha won't be equal for RGB16, but it should be preserved if we go
         # there and back
-        im = im.colourspace(Vips.Interpretation.RGB16)
-        im = im.colourspace(Vips.Interpretation.LAB)
+        im = im.colourspace(pyvips.Interpretation.RGB16)
+        im = im.colourspace(pyvips.Interpretation.LAB)
 
         before = test(10, 10)
         after = im(10, 10)
@@ -147,7 +145,7 @@ class TestColour(unittest.TestCase):
             for end in colour_colourspaces:
                 im = test.colourspace(start)
                 im2 = im.colourspace(end)
-                im3 = im2.colourspace(Vips.Interpretation.LAB)
+                im3 = im2.colourspace(pyvips.Interpretation.LAB)
 
                 before = test(10, 10)
                 after = im3(10, 10)
@@ -156,7 +154,7 @@ class TestColour(unittest.TestCase):
 
         # test Lab->XYZ on mid-grey
         # checked against http://www.brucelindbloom.com
-        im = test.colourspace(Vips.Interpretation.XYZ)
+        im = test.colourspace(pyvips.Interpretation.XYZ)
         after = im(10, 10)
         self.assertAlmostEqualObjects(after, [17.5064, 18.4187, 20.0547, 42])
 
@@ -170,7 +168,7 @@ class TestColour(unittest.TestCase):
             [before, alpha_before] = test_grey(10, 10)
             [after, alpha_after] = im(10, 10)
             self.assertLess(abs(alpha_after - alpha_before), 1)
-            if mono_fmt == Vips.Interpretation.GREY16:
+            if mono_fmt == pyvips.Interpretation.GREY16:
                 # GREY16 can wind up rather different due to rounding
                 self.assertLess(abs(after - before), 30)
             else:
@@ -182,10 +180,10 @@ class TestColour(unittest.TestCase):
 
     def test_dE00(self):
         # put 42 in the extra band, it should be copied unmodified
-        reference = Vips.Image.black(100, 100) + [50, 10, 20, 42]
-        reference = reference.copy(interpretation = Vips.Interpretation.LAB)
-        sample = Vips.Image.black(100, 100) + [40, -20, 10]
-        sample = sample.copy(interpretation = Vips.Interpretation.LAB)
+        reference = pyvips.Image.black(100, 100) + [50, 10, 20, 42]
+        reference = reference.copy(interpretation = pyvips.Interpretation.LAB)
+        sample = pyvips.Image.black(100, 100) + [40, -20, 10]
+        sample = sample.copy(interpretation = pyvips.Interpretation.LAB)
 
         difference = reference.dE00(sample)
         result, alpha = difference(10, 10)
@@ -194,10 +192,10 @@ class TestColour(unittest.TestCase):
 
     def test_dE76(self):
         # put 42 in the extra band, it should be copied unmodified
-        reference = Vips.Image.black(100, 100) + [50, 10, 20, 42]
-        reference = reference.copy(interpretation = Vips.Interpretation.LAB)
-        sample = Vips.Image.black(100, 100) + [40, -20, 10]
-        sample = sample.copy(interpretation = Vips.Interpretation.LAB)
+        reference = pyvips.Image.black(100, 100) + [50, 10, 20, 42]
+        reference = reference.copy(interpretation = pyvips.Interpretation.LAB)
+        sample = pyvips.Image.black(100, 100) + [40, -20, 10]
+        sample = sample.copy(interpretation = pyvips.Interpretation.LAB)
 
         difference = reference.dE76(sample)
         result, alpha = difference(10, 10)
@@ -208,10 +206,10 @@ class TestColour(unittest.TestCase):
     # the CMC formula, so it won't match exactly ... see vips_LCh2CMC() for
     # details
     def test_dECMC(self):
-        reference = Vips.Image.black(100, 100) + [50, 10, 20, 42]
-        reference = reference.copy(interpretation = Vips.Interpretation.LAB)
-        sample = Vips.Image.black(100, 100) + [55, 11, 23]
-        sample = sample.copy(interpretation = Vips.Interpretation.LAB)
+        reference = pyvips.Image.black(100, 100) + [50, 10, 20, 42]
+        reference = reference.copy(interpretation = pyvips.Interpretation.LAB)
+        sample = pyvips.Image.black(100, 100) + [55, 11, 23]
+        sample = sample.copy(interpretation = pyvips.Interpretation.LAB)
 
         difference = reference.dECMC(sample)
         result, alpha = difference(10, 10)
@@ -219,31 +217,31 @@ class TestColour(unittest.TestCase):
         self.assertAlmostEqual(alpha, 42.0, places = 3)
 
     def test_icc(self):
-        test = Vips.Image.new_from_file("images/йцук.jpg")
+        test = pyvips.Image.new_from_file("images/йцук.jpg")
 
         im = test.icc_import().icc_export()
         self.assertLess(im.dE76(test).max(), 6)
 
         im = test.icc_import()
         im2 = im.icc_export(depth = 16)
-        self.assertEqual(im2.format, Vips.BandFormat.USHORT)
+        self.assertEqual(im2.format, pyvips.BandFormat.USHORT)
         im3 = im2.icc_import()
         self.assertLess((im - im3).abs().max(), 3)
 
-        im = test.icc_import(intent = Vips.Intent.ABSOLUTE)
-        im2 = im.icc_export(intent = Vips.Intent.ABSOLUTE)
+        im = test.icc_import(intent = pyvips.Intent.ABSOLUTE)
+        im2 = im.icc_export(intent = pyvips.Intent.ABSOLUTE)
         self.assertLess(im2.dE76(test).max(), 6)
 
         im = test.icc_import()
         im2 = im.icc_export(output_profile = "images/sRGB.icm")
-        im3 = im.colourspace(Vips.Interpretation.SRGB)
+        im3 = im.colourspace(pyvips.Interpretation.SRGB)
         self.assertLess(im2.dE76(im3).max(), 6)
 
         before_profile = test.get_value("icc-profile-data")
         im = test.icc_transform("images/sRGB.icm")
         after_profile = im.get_value("icc-profile-data")
         im2 = test.icc_import()
-        im3 = im2.colourspace(Vips.Interpretation.SRGB)
+        im3 = im2.colourspace(pyvips.Interpretation.SRGB)
         self.assertLess(im.dE76(im3).max(), 6)
         self.assertNotEqual(len(before_profile), len(after_profile))
 
@@ -251,10 +249,10 @@ class TestColour(unittest.TestCase):
         im2 = test.icc_import()
         self.assertLess(6, im.dE76(im2).max())
 
-        im = test.icc_import(pcs = Vips.PCS.XYZ)
-        self.assertEqual(im.interpretation, Vips.Interpretation.XYZ)
+        im = test.icc_import(pcs = pyvips.PCS.XYZ)
+        self.assertEqual(im.interpretation, pyvips.Interpretation.XYZ)
         im = test.icc_import()
-        self.assertEqual(im.interpretation, Vips.Interpretation.LAB)
+        self.assertEqual(im.interpretation, pyvips.Interpretation.LAB)
 
 if __name__ == '__main__':
     unittest.main()

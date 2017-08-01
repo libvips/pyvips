@@ -33,3 +33,23 @@ The hope is that a new Python binding on top of cffi would be:
 
 * easier to package for pip
 
+# Notes
+
+Local user install
+
+	$ pip install --user -e .
+
+Run test suite 
+
+	$ nosetests
+
+To convert old code, replace the lines
+
+	import gi
+	gi.require_version('Vips', '8.0')
+	from gi.repository import Vips 
+
+with
+
+	import pyvips
+	Vips = pyvips

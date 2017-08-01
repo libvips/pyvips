@@ -11,13 +11,11 @@ from tempfile import NamedTemporaryFile
 #import logging
 #logging.basicConfig(level = logging.DEBUG)
 
-import gi
-gi.require_version('Vips', '8.0')
-from gi.repository import Vips 
+import pyvips
 
 from gi.repository import GObject
 
-Vips.leak_set(True)
+pyvips.leak_set(True)
 
 # an expanding zip ... if either of the args is not a list, duplicate it down
 # the other
@@ -59,37 +57,37 @@ class TestForeign(unittest.TestCase):
         self.gif_anim_file = "images/cogs.gif"
         self.dicom_file = "images/dicom_test_image.dcm"
 
-        self.colour = Vips.Image.jpegload(self.jpeg_file)
+        self.colour = pyvips.Image.jpegload(self.jpeg_file)
         self.mono = self.colour.extract_band(1)
         # we remove the ICC profile: the RGB one will no longer be appropriate
         self.mono.remove("icc-profile-data")
         self.rad = self.colour.float2rad()
         self.rad.remove("icc-profile-data")
         self.cmyk = self.colour.bandjoin(self.mono)
-        self.cmyk = self.cmyk.copy(interpretation = Vips.Interpretation.CMYK)
+        self.cmyk = self.cmyk.copy(interpretation = pyvips.Interpretation.CMYK)
         self.cmyk.remove("icc-profile-data")
 
-        im = Vips.Image.new_from_file(self.gif_file)
+        im = pyvips.Image.new_from_file(self.gif_file)
         self.onebit = im > 128
 
     # we have test files for formats which have a clear standard
     def file_loader(self, loader, test_file, validate):
-        im = Vips.call(loader, test_file)
+        im = pyvips.call(loader, test_file)
         validate(self, im)
-        im = Vips.Image.new_from_file(test_file)
+        im = pyvips.Image.new_from_file(test_file)
         validate(self, im)
 
     def buffer_loader(self, loader, test_file, validate):
         with open(test_file, 'rb') as f:
             buf = f.read()
 
-        im = Vips.call(loader, buf)
+        im = pyvips.call(loader, buf)
         validate(self, im)
-        im = Vips.Image.new_from_buffer(buf, "")
+        im = pyvips.Image.new_from_buffer(buf, "")
         validate(self, im)
 
     def save_load(self, format, im):
-        x = Vips.Image.new_temp_file(format)
+        x = pyvips.Image.new_temp_file(format)
         im.write(x)
 
         self.assertEqual(im.width, x.width)
@@ -100,9 +98,9 @@ class TestForeign(unittest.TestCase):
 
     def save_load_file(self, filename, options, im, thresh):
         # yuk! 
-        # but we can't set format parameters for Vips.Image.new_temp_file()
+        # but we can't set format parameters for pyvips.Image.new_temp_file()
         im.write_to_file(filename + options)
-        x = Vips.Image.new_from_file(filename)
+        x = pyvips.Image.new_from_file(filename)
 
         self.assertEqual(im.width, x.width)
         self.assertEqual(im.height, x.height)
@@ -113,8 +111,8 @@ class TestForeign(unittest.TestCase):
         os.unlink(filename)
 
     def save_load_buffer(self, saver, loader, im, max_diff = 0):
-        buf = Vips.call(saver, im)
-        x = Vips.call(loader, buf)
+        buf = pyvips.call(saver, im)
+        x = pyvips.call(loader, buf)
 
         self.assertEqual(im.width, x.width)
         self.assertEqual(im.height, x.height)
@@ -122,11 +120,11 @@ class TestForeign(unittest.TestCase):
         self.assertLessEqual((im - x).abs().max(), max_diff)
 
     def save_buffer_tempfile(self, saver, suf, im, max_diff = 0):
-        buf = Vips.call(saver, im)
+        buf = pyvips.call(saver, im)
         f = NamedTemporaryFile(suffix=suf, delete=False)
         f.write(buf)
         f.close()
-        x = Vips.Image.new_from_file(f.name)
+        x = pyvips.Image.new_from_file(f.name)
 
         self.assertEqual(im.width, x.width)
         self.assertEqual(im.height, x.height)
@@ -140,7 +138,7 @@ class TestForeign(unittest.TestCase):
 
         # check we can save and restore metadata
         self.colour.write_to_file("test.v")
-        x = Vips.Image.new_from_file("test.v")
+        x = pyvips.Image.new_from_file("test.v")
         before_exif = self.colour.get_value("exif-data")
         after_exif = x.get_value("exif-data")
 
@@ -152,7 +150,7 @@ class TestForeign(unittest.TestCase):
         os.unlink("test.v")
 
     def test_jpeg(self):
-        x = Vips.type_find("VipsForeign", "jpegload")
+        x = pyvips.type_find("VipsForeign", "jpegload")
         if not x.is_instantiatable():
             print("no jpeg support in this vips, skipping test")
             return
@@ -174,48 +172,48 @@ class TestForeign(unittest.TestCase):
         self.save_load("%s.jpg", self.colour)
 
         # see if we have exif parsing: our test image has this field
-        x = Vips.Image.new_from_file(self.jpeg_file)
+        x = pyvips.Image.new_from_file(self.jpeg_file)
         if x.get_typeof("exif-ifd0-Orientation") != GObject.TYPE_INVALID:
             # we need a copy of the image to set the new metadata on
             # otherwise we get caching problems
-            x = Vips.Image.new_from_file(self.jpeg_file)
+            x = pyvips.Image.new_from_file(self.jpeg_file)
             x = x.copy()
             x.set_value("orientation", 2)
             x.write_to_file("test.jpg")
-            x = Vips.Image.new_from_file("test.jpg")
+            x = pyvips.Image.new_from_file("test.jpg")
             y = x.get_value("orientation")
             self.assertEqual(y, 2)
             os.unlink("test.jpg")
 
-            x = Vips.Image.new_from_file(self.jpeg_file)
+            x = pyvips.Image.new_from_file(self.jpeg_file)
             x = x.copy()
             x.set_value("orientation", 2)
             x.write_to_file("test-12.jpg")
 
-            x = Vips.Image.new_from_file("test-12.jpg")
+            x = pyvips.Image.new_from_file("test-12.jpg")
             y = x.get_value("orientation")
             self.assertEqual(y, 2)
             x.remove("orientation")
             x.write_to_file("test-13.jpg")
-            x = Vips.Image.new_from_file("test-13.jpg")
+            x = pyvips.Image.new_from_file("test-13.jpg")
             y = x.get_value("orientation")
             self.assertEqual(y, 1)
             os.unlink("test-12.jpg")
             os.unlink("test-13.jpg")
 
-            x = Vips.Image.new_from_file(self.jpeg_file)
+            x = pyvips.Image.new_from_file(self.jpeg_file)
             x = x.copy()
             x.set_value("orientation", 6)
             x.write_to_file("test-14.jpg")
 
-            x1 = Vips.Image.new_from_file("test-14.jpg")
-            x2 = Vips.Image.new_from_file("test-14.jpg", autorotate = True)
+            x1 = pyvips.Image.new_from_file("test-14.jpg")
+            x2 = pyvips.Image.new_from_file("test-14.jpg", autorotate = True)
             self.assertEqual(x1.width, x2.height)
             self.assertEqual(x1.height, x2.width)
             os.unlink("test-14.jpg")
 
     def test_png(self):
-        x = Vips.type_find("VipsForeign", "pngload")
+        x = pyvips.type_find("VipsForeign", "pngload")
         if not x.is_instantiatable():
             print("no png support in this vips, skipping test")
             return
@@ -234,7 +232,7 @@ class TestForeign(unittest.TestCase):
         self.save_load("%s.png", self.colour)
 
     def test_tiff(self):
-        x = Vips.type_find("VipsForeign", "tiffload")
+        x = pyvips.type_find("VipsForeign", "tiffload")
         if not x.is_instantiatable():
             print("no tiff support in this vips, skipping test")
             return
@@ -272,69 +270,69 @@ class TestForeign(unittest.TestCase):
 
         # we need a copy of the image to set the new metadata on
         # otherwise we get caching problems
-        x = Vips.Image.new_from_file(self.tiff_file)
+        x = pyvips.Image.new_from_file(self.tiff_file)
         x = x.copy()
         x.set_value("orientation", 2)
         x.write_to_file("test-11.tif")
-        x = Vips.Image.new_from_file("test-11.tif")
+        x = pyvips.Image.new_from_file("test-11.tif")
         y = x.get_value("orientation")
         self.assertEqual(y, 2)
         os.unlink("test-11.tif")
 
         # we need a copy of the image to set the new metadata on
         # otherwise we get caching problems
-        x = Vips.Image.new_from_file(self.tiff_file)
+        x = pyvips.Image.new_from_file(self.tiff_file)
         x = x.copy()
         x.set_value("orientation", 2)
         x.write_to_file("test-12.tif")
 
-        x = Vips.Image.new_from_file("test-12.tif")
+        x = pyvips.Image.new_from_file("test-12.tif")
         y = x.get_value("orientation")
         self.assertEqual(y, 2)
         x.remove("orientation")
         x.write_to_file("test-13.tif")
-        x = Vips.Image.new_from_file("test-13.tif")
+        x = pyvips.Image.new_from_file("test-13.tif")
         y = x.get_value("orientation")
         self.assertEqual(y, 1)
         os.unlink("test-12.tif")
         os.unlink("test-13.tif")
 
-        x = Vips.Image.new_from_file(self.tiff_file)
+        x = pyvips.Image.new_from_file(self.tiff_file)
         x = x.copy()
         x.set_value("orientation", 6)
         x.write_to_file("test-14.tif")
 
-        x1 = Vips.Image.new_from_file("test-14.tif")
-        x2 = Vips.Image.new_from_file("test-14.tif", autorotate = True)
+        x1 = pyvips.Image.new_from_file("test-14.tif")
+        x2 = pyvips.Image.new_from_file("test-14.tif", autorotate = True)
         self.assertEqual(x1.width, x2.height)
         self.assertEqual(x1.height, x2.width)
         os.unlink("test-14.tif")
 
-        x = Vips.Image.new_from_file(self.ome_file)
+        x = pyvips.Image.new_from_file(self.ome_file)
         self.assertEqual(x.width, 439)
         self.assertEqual(x.height, 167)
         page_height = x.height
 
-        x = Vips.Image.new_from_file(self.ome_file, n = -1)
+        x = pyvips.Image.new_from_file(self.ome_file, n = -1)
         self.assertEqual(x.width, 439)
         self.assertEqual(x.height, page_height * 15)
 
-        x = Vips.Image.new_from_file(self.ome_file, page = 1, n = -1)
+        x = pyvips.Image.new_from_file(self.ome_file, page = 1, n = -1)
         self.assertEqual(x.width, 439)
         self.assertEqual(x.height, page_height * 14)
 
-        x = Vips.Image.new_from_file(self.ome_file, page = 1, n = 2)
+        x = pyvips.Image.new_from_file(self.ome_file, page = 1, n = 2)
         self.assertEqual(x.width, 439)
         self.assertEqual(x.height, page_height * 2)
 
-        x = Vips.Image.new_from_file(self.ome_file, n = -1)
+        x = pyvips.Image.new_from_file(self.ome_file, n = -1)
         self.assertEqual(x(0,166)[0], 96)
         self.assertEqual(x(0,167)[0], 0)
         self.assertEqual(x(0,168)[0], 1)
 
         x.write_to_file("test-15.tif")
 
-        x = Vips.Image.new_from_file("test-15.tif", n = -1)
+        x = pyvips.Image.new_from_file("test-15.tif", n = -1)
         self.assertEqual(x.width, 439)
         self.assertEqual(x.height, page_height * 15)
         self.assertEqual(x(0,166)[0], 96)
@@ -344,7 +342,7 @@ class TestForeign(unittest.TestCase):
         os.unlink("test-15.tif")
 
     def test_magickload(self):
-        x = Vips.type_find("VipsForeign", "magickload")
+        x = pyvips.type_find("VipsForeign", "magickload")
         if not x.is_instantiatable():
             print("no magick support in this vips, skipping test")
             return
@@ -363,14 +361,14 @@ class TestForeign(unittest.TestCase):
         self.buffer_loader("magickload_buffer", self.gif_file, gif_valid)
 
         # we should have rgba for svg files
-        im = Vips.Image.magickload(self.svg_file)
+        im = pyvips.Image.magickload(self.svg_file)
         self.assertEqual(im.bands, 4)
 
         # density should change size of generated svg
-        im = Vips.Image.magickload(self.svg_file, density = 100)
+        im = pyvips.Image.magickload(self.svg_file, density = 100)
         width = im.width
         height = im.height
-        im = Vips.Image.magickload(self.svg_file, density = 200)
+        im = pyvips.Image.magickload(self.svg_file, density = 200)
         # This seems to fail on travis, no idea why, some problem in their IM
         # perhaps
         #self.assertEqual(im.width, width * 2)
@@ -378,32 +376,32 @@ class TestForeign(unittest.TestCase):
 
         # all-frames should load every frame of the animation
         # (though all-frames is deprecated)
-        im = Vips.Image.magickload(self.gif_anim_file)
+        im = pyvips.Image.magickload(self.gif_anim_file)
         width = im.width
         height = im.height
-        im = Vips.Image.magickload(self.gif_anim_file, all_frames = True)
+        im = pyvips.Image.magickload(self.gif_anim_file, all_frames = True)
         self.assertEqual(im.width, width)
         self.assertEqual(im.height, height * 5)
 
         # page/n let you pick a range of pages
-        im = Vips.Image.magickload(self.gif_anim_file)
+        im = pyvips.Image.magickload(self.gif_anim_file)
         width = im.width
         height = im.height
-        im = Vips.Image.magickload(self.gif_anim_file, page = 1, n = 2)
+        im = pyvips.Image.magickload(self.gif_anim_file, page = 1, n = 2)
         self.assertEqual(im.width, width)
         self.assertEqual(im.height, height * 2)
         page_height = im.get_value("page-height")
         self.assertEqual(page_height, height)
 
         # should work for dicom
-        im = Vips.Image.magickload(self.dicom_file)
+        im = pyvips.Image.magickload(self.dicom_file)
         self.assertEqual(im.width, 128)
         self.assertEqual(im.height, 128)
         # some IMs are 3 bands, some are 1, can't really test
         #self.assertEqual(im.bands, 1)
 
     def test_webp(self):
-        x = Vips.type_find("VipsForeign", "webpload")
+        x = pyvips.type_find("VipsForeign", "webpload")
         if not x.is_instantiatable():
             print("no webp support in this vips, skipping test")
             return
@@ -422,9 +420,9 @@ class TestForeign(unittest.TestCase):
         self.save_load("%s.webp", self.colour)
 
         # test lossless mode
-        im = Vips.Image.new_from_file(self.webp_file)
+        im = pyvips.Image.new_from_file(self.webp_file)
         buf = im.webpsave_buffer(lossless = True)
-        im2 = Vips.Image.new_from_buffer(buf, "")
+        im2 = pyvips.Image.new_from_buffer(buf, "")
         self.assertEqual(im.avg(), im2.avg())
 
         # higher Q should mean a bigger buffer
@@ -435,7 +433,7 @@ class TestForeign(unittest.TestCase):
         # try saving an image with an ICC profile and reading it back ... if we
         # can do it, our webp supports metadata load/save
         buf = self.colour.webpsave_buffer()
-        im = Vips.Image.new_from_buffer(buf, "")
+        im = pyvips.Image.new_from_buffer(buf, "")
         if im.get_typeof("icc-profile-data") != GObject.TYPE_INVALID:
             # verify that the profile comes back unharmed
             p1 = self.colour.get_value("icc-profile-data")
@@ -450,11 +448,11 @@ class TestForeign(unittest.TestCase):
             x = self.colour.copy()
             x.set_value("orientation", 6)
             buf = x.webpsave_buffer()
-            y = Vips.Image.new_from_buffer(buf, "")
+            y = pyvips.Image.new_from_buffer(buf, "")
             self.assertEqual(y.get_value("orientation"), 6)
 
     def test_analyzeload(self):
-        x = Vips.type_find("VipsForeign", "analyzeload")
+        x = pyvips.type_find("VipsForeign", "analyzeload")
         if not x.is_instantiatable():
             print("no analyze support in this vips, skipping test")
             return
@@ -469,7 +467,7 @@ class TestForeign(unittest.TestCase):
         self.file_loader("analyzeload", self.analyze_file, analyze_valid)
 
     def test_matload(self):
-        x = Vips.type_find("VipsForeign", "matload")
+        x = pyvips.type_find("VipsForeign", "matload")
         if not x.is_instantiatable():
             print("no matlab support in this vips, skipping test")
             return
@@ -484,7 +482,7 @@ class TestForeign(unittest.TestCase):
         self.file_loader("matload", self.matlab_file, matlab_valid)
 
     def test_openexrload(self):
-        x = Vips.type_find("VipsForeign", "openexrload")
+        x = pyvips.type_find("VipsForeign", "openexrload")
         if not x.is_instantiatable():
             print("no openexr support in this vips, skipping test")
             return
@@ -501,7 +499,7 @@ class TestForeign(unittest.TestCase):
         self.file_loader("openexrload", self.exr_file, exr_valid)
 
     def test_fitsload(self):
-        x = Vips.type_find("VipsForeign", "fitsload")
+        x = pyvips.type_find("VipsForeign", "fitsload")
         if not x.is_instantiatable():
             print("no fits support in this vips, skipping test")
             return
@@ -519,7 +517,7 @@ class TestForeign(unittest.TestCase):
         self.save_load("%s.fits", self.mono)
 
     def test_openslideload(self):
-        x = Vips.type_find("VipsForeign", "openslideload")
+        x = pyvips.type_find("VipsForeign", "openslideload")
         if not x.is_instantiatable():
             print("no openslide support in this vips, skipping test")
             return
@@ -534,7 +532,7 @@ class TestForeign(unittest.TestCase):
         self.file_loader("openslideload", self.openslide_file, openslide_valid)
 
     def test_pdfload(self):
-        x = Vips.type_find("VipsForeign", "pdfload")
+        x = pyvips.type_find("VipsForeign", "pdfload")
         if not x.is_instantiatable():
             print("no pdf support in this vips, skipping test")
             return
@@ -549,18 +547,18 @@ class TestForeign(unittest.TestCase):
         self.file_loader("pdfload", self.pdf_file, pdf_valid)
         self.buffer_loader("pdfload_buffer", self.pdf_file, pdf_valid)
 
-        im = Vips.Image.new_from_file(self.pdf_file)
-        x = Vips.Image.new_from_file(self.pdf_file, scale = 2)
+        im = pyvips.Image.new_from_file(self.pdf_file)
+        x = pyvips.Image.new_from_file(self.pdf_file, scale = 2)
         self.assertLess(abs(im.width * 2 - x.width), 2)
         self.assertLess(abs(im.height * 2 - x.height), 2)
 
-        im = Vips.Image.new_from_file(self.pdf_file)
-        x = Vips.Image.new_from_file(self.pdf_file, dpi = 144)
+        im = pyvips.Image.new_from_file(self.pdf_file)
+        x = pyvips.Image.new_from_file(self.pdf_file, dpi = 144)
         self.assertLess(abs(im.width * 2 - x.width), 2)
         self.assertLess(abs(im.height * 2 - x.height), 2)
 
     def test_gifload(self):
-        x = Vips.type_find("VipsForeign", "gifload")
+        x = pyvips.type_find("VipsForeign", "gifload")
         if not x.is_instantiatable():
             print("no gif support in this vips, skipping test")
             return
@@ -575,20 +573,20 @@ class TestForeign(unittest.TestCase):
         self.file_loader("gifload", self.gif_file, gif_valid)
         self.buffer_loader("gifload_buffer", self.gif_file, gif_valid)
 
-        x1 = Vips.Image.new_from_file(self.gif_anim_file )
-        x2 = Vips.Image.new_from_file(self.gif_anim_file, n = 2 )
+        x1 = pyvips.Image.new_from_file(self.gif_anim_file )
+        x2 = pyvips.Image.new_from_file(self.gif_anim_file, n = 2 )
         self.assertEqual(x2.height, 2 * x1.height)
         page_height = x2.get_value("page-height")
         self.assertEqual(page_height, x1.height)
 
-        x2 = Vips.Image.new_from_file(self.gif_anim_file, n = -1 )
+        x2 = pyvips.Image.new_from_file(self.gif_anim_file, n = -1 )
         self.assertEqual(x2.height, 5 * x1.height)
 
-        x2 = Vips.Image.new_from_file(self.gif_anim_file, page = 1, n = -1 )
+        x2 = pyvips.Image.new_from_file(self.gif_anim_file, page = 1, n = -1 )
         self.assertEqual(x2.height, 4 * x1.height)
 
     def test_svgload(self):
-        x = Vips.type_find("VipsForeign", "svgload")
+        x = pyvips.type_find("VipsForeign", "svgload")
         if not x.is_instantiatable():
             print("no svg support in this vips, skipping test")
             return
@@ -608,13 +606,13 @@ class TestForeign(unittest.TestCase):
 
         self.file_loader("svgload", self.svg_gz_file, svg_valid)
 
-        im = Vips.Image.new_from_file(self.svg_file)
-        x = Vips.Image.new_from_file(self.svg_file, scale = 2)
+        im = pyvips.Image.new_from_file(self.svg_file)
+        x = pyvips.Image.new_from_file(self.svg_file, scale = 2)
         self.assertLess(abs(im.width * 2 - x.width), 2)
         self.assertLess(abs(im.height * 2 - x.height), 2)
 
-        im = Vips.Image.new_from_file(self.svg_file)
-        x = Vips.Image.new_from_file(self.svg_file, dpi = 144)
+        im = pyvips.Image.new_from_file(self.svg_file)
+        x = pyvips.Image.new_from_file(self.svg_file, dpi = 144)
         self.assertLess(abs(im.width * 2 - x.width), 2)
         self.assertLess(abs(im.height * 2 - x.height), 2)
 
@@ -625,7 +623,7 @@ class TestForeign(unittest.TestCase):
         self.save_load("%s.mat", self.mono)
 
     def test_ppm(self):
-        x = Vips.type_find("VipsForeign", "ppmload")
+        x = pyvips.type_find("VipsForeign", "ppmload")
         if not x.is_instantiatable():
             print("no PPM support in this vips, skipping test")
             return
@@ -634,7 +632,7 @@ class TestForeign(unittest.TestCase):
         self.save_load("%s.ppm", self.colour)
 
     def test_rad(self):
-        x = Vips.type_find("VipsForeign", "radload")
+        x = pyvips.type_find("VipsForeign", "radload")
         if not x.is_instantiatable():
             print("no Radiance support in this vips, skipping test")
             return
@@ -643,7 +641,7 @@ class TestForeign(unittest.TestCase):
         self.save_buffer_tempfile("radsave_buffer", ".hdr", self.rad, max_diff = 0)
 
     def test_dzsave(self):
-        x = Vips.type_find("VipsForeign", "dzsave")
+        x = pyvips.type_find("VipsForeign", "dzsave")
         if not x.is_instantiatable():
             print("no dzsave support in this vips, skipping test")
             return
@@ -657,9 +655,9 @@ class TestForeign(unittest.TestCase):
         self.colour.dzsave("test", suffix = ".png")
 
         # test horizontal overlap ... expect 256 step, overlap 1 
-        x = Vips.Image.new_from_file("test_files/10/0_0.png")
+        x = pyvips.Image.new_from_file("test_files/10/0_0.png")
         self.assertEqual(x.width, 255)
-        y = Vips.Image.new_from_file("test_files/10/1_0.png")
+        y = pyvips.Image.new_from_file("test_files/10/1_0.png")
         self.assertEqual(y.width, 256)
 
         # the right two columns of x should equal the left two columns of y
@@ -669,7 +667,7 @@ class TestForeign(unittest.TestCase):
 
         # test vertical overlap
         self.assertEqual(x.height, 255)
-        y = Vips.Image.new_from_file("test_files/10/0_1.png")
+        y = pyvips.Image.new_from_file("test_files/10/0_1.png")
         self.assertEqual(y.height, 256)
 
         # the bottom two rows of x should equal the top two rows of y
@@ -678,7 +676,7 @@ class TestForeign(unittest.TestCase):
         self.assertEqual((top - bottom).abs().max(), 0)
 
         # there should be a bottom layer
-        x = Vips.Image.new_from_file("test_files/0/0_0.png")
+        x = pyvips.Image.new_from_file("test_files/0/0_0.png")
         self.assertEqual(x.width, 1)
         self.assertEqual(x.height, 1)
 
@@ -692,12 +690,12 @@ class TestForeign(unittest.TestCase):
         self.colour.dzsave("test", layout = "google")
 
         # test bottom-right tile ... default is 256x256 tiles, overlap 0
-        x = Vips.Image.new_from_file("test/2/2/3.jpg")
+        x = pyvips.Image.new_from_file("test/2/2/3.jpg")
         self.assertEqual(x.width, 256)
         self.assertEqual(x.height, 256)
         self.assertFalse(os.path.exists("test/2/2/4.jpg"))
         self.assertFalse(os.path.exists("test/3"))
-        x = Vips.Image.new_from_file("test/blank.png")
+        x = pyvips.Image.new_from_file("test/blank.png")
         self.assertEqual(x.width, 256)
         self.assertEqual(x.height, 256)
 
@@ -710,7 +708,7 @@ class TestForeign(unittest.TestCase):
                                                 overlap = 192, depth = "one")
 
         # test bottom-right tile ... default is 256x256 tiles, overlap 0
-        x = Vips.Image.new_from_file("test2/0/2/2.jpg")
+        x = pyvips.Image.new_from_file("test2/0/2/2.jpg")
         self.assertEqual(x.width, 256)
         self.assertEqual(x.height, 256)
         self.assertFalse(os.path.exists("test2/0/3/3.jpg"))
@@ -721,7 +719,7 @@ class TestForeign(unittest.TestCase):
                                                 overlap = 192, depth = "one")
 
         # test bottom-right tile ... default is 256x256 tiles, overlap 0
-        x = Vips.Image.new_from_file("test3/0/3/3.jpg")
+        x = pyvips.Image.new_from_file("test3/0/3/3.jpg")
         self.assertEqual(x.width, 256)
         self.assertEqual(x.height, 256)
         self.assertFalse(os.path.exists("test3/0/4/4.jpg"))
@@ -733,7 +731,7 @@ class TestForeign(unittest.TestCase):
 
         # 256x256 tiles, no overlap
         self.assertTrue(os.path.exists("test/ImageProperties.xml"))
-        x = Vips.Image.new_from_file("test/TileGroup0/2-3-2.jpg")
+        x = pyvips.Image.new_from_file("test/TileGroup0/2-3-2.jpg")
         self.assertEqual(x.width, 256)
         self.assertEqual(x.height, 256)
 
@@ -754,7 +752,7 @@ class TestForeign(unittest.TestCase):
         # test suffix 
         self.colour.dzsave("test", suffix = ".png")
 
-        x = Vips.Image.new_from_file("test_files/10/0_0.png")
+        x = pyvips.Image.new_from_file("test_files/10/0_0.png")
         self.assertEqual(x.width, 255)
 
         shutil.rmtree("test_files")
@@ -763,7 +761,7 @@ class TestForeign(unittest.TestCase):
         # test overlap
         self.colour.dzsave("test", overlap = 200)
 
-        y = Vips.Image.new_from_file("test_files/10/1_1.jpeg")
+        y = pyvips.Image.new_from_file("test_files/10/1_1.jpeg")
         self.assertEqual(y.width, 654)
 
         shutil.rmtree("test_files")
@@ -772,7 +770,7 @@ class TestForeign(unittest.TestCase):
         # test tile-size
         self.colour.dzsave("test", tile_size = 512)
 
-        y = Vips.Image.new_from_file("test_files/10/0_0.jpeg")
+        y = pyvips.Image.new_from_file("test_files/10/0_0.jpeg")
         self.assertEqual(y.width, 513)
         self.assertEqual(y.height, 513)
 

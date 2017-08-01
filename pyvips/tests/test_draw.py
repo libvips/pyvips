@@ -6,11 +6,9 @@ import math
 #import logging
 #logging.basicConfig(level = logging.DEBUG)
 
-import gi
-gi.require_version('Vips', '8.0')
-from gi.repository import Vips 
+import pyvips
 
-Vips.leak_set(True)
+pyvips.leak_set(True)
 
 # an expanding zip ... if either of the args is a scalar or a one-element list,
 # duplicate it down the other side 
@@ -38,7 +36,7 @@ class TestDraw(unittest.TestCase):
             self.assertAlmostEqual(x, y, places = places, msg = msg)
 
     def test_draw_circle(self):
-        im = Vips.Image.black(100, 100)
+        im = pyvips.Image.black(100, 100)
         im = im.draw_circle(100, 50, 50, 25)
         pixel = im(25, 50)
         self.assertEqual(len(pixel), 1)
@@ -47,7 +45,7 @@ class TestDraw(unittest.TestCase):
         self.assertEqual(len(pixel), 1)
         self.assertEqual(pixel[0], 0)
 
-        im = Vips.Image.black(100, 100)
+        im = pyvips.Image.black(100, 100)
         im = im.draw_circle(100, 50, 50, 25, fill = True)
         pixel = im(25, 50)
         self.assertEqual(len(pixel), 1)
@@ -58,31 +56,31 @@ class TestDraw(unittest.TestCase):
         self.assertEqual(pixel[0], 0)
 
     def test_draw_flood(self):
-        im = Vips.Image.black(100, 100)
+        im = pyvips.Image.black(100, 100)
         im = im.draw_circle(100, 50, 50, 25)
         im = im.draw_flood(100, 50, 50)
 
-        im2 = Vips.Image.black(100, 100)
+        im2 = pyvips.Image.black(100, 100)
         im2 = im.draw_circle(100, 50, 50, 25, fill = True)
 
         diff = (im - im2).abs().max()
         self.assertEqual(diff, 0)
 
     def test_draw_image(self):
-        im = Vips.Image.black(51, 51)
+        im = pyvips.Image.black(51, 51)
         im = im.draw_circle(100, 25, 25, 25, fill = True)
 
-        im2 = Vips.Image.black(100, 100)
+        im2 = pyvips.Image.black(100, 100)
         im2 = im2.draw_image(im, 25, 25)
 
-        im3 = Vips.Image.black(100, 100)
+        im3 = pyvips.Image.black(100, 100)
         im3 = im3.draw_circle(100, 50, 50, 25, fill = True)
 
         diff = (im2 - im3).abs().max()
         self.assertEqual(diff, 0)
 
     def test_draw_line(self):
-        im = Vips.Image.black(100, 100)
+        im = pyvips.Image.black(100, 100)
         im = im.draw_line(100, 0, 0, 100, 0)
         pixel = im(0, 0)
         self.assertEqual(len(pixel), 1)
@@ -92,23 +90,23 @@ class TestDraw(unittest.TestCase):
         self.assertEqual(pixel[0], 0)
 
     def test_draw_mask(self):
-        mask = Vips.Image.black(51, 51)
+        mask = pyvips.Image.black(51, 51)
         mask = mask.draw_circle(128, 25, 25, 25, fill = True)
 
-        im = Vips.Image.black(100, 100)
+        im = pyvips.Image.black(100, 100)
         im = im.draw_mask(200, mask, 25, 25)
 
-        im2 = Vips.Image.black(100, 100)
+        im2 = pyvips.Image.black(100, 100)
         im2 = im2.draw_circle(100, 50, 50, 25, fill = True)
 
         diff = (im - im2).abs().max()
         self.assertEqual(diff, 0)
 
     def test_draw_rect(self):
-        im = Vips.Image.black(100, 100)
+        im = pyvips.Image.black(100, 100)
         im = im.draw_rect(100, 25, 25, 50, 50, fill = True)
 
-        im2 = Vips.Image.black(100, 100)
+        im2 = pyvips.Image.black(100, 100)
         for y in range(25, 75):
             im2 = im2.draw_line(100, 25, y, 74, y)
 
@@ -116,7 +114,7 @@ class TestDraw(unittest.TestCase):
         self.assertEqual(diff, 0)
 
     def test_draw_smudge(self):
-        im = Vips.Image.black(100, 100)
+        im = pyvips.Image.black(100, 100)
         im = im.draw_circle(100, 50, 50, 25, fill = True)
 
         im2 = im.draw_smudge(10, 10, 50, 50)
