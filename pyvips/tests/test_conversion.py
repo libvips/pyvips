@@ -1,3 +1,5 @@
+# vim: set fileencoding=utf-8 :
+
 from __future__ import division
 import unittest
 import math

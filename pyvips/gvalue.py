@@ -138,14 +138,11 @@ class GValue(object):
             if isinstance(value, package_index['Image']):
                 value = [value]
 
-            # pull out all the VipsImage* pointers
-            pointers = [x.vimage for x in value]
-
-            # the gvalue needs a set of refs to own
-            [vips_lib.g_object_ref(x) for x in pointers]
-
-            array = ffi.new('(VipsImage*)[]', pointers)
-            vips_lib.vips_value_set_array_double(self.gvalue, array, len(value))
+            vips_lib.vips_value_set_array_image(self.gvalue, len(value))
+            array = vips_lib.vips_value_get_array_image(self.gvalue, ffi.NULL);
+            for i, image in enumerate(value):
+                vips_lib.g_object_ref(image.pointer)
+                array[i] = image.pointer
         elif gtype == GValue.blob_type:
             # we need to set the blob to a copy of the string that vips_lib
             # can own

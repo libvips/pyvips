@@ -23,3 +23,24 @@ class BandFormat(object):
 
     def __eq__(self, other):
         print 'BANANA !!!'
+
+class Interpretation(object):
+	MULTIBAND = 0
+	B_W = 1
+	HISTOGRAM = 10
+	XYZ = 12
+	LAB = 13
+	CMYK = 15
+	LABQ = 16
+	RGB = 17
+	CMC = 18
+	LCH = 19
+	LABS = 21
+	SRGB = 22
+	YXY = 23
+	FOURIER = 24
+	RGB16 = 25
+	GREY16 = 26
+	MATRIX = 27
+	SCRGB = 28
+	HSV = 29

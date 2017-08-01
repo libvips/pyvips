@@ -85,6 +85,40 @@ def _call_enum_eq(image, other, base, operation):
     else:
         return False
 
+def _run_cmplx(fn, image):
+    """Run a complex function on a non-complex image.
+
+    The image needs to be complex, or have an even number of bands. The input
+    can be int, the output is always float or double.
+    """
+    original_format = image.format
+
+    if image.format != "complex" and image.format != "dpcomplex":
+        if image.bands % 2 != 0:
+            raise "not an even number of bands"
+
+        if image.format != "float" and image.format != "double":
+            image = image.cast("float")
+
+        if image.format == "double":
+            new_format = "dpcomplex"
+        else:
+            new_format = "complex"
+
+        image = image.copy(format = new_format, bands = image.bands / 2)
+
+    image = fn(image)
+
+    if original_format != "complex" and original_format != "dpcomplex":
+        if image.format == "dpcomplex":
+            new_format = "double"
+        else:
+            new_format = "float"
+
+        image = image.copy(format = new_format, bands = image.bands * 2)
+
+    return image
+
 # metaclass for Image ... getattr on this implements the class methods
 class ImageType(type):
     def __getattr__(cls, name):
@@ -184,7 +218,7 @@ class Image(VipsObject):
         options = vips_lib.vips_filename_get_options(vips_filename)
         name = vips_lib.vips_foreign_find_save(filename)
         if name == ffi.NULL:
-            raise Error('unable to write to file {}'.format(vips_filename))
+            raise Error('unable to write to file {0}'.format(vips_filename))
 
         return Operation.call(ffi.string(name), self, filename,
                               string_options = ffi.string(options), **kwargs)
@@ -363,7 +397,7 @@ class Image(VipsObject):
         return self.__or__(other)
 
     def __xor__(self, other):
-        return _call_enum(self, 'other, boolean', 'eor')
+        return _call_enum(self, other, 'boolean', 'eor')
 
     def __rxor__(self, other):
         return self.__xor__(other)
@@ -381,7 +415,7 @@ class Image(VipsObject):
         return _call_enum(self, other, 'relational', 'more')
 
     def __ge__(self, other):
-        return _call_enum(self, other, 'relational', 'moreeq', other)
+        return _call_enum(self, other, 'relational', 'moreeq')
 
     def __lt__(self, other):
         return _call_enum(self, other, 'relational', 'less')
@@ -471,11 +505,11 @@ class Image(VipsObject):
 
     def polar(self):
         """Return an image converted to polar coordinates."""
-        return run_cmplx(lambda x: x.complex('polar'), self)
+        return _run_cmplx(lambda x: x.complex('polar'), self)
 
     def rect(self):
         """Return an image converted to rectangular coordinates."""
-        return run_cmplx(lambda x: x.complex('rect'), self)
+        return _run_cmplx(lambda x: x.complex('rect'), self)
 
     def conj(self):
         """Return the complex conjugate of an image."""

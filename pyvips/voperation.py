@@ -178,9 +178,8 @@ class Operation(VipsObject):
         op2 = None
         vop2 = None
 
-        result = []
-
         # fetch required output args, plus modified input images
+        result = []
         for name, flags in arguments:
             if ((flags & _OUTPUT) != 0 and 
                 (flags & _REQUIRED) != 0 and 
@@ -192,15 +191,19 @@ class Operation(VipsObject):
                 result.append(op.get(name))
 
         # fetch optional output args
+        opts = {}
         for name, value in kwargs.items():
             flags = flags_from_name[name]
 
             if ((flags & _OUTPUT) != 0 and 
                 (flags & _REQUIRED) == 0 and 
                 (flags & _DEPRECATED) == 0):
-                result.append(op.get(name))
+                opts[name] = op.get(name)
 
         vips_lib.vips_object_unref_outputs(op.pointer)
+
+        if len(opts) > 0:
+            result.append(opts)
 
         if len(result) == 1:
             result = result[0]
