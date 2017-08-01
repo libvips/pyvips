@@ -1,4 +1,9 @@
-# pyvips --- experimental CFFI binding for libvips
+========
+ pyvips 
+========
+--------------------------------------------
+pyvips experimental CFFI binding for libvips
+--------------------------------------------
 
 This is supposed to be an experiment with making a libvips binding using cffi.
 
@@ -33,23 +38,28 @@ The hope is that a new Python binding on top of cffi would be:
 
 * easier to package for pip
 
-# Notes
+Notes
+-----
 
-Local user install
+Local user install::
 
 	$ pip install --user -e .
+	$ pip3 install --user -e .
 
-Run test suite 
+Run test suite::
 
 	$ nosetests
 
-To convert old code, replace the lines
+Converting old code
+-------------------
+
+Replace the lines::
 
 	import gi
 	gi.require_version('Vips', '8.0')
 	from gi.repository import Vips 
 
-with
+with::
 
 	import pyvips
 	Vips = pyvips

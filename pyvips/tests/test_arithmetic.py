@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 
 from __future__ import division
 import unittest
@@ -7,7 +7,7 @@ import math
 #import logging
 #logging.basicConfig(level = logging.DEBUG)
 
-import pyips
+import pyvips
 
 pyvips.leak_set(True)
 
