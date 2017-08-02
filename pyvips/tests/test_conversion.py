@@ -5,8 +5,8 @@ import unittest
 import math
 from functools import reduce
 
-#import logging
-#logging.basicConfig(level = logging.DEBUG)
+# import logging
+# logging.basicConfig(level = logging.DEBUG)
 
 import pyvips
 
@@ -753,3 +753,7 @@ class TestConversion(unittest.TestCase):
             before = test(50, 50)
             after = im(0, 0)
             self.assertAlmostEqualObjects(before, after)
+
+if __name__ == '__main__':
+    unittest.main()
+

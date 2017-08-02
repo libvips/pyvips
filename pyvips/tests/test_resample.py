@@ -19,7 +19,7 @@ def run_cmplx(fn, image):
     elif image.format == pyvips.BandFormat.DOUBLE:
         new_format = pyvips.BandFormat.DPCOMPLEX
     else:
-        raise "run_cmplx: not float or double"
+        raise pyvips.Error("run_cmplx: not float or double")
 
     # tag as complex, run, revert tagging
     cmplx = image.copy(bands = 1, format = new_format)
@@ -236,3 +236,5 @@ class TestResample(unittest.TestCase):
         b = im.crop(50, 0, im.width - 50, im.height).gaussblur(2)
         self.assertLess((a - b).abs().max(), 20)
 
+if __name__ == '__main__':
+    unittest.main()

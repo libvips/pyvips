@@ -121,3 +121,6 @@ class TestHistogram(unittest.TestCase):
         # new mean should be closer to target mean
         self.assertTrue(abs(im.avg() - 128) > abs(im2.avg() - 128))
 
+if __name__ == '__main__':
+    unittest.main()
+

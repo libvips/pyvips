@@ -7,51 +7,9 @@ import math
 
 import pyvips
 
+from helpers import *
+
 pyvips.leak_set(True)
-
-unsigned_formats = [pyvips.BandFormat.UCHAR, 
-                    pyvips.BandFormat.USHORT, 
-                    pyvips.BandFormat.UINT] 
-signed_formats = [pyvips.BandFormat.CHAR, 
-                  pyvips.BandFormat.SHORT, 
-                  pyvips.BandFormat.INT] 
-float_formats = [pyvips.BandFormat.FLOAT, 
-                 pyvips.BandFormat.DOUBLE]
-complex_formats = [pyvips.BandFormat.COMPLEX, 
-                   pyvips.BandFormat.DPCOMPLEX] 
-int_formats = unsigned_formats + signed_formats
-noncomplex_formats = int_formats + float_formats
-all_formats = int_formats + float_formats + complex_formats
-
-# an expanding zip ... if either of the args is not a list, duplicate it down
-# the other
-def zip_expand(x, y):
-    if isinstance(x, list) and isinstance(y, list):
-        return list(zip(x, y))
-    elif isinstance(x, list):
-        return [[i, y] for i in x]
-    elif isinstance(y, list):
-        return [[x, j] for j in y]
-    else:
-        return [[x, y]]
-
-# run a 1-ary function on a thing -- loop over elements if the 
-# thing is a list
-def run_fn(fn, x):
-    if isinstance(x, list):
-        return [fn(i) for i in x]
-    else:
-        return fn(x)
-
-# run a 2-ary function on two things -- loop over elements pairwise if the 
-# things are lists
-def run_fn2(fn, x, y):
-    if isinstance(x, pyvips.Image) or isinstance(y, pyvips.Image):
-        return fn(x, y)
-    elif isinstance(x, list) or isinstance(y, list):
-        return [fn(i, j) for i, j in zip_expand(x, y)]
-    else:
-        return fn(x, y)
 
 class TestArithmetic(unittest.TestCase):
     # test a pair of things which can be lists for approx. equality
@@ -693,3 +651,6 @@ class TestArithmetic(unittest.TestCase):
             im2 = [(im + x).cast(fmt) for x in range(0, 100, 10)]
             im3 = pyvips.Image.sum(im2)
             self.assertAlmostEqual(im3.max(), sum(range(0, 100, 10)))
+
+if __name__ == '__main__':
+    unittest.main()

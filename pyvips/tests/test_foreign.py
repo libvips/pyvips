@@ -39,7 +39,7 @@ class TestForeign(unittest.TestCase):
 
     # we have test files for formats which have a clear standard
     def file_loader(self, loader, test_file, validate):
-        im = pyvips.call(loader, test_file)
+        im = pyvips.Operation.call(loader, test_file)
         validate(self, im)
         im = pyvips.Image.new_from_file(test_file)
         validate(self, im)
@@ -48,7 +48,7 @@ class TestForeign(unittest.TestCase):
         with open(test_file, 'rb') as f:
             buf = f.read()
 
-        im = pyvips.call(loader, buf)
+        im = pyvips.Operation.call(loader, buf)
         validate(self, im)
         im = pyvips.Image.new_from_buffer(buf, "")
         validate(self, im)
@@ -78,8 +78,8 @@ class TestForeign(unittest.TestCase):
         os.unlink(filename)
 
     def save_load_buffer(self, saver, loader, im, max_diff = 0):
-        buf = pyvips.call(saver, im)
-        x = pyvips.call(loader, buf)
+        buf = pyvips.Operation.call(saver, im)
+        x = pyvips.Operation.call(loader, buf)
 
         self.assertEqual(im.width, x.width)
         self.assertEqual(im.height, x.height)
@@ -87,7 +87,7 @@ class TestForeign(unittest.TestCase):
         self.assertLessEqual((im - x).abs().max(), max_diff)
 
     def save_buffer_tempfile(self, saver, suf, im, max_diff = 0):
-        buf = pyvips.call(saver, im)
+        buf = pyvips.Operation.call(saver, im)
         f = NamedTemporaryFile(suffix=suf, delete=False)
         f.write(buf)
         f.close()
@@ -117,8 +117,7 @@ class TestForeign(unittest.TestCase):
         os.unlink("test.v")
 
     def test_jpeg(self):
-        x = pyvips.type_find("VipsForeign", "jpegload")
-        if not x.is_instantiatable():
+        if pyvips.type_find("VipsForeign", "jpegload") == 0:
             print("no jpeg support in this vips, skipping test")
             return
 
@@ -180,8 +179,7 @@ class TestForeign(unittest.TestCase):
             os.unlink("test-14.jpg")
 
     def test_png(self):
-        x = pyvips.type_find("VipsForeign", "pngload")
-        if not x.is_instantiatable():
+        if pyvips.type_find("VipsForeign", "pngload") == 0: 
             print("no png support in this vips, skipping test")
             return
 
@@ -199,8 +197,7 @@ class TestForeign(unittest.TestCase):
         self.save_load("%s.png", self.colour)
 
     def test_tiff(self):
-        x = pyvips.type_find("VipsForeign", "tiffload")
-        if not x.is_instantiatable():
+        if pyvips.type_find("VipsForeign", "tiffload") == 0: 
             print("no tiff support in this vips, skipping test")
             return
 
@@ -309,8 +306,7 @@ class TestForeign(unittest.TestCase):
         os.unlink("test-15.tif")
 
     def test_magickload(self):
-        x = pyvips.type_find("VipsForeign", "magickload")
-        if not x.is_instantiatable():
+        if pyvips.type_find("VipsForeign", "magickload") == 0: 
             print("no magick support in this vips, skipping test")
             return
 
@@ -368,8 +364,7 @@ class TestForeign(unittest.TestCase):
         #self.assertEqual(im.bands, 1)
 
     def test_webp(self):
-        x = pyvips.type_find("VipsForeign", "webpload")
-        if not x.is_instantiatable():
+        if pyvips.type_find("VipsForeign", "webpload") == 0: 
             print("no webp support in this vips, skipping test")
             return
 
@@ -419,8 +414,7 @@ class TestForeign(unittest.TestCase):
             self.assertEqual(y.get_value("orientation"), 6)
 
     def test_analyzeload(self):
-        x = pyvips.type_find("VipsForeign", "analyzeload")
-        if not x.is_instantiatable():
+        if pyvips.type_find("VipsForeign", "analyzeload") == 0:
             print("no analyze support in this vips, skipping test")
             return
 
@@ -434,8 +428,7 @@ class TestForeign(unittest.TestCase):
         self.file_loader("analyzeload", ANALYZE_FILE, analyze_valid)
 
     def test_matload(self):
-        x = pyvips.type_find("VipsForeign", "matload")
-        if not x.is_instantiatable():
+        if pyvips.type_find("VipsForeign", "matload") == 0:
             print("no matlab support in this vips, skipping test")
             return
 
@@ -449,8 +442,7 @@ class TestForeign(unittest.TestCase):
         self.file_loader("matload", MATLAB_FILE, matlab_valid)
 
     def test_openexrload(self):
-        x = pyvips.type_find("VipsForeign", "openexrload")
-        if not x.is_instantiatable():
+        if pyvips.type_find("VipsForeign", "openexrload") == 0:
             print("no openexr support in this vips, skipping test")
             return
 
@@ -466,8 +458,7 @@ class TestForeign(unittest.TestCase):
         self.file_loader("openexrload", EXR_FILE, exr_valid)
 
     def test_fitsload(self):
-        x = pyvips.type_find("VipsForeign", "fitsload")
-        if not x.is_instantiatable():
+        if pyvips.type_find("VipsForeign", "fitsload") == 0:
             print("no fits support in this vips, skipping test")
             return
 
@@ -484,8 +475,7 @@ class TestForeign(unittest.TestCase):
         self.save_load("%s.fits", self.mono)
 
     def test_openslideload(self):
-        x = pyvips.type_find("VipsForeign", "openslideload")
-        if not x.is_instantiatable():
+        if pyvips.type_find("VipsForeign", "openslideload") == 0: 
             print("no openslide support in this vips, skipping test")
             return
 
@@ -499,8 +489,7 @@ class TestForeign(unittest.TestCase):
         self.file_loader("openslideload", OPENSLIDE_FILE, openslide_valid)
 
     def test_pdfload(self):
-        x = pyvips.type_find("VipsForeign", "pdfload")
-        if not x.is_instantiatable():
+        if pyvips.type_find("VipsForeign", "pdfload") == 0:
             print("no pdf support in this vips, skipping test")
             return
 
@@ -525,8 +514,7 @@ class TestForeign(unittest.TestCase):
         self.assertLess(abs(im.height * 2 - x.height), 2)
 
     def test_gifload(self):
-        x = pyvips.type_find("VipsForeign", "gifload")
-        if not x.is_instantiatable():
+        if pyvips.type_find("VipsForeign", "gifload") == 0:
             print("no gif support in this vips, skipping test")
             return
 
@@ -553,8 +541,7 @@ class TestForeign(unittest.TestCase):
         self.assertEqual(x2.height, 4 * x1.height)
 
     def test_svgload(self):
-        x = pyvips.type_find("VipsForeign", "svgload")
-        if not x.is_instantiatable():
+        if pyvips.type_find("VipsForeign", "svgload") == 0: 
             print("no svg support in this vips, skipping test")
             return
 
@@ -590,8 +577,7 @@ class TestForeign(unittest.TestCase):
         self.save_load("%s.mat", self.mono)
 
     def test_ppm(self):
-        x = pyvips.type_find("VipsForeign", "ppmload")
-        if not x.is_instantiatable():
+        if pyvips.type_find("VipsForeign", "ppmload") == 0: 
             print("no PPM support in this vips, skipping test")
             return
 
@@ -599,8 +585,7 @@ class TestForeign(unittest.TestCase):
         self.save_load("%s.ppm", self.colour)
 
     def test_rad(self):
-        x = pyvips.type_find("VipsForeign", "radload")
-        if not x.is_instantiatable():
+        if pyvips.type_find("VipsForeign", "radload") == 0:
             print("no Radiance support in this vips, skipping test")
             return
 
@@ -608,8 +593,7 @@ class TestForeign(unittest.TestCase):
         self.save_buffer_tempfile("radsave_buffer", ".hdr", self.rad, max_diff = 0)
 
     def test_dzsave(self):
-        x = pyvips.type_find("VipsForeign", "dzsave")
-        if not x.is_instantiatable():
+        if pyvips.type_find("VipsForeign", "dzsave") == 0: 
             print("no dzsave support in this vips, skipping test")
             return
 
@@ -755,3 +739,5 @@ class TestForeign(unittest.TestCase):
         # we can't test the bytes are exactly equal, the timestamps will be
         # different
 
+if __name__ == '__main__':
+    unittest.main()

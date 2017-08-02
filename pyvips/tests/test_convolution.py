@@ -263,3 +263,6 @@ class TestConvolution(unittest.TestCase):
                     #print("max diff = %g" % (im - sharp).abs().max())
                     self.assertEqual((im - sharp).abs().max(), 0)
 
+if __name__ == '__main__':
+    unittest.main()
+

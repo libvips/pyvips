@@ -124,3 +124,5 @@ class TestDraw(unittest.TestCase):
         diff = (im4 - im).abs().max()
         self.assertEqual(diff, 0)
 
+if __name__ == '__main__':
+    unittest.main()

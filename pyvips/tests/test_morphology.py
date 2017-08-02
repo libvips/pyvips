@@ -78,3 +78,5 @@ class TestMorphology(unittest.TestCase):
         self.assertEqual(im.bands, im2.bands)
         self.assertTrue(im2.avg() > im.avg())
 
+if __name__ == '__main__':
+    unittest.main()

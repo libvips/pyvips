@@ -67,23 +67,10 @@ def smap(func, x):
         return func(x)
 
 def _call_enum(image, other, base, operation):
-    if isinstance(other, numbers.Number):
-        return Operation.call(base + '_const', image, operation, [other])
-    elif _is_pixel(other):
+    if _is_pixel(other):
         return Operation.call(base + '_const', image, operation, other)
     else:
         return Operation.call(base, image, other, operation)
-
-# for equality style operations, we need to allow comparison with None
-def _call_enum_eq(image, other, base, operation):
-    if isinstance(other, package_index['Image']):
-        return Operation.call(base, image, other, operation)
-    elif isinstance(other, numbers.Number):
-        return Operation.call(base + '_const', image, operation, [other])
-    elif _is_pixel(other):
-        return Operation.call(base + '_const', image, operation, other)
-    else:
-        return False
 
 def _run_cmplx(fn, image):
     """Run a complex function on a non-complex image.
@@ -163,7 +150,7 @@ class Image(VipsObject):
 
     @staticmethod
     def new_from_buffer(data, options, **kwargs):
-        name = vips_lib.vips_foreign_find_load_buffer(data)
+        name = vips_lib.vips_foreign_find_load_buffer(data, len(data))
         if name == ffi.NULL:
             raise Error('unable to load from buffer')
 
@@ -176,7 +163,7 @@ class Image(VipsObject):
             array = [array]
 
         height = len(array)
-        width = len(array[1])
+        width = len(array[0])
 
         n = width * height
         a = ffi.new("double[]", n)
@@ -194,7 +181,7 @@ class Image(VipsObject):
 
     def new_from_image(self, value):
         pixel = (Image.black(1, 1) + value).cast(self.format)
-        image = pixel.embed(0, 0, base_image.width, base_image.height,
+        image = pixel.embed(0, 0, self.width, self.height,
             extend = "copy")
         image = image.copy(interpretation = self.interpretation,
                            xres = self.xres,
@@ -239,7 +226,7 @@ class Image(VipsObject):
 
     def get(self, name):
         gv = GValue()
-        result = vips_lib.vips_image_get(self.pointer, name, gv)
+        result = vips_lib.vips_image_get(self.pointer, name, gv.pointer)
         if result != 0:
             raise Error('unable to get {0}'.format(name))
 
@@ -249,7 +236,7 @@ class Image(VipsObject):
         gv = GValue()
         gv.init(gtype)
         gv.set(value)
-        vips_lib.vips_image_set(self.pointer, name, gv)
+        vips_lib.vips_image_set(self.pointer, name, gv.pointer)
 
     def set(self, name, value):
         gtype = self.get_typeof(name)
@@ -273,6 +260,20 @@ class Image(VipsObject):
     # compatibility: these used to be called get_value / set_value
     get_value = get
     set_value = set
+
+    # scale and offset with default values
+
+    def get_scale(self):
+        if self.get_typeof("scale") != 0:
+            return self.get("scale")
+        else:
+            return 1.0
+
+    def get_offset(self):
+        if self.get_typeof("offset") != 0:
+            return self.get("offset")
+        else:
+            return 0.0
 
     # support with in the most trivial way
 
@@ -429,11 +430,17 @@ class Image(VipsObject):
 
     def __eq__(self, other):
         # _eq version allows comparison to None
-        return _call_enum_eq(self, other, 'relational', 'equal')
+        if other == None:
+            return False
+
+        return _call_enum(self, other, 'relational', 'equal')
 
     def __ne__(self, other):
         # _eq version allows comparison to None
-        return _call_enum_eq(self, other, 'relational', 'noteq')
+        if other == None:
+            return True
+
+        return _call_enum(self, other, 'relational', 'noteq')
 
     def floor(self):
         """Return the largest integral value not greater than the argument."""
@@ -476,14 +483,14 @@ class Image(VipsObject):
         if non_number == None:
             return self.bandjoin_const(other)
         else:
-            return Operation.call("bandjoin", self, other)
+            return Operation.call("bandjoin", [self] + other)
 
     def bandrank(self, other, **kwargs):
         """Band-wise rank filter a set of images."""
         if not isinstance(other, list):
             other = [other]
 
-        return Operation.call("bandrank", self, other, **kwargs)
+        return Operation.call("bandrank", [self] + other, **kwargs)
 
     def maxpos(self):
         """Return the coordinates of the image maximum."""
@@ -599,9 +606,9 @@ class Image(VipsObject):
                 break
 
         if not isinstance(th, package_index['Image']):
-            th = imageize(match_image, th)
+            th = Image.imageize(match_image, th)
         if not isinstance(el, package_index['Image']):
-            el = imageize(match_image, el)
+            el = Image.imageize(match_image, el)
 
         return Operation.call("ifthenelse", self, th, el, **kwargs)
 

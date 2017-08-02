@@ -43,12 +43,13 @@ _MODIFY = 128
 
 # search an array with a predicate, recursing into subarrays as we see them
 # used to find the match_image for an operation
-def _find_inside(fn, array):
-    for x in array:
-        if fn(x):
-            return x
-        elif isinstance(x, list):
-            result = _find_inside(fn, x)
+def _find_inside(pred, thing):
+    if pred(thing):
+        return thing
+
+    if isinstance(thing, list) or isinstance(thing, tuple):
+        for x in thing:
+            result = _find_inside(pred, x)
 
             if result != None:
                 return result
@@ -108,9 +109,10 @@ class Operation(VipsObject):
     # string_options is any optional args coded as a string, perhaps
     # '[strip,tile=true]'
     @staticmethod
-    def call(name, *args, **kwargs):
-        logger.debug('VipsOperation.call: name = {0}, args = {1}, kwargs = {2}'.
-            format(name, args, kwargs))
+    def call(operation_name, *args, **kwargs):
+        logger.debug(('VipsOperation.call: operation_name = {0}, ' + 
+            'args = {1}, kwargs = {2}').
+            format(operation_name, args, kwargs))
 
         # pull out the special string_options kwarg
         string_options = kwargs.pop('string_options', '')
@@ -118,9 +120,9 @@ class Operation(VipsObject):
         logger.debug('VipsOperation.call: string_options = {0}'.
             format(string_options))
 
-        vop = vips_lib.vips_operation_new(name)
+        vop = vips_lib.vips_operation_new(operation_name)
         if vop == ffi.NULL:
-            raise Error('no such operation {0}'.format(name))
+            raise Error('no such operation {0}'.format(operation_name))
         op = Operation(vop)
         vop = None
 
@@ -142,7 +144,8 @@ class Operation(VipsObject):
 
         if n_required != len(args):
             raise Error(('unable to call {0}: {1} arguments given, ' +
-                         'but {2} required').format(name, len(args), n_required))
+                         'but {2} required').
+                         format(operation_name, len(args), n_required))
 
         # the first image argument is the thing we expand constants to
         # match ... look inside tables for images, since we may be passing
@@ -150,12 +153,13 @@ class Operation(VipsObject):
         match_image = _find_inside(lambda x: 
                                    isinstance(x, package_index['Image']),
                                    args)
+
         logger.debug('VipsOperation.call: match_image = {0}'.format(match_image))
 
         # set any string options before any args so they can't be
         # overridden
         if not op.set_string(string_options):
-            raise Error('unable to call {0}'.format(name))
+            raise Error('unable to call {0}'.format(operation_name))
 
         # set required and optional args
         n = 0
@@ -172,7 +176,7 @@ class Operation(VipsObject):
         # build operation
         vop2 = vips_lib.vips_cache_operation_build(op.pointer)
         if vop2 == ffi.NULL:
-            raise Error('unable to call {0}'.format(name))
+            raise Error('unable to call {0}'.format(operation_name))
         op2 = Operation(vop2)
         op = op2
         op2 = None
@@ -207,6 +211,8 @@ class Operation(VipsObject):
 
         if len(result) == 1:
             result = result[0]
+
+        logger.debug('VipsOperation.call: result = {0}'.format(result))
 
         return result
 

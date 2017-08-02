@@ -103,7 +103,7 @@ class GValue(object):
         if gtype == GValue.gbool_type:
             gobject_lib.g_value_set_boolean(self.gvalue, value)
         elif gtype == GValue.gint_type:
-            gobject_lib.g_value_set_int(self.gvalue, value)
+            gobject_lib.g_value_set_int(self.gvalue, int(value))
         elif gtype == GValue.gdouble_type:
             gobject_lib.g_value_set_double(self.gvalue, value)
         elif fundamental == GValue.genum_type:
@@ -146,8 +146,8 @@ class GValue(object):
         elif gtype == GValue.blob_type:
             # we need to set the blob to a copy of the string that vips_lib
             # can own
-            memory = glib.g_malloc(len(value))
-            ffi.memcpy(memory, value, len(value))
+            memory = gobject_lib.g_malloc(len(value))
+            ffi.memmove(memory, value, len(value))
 
             vips_lib.vips_value_set_blob(self.gvalue, 
                     g_free_callback, memory, len(value))

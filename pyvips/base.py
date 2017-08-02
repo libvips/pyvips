@@ -45,6 +45,8 @@ ffi.cdef('''
     void* g_malloc (size_t size);
     void g_free (void* data);
 
+    GType vips_type_find (const char* basename, const char* nickname);
+
     int vips_leak_set (int leak);
 
 ''')
@@ -81,5 +83,8 @@ def g_free_callback(ptr):
 def leak_set(leak):
     return vips_lib.vips_leak_set(leak)
 
+def type_find(basename, nickname):
+    return vips_lib.vips_type_find(basename, nickname)
+
 __all__ = ['ffi', 'g_free_callback', 'vips_lib', 'gobject_lib', 'Error',
-           'leak_set']
+           'leak_set', 'type_find']
