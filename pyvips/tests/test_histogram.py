@@ -8,25 +8,9 @@ import math
 
 import pyvips
 
+from helpers import *
+
 pyvips.leak_set(True)
-
-# an expanding zip ... if either of the args is a scalar or a one-element list,
-# duplicate it down the other side 
-def zip_expand(x, y):
-    # handle singleton list case
-    if isinstance(x, list) and len(x) == 1:
-        x = x[0]
-    if isinstance(y, list) and len(y) == 1:
-        y = y[0]
-
-    if isinstance(x, list) and isinstance(y, list):
-        return list(zip(x, y))
-    elif isinstance(x, list):
-        return [[i, y] for i in x]
-    elif isinstance(y, list):
-        return [[x, j] for j in y]
-    else:
-        return [[x, y]]
 
 class TestHistogram(unittest.TestCase):
     # test a pair of things which can be lists for approx. equality
@@ -46,7 +30,7 @@ class TestHistogram(unittest.TestCase):
         self.assertEqual(p[0], sum)
 
     def test_hist_equal(self):
-        im = pyvips.Image.new_from_file("images/йцук.jpg")
+        im = pyvips.Image.new_from_file(JPEG_FILE)
 
         im2 = im.hist_equal()
 
@@ -61,7 +45,7 @@ class TestHistogram(unittest.TestCase):
         self.assertTrue(im.hist_ismonotonic())
 
     def test_hist_local(self):
-        im = pyvips.Image.new_from_file("images/йцук.jpg")
+        im = pyvips.Image.new_from_file(JPEG_FILE)
 
         im2 = im.hist_local(10, 10)
 
@@ -109,7 +93,7 @@ class TestHistogram(unittest.TestCase):
         self.assertEqual((im - im2).abs().max(), 0.0)
 
     def test_percent(self):
-        im = pyvips.Image.new_from_file("images/йцук.jpg").extract_band(1)
+        im = pyvips.Image.new_from_file(JPEG_FILE).extract_band(1)
 
         pc = im.percent(90)
 
@@ -120,14 +104,14 @@ class TestHistogram(unittest.TestCase):
         self.assertAlmostEqual(pc_set, 90, places = 0)
 
     def test_hist_entropy(self):
-        im = pyvips.Image.new_from_file("images/йцук.jpg").extract_band(1)
+        im = pyvips.Image.new_from_file(JPEG_FILE).extract_band(1)
 
         ent = im.hist_find().hist_entropy()
 
         self.assertAlmostEqual(ent, 4.37, places = 2)
 
     def test_stdif(self):
-        im = pyvips.Image.new_from_file("images/йцук.jpg")
+        im = pyvips.Image.new_from_file(JPEG_FILE)
 
         im2 = im.stdif(10, 10)
 

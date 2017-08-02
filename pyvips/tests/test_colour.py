@@ -2,76 +2,19 @@
 
 import unittest
 import math
+import os
 
 #import logging
 #logging.basicConfig(level = logging.DEBUG)
 
 import pyvips
 
+from helpers import * 
+
 pyvips.leak_set(True)
 
-unsigned_formats = [pyvips.BandFormat.UCHAR, 
-                    pyvips.BandFormat.USHORT, 
-                    pyvips.BandFormat.UINT] 
-signed_formats = [pyvips.BandFormat.CHAR, 
-                  pyvips.BandFormat.SHORT, 
-                  pyvips.BandFormat.INT] 
-float_formats = [pyvips.BandFormat.FLOAT, 
-                 pyvips.BandFormat.DOUBLE]
-complex_formats = [pyvips.BandFormat.COMPLEX, 
-                   pyvips.BandFormat.DPCOMPLEX] 
-int_formats = unsigned_formats + signed_formats
-noncomplex_formats = int_formats + float_formats
-all_formats = int_formats + float_formats + complex_formats
-
-colour_colourspaces = [pyvips.Interpretation.XYZ,
-                       pyvips.Interpretation.LAB,
-                       pyvips.Interpretation.LCH,
-                       pyvips.Interpretation.CMC,
-                       pyvips.Interpretation.LABS,
-                       pyvips.Interpretation.SCRGB,
-                       pyvips.Interpretation.HSV,
-                       pyvips.Interpretation.SRGB,
-                       pyvips.Interpretation.YXY]
-coded_colourspaces = [pyvips.Interpretation.LABQ]
-mono_colourspaces = [pyvips.Interpretation.B_W]
-sixteenbit_colourspaces = [pyvips.Interpretation.GREY16,
-                           pyvips.Interpretation.RGB16]
-all_colourspaces = colour_colourspaces + mono_colourspaces + \
-                    coded_colourspaces + sixteenbit_colourspaces
-
-# an expanding zip ... if either of the args is not a list, duplicate it down
-# the other
-def zip_expand(x, y):
-    if isinstance(x, list) and isinstance(y, list):
-        return list(zip(x, y))
-    elif isinstance(x, list):
-        return [[i, y] for i in x]
-    elif isinstance(y, list):
-        return [[x, j] for j in y]
-    else:
-        return [[x, y]]
-
-# run a 1-ary function on a thing -- loop over elements if the 
-# thing is a list
-def run_fn(fn, x):
-    if isinstance(x, list):
-        return [fn(i) for i in x]
-    else:
-        return fn(x)
-
-# run a 2-ary function on two things -- loop over elements pairwise if the 
-# things are lists
-def run_fn2(fn, x, y):
-    if isinstance(x, pyvips.Image) or isinstance(y, pyvips.Image):
-        return fn(x, y)
-    elif isinstance(x, list) or isinstance(y, list):
-        return [fn(i, j) for i, j in zip_expand(x, y)]
-    else:
-        return fn(x, y)
-
 class TestColour(unittest.TestCase):
-    # test a pair of things which can be lists for approx. equality
+    # test a pair of things, which can be lists, for approx. equality
     def assertAlmostEqualObjects(self, a, b, places = 4, msg = ''):
         #print 'assertAlmostEqualObjects %s = %s' % (a, b)
         for x, y in zip_expand(a, b):
@@ -216,7 +159,7 @@ class TestColour(unittest.TestCase):
         self.assertAlmostEqual(alpha, 42.0, places = 3)
 
     def test_icc(self):
-        test = pyvips.Image.new_from_file("images/йцук.jpg")
+        test = pyvips.Image.new_from_file(JPEG_FILE)
 
         im = test.icc_import().icc_export()
         self.assertLess(im.dE76(test).max(), 6)
@@ -232,19 +175,19 @@ class TestColour(unittest.TestCase):
         self.assertLess(im2.dE76(test).max(), 6)
 
         im = test.icc_import()
-        im2 = im.icc_export(output_profile = "images/sRGB.icm")
+        im2 = im.icc_export(output_profile = SRGB_FILE)
         im3 = im.colourspace(pyvips.Interpretation.SRGB)
         self.assertLess(im2.dE76(im3).max(), 6)
 
         before_profile = test.get_value("icc-profile-data")
-        im = test.icc_transform("images/sRGB.icm")
+        im = test.icc_transform(SRGB_FILE)
         after_profile = im.get_value("icc-profile-data")
         im2 = test.icc_import()
         im3 = im2.colourspace(pyvips.Interpretation.SRGB)
         self.assertLess(im.dE76(im3).max(), 6)
         self.assertNotEqual(len(before_profile), len(after_profile))
 
-        im = test.icc_import(input_profile = "images/sRGB.icm")
+        im = test.icc_import(input_profile = SRGB_FILE)
         im2 = test.icc_import()
         self.assertLess(6, im.dE76(im2).max())
 

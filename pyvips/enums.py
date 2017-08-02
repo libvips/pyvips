@@ -44,3 +44,27 @@ class Interpretation(object):
 	MATRIX = 27
 	SCRGB = 28
 	HSV = 29
+
+class Angle(object):
+	D0 = 0
+	D90 = 1
+	D180 = 2
+	D270 = 3
+
+class Angle45(object):
+	D0 = 0
+	D45 = 1
+	D90 = 2
+	D135 = 3
+	D180 = 4
+	D225 = 5
+	D270 = 6
+	D315 = 7
+
+class Intent(object):
+	PERCEPTUAL = 0
+	RELATIVE = 1
+	SATURATION = 2
+	ABSOLUTE = 3
+
+

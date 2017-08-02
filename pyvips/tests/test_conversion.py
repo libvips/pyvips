@@ -10,85 +10,9 @@ from functools import reduce
 
 import pyvips
 
+from helpers import * 
+
 pyvips.leak_set(True)
-
-unsigned_formats = [pyvips.BandFormat.UCHAR, 
-                    pyvips.BandFormat.USHORT, 
-                    pyvips.BandFormat.UINT] 
-signed_formats = [pyvips.BandFormat.CHAR, 
-                  pyvips.BandFormat.SHORT, 
-                  pyvips.BandFormat.INT] 
-float_formats = [pyvips.BandFormat.FLOAT, 
-                 pyvips.BandFormat.DOUBLE]
-complex_formats = [pyvips.BandFormat.COMPLEX, 
-                   pyvips.BandFormat.DPCOMPLEX] 
-int_formats = unsigned_formats + signed_formats
-noncomplex_formats = int_formats + float_formats
-all_formats = int_formats + float_formats + complex_formats
-
-max_value = {pyvips.BandFormat.UCHAR: 0xff,
-             pyvips.BandFormat.USHORT: 0xffff,
-             pyvips.BandFormat.UINT: 0xffffffff, 
-             pyvips.BandFormat.CHAR: 0x7f,
-             pyvips.BandFormat.SHORT: 0x7fff, 
-             pyvips.BandFormat.INT: 0x7fffffff,
-             pyvips.BandFormat.FLOAT: 1.0,
-             pyvips.BandFormat.DOUBLE: 1.0,
-             pyvips.BandFormat.COMPLEX: 1.0,
-             pyvips.BandFormat.DPCOMPLEX: 1.0}
-
-sizeof_format = {pyvips.BandFormat.UCHAR: 1,
-                 pyvips.BandFormat.USHORT: 2,
-                 pyvips.BandFormat.UINT: 4,
-                 pyvips.BandFormat.CHAR: 1,
-                 pyvips.BandFormat.SHORT: 2,
-                 pyvips.BandFormat.INT: 4,
-                 pyvips.BandFormat.FLOAT: 4,
-                 pyvips.BandFormat.DOUBLE: 8,
-                 pyvips.BandFormat.COMPLEX: 8,
-                 pyvips.BandFormat.DPCOMPLEX: 16}
-
-rot45_angles = [pyvips.Angle45.D0,
-                pyvips.Angle45.D45,
-                pyvips.Angle45.D90,
-                pyvips.Angle45.D135,
-                pyvips.Angle45.D180,
-                pyvips.Angle45.D225,
-                pyvips.Angle45.D270,
-                pyvips.Angle45.D315]
-
-rot45_angle_bonds = [pyvips.Angle45.D0,
-                     pyvips.Angle45.D315,
-                     pyvips.Angle45.D270,
-                     pyvips.Angle45.D225,
-                     pyvips.Angle45.D180,
-                     pyvips.Angle45.D135,
-                     pyvips.Angle45.D90,
-                     pyvips.Angle45.D45]
-
-rot_angles = [pyvips.Angle.D0,
-              pyvips.Angle.D90,
-              pyvips.Angle.D180,
-              pyvips.Angle.D270]
-
-rot_angle_bonds = [pyvips.Angle.D0,
-                   pyvips.Angle.D270,
-                   pyvips.Angle.D180,
-                   pyvips.Angle.D90]
-
-# an expanding zip ... if either of the args is not a list, duplicate it down
-# the other
-def zip_expand(x, y):
-    if isinstance(x, list) and isinstance(y, list):
-        if len(x) != len(y):
-            raise pyvips.Error("zip_expand list args not equal length")
-        return list(zip(x, y))
-    elif isinstance(x, list):
-        return [[i, y] for i in x]
-    elif isinstance(y, list):
-        return [[x, j] for j in y]
-    else:
-        return [[x, y]]
 
 class TestConversion(unittest.TestCase):
     # test a pair of things which can be lists for approx. equality
@@ -142,8 +66,7 @@ class TestConversion(unittest.TestCase):
         self.colour = im * [1, 2, 3] + [2, 3, 4]
         self.mono = self.colour[1]
         self.all_images = [self.mono, self.colour]
-        self.jpeg_file = "images/йцук.jpg"
-        self.image = pyvips.Image.jpegload(self.jpeg_file)
+        self.image = pyvips.Image.jpegload(JPEG_FILE)
 
     def test_band_and(self):
         def band_and(x):

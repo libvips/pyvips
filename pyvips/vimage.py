@@ -95,7 +95,7 @@ def _run_cmplx(fn, image):
 
     if image.format != "complex" and image.format != "dpcomplex":
         if image.bands % 2 != 0:
-            raise "not an even number of bands"
+            raise Error("not an even number of bands")
 
         if image.format != "float" and image.format != "double":
             image = image.cast("float")
@@ -269,6 +269,10 @@ class Image(VipsObject):
             return Operation.call(name, self, *args, **kwargs)
 
         return call_function
+
+    # compatibility: these used to be called get_value / set_value
+    get_value = get
+    set_value = set
 
     # support with in the most trivial way
 
@@ -472,14 +476,14 @@ class Image(VipsObject):
         if non_number == None:
             return self.bandjoin_const(other)
         else:
-            return _call_base("bandjoin", [[self] + other], {})
+            return Operation.call("bandjoin", self, other)
 
     def bandrank(self, other, **kwargs):
         """Band-wise rank filter a set of images."""
         if not isinstance(other, list):
             other = [other]
 
-        return _call_base("bandrank", [[self] + other], kwargs)
+        return Operation.call("bandrank", self, other, **kwargs)
 
     def maxpos(self):
         """Return the coordinates of the image maximum."""
