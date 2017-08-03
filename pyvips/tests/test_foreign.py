@@ -139,7 +139,7 @@ class TestForeign(unittest.TestCase):
 
         # see if we have exif parsing: our test image has this field
         x = pyvips.Image.new_from_file(JPEG_FILE)
-        if x.get_typeof("exif-ifd0-Orientation") != GObject.TYPE_INVALID:
+        if x.get_typeof("exif-ifd0-Orientation") != 0:
             # we need a copy of the image to set the new metadata on
             # otherwise we get caching problems
             x = pyvips.Image.new_from_file(JPEG_FILE)
@@ -328,10 +328,10 @@ class TestForeign(unittest.TestCase):
         self.assertEqual(im.bands, 4)
 
         # density should change size of generated svg
-        im = pyvips.Image.magickload(SVG_FILE, density = 100)
+        im = pyvips.Image.magickload(SVG_FILE, density = '100')
         width = im.width
         height = im.height
-        im = pyvips.Image.magickload(SVG_FILE, density = 200)
+        im = pyvips.Image.magickload(SVG_FILE, density = '200')
         # This seems to fail on travis, no idea why, some problem in their IM
         # perhaps
         #self.assertEqual(im.width, width * 2)
@@ -396,7 +396,7 @@ class TestForeign(unittest.TestCase):
         # can do it, our webp supports metadata load/save
         buf = self.colour.webpsave_buffer()
         im = pyvips.Image.new_from_buffer(buf, "")
-        if im.get_typeof("icc-profile-data") != GObject.TYPE_INVALID:
+        if im.get_typeof("icc-profile-data") != 0:
             # verify that the profile comes back unharmed
             p1 = self.colour.get_value("icc-profile-data")
             p2 = im.get_value("icc-profile-data")

@@ -36,6 +36,10 @@ ffi.cdef('''
     char* vips_filename_get_filename (const char* vips_filename);
     char* vips_filename_get_options (const char* vips_filename);
 
+    VipsImage* vips_image_new_temp_file (const char* format);
+
+    int vips_image_write (VipsImage* image, VipsImage* out);
+
 ''')
 
 # either a single number, or a table of numbers
@@ -155,7 +159,7 @@ class Image(VipsObject):
             raise Error('unable to load from buffer')
 
         return Operation.call(ffi.string(name), data, 
-                              string_options = ffi.string(options), **kwargs)
+                              string_options = options, **kwargs)
 
     @staticmethod
     def new_from_array(array, scale = 1.0, offset = 0.0):
@@ -176,6 +180,13 @@ class Image(VipsObject):
 
         image.set_type(GValue.gdouble_type, "scale", scale)
         image.set_type(GValue.gdouble_type, "offset", offset)
+
+        return image
+
+    @staticmethod
+    def new_temp_file(format):
+        vi = vips_lib.vips_image_new_temp_file(format)
+        image = Image(vi)
 
         return image
 
@@ -218,6 +229,11 @@ class Image(VipsObject):
 
         return Operation.call(ffi.string(name), self, 
                               string_options = ffi.string(options), **kwargs)
+
+    def write(self, other):
+        result = vips_lib.vips_image_write(self.pointer, other.pointer)
+        if result != 0:
+            raise Error('unable to write to image')
 
     # get/set metadata
 

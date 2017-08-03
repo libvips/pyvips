@@ -49,6 +49,9 @@ ffi.cdef('''
 
     int vips_leak_set (int leak);
 
+    char* vips_path_filename7 (const char* path);
+    char* vips_path_mode7 (const char* path);
+
 ''')
 
 class Error(Exception):
@@ -85,6 +88,12 @@ def leak_set(leak):
 
 def type_find(basename, nickname):
     return vips_lib.vips_type_find(basename, nickname)
+
+def path_filename7(filename):
+    return ffi.string(vips_lib.vips_path_filename7(filename))
+
+def path_mode7(filename):
+    return ffi.string(vips_lib.vips_path_mode7(filename))
 
 __all__ = ['ffi', 'g_free_callback', 'vips_lib', 'gobject_lib', 'Error',
            'leak_set', 'type_find']
