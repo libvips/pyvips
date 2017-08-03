@@ -232,7 +232,8 @@ class GValue(object):
             psize = ffi.new('size_t *')
 
             array = vips_lib.vips_value_get_blob(self.gvalue, psize)
-            result = ffi.string(array, psize[0])
+            buf = ffi.cast("char*", array)
+            result = ffi.unpack(buf, psize[0])
         else:
              raise Error('unsupported gtype for get {0}'.
                    format(gvalue.type_name(gtype)))

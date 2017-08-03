@@ -95,3 +95,7 @@ class Combine(object):
 	MAX = 'max'
 	SUM = 'sum'
 
+class PCS(object):
+	LAB = 'lab'
+	XYZ = 'xyz'
+
