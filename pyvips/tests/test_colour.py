@@ -1,54 +1,11 @@
 # vim: set fileencoding=utf-8 :
 
-import unittest
-import math
-import os
-
-#import logging
-#logging.basicConfig(level = logging.DEBUG)
-
-import pyvips
-
 from helpers import * 
 
-pyvips.leak_set(True)
-
-class TestColour(unittest.TestCase):
-    # test a pair of things, which can be lists, for approx. equality
-    def assertAlmostEqualObjects(self, a, b, places = 4, msg = ''):
-        #print 'assertAlmostEqualObjects %s = %s' % (a, b)
-        for x, y in zip_expand(a, b):
-            self.assertAlmostEqual(x, y, places = places, msg = msg)
-
-    # run a function on an image and on a single pixel, the results 
-    # should match 
-    def run_cmp(self, message, im, x, y, fn):
-        a = im(x, y)
-        v1 = fn(a)
-        im2 = fn(im)
-        v2 = im2(x, y)
-        self.assertAlmostEqualObjects(v1, v2, msg = message)
-
-    # run a function on a pair of images and on a pair of pixels, the results 
-    # should match 
-    def run_cmp2(self, message, left, right, x, y, fn):
-        a = left(x, y)
-        b = right(x, y)
-        v1 = fn(a, b)
-        after = fn(left, right)
-        v2 = after(x, y)
-        self.assertAlmostEqualObjects(v1, v2, msg = message)
-
-    # run a function on a pair of images
-    # 50,50 and 10,10 should have different values on the test image
-    def run_test2(self, message, left, right, fn):
-        self.run_cmp2(message, left, right, 50, 50, 
-                      lambda x, y: run_fn2(fn, x, y))
-        self.run_cmp2(message, left, right, 10, 10, 
-                      lambda x, y: run_fn2(fn, x, y))
-
+class TestColour(PyvipsTester):
     def setUp(self):
-        im = pyvips.Image.mask_ideal(100, 100, 0.5, reject = True, optical = True)
+        im = pyvips.Image.mask_ideal(100, 100, 0.5, 
+                                     reject = True, optical = True)
         self.colour = im * [1, 2, 3] + [2, 3, 4]
         self.mono = self.colour.extract_band(1)
         self.all_images = [self.mono, self.colour]

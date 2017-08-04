@@ -1,67 +1,6 @@
-from __future__ import division
-from numbers import Number
-from functools import reduce
+# vim: set fileencoding=utf-8 :
 
-import unittest
-import operator
-import math
-
-#import logging
-#logging.basicConfig(level = logging.DEBUG)
-
-import pyvips
-
-pyvips.leak_set(True)
-
-unsigned_formats = [pyvips.BandFormat.UCHAR, 
-                    pyvips.BandFormat.USHORT, 
-                    pyvips.BandFormat.UINT] 
-signed_formats = [pyvips.BandFormat.CHAR, 
-                  pyvips.BandFormat.SHORT, 
-                  pyvips.BandFormat.INT] 
-float_formats = [pyvips.BandFormat.FLOAT, 
-                 pyvips.BandFormat.DOUBLE]
-complex_formats = [pyvips.BandFormat.COMPLEX, 
-                   pyvips.BandFormat.DPCOMPLEX] 
-int_formats = unsigned_formats + signed_formats
-noncomplex_formats = int_formats + float_formats
-all_formats = int_formats + float_formats + complex_formats
-
-# an expanding zip ... if either of the args is a scalar or a one-element list,
-# duplicate it down the other side 
-def zip_expand(x, y):
-    # handle singleton list case
-    if isinstance(x, list) and len(x) == 1:
-        x = x[0]
-    if isinstance(y, list) and len(y) == 1:
-        y = y[0]
-
-    if isinstance(x, list) and isinstance(y, list):
-        return list(zip(x, y))
-    elif isinstance(x, list):
-        return [[i, y] for i in x]
-    elif isinstance(y, list):
-        return [[x, j] for j in y]
-    else:
-        return [[x, y]]
-
-# run a 1-ary function on a thing -- loop over elements if the 
-# thing is a list
-def run_fn(fn, x):
-    if isinstance(x, list):
-        return [fn(i) for i in x]
-    else:
-        return fn(x)
-
-# run a 2-ary function on two things -- loop over elements pairwise if the 
-# things are lists
-def run_fn2(fn, x, y):
-    if isinstance(x, pyvips.Image) or isinstance(y, pyvips.Image):
-        return fn(x, y)
-    elif isinstance(x, list) or isinstance(y, list):
-        return [fn(i, j) for i, j in zip_expand(x, y)]
-    else:
-        return fn(x, y)
+from helpers import * 
 
 # point convolution
 def conv(image, mask, x_position, y_position):
@@ -85,18 +24,7 @@ def compass(image, mask, x_position, y_position, n_rot, fn):
 
     return reduce(lambda a, b: run_fn2(fn, a, b), acc)
 
-class TestConvolution(unittest.TestCase):
-    # test a pair of things which can be lists for approx. equality
-    def assertAlmostEqualObjects(self, a, b, places = 4, msg = ''):
-        #print 'assertAlmostEqualObjects %s = %s' % (a, b)
-        for x, y in zip_expand(a, b):
-            self.assertAlmostEqual(x, y, places = places, msg = msg)
-
-    # test a pair of things which can be lists for difference less than a
-    # threshold
-    def assertLessThreshold(self, a, b, diff):
-        for x, y in zip_expand(a, b):
-            self.assertLess(abs(x - y), diff)
+class TestConvolution(PyvipsTester):
 
     def setUp(self):
         im = pyvips.Image.mask_ideal(100, 100, 0.5, reject = True, optical = True)
@@ -134,7 +62,7 @@ class TestConvolution(unittest.TestCase):
                     self.assertAlmostEqualObjects(result, true)
 
     # don't test conva, it's still not done
-    def dont_test_conva(self):
+    def dont_est_conva(self):
         for im in self.all_images:
             for msk in self.all_masks:
                 print("msk:")

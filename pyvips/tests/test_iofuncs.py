@@ -1,32 +1,8 @@
-from __future__ import division
-import unittest
-import math
+# vim: set fileencoding=utf-8 :
 
-#import logging
-#logging.basicConfig(level = logging.DEBUG)
+from helpers import *
 
-import pyvips
-
-pyvips.leak_set(True)
-
-# an expanding zip ... if either of the args is not a list, duplicate it down
-# the other
-def zip_expand(x, y):
-    if isinstance(x, list) and isinstance(y, list):
-        return list(zip(x, y))
-    elif isinstance(x, list):
-        return [[i, y] for i in x]
-    elif isinstance(y, list):
-        return [[x, j] for j in y]
-    else:
-        return [[x, y]]
-
-class TestIofuncs(unittest.TestCase):
-    # test a pair of things which can be lists for approx. equality
-    def assertEqualObjects(self, a, b, msg = ''):
-        #print('assertEqualObjects %s = %s' % (a, b))
-        for x, y in zip_expand(a, b):
-            self.assertEqual(x, y, msg = msg)
+class TestIofuncs(PyvipsTester):
 
     # test the vips7 filename splitter ... this is very fragile and annoying
     # code with lots of cases

@@ -1,27 +1,8 @@
 # vim: set fileencoding=utf-8 :
 
-from __future__ import division
-import unittest
-import math
-import os
-import shutil
-from tempfile import NamedTemporaryFile
-
-#import logging
-#logging.basicConfig(level = logging.DEBUG)
-
-import pyvips
-
 from helpers import *
 
-pyvips.leak_set(True)
-
-class TestForeign(unittest.TestCase):
-    # test a pair of things which can be lists for approx. equality
-    def assertAlmostEqualObjects(self, a, b, places = 4, msg = ''):
-        #print 'assertAlmostEqualObjects %s = %s' % (a, b)
-        for x, y in zip_expand(a, b):
-            self.assertAlmostEqual(x, y, places = places, msg = msg)
+class TestForeign(PyvipsTester):
 
     def setUp(self):
         self.colour = pyvips.Image.jpegload(JPEG_FILE)
@@ -221,7 +202,7 @@ class TestForeign(unittest.TestCase):
         self.save_load_file("test-3.tif", "[squash,miniswhite]", self.onebit, 0)
 
         self.save_load_file("test-4.tif",
-                            "[profile=images/sRGB.icm]",
+                            "[profile={0}]".format(SRGB_FILE),
                             self.colour, 0)
         self.save_load_file("test-5.tif", "[tile]", self.colour, 0)
         self.save_load_file("test-6.tif", "[tile,pyramid]", self.colour, 0)

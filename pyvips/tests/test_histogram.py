@@ -1,23 +1,8 @@
 # vim: set fileencoding=utf-8 :
 
-import unittest
-import math
-
-#import logging
-#logging.basicConfig(level = logging.DEBUG)
-
-import pyvips
-
 from helpers import *
 
-pyvips.leak_set(True)
-
-class TestHistogram(unittest.TestCase):
-    # test a pair of things which can be lists for approx. equality
-    def assertAlmostEqualObjects(self, a, b, places = 4, msg = ''):
-        # print 'assertAlmostEqualObjects %s = %s' % (a, b)
-        for x, y in zip_expand(a, b):
-            self.assertAlmostEqual(x, y, places = places, msg = msg)
+class TestHistogram(PyvipsTester):
 
     def test_hist_cum(self):
         im = pyvips.Image.identity()

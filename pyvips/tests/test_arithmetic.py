@@ -1,71 +1,32 @@
-from __future__ import division
-import unittest
-import math
-
-# import logging
-# logging.basicConfig(level = logging.DEBUG)
-
-import pyvips
+# vim: set fileencoding=utf-8 :
 
 from helpers import *
 
-pyvips.leak_set(True)
-
-class TestArithmetic(unittest.TestCase):
-    # test a pair of things which can be lists for approx. equality
-    def assertAlmostEqualObjects(self, a, b, msg = ''):
-        #print 'assertAlmostEqualObjects %s = %s' % (a, b)
-        for x, y in zip_expand(a, b):
-            self.assertAlmostEqual(x, y, places = 4, msg = msg)
-
-    # run a function on an image and on a single pixel, the results 
-    # should match 
-    def run_cmp(self, message, im, x, y, fn):
-        a = im(x, y)
-        v1 = fn(a)
-        im2 = fn(im)
-        v2 = im2(x, y)
-        self.assertAlmostEqualObjects(v1, v2, msg = message)
-
-    # run a function on (image, constant), and on (constant, image).
-    # 50,50 and 10,10 should have different values on the test image
-    def run_testconst(self, message, fn, im, c):
-        self.run_cmp(message, im, 50, 50, lambda x: run_fn2(fn, x, c))
-        self.run_cmp(message, im, 50, 50, lambda x: run_fn2(fn, c, x))
-        self.run_cmp(message, im, 10, 10, lambda x: run_fn2(fn, x, c))
-        self.run_cmp(message, im, 10, 10, lambda x: run_fn2(fn, c, x))
-
-    def run_arith_const(self, fn, fmt = all_formats):
-        [self.run_testconst(fn.__name__ + ' scalar', fn, x.cast(y), 2)
-         for x in self.all_images for y in fmt]
-        [self.run_testconst(fn.__name__ + ' vector', fn, self.colour.cast(y), 
-                            [1, 2, 3])
-         for y in fmt]
-
-    # run a function on a pair of images and on a pair of pixels, the results 
-    # should match 
-    def run_cmp2(self, message, left, right, x, y, fn):
-        a = left(x, y)
-        b = right(x, y)
-        v1 = fn(a, b)
-        after = fn(left, right)
-        v2 = after(x, y)
-        self.assertAlmostEqualObjects(v1, v2, msg = message)
-
-    # run a function on a pair of images
-    # 50,50 and 10,10 should have different values on the test image
-    def run_test2(self, message, left, right, fn):
-        self.run_cmp2(message, left, right, 50, 50, 
-                      lambda x, y: run_fn2(fn, x, y))
-        self.run_cmp2(message, left, right, 10, 10, 
-                      lambda x, y: run_fn2(fn, x, y))
-
+class TestArithmetic(PyvipsTester):
     def run_arith(self, fn, fmt = all_formats):
-        [self.run_test2(fn.__name__ + ' image', x.cast(y), x.cast(z), fn)
+        [self.run_image2(fn.__name__ + ' image', x.cast(y), x.cast(z), fn)
          for x in self.all_images for y in fmt for z in fmt]
 
+    def run_arith_const(self, fn, fmt = all_formats):
+        [self.run_const(fn.__name__ + ' scalar', fn, x.cast(y), 2)
+         for x in self.all_images for y in fmt]
+        [self.run_const(fn.__name__ + ' vector', fn, self.colour.cast(y), 
+                        [1, 2, 3])
+         for y in fmt]
+
+    # run a function on an image, 
+    # 50,50 and 10,10 should have different values on the test image
+    def run_imageunary(self, message, im, fn):
+        self.run_cmp(message, im, 50, 50, lambda x: run_fn(fn, x))
+        self.run_cmp(message, im, 10, 10, lambda x: run_fn(fn, x))
+
+    def run_unary(self, images, fn, fmt = all_formats):
+        [self.run_imageunary(fn.__name__ + ' image', x.cast(y), fn)
+         for x in images for y in fmt]
+
     def setUp(self):
-        im = pyvips.Image.mask_ideal(100, 100, 0.5, reject = True, optical = True)
+        im = pyvips.Image.mask_ideal(100, 100, 0.5, 
+                                     reject = True, optical = True)
         self.colour = im * [1, 2, 3] + [2, 3, 4]
         self.mono = self.colour.extract_band(1)
         self.all_images = [self.mono, self.colour]
@@ -230,16 +191,6 @@ class TestArithmetic(unittest.TestCase):
 
         self.run_arith_const(noteq)
         self.run_arith(noteq)
-
-    # run a function on an image, 
-    # 50,50 and 10,10 should have different values on the test image
-    def run_testunary(self, message, im, fn):
-        self.run_cmp(message, im, 50, 50, lambda x: run_fn(fn, x))
-        self.run_cmp(message, im, 10, 10, lambda x: run_fn(fn, x))
-
-    def run_unary(self, images, fn, fmt = all_formats):
-        [self.run_testunary(fn.__name__ + ' image', x.cast(y), fn)
-         for x in images for y in fmt]
 
     def test_abs(self):
         def my_abs(x):
