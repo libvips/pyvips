@@ -42,23 +42,23 @@ class TestConversion(unittest.TestCase):
 
     # run a function on a pair of images
     # 50,50 and 10,10 should have different values on the test image
-    def run_testbinary(self, message, left, right, fn):
+    def _run_testbinary(self, message, left, right, fn):
         self.run_cmp_binary(message, left, right, 50, 50, fn)
         self.run_cmp_binary(message, left, right, 10, 10, fn)
 
     # run a function on an image, 
     # 50,50 and 10,10 should have different values on the test image
-    def run_testunary(self, message, im, fn):
+    def _run_testunary(self, message, im, fn):
         self.run_cmp_unary(message, im, 50, 50, fn)
         self.run_cmp_unary(message, im, 10, 10, fn)
 
     def run_unary(self, images, fn, fmt = all_formats):
-        [self.run_testunary(fn.__name__ + (' %s' % y), x.cast(y), fn)
+        [self._run_testunary(fn.__name__ + (' %s' % y), x.cast(y), fn)
          for x in images for y in fmt]
 
     def run_binary(self, images, fn, fmt = all_formats):
-        [self.run_testbinary(fn.__name__ + (' %s %s' % (y, z)), 
-                             x.cast(y), x.cast(z), fn)
+        [self._run_testbinary(fn.__name__ + (' %s %s' % (y, z)),
+                              x.cast(y), x.cast(z), fn)
          for x in images for y in fmt for z in fmt]
 
     def setUp(self):
