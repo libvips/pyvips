@@ -176,7 +176,9 @@ class Image(VipsObject):
                 a[x + y * width] = array[y][x]
 
         vi = vips_lib.vips_image_new_matrix_from_array(width, height, a, n)
-        image = Image(vi)
+        if vi == ffi.NULL:
+            raise Error('unable to make image from matrix')
+        image = package_index['Image'](vi)
 
         image.set_type(GValue.gdouble_type, "scale", scale)
         image.set_type(GValue.gdouble_type, "offset", offset)
@@ -186,9 +188,10 @@ class Image(VipsObject):
     @staticmethod
     def new_temp_file(format):
         vi = vips_lib.vips_image_new_temp_file(format)
-        image = Image(vi)
+        if vi == ffi.NULL:
+            raise Error('unable to make temp file')
 
-        return image
+        return package_index['Image'](vi)
 
     def new_from_image(self, value):
         pixel = (Image.black(1, 1) + value).cast(self.format)

@@ -44,9 +44,11 @@ class TestForeign(PyvipsTester):
         max_diff = (im - x).abs().max()
         self.assertEqual(max_diff, 0)
 
-    def save_load_file(self, filename, options, im, thresh):
+    def save_load_file(self, format, options, im, thresh):
         # yuk! 
         # but we can't set format parameters for pyvips.Image.new_temp_file()
+        filename = temp_filename(format)
+
         im.write_to_file(filename + options)
         x = pyvips.Image.new_from_file(filename)
 
@@ -56,6 +58,7 @@ class TestForeign(PyvipsTester):
         max_diff = (im - x).abs().max()
         self.assertTrue(max_diff <= thresh)
         x = None
+
         os.unlink(filename)
 
     def save_load_buffer(self, saver, loader, im, max_diff = 0):
@@ -68,25 +71,29 @@ class TestForeign(PyvipsTester):
         self.assertLessEqual((im - x).abs().max(), max_diff)
 
     def save_buffer_tempfile(self, saver, suf, im, max_diff = 0):
+        filename = temp_filename(suf)
+
         buf = pyvips.Operation.call(saver, im)
-        f = NamedTemporaryFile(suffix=suf, delete=False)
+        f = open(filename, 'w')
         f.write(buf)
         f.close()
-        x = pyvips.Image.new_from_file(f.name)
+
+        x = pyvips.Image.new_from_file(filename)
 
         self.assertEqual(im.width, x.width)
         self.assertEqual(im.height, x.height)
         self.assertEqual(im.bands, x.bands)
         self.assertLessEqual((im - x).abs().max(), max_diff)
 
-        os.unlink(f.name)
+        os.unlink(filename)
 
     def test_vips(self):
-        self.save_load_file("test.v", "", self.colour, 0)
+        self.save_load_file(".v", "", self.colour, 0)
 
         # check we can save and restore metadata
-        self.colour.write_to_file("test.v")
-        x = pyvips.Image.new_from_file("test.v")
+        filename = temp_filename(".v")
+        self.colour.write_to_file(filename)
+        x = pyvips.Image.new_from_file(filename)
         before_exif = self.colour.get_value("exif-data")
         after_exif = x.get_value("exif-data")
 
@@ -95,7 +102,7 @@ class TestForeign(PyvipsTester):
             self.assertEqual(before_exif[i], after_exif[i])
 
         x = None
-        os.unlink("test.v")
+        os.unlink(filename)
 
     def test_jpeg(self):
         if pyvips.type_find("VipsForeign", "jpegload") == 0:
@@ -126,38 +133,44 @@ class TestForeign(PyvipsTester):
             x = pyvips.Image.new_from_file(JPEG_FILE)
             x = x.copy()
             x.set_value("orientation", 2)
-            x.write_to_file("test.jpg")
-            x = pyvips.Image.new_from_file("test.jpg")
+
+            filename = temp_filename('.jpg')
+            x.write_to_file(filename)
+            x = pyvips.Image.new_from_file(filename)
             y = x.get_value("orientation")
             self.assertEqual(y, 2)
-            os.unlink("test.jpg")
+            os.unlink(filename)
+
+            filename = temp_filename('.jpg')
 
             x = pyvips.Image.new_from_file(JPEG_FILE)
             x = x.copy()
             x.set_value("orientation", 2)
-            x.write_to_file("test-12.jpg")
-
-            x = pyvips.Image.new_from_file("test-12.jpg")
+            x.write_to_file(filename)
+            x = pyvips.Image.new_from_file(filename)
             y = x.get_value("orientation")
             self.assertEqual(y, 2)
             x.remove("orientation")
-            x.write_to_file("test-13.jpg")
-            x = pyvips.Image.new_from_file("test-13.jpg")
+
+            filename2 = temp_filename('.jpg')
+            x.write_to_file(filename2)
+            x = pyvips.Image.new_from_file(filename2)
             y = x.get_value("orientation")
             self.assertEqual(y, 1)
-            os.unlink("test-12.jpg")
-            os.unlink("test-13.jpg")
+            os.unlink(filename2)
 
+            os.unlink(filename)
+
+            filename = temp_filename('.jpg')
             x = pyvips.Image.new_from_file(JPEG_FILE)
             x = x.copy()
             x.set_value("orientation", 6)
-            x.write_to_file("test-14.jpg")
-
-            x1 = pyvips.Image.new_from_file("test-14.jpg")
-            x2 = pyvips.Image.new_from_file("test-14.jpg", autorotate = True)
+            x.write_to_file(filename)
+            x1 = pyvips.Image.new_from_file(filename)
+            x2 = pyvips.Image.new_from_file(filename, autorotate = True)
             self.assertEqual(x1.width, x2.height)
             self.assertEqual(x1.height, x2.width)
-            os.unlink("test-14.jpg")
+            os.unlink(filename)
 
     def test_png(self):
         if pyvips.type_find("VipsForeign", "pngload") == 0: 
@@ -197,61 +210,66 @@ class TestForeign(PyvipsTester):
         self.save_load("%s.tif", self.cmyk)
 
         self.save_load("%s.tif", self.onebit)
-        self.save_load_file("test-1.tif", "[squash]", self.onebit, 0)
-        self.save_load_file("test-2.tif", "[miniswhite]", self.onebit, 0)
-        self.save_load_file("test-3.tif", "[squash,miniswhite]", self.onebit, 0)
+        self.save_load_file(".tif", "[squash]", self.onebit, 0)
+        self.save_load_file(".tif", "[miniswhite]", self.onebit, 0)
+        self.save_load_file(".tif", "[squash,miniswhite]", self.onebit, 0)
 
-        self.save_load_file("test-4.tif",
+        self.save_load_file(".tif",
                             "[profile={0}]".format(SRGB_FILE),
                             self.colour, 0)
-        self.save_load_file("test-5.tif", "[tile]", self.colour, 0)
-        self.save_load_file("test-6.tif", "[tile,pyramid]", self.colour, 0)
-        self.save_load_file("test-7.tif", 
+        self.save_load_file(".tif", "[tile]", self.colour, 0)
+        self.save_load_file(".tif", "[tile,pyramid]", self.colour, 0)
+        self.save_load_file(".tif", 
                             "[tile,pyramid,compression=jpeg]", self.colour, 80)
-        self.save_load_file("test-8.tif", "[bigtiff]", self.colour, 0)
-        self.save_load_file("test-9.tif", "[compression=jpeg]", self.colour, 80)
-        self.save_load_file("test-10.tif", 
+        self.save_load_file(".tif", "[bigtiff]", self.colour, 0)
+        self.save_load_file(".tif", "[compression=jpeg]", self.colour, 80)
+        self.save_load_file(".tif", 
                             "[tile,tile-width=256]", self.colour, 10)
 
         # we need a copy of the image to set the new metadata on
         # otherwise we get caching problems
+        filename = temp_filename('.tif')
         x = pyvips.Image.new_from_file(TIF_FILE)
         x = x.copy()
         x.set_value("orientation", 2)
-        x.write_to_file("test-11.tif")
-        x = pyvips.Image.new_from_file("test-11.tif")
+        x.write_to_file(filename)
+        x = pyvips.Image.new_from_file(filename)
         y = x.get_value("orientation")
         self.assertEqual(y, 2)
-        os.unlink("test-11.tif")
+        os.unlink(filename)
 
         # we need a copy of the image to set the new metadata on
         # otherwise we get caching problems
+        filename = temp_filename('.tif')
         x = pyvips.Image.new_from_file(TIF_FILE)
         x = x.copy()
         x.set_value("orientation", 2)
-        x.write_to_file("test-12.tif")
+        x.write_to_file(filename)
 
-        x = pyvips.Image.new_from_file("test-12.tif")
+        x = pyvips.Image.new_from_file(filename)
         y = x.get_value("orientation")
         self.assertEqual(y, 2)
         x.remove("orientation")
-        x.write_to_file("test-13.tif")
-        x = pyvips.Image.new_from_file("test-13.tif")
+
+        filename2 = temp_filename('.tif')
+        x.write_to_file(filename2)
+        x = pyvips.Image.new_from_file(filename2)
         y = x.get_value("orientation")
         self.assertEqual(y, 1)
-        os.unlink("test-12.tif")
-        os.unlink("test-13.tif")
+        os.unlink(filename2)
+        os.unlink(filename)
 
+        filename = temp_filename('.tif')
         x = pyvips.Image.new_from_file(TIF_FILE)
         x = x.copy()
         x.set_value("orientation", 6)
-        x.write_to_file("test-14.tif")
+        x.write_to_file(filename)
 
-        x1 = pyvips.Image.new_from_file("test-14.tif")
-        x2 = pyvips.Image.new_from_file("test-14.tif", autorotate = True)
+        x1 = pyvips.Image.new_from_file(filename)
+        x2 = pyvips.Image.new_from_file(filename, autorotate = True)
         self.assertEqual(x1.width, x2.height)
         self.assertEqual(x1.height, x2.width)
-        os.unlink("test-14.tif")
+        os.unlink(filename)
 
         x = pyvips.Image.new_from_file(OME_FILE)
         self.assertEqual(x.width, 439)
@@ -275,16 +293,17 @@ class TestForeign(PyvipsTester):
         self.assertEqual(x(0,167)[0], 0)
         self.assertEqual(x(0,168)[0], 1)
 
-        x.write_to_file("test-15.tif")
+        filename = temp_filename('.tif')
+        x.write_to_file(filename)
 
-        x = pyvips.Image.new_from_file("test-15.tif", n = -1)
+        x = pyvips.Image.new_from_file(filename, n = -1)
         self.assertEqual(x.width, 439)
         self.assertEqual(x.height, page_height * 15)
         self.assertEqual(x(0,166)[0], 96)
         self.assertEqual(x(0,167)[0], 0)
         self.assertEqual(x(0,168)[0], 1)
 
-        os.unlink("test-15.tif")
+        os.unlink(filename)
 
     def test_magickload(self):
         if pyvips.type_find("VipsForeign", "magickload") == 0: 
@@ -571,7 +590,8 @@ class TestForeign(PyvipsTester):
             return
 
         self.save_load("%s.hdr", self.colour)
-        self.save_buffer_tempfile("radsave_buffer", ".hdr", self.rad, max_diff = 0)
+        self.save_buffer_tempfile("radsave_buffer", ".hdr", 
+                                  self.rad, max_diff = 0)
 
     def test_dzsave(self):
         if pyvips.type_find("VipsForeign", "dzsave") == 0: 
@@ -584,12 +604,13 @@ class TestForeign(PyvipsTester):
 
         # default deepzoom layout ... we must use png here, since we want to
         # test the overlap for equality
-        self.colour.dzsave("test", suffix = ".png")
+        filename = temp_filename('')
+        self.colour.dzsave(filename, suffix = ".png")
 
         # test horizontal overlap ... expect 256 step, overlap 1 
-        x = pyvips.Image.new_from_file("test_files/10/0_0.png")
+        x = pyvips.Image.new_from_file(filename + "_files/10/0_0.png")
         self.assertEqual(x.width, 255)
-        y = pyvips.Image.new_from_file("test_files/10/1_0.png")
+        y = pyvips.Image.new_from_file(filename + "_files/10/1_0.png")
         self.assertEqual(y.width, 256)
 
         # the right two columns of x should equal the left two columns of y
@@ -599,7 +620,7 @@ class TestForeign(PyvipsTester):
 
         # test vertical overlap
         self.assertEqual(x.height, 255)
-        y = pyvips.Image.new_from_file("test_files/10/0_1.png")
+        y = pyvips.Image.new_from_file(filename + "_files/10/0_1.png")
         self.assertEqual(y.height, 256)
 
         # the bottom two rows of x should equal the top two rows of y
@@ -608,113 +629,126 @@ class TestForeign(PyvipsTester):
         self.assertEqual((top - bottom).abs().max(), 0)
 
         # there should be a bottom layer
-        x = pyvips.Image.new_from_file("test_files/0/0_0.png")
+        x = pyvips.Image.new_from_file(filename + "_files/0/0_0.png")
         self.assertEqual(x.width, 1)
         self.assertEqual(x.height, 1)
 
         # 10 should be the final layer
-        self.assertFalse(os.path.isdir("test_files/11"))
+        self.assertFalse(os.path.isdir(filename + "_files/11"))
 
-        shutil.rmtree("test_files")
-        os.unlink("test.dzi")
+        shutil.rmtree(filename + "_files")
+        os.unlink(filename + ".dzi")
 
         # default google layout
-        self.colour.dzsave("test", layout = "google")
+        filename = temp_filename('')
+        self.colour.dzsave(filename, layout = "google")
 
         # test bottom-right tile ... default is 256x256 tiles, overlap 0
-        x = pyvips.Image.new_from_file("test/2/2/3.jpg")
+        x = pyvips.Image.new_from_file(filename + "/2/2/3.jpg")
         self.assertEqual(x.width, 256)
         self.assertEqual(x.height, 256)
-        self.assertFalse(os.path.exists("test/2/2/4.jpg"))
-        self.assertFalse(os.path.exists("test/3"))
-        x = pyvips.Image.new_from_file("test/blank.png")
+        self.assertFalse(os.path.exists(filename + "/2/2/4.jpg"))
+        self.assertFalse(os.path.exists(filename + "/3"))
+        x = pyvips.Image.new_from_file(filename + "/blank.png")
         self.assertEqual(x.width, 256)
         self.assertEqual(x.height, 256)
 
-        shutil.rmtree("test")
+        shutil.rmtree(filename)
 
         # google layout with overlap ... verify that we clip correctly
         # with overlap 192 tile size 256, we should step by 64 pixels each time
         # so 3x3 tiles exactly
-        self.colour.crop(0, 0, 384, 384).dzsave("test2", layout = "google", 
+        filename = temp_filename('')
+        self.colour.crop(0, 0, 384, 384).dzsave(filename, layout = "google", 
                                                 overlap = 192, depth = "one")
 
         # test bottom-right tile ... default is 256x256 tiles, overlap 0
-        x = pyvips.Image.new_from_file("test2/0/2/2.jpg")
+        x = pyvips.Image.new_from_file(filename + "/0/2/2.jpg")
         self.assertEqual(x.width, 256)
         self.assertEqual(x.height, 256)
-        self.assertFalse(os.path.exists("test2/0/3/3.jpg"))
+        self.assertFalse(os.path.exists(filename + "/0/3/3.jpg"))
 
-        shutil.rmtree("test2")
+        shutil.rmtree(filename)
 
-        self.colour.crop(0, 0, 385, 385).dzsave("test3", layout = "google", 
+        filename = temp_filename('')
+        self.colour.crop(0, 0, 385, 385).dzsave(filename, layout = "google", 
                                                 overlap = 192, depth = "one")
 
         # test bottom-right tile ... default is 256x256 tiles, overlap 0
-        x = pyvips.Image.new_from_file("test3/0/3/3.jpg")
+        x = pyvips.Image.new_from_file(filename + "/0/3/3.jpg")
         self.assertEqual(x.width, 256)
         self.assertEqual(x.height, 256)
-        self.assertFalse(os.path.exists("test3/0/4/4.jpg"))
+        self.assertFalse(os.path.exists(filename + "/0/4/4.jpg"))
 
-        shutil.rmtree("test3")
+        shutil.rmtree(filename)
 
         # default zoomify layout
-        self.colour.dzsave("test", layout = "zoomify")
+        filename = temp_filename('')
+        self.colour.dzsave(filename, layout = "zoomify")
 
         # 256x256 tiles, no overlap
-        self.assertTrue(os.path.exists("test/ImageProperties.xml"))
-        x = pyvips.Image.new_from_file("test/TileGroup0/2-3-2.jpg")
+        self.assertTrue(os.path.exists(filename + "/ImageProperties.xml"))
+        x = pyvips.Image.new_from_file(filename + "/TileGroup0/2-3-2.jpg")
         self.assertEqual(x.width, 256)
         self.assertEqual(x.height, 256)
 
-        shutil.rmtree("test")
+        shutil.rmtree(filename)
 
         # test zip output
-        self.colour.dzsave("test.zip")
-        self.assertFalse(os.path.exists("test_files"))
-        self.assertFalse(os.path.exists("test.dzi"))
+        filename = temp_filename('.zip')
+        self.colour.dzsave(filename)
+        self.assertFalse(os.path.exists(filename + "_files"))
+        self.assertFalse(os.path.exists(filename + ".dzi"))
 
         # test compressed zip output
-        self.colour.dzsave("test_compressed.zip", compression = -1)
-        self.assertLess(os.path.getsize("test_compressed.zip"),
-                        os.path.getsize("test.zip"))
-        os.unlink("test.zip")
-        os.unlink("test_compressed.zip")
+        filename2 = temp_filename('.zip')
+        self.colour.dzsave(filename2, compression = -1)
+        self.assertLess(os.path.getsize(filename2),
+                        os.path.getsize(filename))
+        os.unlink(filename2)
+        os.unlink(filename)
 
         # test suffix 
-        self.colour.dzsave("test", suffix = ".png")
+        filename = temp_filename('')
+        self.colour.dzsave(filename, suffix = ".png")
 
-        x = pyvips.Image.new_from_file("test_files/10/0_0.png")
+        x = pyvips.Image.new_from_file(filename + "_files/10/0_0.png")
         self.assertEqual(x.width, 255)
 
-        shutil.rmtree("test_files")
-        os.unlink("test.dzi")
+        shutil.rmtree(filename + "_files")
+        os.unlink(filename + ".dzi")
 
         # test overlap
-        self.colour.dzsave("test", overlap = 200)
+        filename = temp_filename('')
+        self.colour.dzsave(filename, overlap = 200)
 
-        y = pyvips.Image.new_from_file("test_files/10/1_1.jpeg")
+        y = pyvips.Image.new_from_file(filename + "_files/10/1_1.jpeg")
         self.assertEqual(y.width, 654)
 
-        shutil.rmtree("test_files")
-        os.unlink("test.dzi")
+        shutil.rmtree(filename + "_files")
+        os.unlink(filename + ".dzi")
 
         # test tile-size
-        self.colour.dzsave("test", tile_size = 512)
+        filename = temp_filename('')
+        self.colour.dzsave(filename, tile_size = 512)
 
-        y = pyvips.Image.new_from_file("test_files/10/0_0.jpeg")
+        y = pyvips.Image.new_from_file(filename + "_files/10/0_0.jpeg")
         self.assertEqual(y.width, 513)
         self.assertEqual(y.height, 513)
 
-        shutil.rmtree("test_files")
-        os.unlink("test.dzi")
+        shutil.rmtree(filename + "_files")
+        os.unlink(filename + ".dzi")
 
         # test save to memory buffer
-        self.colour.dzsave("test-10.zip")
-        with open("test-10.zip", 'rb') as f:
+        filename = temp_filename('.zip')
+        base = os.path.basename(filename)
+        root, ext = os.path.splitext(base)
+
+        self.colour.dzsave(filename)
+        with open(filename, 'rb') as f:
             buf1 = f.read()
-        os.unlink("test-10.zip")
-        buf2 = self.colour.dzsave_buffer(basename = "test-10")
+        os.unlink(filename)
+        buf2 = self.colour.dzsave_buffer(basename = root)
         self.assertEqual(len(buf1), len(buf2))
 
         # we can't test the bytes are exactly equal, the timestamps will be

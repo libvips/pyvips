@@ -8,6 +8,7 @@ import operator
 import math
 from functools import reduce
 import shutil
+import tempfile
 from tempfile import NamedTemporaryFile
 
 import pyvips
@@ -141,6 +142,14 @@ def run_fn(fn, x):
         return [fn(i) for i in x]
     else:
         return fn(x)
+
+# make a temp filename with the specified suffix
+def temp_filename(suffix):
+    handle, filename = tempfile.mkstemp(suffix)
+    os.close(handle)
+    os.unlink(filename)
+
+    return filename
 
 # run a 2-ary function on two things -- loop over elements pairwise if the 
 # things are lists
