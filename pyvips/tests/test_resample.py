@@ -117,7 +117,8 @@ class TestResample(unittest.TestCase):
                 r = x.reduce(fac, fac, kernel = "cubic")
                 a = x.affine([1.0 / fac, 0, 0, 1.0 / fac], 
                              interpolate = bicubic,
-                             oarea = [0, 0, x.width / fac, x.height / fac])
+                             oarea = [0, 0, 
+                                      int(x.width / fac), int(x.height / fac)])
                 d = (r - a).abs().max()
                 self.assertLess(d, 10)
 
@@ -127,7 +128,8 @@ class TestResample(unittest.TestCase):
                 r = x.reduce(fac, fac, kernel = "linear")
                 a = x.affine([1.0 / fac, 0, 0, 1.0 / fac], 
                              interpolate = bilinear,
-                             oarea = [0, 0, x.width / fac, x.height / fac])
+                             oarea = [0, 0, 
+                                      int(x.width / fac), int(x.height / fac)])
                 d = (r - a).abs().max()
                 self.assertLess(d, 10)
 

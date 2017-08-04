@@ -16,6 +16,7 @@ from gobject import GObject
 from vobject import VipsObject
 from voperation import Operation
 from vimage import Image
+from vinterpolate import Interpolate
 
 package_index['Image'] = Image
 package_index['Operation'] = Operation

@@ -96,4 +96,4 @@ def path_mode7(filename):
     return ffi.string(vips_lib.vips_path_mode7(filename))
 
 __all__ = ['ffi', 'g_free_callback', 'vips_lib', 'gobject_lib', 'Error',
-           'leak_set', 'type_find']
+           'leak_set', 'type_find', 'path_filename7', 'path_mode7']

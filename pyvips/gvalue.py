@@ -71,6 +71,7 @@ class GValue(object):
     gstr_type = gobject_lib.g_type_from_name('gchararray')
     genum_type = gobject_lib.g_type_from_name('GEnum')
     gflags_type = gobject_lib.g_type_from_name('GFlags')
+    gobject_type = gobject_lib.g_type_from_name('GObject')
     image_type = gobject_lib.g_type_from_name('VipsImage')
     array_int_type = gobject_lib.g_type_from_name('VipsArrayInt')
     array_double_type = gobject_lib.g_type_from_name('VipsArrayDouble')
@@ -120,7 +121,7 @@ class GValue(object):
             gobject_lib.g_value_set_flags(self.gvalue, value)
         elif gtype == GValue.gstr_type or gtype == GValue.refstr_type:
             gobject_lib.g_value_set_string(self.gvalue, value)
-        elif gtype == GValue.image_type:
+        elif fundamental == GValue.gobject_type:
             gobject_lib.g_value_set_object(self.gvalue, value.pointer)
         elif gtype == GValue.array_int_type:
             if isinstance(value, numbers.Number):
@@ -152,8 +153,9 @@ class GValue(object):
             vips_lib.vips_value_set_blob(self.gvalue, 
                     g_free_callback, memory, len(value))
         else:
-            raise Error('unsupported gtype for get {0}'.
-                        format(gvalue.type_name(gtype)))
+            raise Error('unsupported gtype for set {0}, fundamental {1}'.
+                        format(GValue.type_name(gtype), 
+                               GValue.type_name(fundamental)))
 
     def get(self):
         logger.debug('GValue.get: self = {0}'.format(self))
@@ -236,7 +238,7 @@ class GValue(object):
             result = ffi.unpack(buf, psize[0])
         else:
              raise Error('unsupported gtype for get {0}'.
-                   format(gvalue.type_name(gtype)))
+                   format(GValue.type_name(gtype)))
 
         return result
 
