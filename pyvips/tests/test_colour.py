@@ -39,14 +39,6 @@ class TestColour(unittest.TestCase):
         v2 = after(x, y)
         self.assertAlmostEqualObjects(v1, v2, msg = message)
 
-    # run a function on a pair of images
-    # 50,50 and 10,10 should have different values on the test image
-    def run_test2(self, message, left, right, fn):
-        self.run_cmp2(message, left, right, 50, 50, 
-                      lambda x, y: run_fn2(fn, x, y))
-        self.run_cmp2(message, left, right, 10, 10, 
-                      lambda x, y: run_fn2(fn, x, y))
-
     def setUp(self):
         im = pyvips.Image.mask_ideal(100, 100, 0.5, reject = True, optical = True)
         self.colour = im * [1, 2, 3] + [2, 3, 4]
