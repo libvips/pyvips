@@ -22,4 +22,6 @@ package_index['Image'] = Image
 package_index['Operation'] = Operation
 package_index['GValue'] = GValue
 
-__all__ = ['Error', 'Image', 'Operation', 'GValue']
+__all__ = ['Error', 'Image', 'Operation', 'GValue',
+           'type_find', 'type_name',
+          ]

@@ -81,12 +81,6 @@ class TestGValue(PyvipsTester):
         value = gv.get()
         self.assertEqual(value, image)
 
-    """
-
-    this causes a lot of warnings! investigate
-    
-    perhaps the vips r, g, b images are GCd too early?
-
     def test_array_image(self):
         image = pyvips.Image.new_from_file(JPEG_FILE)
         r, g, b = image.bandsplit()
@@ -95,8 +89,6 @@ class TestGValue(PyvipsTester):
         gv.set([r, g, b])
         value = gv.get()
         self.assertEqual(value, [r, g, b])
-
-    """
 
     def test_blob(self):
         with open(JPEG_FILE, 'rb') as f:

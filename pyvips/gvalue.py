@@ -20,7 +20,6 @@ ffi.cdef('''
 
     void g_value_init (GValue* value, GType gtype);
     void g_value_unset (GValue* value);
-    const char* g_type_name (GType gtype);
     GType g_type_from_name (const char* name);
     GType g_type_fundamental (GType gtype);
 
@@ -62,14 +61,6 @@ ffi.cdef('''
 
 ''')
 
-# a callback that triggers g_free()
-@ffi.callback('void(void*)')
-def my_callback(ptr):
-    print 'hello!!'
-    print 'free_callback: freeing {0}'.format(ptr)
-
-    gobject_lib.g_free(ptr)
-
 class GValue(object):
 
     # look up some common gtypes at init for speed
@@ -95,10 +86,6 @@ class GValue(object):
         # and tag it to be unset on GC as well
         self.gvalue = ffi.gc(self.pointer, gobject_lib.g_value_unset)
         logger.debug('GValue.__init__: gvalue = {0}'.format(self.gvalue))
-
-    @staticmethod
-    def type_name(gtype):
-        return(ffi.string(gobject_lib.g_type_name(gtype)))
 
     def init(self, gtype):
         gobject_lib.g_value_init(self.gvalue, gtype)
@@ -162,8 +149,7 @@ class GValue(object):
                     gobject_lib.g_free, memory, len(value))
         else:
             raise Error('unsupported gtype for set {0}, fundamental {1}'.
-                        format(GValue.type_name(gtype), 
-                               GValue.type_name(fundamental)))
+                        format(type_name(gtype), type_name(fundamental)))
 
     def get(self):
         logger.debug('GValue.get: self = {0}'.format(self))
@@ -181,7 +167,6 @@ class GValue(object):
             result = gobject_lib.g_value_get_double(self.gvalue)
         elif fundamental == GValue.genum_type:
             enum_value = gobject_lib.g_value_get_enum(self.gvalue)
-
             cstr = vips_lib.vips_enum_nick(gtype, enum_value)
             if cstr == 0:
                 raise Error('value not in enum')
@@ -198,7 +183,6 @@ class GValue(object):
                 result = nil
         elif gtype == GValue.refstr_type:
             psize = ffi.new('size_t *')
-
             cstr = vips_lib.vips_value_get_ref_string(self.gvalue, psize)
 
             result = ffi.string(cstr, psize[0])
@@ -216,38 +200,38 @@ class GValue(object):
             result = package_index['Image'](vi)
         elif gtype == GValue.array_int_type:
             pint = ffi.new('int *')
-
             array = vips_lib.vips_value_get_array_int(self.gvalue, pint)
+
             result = []
             for i in range(0, pint[0]):
                 result.append(array[i])
         elif gtype == GValue.array_double_type:
             pint = ffi.new('int *')
-
             array = vips_lib.vips_value_get_array_double(self.gvalue, pint)
+
             result = []
             for i in range(0, pint[0]):
                 result.append(array[i])
         elif gtype == GValue.array_image_type:
             pint = ffi.new('int *')
-
             array = vips_lib.vips_value_get_array_image(self.gvalue, pint)
+
             result = []
             for i in range(0, pint[0]):
-                # this will make a new cdata object 
                 vi = array[i]
-
-                result.append(package_index['Image'](vi))
+                vips_lib.g_object_ref(vi)
+                image = package_index['Image'](vi)
+                result.append(image)
         elif gtype == GValue.blob_type:
             psize = ffi.new('size_t *')
-
             array = vips_lib.vips_value_get_blob(self.gvalue, psize)
             buf = ffi.cast("char*", array)
+
             result = ffi.unpack(buf, psize[0])
         else:
              raise Error('unsupported gtype for get {0}'.
-                   format(GValue.type_name(gtype)))
+                   format(type_name(gtype)))
 
         return result
 
-__all__ = ['GValue']
+__all__ = ['GValue', 'type_find', 'type_name']

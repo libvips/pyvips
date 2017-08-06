@@ -46,12 +46,13 @@ ffi.cdef('''
     void* g_malloc (size_t size);
     void g_free (void* data);
 
-    GType vips_type_find (const char* basename, const char* nickname);
-
     int vips_leak_set (int leak);
 
     char* vips_path_filename7 (const char* path);
     char* vips_path_mode7 (const char* path);
+
+    GType vips_type_find (const char* basename, const char* nickname);
+    const char* g_type_name (GType gtype);
 
 ''')
 
@@ -86,14 +87,18 @@ logger.debug('')
 def leak_set(leak):
     return vips_lib.vips_leak_set(leak)
 
-def type_find(basename, nickname):
-    return vips_lib.vips_type_find(basename, nickname)
-
 def path_filename7(filename):
     return ffi.string(vips_lib.vips_path_filename7(filename))
 
 def path_mode7(filename):
     return ffi.string(vips_lib.vips_path_mode7(filename))
 
-__all__ = ['ffi', 'vips_lib', 'gobject_lib', 'Error', 'leak_set', 'type_find', 
+def type_find(basename, nickname):
+    return vips_lib.vips_type_find(basename, nickname)
+
+def type_name(gtype):
+    return(ffi.string(gobject_lib.g_type_name(gtype)))
+
+__all__ = ['ffi', 'vips_lib', 'gobject_lib', 'Error', 'leak_set', 
+           'type_find', 'type_name',
            'path_filename7', 'path_mode7', 'shutdown']
