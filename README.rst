@@ -23,6 +23,11 @@ with::
 	import pyvips
 	Vips = pyvips
 
+Instead of the `pyvips = Vips`, you can also swap all `Vips` for `pyvips` with
+eg.:
+
+        %s/Vips/pyvips/g
+
 Background
 ----------
 
