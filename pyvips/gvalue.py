@@ -81,17 +81,17 @@ class GValue(object):
     def __init__(self):
         # allocate memory for the gvalue which will be freed on GC
         self.pointer = ffi.new('GValue *')
-        logger.debug('GValue.__init__: pointer = {0}'.format(self.pointer))
+        # logger.debug('GValue.__init__: pointer = {0}'.format(self.pointer))
 
         # and tag it to be unset on GC as well
         self.gvalue = ffi.gc(self.pointer, gobject_lib.g_value_unset)
-        logger.debug('GValue.__init__: gvalue = {0}'.format(self.gvalue))
+        # logger.debug('GValue.__init__: gvalue = {0}'.format(self.gvalue))
 
     def init(self, gtype):
         gobject_lib.g_value_init(self.gvalue, gtype)
 
     def set(self, value):
-        logger.debug('GValue.set: self = {0}, value = {1}'.format(self, value))
+        # logger.debug('GValue.set: self = {0}, value = {1}'.format(self, value))
 
         gtype = self.gvalue.gtype
         fundamental = gobject_lib.g_type_fundamental(gtype)
@@ -152,7 +152,7 @@ class GValue(object):
                         format(type_name(gtype), type_name(fundamental)))
 
     def get(self):
-        logger.debug('GValue.get: self = {0}'.format(self))
+        # logger.debug('GValue.get: self = {0}'.format(self))
 
         gtype = self.gvalue.gtype
         fundamental = gobject_lib.g_type_fundamental(gtype)

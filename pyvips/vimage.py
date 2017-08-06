@@ -113,7 +113,7 @@ def _run_cmplx(fn, image):
 # metaclass for Image ... getattr on this implements the class methods
 class ImageType(type):
     def __getattr__(cls, name):
-        logger.debug('ImageType.__getattr__ {0}'.format(name))
+        # logger.debug('ImageType.__getattr__ {0}'.format(name))
 
         def call_function(*args, **kwargs):
             return Operation.call(name, *args, **kwargs)
@@ -136,7 +136,7 @@ class Image(VipsObject):
             return self.new_from_image(value)
 
     def __init__(self, pointer):
-        logger.debug('Image.__init__: pointer = {0}'.format(pointer))
+        # logger.debug('Image.__init__: pointer = {0}'.format(pointer))
         super(Image, self).__init__(pointer)
 
     # constructors
@@ -265,7 +265,7 @@ class Image(VipsObject):
         return vips_lib.vips_image_remove(self.pointer, name) != 0
 
     def __getattr__(self, name):
-        logger.debug('Image.__getattr__ {0}'.format(name))
+        # logger.debug('Image.__getattr__ {0}'.format(name))
 
         # look up in props first (but not metadata)
         if super(Image, self).get_typeof(name) != 0:

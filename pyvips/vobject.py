@@ -69,7 +69,7 @@ ffi.cdef('''
 class VipsObject(GObject):
 
     def __init__(self, pointer):
-        logger.debug('VipsObject.__init__: pointer = {0}'.format(pointer))
+        # logger.debug('VipsObject.__init__: pointer = {0}'.format(pointer))
         super(VipsObject, self).__init__(pointer)
 
     @staticmethod
@@ -81,8 +81,8 @@ class VipsObject(GObject):
 
     # slow! eeeeew
     def get_typeof(self, name):
-        logger.debug('VipsObject.get_typeof: self = {0}, name = {1}'.
-                     format(self, name))
+        # logger.debug('VipsObject.get_typeof: self = {0}, name = {1}'.
+        #              format(self, name))
 
         pspec = ffi.new('GParamSpec **');
         argument_class = ffi.new('VipsArgumentClass **');

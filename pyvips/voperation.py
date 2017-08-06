@@ -110,9 +110,10 @@ class Operation(VipsObject):
     # '[strip,tile=true]'
     @staticmethod
     def call(operation_name, *args, **kwargs):
-        logger.debug(('VipsOperation.call: operation_name = {0}, ' + 
-            'args = {1}, kwargs = {2}').
-            format(operation_name, args, kwargs))
+        logger.debug('VipsOperation.call: operation_name = {0}'.
+                     format(operation_name))
+        # logger.debug('VipsOperation.call: args = {1}, kwargs = {2}'.
+        #              format(args, kwargs))
 
         # pull out the special string_options kwarg
         string_options = kwargs.pop('string_options', '')
@@ -127,7 +128,7 @@ class Operation(VipsObject):
         vop = None
 
         arguments = op.getargs()
-        logger.debug('arguments = {0}'.format(arguments))
+        # logger.debug('arguments = {0}'.format(arguments))
 
         # make a thing to quickly get flags from an arg name
         flags_from_name = {}
