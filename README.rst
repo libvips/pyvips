@@ -8,8 +8,9 @@ pyvips experimental CFFI binding for libvips
 Status
 ------
 
-This binding passes the vips test suite cleanly and with no leaks, so it should
-be OK to use. The docs still need updating, and it could use a little polish. 
+This binding passes the vips test suite cleanly and with no leaks, so it's
+getting close. The docs still need updating, it could use a little polish,
+and it currently fails with python3.
 
 To convert old code, replace the lines::
 
