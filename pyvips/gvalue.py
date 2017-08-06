@@ -62,6 +62,14 @@ ffi.cdef('''
 
 ''')
 
+# a callback that triggers g_free()
+@ffi.callback('void(void*)')
+def my_callback(ptr):
+    print 'hello!!'
+    print 'free_callback: freeing {0}'.format(ptr)
+
+    gobject_lib.g_free(ptr)
+
 class GValue(object):
 
     # look up some common gtypes at init for speed
@@ -151,7 +159,7 @@ class GValue(object):
             ffi.memmove(memory, value, len(value))
 
             vips_lib.vips_value_set_blob(self.gvalue, 
-                    g_free_callback, memory, len(value))
+                    gobject_lib.g_free, memory, len(value))
         else:
             raise Error('unsupported gtype for set {0}, fundamental {1}'.
                         format(GValue.type_name(gtype), 

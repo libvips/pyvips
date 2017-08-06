@@ -5,6 +5,26 @@
 pyvips experimental CFFI binding for libvips
 --------------------------------------------
 
+Status
+------
+
+This binding passes the vips test suite cleanly and with no leaks, so it should
+be OK to use. The docs still need updating, and it could use a little polish. 
+
+To convert old code, replace the lines::
+
+	import gi
+	gi.require_version('Vips', '8.0')
+	from gi.repository import Vips 
+
+with::
+
+	import pyvips
+	Vips = pyvips
+
+Background
+----------
+
 This is supposed to be an experiment with making a libvips binding using cffi.
 
 http://cffi.readthedocs.io/en/latest/ref.html
@@ -50,17 +70,3 @@ Run test suite::
 
 	$ nosetests |& more
 	$ nosetests --logging-level=WARNING
-
-Converting old code
--------------------
-
-Replace the lines::
-
-	import gi
-	gi.require_version('Vips', '8.0')
-	from gi.repository import Vips 
-
-with::
-
-	import pyvips
-	Vips = pyvips

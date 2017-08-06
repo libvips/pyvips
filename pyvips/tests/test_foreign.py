@@ -119,11 +119,12 @@ class TestForeign(PyvipsTester):
             self.assertEqual(im.bands, 3)
 
         self.file_loader("jpegload", JPEG_FILE, jpeg_valid)
-        self.buffer_loader("jpegload_buffer", JPEG_FILE, jpeg_valid)
-        self.save_load_buffer("jpegsave_buffer", "jpegload_buffer", self.colour,
-                             80)
         self.save_load("%s.jpg", self.mono)
         self.save_load("%s.jpg", self.colour)
+
+        self.buffer_loader("jpegload_buffer", JPEG_FILE, jpeg_valid)
+        self.save_load_buffer("jpegsave_buffer", "jpegload_buffer", 
+                              self.colour, 80)
 
         # see if we have exif parsing: our test image has this field
         x = pyvips.Image.new_from_file(JPEG_FILE)
@@ -171,6 +172,7 @@ class TestForeign(PyvipsTester):
             self.assertEqual(x1.width, x2.height)
             self.assertEqual(x1.height, x2.width)
             os.unlink(filename)
+
 
     def test_png(self):
         if pyvips.type_find("VipsForeign", "pngload") == 0: 

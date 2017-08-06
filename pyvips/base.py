@@ -38,6 +38,7 @@ ffi.cdef('''
     void vips_error_clear (void);
 
     int vips_init (const char* argv0);
+    void vips_shutdown (void);
 
     typedef struct _VipsImage VipsImage;
     typedef struct _GValue GValue;
@@ -75,13 +76,12 @@ class Error(Exception):
 if vips_lib.vips_init(sys.argv[0]) != 0:
     raise Error('unable to init Vips')
 
+def shutdown():
+    logger.debug('Shutting down libvips')
+    vips_lib.vips_shutdown()
+
 logger.debug('Inited libvips')
 logger.debug('')
-
-# a callback that triggers g_free()
-@ffi.callback('void(void*)')
-def g_free_callback(ptr):
-    gobject_lib.g_free(ptr)
 
 def leak_set(leak):
     return vips_lib.vips_leak_set(leak)
@@ -95,5 +95,5 @@ def path_filename7(filename):
 def path_mode7(filename):
     return ffi.string(vips_lib.vips_path_mode7(filename))
 
-__all__ = ['ffi', 'g_free_callback', 'vips_lib', 'gobject_lib', 'Error',
-           'leak_set', 'type_find', 'path_filename7', 'path_mode7']
+__all__ = ['ffi', 'vips_lib', 'gobject_lib', 'Error', 'leak_set', 'type_find', 
+           'path_filename7', 'path_mode7', 'shutdown']
