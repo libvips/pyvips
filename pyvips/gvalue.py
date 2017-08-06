@@ -1,6 +1,7 @@
 # wrap GValue
 
 from __future__ import division
+from __future__ import unicode_literals 
 
 import logging
 import sys
@@ -61,22 +62,25 @@ ffi.cdef('''
 
 ''')
 
+def type_from_name(name):
+    return gobject_lib.g_type_from_name(name)
+
 class GValue(object):
 
     # look up some common gtypes at init for speed
-    gbool_type = gobject_lib.g_type_from_name('gboolean')
-    gint_type = gobject_lib.g_type_from_name('gint')
-    gdouble_type = gobject_lib.g_type_from_name('gdouble')
-    gstr_type = gobject_lib.g_type_from_name('gchararray')
-    genum_type = gobject_lib.g_type_from_name('GEnum')
-    gflags_type = gobject_lib.g_type_from_name('GFlags')
-    gobject_type = gobject_lib.g_type_from_name('GObject')
-    image_type = gobject_lib.g_type_from_name('VipsImage')
-    array_int_type = gobject_lib.g_type_from_name('VipsArrayInt')
-    array_double_type = gobject_lib.g_type_from_name('VipsArrayDouble')
-    array_image_type = gobject_lib.g_type_from_name('VipsArrayImage')
-    refstr_type = gobject_lib.g_type_from_name('VipsRefString')
-    blob_type = gobject_lib.g_type_from_name('VipsBlob')
+    gbool_type = type_from_name('gboolean')
+    gint_type = type_from_name('gint')
+    gdouble_type = type_from_name('gdouble')
+    gstr_type = type_from_name('gchararray')
+    genum_type = type_from_name('GEnum')
+    gflags_type = type_from_name('GFlags')
+    gobject_type = type_from_name('GObject')
+    image_type = type_from_name('VipsImage')
+    array_int_type = type_from_name('VipsArrayInt')
+    array_double_type = type_from_name('VipsArrayDouble')
+    array_image_type = type_from_name('VipsArrayImage')
+    refstr_type = type_from_name('VipsRefString')
+    blob_type = type_from_name('VipsBlob')
 
     def __init__(self):
         # allocate memory for the gvalue which will be freed on GC

@@ -74,7 +74,7 @@ class Error(Exception):
     def __str__(self):
         return '{0}\n  {1}'.format(self.message, self.detail)
 
-if vips_lib.vips_init(sys.argv[0]) != 0:
+if vips_lib.vips_init(bytes(sys.argv[0], 'utf-8')) != 0:
     raise Error('unable to init Vips')
 
 def shutdown():
@@ -88,13 +88,14 @@ def leak_set(leak):
     return vips_lib.vips_leak_set(leak)
 
 def path_filename7(filename):
-    return ffi.string(vips_lib.vips_path_filename7(filename))
+    return ffi.string(vips_lib.vips_path_filename7(bytes(filename, 'utf-8')))
 
 def path_mode7(filename):
-    return ffi.string(vips_lib.vips_path_mode7(filename))
+    return ffi.string(vips_lib.vips_path_mode7(bytes(filename, 'utf-8')))
 
 def type_find(basename, nickname):
-    return vips_lib.vips_type_find(basename, nickname)
+    return vips_lib.vips_type_find(bytes(basename, 'utf-8'), 
+                                   bytes(nickname, 'utf-8'))
 
 def type_name(gtype):
     return(ffi.string(gobject_lib.g_type_name(gtype)))
