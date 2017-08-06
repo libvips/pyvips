@@ -10,7 +10,7 @@ from os import path
 
 here = path.abspath(path.dirname(__file__))
 
-with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
+with open(path.join(here, 'README.rst'), encoding = 'utf-8') as f:
     long_description = f.read()
 
 setup(
@@ -40,11 +40,12 @@ setup(
     ],
 
     keywords = 'image processing',
-    packages = find_packages(exclude = ['contrib', 'docs', 'tests']),
+    packages = find_packages(exclude = ['contrib', 'docs', 'tests', 'examples',
+                                        'test_images']),
 
-    install_requires=['cffi'],
+    install_requires = ['cffi'],
 
-    extras_require={
+    extras_require = {
         'test': ['nose'],
     },
     test_suite = 'nose.collector',
