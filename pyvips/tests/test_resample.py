@@ -1,6 +1,6 @@
 # vim: set fileencoding=utf-8 :
 
-from helpers import *
+from .helpers import *
 
 # Run a function expecting a complex image on a two-band image
 def run_cmplx(fn, image):
@@ -126,7 +126,7 @@ class TestResample(PyvipsTester):
         self.assertEqual(im2.height, round(im.height / 4.0))
 
         # test geometry rounding corner case
-        im = pyvips.Image.black(100, 1);
+        im = pyvips.Image.black(100, 1)
         x = im.resize(0.5)
         self.assertEqual(x.width, 50)
         self.assertEqual(x.height, 1)

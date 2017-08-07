@@ -1,6 +1,6 @@
 # vim: set fileencoding=utf-8 :
 
-from helpers import *
+from .helpers import *
 
 class TestGValue(PyvipsTester):
     def test_bool(self):
@@ -33,7 +33,7 @@ class TestGValue(PyvipsTester):
         # make it ourselves in case we are run before the first image
         pyvips.vips_lib.vips_interpretation_get_type()
         interpretation_gtype = pyvips.gobject_lib. \
-            g_type_from_name('VipsInterpretation')
+            g_type_from_name(b'VipsInterpretation')
         gv = pyvips.GValue()
         gv.init(interpretation_gtype)
         gv.set('xyz')
@@ -45,7 +45,7 @@ class TestGValue(PyvipsTester):
         # make it ourselves in case we are run before that
         pyvips.vips_lib.vips_operation_flags_get_type()
         operationflags_gtype = pyvips.gobject_lib. \
-            g_type_from_name('VipsOperationFlags')
+            g_type_from_name(b'VipsOperationFlags')
         gv = pyvips.GValue()
         gv.init(operationflags_gtype)
         gv.set(12)

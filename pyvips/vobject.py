@@ -84,15 +84,15 @@ class VipsObject(GObject):
         # logger.debug('VipsObject.get_typeof: self = {0}, name = {1}'.
         #              format(self, name))
 
-        pspec = ffi.new('GParamSpec **');
-        argument_class = ffi.new('VipsArgumentClass **');
-        argument_instance = ffi.new('VipsArgumentInstance **');
+        pspec = ffi.new('GParamSpec **')
+        argument_class = ffi.new('VipsArgumentClass **')
+        argument_instance = ffi.new('VipsArgumentInstance **')
         vo = ffi.cast('VipsObject *', self.pointer)
-        result = vips_lib.vips_object_get_argument(vo, name,
+        result = vips_lib.vips_object_get_argument(vo, to_bytes(name),
             pspec, argument_class, argument_instance)
 
         if result != 0:
-            # need to clear any error
+            # need to clear any error, this is horrible
             Error('')
             return 0
 
@@ -106,7 +106,7 @@ class VipsObject(GObject):
         gv = GValue()
         gv.init(gtype)
         go = ffi.cast('GObject *', self.pointer)
-        gobject_lib.g_object_get_property(go, name, gv.pointer)
+        gobject_lib.g_object_get_property(go, to_bytes(name), gv.pointer)
 
         return gv.get()
 
@@ -120,11 +120,14 @@ class VipsObject(GObject):
         gv.init(gtype)
         gv.set(value)
         go = ffi.cast('GObject *', self.pointer)
-        gobject_lib.g_object_set_property(go, name, gv.pointer)
+        gobject_lib.g_object_set_property(go, to_bytes(name), gv.pointer)
 
     # set a series of options using a string, perhaps 'fred=12, tile'
     def set_string(self, string_options):
         vo = ffi.cast('VipsObject *', self.pointer)
-        return vips_lib.vips_object_set_from_string(vo, string_options) == 0
+        result = vips_lib.vips_object_set_from_string(vo, 
+                                                      to_bytes(string_options)) 
+
+        return result == 0
 
 __all__ = ['VipsObject']

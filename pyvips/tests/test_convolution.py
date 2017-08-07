@@ -1,6 +1,8 @@
 # vim: set fileencoding=utf-8 :
 
-from helpers import * 
+import operator
+from functools import reduce
+from .helpers import *
 
 # point convolution
 def conv(image, mask, x_position, y_position):
@@ -33,17 +35,17 @@ class TestConvolution(PyvipsTester):
         self.mono = self.colour.extract_band(1)
         self.mono = self.mono.copy(interpretation = pyvips.Interpretation.B_W)
         self.all_images = [self.mono, self.colour]
-        self.sharp = pyvips.Image.new_from_array([[-1, -1,  -1], 
-                                                [-1,  16, -1], 
+        self.sharp = pyvips.Image.new_from_array([[-1, -1,  -1],
+                                                [-1,  16, -1],
                                                 [-1, -1,  -1]], scale = 8)
-        self.blur = pyvips.Image.new_from_array([[1, 1, 1], 
-                                               [1, 1, 1], 
+        self.blur = pyvips.Image.new_from_array([[1, 1, 1],
+                                               [1, 1, 1],
                                                [1, 1, 1]], scale = 9)
-        self.line = pyvips.Image.new_from_array([[ 1,  1,  1], 
-                                               [-2, -2, -2], 
+        self.line = pyvips.Image.new_from_array([[ 1,  1,  1],
+                                               [-2, -2, -2],
                                                [ 1,  1,  1]])
-        self.sobel = pyvips.Image.new_from_array([[ 1,  2,  1], 
-                                                [ 0,  0,  0], 
+        self.sobel = pyvips.Image.new_from_array([[ 1,  2,  1],
+                                                [ 0,  0,  0],
                                                 [-1, -2, -1]])
         self.all_masks = [self.sharp, self.blur, self.line, self.sobel]
 
@@ -86,8 +88,8 @@ class TestConvolution(PyvipsTester):
             for msk in self.all_masks:
                 for prec in [pyvips.Precision.INTEGER, pyvips.Precision.FLOAT]:
                     for times in range(1, 4):
-                        convolved = im.compass(msk, 
-                                               times = times, 
+                        convolved = im.compass(msk,
+                                               times = times,
                                                angle = pyvips.Angle45.D45,
                                                combine = pyvips.Combine.MAX,
                                                precision = prec)
@@ -100,8 +102,8 @@ class TestConvolution(PyvipsTester):
             for msk in self.all_masks:
                 for prec in [pyvips.Precision.INTEGER, pyvips.Precision.FLOAT]:
                     for times in range(1, 4):
-                        convolved = im.compass(msk, 
-                                               times = times, 
+                        convolved = im.compass(msk,
+                                               times = times,
                                                angle = pyvips.Angle45.D45,
                                                combine = pyvips.Combine.SUM,
                                                precision = prec)
@@ -113,9 +115,9 @@ class TestConvolution(PyvipsTester):
     def test_convsep(self):
         for im in self.all_images:
             for prec in [pyvips.Precision.INTEGER, pyvips.Precision.FLOAT]:
-                gmask = pyvips.Image.gaussmat(2, 0.1, 
+                gmask = pyvips.Image.gaussmat(2, 0.1,
                                             precision = prec)
-                gmask_sep = pyvips.Image.gaussmat(2, 0.1, 
+                gmask_sep = pyvips.Image.gaussmat(2, 0.1,
                                                 separable = True,
                                                 precision = prec)
 
@@ -158,7 +160,7 @@ class TestConvolution(PyvipsTester):
             for prec in [pyvips.Precision.INTEGER, pyvips.Precision.FLOAT]:
                 for i in range(5, 10):
                     sigma = i / 5.0
-                    gmask = pyvips.Image.gaussmat(sigma, 0.2, 
+                    gmask = pyvips.Image.gaussmat(sigma, 0.2,
                                                 precision = prec)
 
                     a = im.conv(gmask, precision = prec)

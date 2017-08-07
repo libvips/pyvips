@@ -1,6 +1,7 @@
 # wrap GValue
 
 from __future__ import division
+from __future__ import unicode_literals 
 
 import logging
 import sys
@@ -64,19 +65,19 @@ ffi.cdef('''
 class GValue(object):
 
     # look up some common gtypes at init for speed
-    gbool_type = gobject_lib.g_type_from_name('gboolean')
-    gint_type = gobject_lib.g_type_from_name('gint')
-    gdouble_type = gobject_lib.g_type_from_name('gdouble')
-    gstr_type = gobject_lib.g_type_from_name('gchararray')
-    genum_type = gobject_lib.g_type_from_name('GEnum')
-    gflags_type = gobject_lib.g_type_from_name('GFlags')
-    gobject_type = gobject_lib.g_type_from_name('GObject')
-    image_type = gobject_lib.g_type_from_name('VipsImage')
-    array_int_type = gobject_lib.g_type_from_name('VipsArrayInt')
-    array_double_type = gobject_lib.g_type_from_name('VipsArrayDouble')
-    array_image_type = gobject_lib.g_type_from_name('VipsArrayImage')
-    refstr_type = gobject_lib.g_type_from_name('VipsRefString')
-    blob_type = gobject_lib.g_type_from_name('VipsBlob')
+    gbool_type = gobject_lib.g_type_from_name(b'gboolean')
+    gint_type = gobject_lib.g_type_from_name(b'gint')
+    gdouble_type = gobject_lib.g_type_from_name(b'gdouble')
+    gstr_type = gobject_lib.g_type_from_name(b'gchararray')
+    genum_type = gobject_lib.g_type_from_name(b'GEnum')
+    gflags_type = gobject_lib.g_type_from_name(b'GFlags')
+    gobject_type = gobject_lib.g_type_from_name(b'GObject')
+    image_type = gobject_lib.g_type_from_name(b'VipsImage')
+    array_int_type = gobject_lib.g_type_from_name(b'VipsArrayInt')
+    array_double_type = gobject_lib.g_type_from_name(b'VipsArrayDouble')
+    array_image_type = gobject_lib.g_type_from_name(b'VipsArrayImage')
+    refstr_type = gobject_lib.g_type_from_name(b'VipsRefString')
+    blob_type = gobject_lib.g_type_from_name(b'VipsBlob')
 
     def __init__(self):
         # allocate memory for the gvalue which will be freed on GC
@@ -104,7 +105,8 @@ class GValue(object):
             gobject_lib.g_value_set_double(self.gvalue, value)
         elif fundamental == GValue.genum_type:
             if isinstance(value, basestring if _is_PY2 else str):
-                enum_value = vips_lib.vips_enum_from_nick('pyvips', gtype, value)
+                enum_value = vips_lib.vips_enum_from_nick(b'pyvips', gtype, 
+                                                          to_bytes(value))
 
                 if enum_value < 0:
                     raise Error('no such enum {0}')
@@ -115,7 +117,7 @@ class GValue(object):
         elif fundamental == GValue.gflags_type:
             gobject_lib.g_value_set_flags(self.gvalue, value)
         elif gtype == GValue.gstr_type or gtype == GValue.refstr_type:
-            gobject_lib.g_value_set_string(self.gvalue, value)
+            gobject_lib.g_value_set_string(self.gvalue, to_bytes(value))
         elif fundamental == GValue.gobject_type:
             gobject_lib.g_value_set_object(self.gvalue, value.pointer)
         elif gtype == GValue.array_int_type:
@@ -135,7 +137,7 @@ class GValue(object):
                 value = [value]
 
             vips_lib.vips_value_set_array_image(self.gvalue, len(value))
-            array = vips_lib.vips_value_get_array_image(self.gvalue, ffi.NULL);
+            array = vips_lib.vips_value_get_array_image(self.gvalue, ffi.NULL)
             for i, image in enumerate(value):
                 vips_lib.g_object_ref(image.pointer)
                 array[i] = image.pointer
@@ -171,21 +173,19 @@ class GValue(object):
             if cstr == 0:
                 raise Error('value not in enum')
 
-            result = ffi.string(cstr)
+            result = to_string(ffi.string(cstr))
         elif fundamental == GValue.gflags_type:
             result = gobject_lib.g_value_get_flags(self.gvalue)
         elif gtype == GValue.gstr_type:
             cstr = gobject_lib.g_value_get_string(self.gvalue)
 
             if cstr != ffi.NULL:
-                result = ffi.string(cstr)
-            else:
-                result = nil
+                result = to_string(ffi.string(cstr))
         elif gtype == GValue.refstr_type:
             psize = ffi.new('size_t *')
             cstr = vips_lib.vips_value_get_ref_string(self.gvalue, psize)
 
-            result = ffi.string(cstr, psize[0])
+            result = to_string(ffi.string(cstr, psize[0]))
         elif gtype == GValue.image_type:
             # g_value_get_object() will not add a ref ... that is
             # held by the gvalue
@@ -230,7 +230,7 @@ class GValue(object):
             result = ffi.unpack(buf, psize[0])
         else:
              raise Error('unsupported gtype for get {0}'.
-                   format(type_name(gtype)))
+                         format(type_name(gtype)))
 
         return result
 
