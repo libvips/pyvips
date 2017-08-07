@@ -8,9 +8,9 @@ pyvips experimental CFFI binding for libvips
 Status
 ------
 
-This binding passes the vips test suite cleanly and with no leaks, so it's
-getting close. The docs still need updating, it could use a little polish,
-and it currently fails with python3.
+This binding passes the vips test suite cleanly and with no leaks under python2
+and python3, so it's getting close. The docs still need updating and it could 
+use a little polish.
 
 To convert old code, replace the lines::
 
@@ -23,8 +23,8 @@ with::
 	import pyvips
 	Vips = pyvips
 
-Instead of the `pyvips = Vips`, you can also swap all `Vips` for `pyvips` with
-eg.:
+Instead of the ``pyvips = Vips``, you can of course also swap all ``Vips`` for
+``pyvips`` with eg.::
 
         %s/Vips/pyvips/g
 
