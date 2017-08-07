@@ -62,19 +62,21 @@ def _is_2D(array):
     return True
 
 # https://stackoverflow.com/a/22409540/1480019
-def with_metaclass(mcls):
+def _with_metaclass(mcls):
     def decorator(cls):
         body = vars(cls).copy()
         # clean out class body
         body.pop('__dict__', None)
         body.pop('__weakref__', None)
+
         return mcls(cls.__name__, cls.__bases__, body)
+
     return decorator
 
 # apply a function to a thing, or map over a list
 # we often need to do something like (1.0 / other) and need to work for lists
 # as well as scalars
-def smap(func, x):
+def _smap(func, x):
     if isinstance(x, list):
         return list(map(func, x))
     else:
@@ -130,7 +132,7 @@ class ImageType(type):
 
         return call_function
 
-@with_metaclass(ImageType)
+@_with_metaclass(ImageType)
 class Image(VipsObject):
     # private static
 
@@ -159,8 +161,10 @@ class Image(VipsObject):
         if name == ffi.NULL:
             raise Error('unable to load from file {0}'.format(vips_filename))
 
-        return Operation.call(to_string(ffi.string(name)), to_string(ffi.string(filename)),
-                              string_options = to_string(ffi.string(options)), **kwargs)
+        return Operation.call(to_string(ffi.string(name)), 
+                              to_string(ffi.string(filename)),
+                              string_options = to_string(ffi.string(options)), 
+                              **kwargs)
 
     @staticmethod
     def new_from_buffer(data, options, **kwargs):
@@ -206,7 +210,7 @@ class Image(VipsObject):
     def new_from_image(self, value):
         pixel = (Image.black(1, 1) + value).cast(self.format)
         image = pixel.embed(0, 0, self.width, self.height,
-            extend = "copy")
+                            extend = "copy")
         image = image.copy(interpretation = self.interpretation,
                            xres = self.xres,
                            yres =  self.yres,
@@ -233,7 +237,8 @@ class Image(VipsObject):
             raise Error('unable to write to file {0}'.format(vips_filename))
 
         return Operation.call(to_string(ffi.string(name)), self, filename,
-                              string_options = to_string(ffi.string(options)), **kwargs)
+                              string_options = to_string(ffi.string(options)), 
+                              **kwargs)
 
     def write_to_buffer(self, format_string, **kwargs):
         format_string = to_bytes(format_string)
@@ -243,7 +248,8 @@ class Image(VipsObject):
             raise Error('unable to write to buffer')
 
         return Operation.call(to_string(ffi.string(name)), self,
-                              string_options = to_string(ffi.string(options)), **kwargs)
+                              string_options = to_string(ffi.string(options)), 
+                              **kwargs)
 
     def write(self, other):
         result = vips_lib.vips_image_write(self.pointer, other.pointer)
@@ -257,7 +263,8 @@ class Image(VipsObject):
 
     def get(self, name):
         gv = GValue()
-        result = vips_lib.vips_image_get(self.pointer, to_bytes(name), gv.pointer)
+        result = vips_lib.vips_image_get(self.pointer, to_bytes(name), 
+                                         gv.pointer)
         if result != 0:
             raise Error('unable to get {0}'.format(name))
 
@@ -359,7 +366,7 @@ class Image(VipsObject):
         if isinstance(other, package_index['Image']):
             return self.subtract(other)
         else:
-            return self.linear(1, smap(lambda x: -1 * x, other))
+            return self.linear(1, _smap(lambda x: -1 * x, other))
 
     def __rsub__(self, other):
         return self.linear(-1, other)
@@ -379,7 +386,7 @@ class Image(VipsObject):
         if isinstance(other, package_index['Image']):
             return self.divide(other)
         else:
-            return self.linear(smap(lambda x: 1.0 / x, other), 0)
+            return self.linear(_smap(lambda x: 1.0 / x, other), 0)
 
     def __rdiv__(self, other):
         return (self ** -1) * other
@@ -394,7 +401,7 @@ class Image(VipsObject):
         if isinstance(other, package_index['Image']):
             return self.divide(other).floor()
         else:
-            return self.linear(smap(lambda x: 1.0 / x, other), 0).floor()
+            return self.linear(_smap(lambda x: 1.0 / x, other), 0).floor()
 
     def __rfloordiv__(self, other):
         return ((self ** -1) * other).floor()
@@ -508,7 +515,7 @@ class Image(VipsObject):
 
         # if [other] is all numbers, we can use bandjoin_const
         non_number = next((x for x in other 
-                            if not isinstance(x, numbers.Number)), 
+                           if not isinstance(x, numbers.Number)), 
                            None)
 
         if non_number == None:

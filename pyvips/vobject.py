@@ -92,7 +92,7 @@ class VipsObject(GObject):
             pspec, argument_class, argument_instance)
 
         if result != 0:
-            # need to clear any error
+            # need to clear any error, this is horrible
             Error('')
             return 0
 
@@ -125,6 +125,9 @@ class VipsObject(GObject):
     # set a series of options using a string, perhaps 'fred=12, tile'
     def set_string(self, string_options):
         vo = ffi.cast('VipsObject *', self.pointer)
-        return vips_lib.vips_object_set_from_string(vo, to_bytes(string_options)) == 0
+        result = vips_lib.vips_object_set_from_string(vo, 
+                                                      to_bytes(string_options)) 
+
+        return result == 0
 
 __all__ = ['VipsObject']

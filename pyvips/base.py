@@ -19,19 +19,29 @@ gobject_lib = ffi.dlopen('libgobject-2.0.so')
 logger.debug('Loaded lib {0}'.format(vips_lib))
 logger.debug('Loaded lib {0}'.format(gobject_lib))
 
-is_PY3 = sys.version_info[0] == 3
+_is_PY3 = sys.version_info[0] == 3
 
-if is_PY3:
+if _is_PY3:
     text_type = str
 else:
     text_type = unicode
 
+def to_bytes(x):
+    if isinstance(x, text_type):
+        x = x.encode()
+    return x
+
+def to_string(x):
+    if _is_PY3 and isinstance(x, bytes):
+        x = x.decode('utf-8')
+    return x
+
 # apparently the best way to find out
-is_64bits = sys.maxsize > 2 ** 32
+_is_64bits = sys.maxsize > 2 ** 32
 
 # GType is an int the size of a pointer ... I don't think we can just use
 # size_t, sadly
-if is_64bits:
+if _is_64bits:
     ffi.cdef('''
         typedef uint64_t GType;
     ''')
@@ -81,12 +91,8 @@ class Error(Exception):
     def __str__(self):
         return '{0}\n  {1}'.format(self.message, self.detail)
 
-argv = sys.argv[0]
-if isinstance(argv, text_type):
-    argv = argv.encode()
-
-if vips_lib.vips_init(argv) != 0:
-    raise Error('unable to init Vips')
+if vips_lib.vips_init(to_bytes(sys.argv[0])) != 0:
+    raise Error('unable to init libvips')
 
 def shutdown():
     logger.debug('Shutting down libvips')
@@ -97,16 +103,6 @@ logger.debug('')
 
 def leak_set(leak):
     return vips_lib.vips_leak_set(leak)
-
-def to_bytes(x):
-    if isinstance(x, text_type):
-        x = x.encode()
-    return x
-
-def to_string(x):
-    if is_PY3 and isinstance(x, bytes):
-        x = x.decode('utf-8')
-    return x
 
 def path_filename7(filename):
     return to_string(ffi.string(vips_lib.vips_path_filename7(to_bytes(filename))))

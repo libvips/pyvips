@@ -6,9 +6,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# you can supply enum values as strings or ints ... these classes give the ints
-# for each string, so pyvips.BandFormat.SHORT is equivalent to 'short'
-
 class BandFormat(object):
     UCHAR = 'uchar'
     CHAR = 'char'

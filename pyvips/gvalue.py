@@ -105,7 +105,8 @@ class GValue(object):
             gobject_lib.g_value_set_double(self.gvalue, value)
         elif fundamental == GValue.genum_type:
             if isinstance(value, basestring if _is_PY2 else str):
-                enum_value = vips_lib.vips_enum_from_nick(b'pyvips', gtype, to_bytes(value))
+                enum_value = vips_lib.vips_enum_from_nick(b'pyvips', gtype, 
+                                                          to_bytes(value))
 
                 if enum_value < 0:
                     raise Error('no such enum {0}')
@@ -229,7 +230,7 @@ class GValue(object):
             result = ffi.unpack(buf, psize[0])
         else:
              raise Error('unsupported gtype for get {0}'.
-                   format(type_name(gtype)))
+                         format(type_name(gtype)))
 
         return result
 

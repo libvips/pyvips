@@ -41,11 +41,11 @@ class GObject(object):
     def __init__(self, pointer):
         # record the pointer we were given to manage
         self.pointer = pointer
-        logger.debug('GObject.__init__: pointer = {0}'.format(self.pointer))
+        # logger.debug('GObject.__init__: pointer = {0}'.format(self.pointer))
 
         # on GC, unref
         self.gobject = ffi.gc(self.pointer, gobject_lib.g_object_unref)
-        logger.debug('GObject.__init__: gobject = {0}'.format(self.gobject))
+        # logger.debug('GObject.__init__: gobject = {0}'.format(self.gobject))
 
     @staticmethod
     def print_all(msg):

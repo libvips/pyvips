@@ -59,7 +59,7 @@ def _find_inside(pred, thing):
 class Operation(VipsObject):
 
     def __init__(self, pointer):
-        logger.debug('Operation.__init__: pointer = {0}'.format(pointer))
+        # logger.debug('Operation.__init__: pointer = {0}'.format(pointer))
         super(Operation, self).__init__(pointer)
 
     def set(self, name, flags, match_image, value):
@@ -78,7 +78,7 @@ class Operation(VipsObject):
 
         # MODIFY args need to be copied before they are set
         if (flags & _MODIFY) != 0:
-            logger.debug('copying MODIFY arg {0}'.format(name))
+            # logger.debug('copying MODIFY arg {0}'.format(name))
             # make sure we have a unique copy
             value = value.copy().copy_memory()
 
@@ -146,7 +146,7 @@ class Operation(VipsObject):
         if n_required != len(args):
             raise Error(('unable to call {0}: {1} arguments given, ' +
                          'but {2} required').
-                         format(operation_name, len(args), n_required))
+                        format(operation_name, len(args), n_required))
 
         # the first image argument is the thing we expand constants to
         # match ... look inside tables for images, since we may be passing
@@ -175,13 +175,10 @@ class Operation(VipsObject):
             op.set(name, flags_from_name[name], match_image, value)
 
         # build operation
-        vop2 = vips_lib.vips_cache_operation_build(op.pointer)
-        if vop2 == ffi.NULL:
+        vop = vips_lib.vips_cache_operation_build(op.pointer)
+        if vop == ffi.NULL:
             raise Error('unable to call {0}'.format(operation_name))
-        op2 = Operation(vop2)
-        op = op2
-        op2 = None
-        vop2 = None
+        op = Operation(vop)
 
         # fetch required output args, plus modified input images
         result = []

@@ -74,5 +74,6 @@ Local user install::
 
 Run test suite::
 
-	$ nosetests |& more
 	$ nosetests --logging-level=WARNING
+	$ python3 -m "nose" --logging-level=WARNING
+
