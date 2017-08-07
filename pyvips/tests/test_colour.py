@@ -1,6 +1,6 @@
 # vim: set fileencoding=utf-8 :
 
-from helpers import * 
+from .helpers import *
 
 class TestColour(PyvipsTester):
     def setUp(self):

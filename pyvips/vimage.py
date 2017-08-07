@@ -61,6 +61,16 @@ def _is_2D(array):
 
     return True
 
+# https://stackoverflow.com/a/22409540/1480019
+def with_metaclass(mcls):
+    def decorator(cls):
+        body = vars(cls).copy()
+        # clean out class body
+        body.pop('__dict__', None)
+        body.pop('__weakref__', None)
+        return mcls(cls.__name__, cls.__bases__, body)
+    return decorator
+
 # apply a function to a thing, or map over a list
 # we often need to do something like (1.0 / other) and need to work for lists
 # as well as scalars
@@ -120,9 +130,8 @@ class ImageType(type):
 
         return call_function
 
+@with_metaclass(ImageType)
 class Image(VipsObject):
-    __metaclass__ = ImageType
-
     # private static
 
     @staticmethod
@@ -143,14 +152,15 @@ class Image(VipsObject):
 
     @staticmethod
     def new_from_file(vips_filename, **kwargs):
+        vips_filename = vips_filename.encode()
         filename = vips_lib.vips_filename_get_filename(vips_filename)
         options = vips_lib.vips_filename_get_options(vips_filename)
         name = vips_lib.vips_foreign_find_load(filename)
         if name == ffi.NULL:
             raise Error('unable to load from file {0}'.format(vips_filename))
 
-        return Operation.call(ffi.string(name), ffi.string(filename), 
-                              string_options = ffi.string(options), **kwargs)
+        return Operation.call(ffi.string(name).decode('utf-8'), ffi.string(filename).decode('utf-8'),
+                              string_options = ffi.string(options).decode('utf-8'), **kwargs)
 
     @staticmethod
     def new_from_buffer(data, options, **kwargs):
@@ -158,7 +168,7 @@ class Image(VipsObject):
         if name == ffi.NULL:
             raise Error('unable to load from buffer')
 
-        return Operation.call(ffi.string(name), data, 
+        return Operation.call(ffi.string(name).decode('utf-8'), data,
                               string_options = options, **kwargs)
 
     @staticmethod
@@ -187,7 +197,7 @@ class Image(VipsObject):
 
     @staticmethod
     def new_temp_file(format):
-        vi = vips_lib.vips_image_new_temp_file(format)
+        vi = vips_lib.vips_image_new_temp_file(format.encode())
         if vi == ffi.NULL:
             raise Error('unable to make temp file')
 
@@ -215,23 +225,25 @@ class Image(VipsObject):
     # writers
 
     def write_to_file(self, vips_filename, **kwargs):
+        vips_filename = vips_filename.encode()
         filename = vips_lib.vips_filename_get_filename(vips_filename)
         options = vips_lib.vips_filename_get_options(vips_filename)
         name = vips_lib.vips_foreign_find_save(filename)
         if name == ffi.NULL:
             raise Error('unable to write to file {0}'.format(vips_filename))
 
-        return Operation.call(ffi.string(name), self, filename,
-                              string_options = ffi.string(options), **kwargs)
+        return Operation.call(ffi.string(name).decode('utf-8'), self, filename,
+                              string_options = ffi.string(options).decode('utf-8'), **kwargs)
 
     def write_to_buffer(self, format_string, **kwargs):
+        format_string = format_string.encode()
         options = vips_lib.vips_filename_get_options(format_string)
         name = vips_lib.vips_foreign_find_save_buffer(format_string)
         if name == ffi.NULL:
             raise Error('unable to write to buffer')
 
-        return Operation.call(ffi.string(name), self, 
-                              string_options = ffi.string(options), **kwargs)
+        return Operation.call(ffi.string(name).decode('utf-8'), self,
+                              string_options = ffi.string(options).decode('utf-8'), **kwargs)
 
     def write(self, other):
         result = vips_lib.vips_image_write(self.pointer, other.pointer)
@@ -241,11 +253,11 @@ class Image(VipsObject):
     # get/set metadata
 
     def get_typeof(self, name):
-        return vips_lib.vips_image_get_typeof(self.pointer, name)
+        return vips_lib.vips_image_get_typeof(self.pointer, name.encode())
 
     def get(self, name):
         gv = GValue()
-        result = vips_lib.vips_image_get(self.pointer, name, gv.pointer)
+        result = vips_lib.vips_image_get(self.pointer, name.encode(), gv.pointer)
         if result != 0:
             raise Error('unable to get {0}'.format(name))
 
@@ -255,14 +267,14 @@ class Image(VipsObject):
         gv = GValue()
         gv.init(gtype)
         gv.set(value)
-        vips_lib.vips_image_set(self.pointer, name, gv.pointer)
+        vips_lib.vips_image_set(self.pointer, name.encode(), gv.pointer)
 
     def set(self, name, value):
         gtype = self.get_typeof(name)
         self.set_type(gtype, name, value)
 
     def remove(self, name):
-        return vips_lib.vips_image_remove(self.pointer, name) != 0
+        return vips_lib.vips_image_remove(self.pointer, name.encode()) != 0
 
     def __getattr__(self, name):
         # logger.debug('Image.__getattr__ {0}'.format(name))
