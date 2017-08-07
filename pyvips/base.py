@@ -19,6 +19,13 @@ gobject_lib = ffi.dlopen('libgobject-2.0.so')
 logger.debug('Loaded lib {0}'.format(vips_lib))
 logger.debug('Loaded lib {0}'.format(gobject_lib))
 
+is_PY3 = sys.version_info[0] == 3
+
+if is_PY3:
+    text_type = str
+else:
+    text_type = unicode
+
 # apparently the best way to find out
 is_64bits = sys.maxsize > 2 ** 32
 
@@ -64,8 +71,8 @@ class Error(Exception):
     """
     def __init__(self, message, detail = None):
         self.message = message
-        if detail == None or detail == "":
-            detail = ffi.string(vips_lib.vips_error_buffer()).decode('utf-8')
+        if detail is None or detail == "":
+            detail = to_string(ffi.string(vips_lib.vips_error_buffer()))
             vips_lib.vips_error_clear()
         self.detail = detail
 
@@ -74,7 +81,11 @@ class Error(Exception):
     def __str__(self):
         return '{0}\n  {1}'.format(self.message, self.detail)
 
-if vips_lib.vips_init(bytes(sys.argv[0], 'utf-8')) != 0:
+argv = sys.argv[0]
+if isinstance(argv, text_type):
+    argv = argv.encode()
+
+if vips_lib.vips_init(argv) != 0:
     raise Error('unable to init Vips')
 
 def shutdown():
@@ -87,18 +98,28 @@ logger.debug('')
 def leak_set(leak):
     return vips_lib.vips_leak_set(leak)
 
+def to_bytes(x):
+    if isinstance(x, text_type):
+        x = x.encode()
+    return x
+
+def to_string(x):
+    if is_PY3 and isinstance(x, bytes):
+        x = x.decode('utf-8')
+    return x
+
 def path_filename7(filename):
-    return ffi.string(vips_lib.vips_path_filename7(filename.encode())).decode('utf-8')
+    return to_string(ffi.string(vips_lib.vips_path_filename7(to_bytes(filename))))
 
 def path_mode7(filename):
-    return ffi.string(vips_lib.vips_path_mode7(filename.encode())).decode('utf-8')
+    return to_string(ffi.string(vips_lib.vips_path_mode7(to_bytes(filename))))
 
 def type_find(basename, nickname):
-    return vips_lib.vips_type_find(basename.encode(), nickname.encode())
+    return vips_lib.vips_type_find(to_bytes(basename), to_bytes(nickname))
 
 def type_name(gtype):
-    return ffi.string(gobject_lib.g_type_name(gtype)).decode('utf-8')
+    return to_string(ffi.string(gobject_lib.g_type_name(gtype)))
 
-__all__ = ['ffi', 'vips_lib', 'gobject_lib', 'Error', 'leak_set', 
-           'type_find', 'type_name',
+__all__ = ['ffi', 'vips_lib', 'gobject_lib', 'Error', 'leak_set',
+           'to_bytes', 'to_string', 'type_find', 'type_name',
            'path_filename7', 'path_mode7', 'shutdown']
