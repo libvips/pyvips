@@ -29,7 +29,7 @@ class Interpolate(VipsObject):
     def new(name):
         # logger.debug('VipsInterpolate.new: name = {0}'.format(name))
 
-        vi = vips_lib.vips_interpolate_new(name.encode())
+        vi = vips_lib.vips_interpolate_new(to_bytes(name))
         if vi == ffi.NULL:
             raise Error('no such interpolator {0}'.format(name))
 

@@ -88,7 +88,7 @@ class VipsObject(GObject):
         argument_class = ffi.new('VipsArgumentClass **')
         argument_instance = ffi.new('VipsArgumentInstance **')
         vo = ffi.cast('VipsObject *', self.pointer)
-        result = vips_lib.vips_object_get_argument(vo, name.encode(),
+        result = vips_lib.vips_object_get_argument(vo, to_bytes(name),
             pspec, argument_class, argument_instance)
 
         if result != 0:
@@ -106,7 +106,7 @@ class VipsObject(GObject):
         gv = GValue()
         gv.init(gtype)
         go = ffi.cast('GObject *', self.pointer)
-        gobject_lib.g_object_get_property(go, name.encode(), gv.pointer)
+        gobject_lib.g_object_get_property(go, to_bytes(name), gv.pointer)
 
         return gv.get()
 
@@ -120,11 +120,11 @@ class VipsObject(GObject):
         gv.init(gtype)
         gv.set(value)
         go = ffi.cast('GObject *', self.pointer)
-        gobject_lib.g_object_set_property(go, name.encode(), gv.pointer)
+        gobject_lib.g_object_set_property(go, to_bytes(name), gv.pointer)
 
     # set a series of options using a string, perhaps 'fred=12, tile'
     def set_string(self, string_options):
         vo = ffi.cast('VipsObject *', self.pointer)
-        return vips_lib.vips_object_set_from_string(vo, string_options) == 0
+        return vips_lib.vips_object_set_from_string(vo, to_bytes(string_options)) == 0
 
 __all__ = ['VipsObject']
