@@ -63,7 +63,7 @@ ffi.cdef('''
 ''')
 
 def type_from_name(name):
-    return gobject_lib.g_type_from_name(name)
+    return gobject_lib.g_type_from_name(name.encode())
 
 class GValue(object):
 
@@ -108,7 +108,7 @@ class GValue(object):
             gobject_lib.g_value_set_double(self.gvalue, value)
         elif fundamental == GValue.genum_type:
             if isinstance(value, basestring if _is_PY2 else str):
-                enum_value = vips_lib.vips_enum_from_nick('pyvips', gtype, value)
+                enum_value = vips_lib.vips_enum_from_nick('pyvips'.encode(), gtype, value.encode())
 
                 if enum_value < 0:
                     raise Error('no such enum {0}')
@@ -119,6 +119,9 @@ class GValue(object):
         elif fundamental == GValue.gflags_type:
             gobject_lib.g_value_set_flags(self.gvalue, value)
         elif gtype == GValue.gstr_type or gtype == GValue.refstr_type:
+            if isinstance(value, basestring if _is_PY2 else str):
+                value = value.encode()
+
             gobject_lib.g_value_set_string(self.gvalue, value)
         elif fundamental == GValue.gobject_type:
             gobject_lib.g_value_set_object(self.gvalue, value.pointer)
@@ -139,7 +142,7 @@ class GValue(object):
                 value = [value]
 
             vips_lib.vips_value_set_array_image(self.gvalue, len(value))
-            array = vips_lib.vips_value_get_array_image(self.gvalue, ffi.NULL);
+            array = vips_lib.vips_value_get_array_image(self.gvalue, ffi.NULL)
             for i, image in enumerate(value):
                 vips_lib.g_object_ref(image.pointer)
                 array[i] = image.pointer
@@ -175,21 +178,19 @@ class GValue(object):
             if cstr == 0:
                 raise Error('value not in enum')
 
-            result = ffi.string(cstr)
+            result = ffi.string(cstr).decode('utf-8')
         elif fundamental == GValue.gflags_type:
             result = gobject_lib.g_value_get_flags(self.gvalue)
         elif gtype == GValue.gstr_type:
             cstr = gobject_lib.g_value_get_string(self.gvalue)
 
             if cstr != ffi.NULL:
-                result = ffi.string(cstr)
-            else:
-                result = nil
+                result = ffi.string(cstr).decode('utf-8')
         elif gtype == GValue.refstr_type:
             psize = ffi.new('size_t *')
             cstr = vips_lib.vips_value_get_ref_string(self.gvalue, psize)
 
-            result = ffi.string(cstr, psize[0])
+            result = ffi.string(cstr, psize[0]).decode('utf-8')
         elif gtype == GValue.image_type:
             # g_value_get_object() will not add a ref ... that is
             # held by the gvalue

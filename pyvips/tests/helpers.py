@@ -4,12 +4,7 @@
 from __future__ import division
 import os
 import unittest
-import operator
-import math
-from functools import reduce
-import shutil
 import tempfile
-from tempfile import NamedTemporaryFile
 
 import pyvips
 

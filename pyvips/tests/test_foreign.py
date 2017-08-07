@@ -1,6 +1,7 @@
 # vim: set fileencoding=utf-8 :
 
-from helpers import *
+import shutil
+from .helpers import *
 
 class TestForeign(PyvipsTester):
 
@@ -74,7 +75,7 @@ class TestForeign(PyvipsTester):
         filename = temp_filename(suf)
 
         buf = pyvips.Operation.call(saver, im)
-        f = open(filename, 'w')
+        f = open(filename, 'wb')
         f.write(buf)
         f.close()
 

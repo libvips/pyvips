@@ -65,7 +65,7 @@ class Error(Exception):
     def __init__(self, message, detail = None):
         self.message = message
         if detail == None or detail == "":
-            detail = ffi.string(vips_lib.vips_error_buffer())
+            detail = ffi.string(vips_lib.vips_error_buffer()).decode('utf-8')
             vips_lib.vips_error_clear()
         self.detail = detail
 
@@ -88,17 +88,16 @@ def leak_set(leak):
     return vips_lib.vips_leak_set(leak)
 
 def path_filename7(filename):
-    return ffi.string(vips_lib.vips_path_filename7(bytes(filename, 'utf-8')))
+    return ffi.string(vips_lib.vips_path_filename7(filename.encode())).decode('utf-8')
 
 def path_mode7(filename):
-    return ffi.string(vips_lib.vips_path_mode7(bytes(filename, 'utf-8')))
+    return ffi.string(vips_lib.vips_path_mode7(filename.encode())).decode('utf-8')
 
 def type_find(basename, nickname):
-    return vips_lib.vips_type_find(bytes(basename, 'utf-8'), 
-                                   bytes(nickname, 'utf-8'))
+    return vips_lib.vips_type_find(basename.encode(), nickname.encode())
 
 def type_name(gtype):
-    return(ffi.string(gobject_lib.g_type_name(gtype)))
+    return ffi.string(gobject_lib.g_type_name(gtype)).decode('utf-8')
 
 __all__ = ['ffi', 'vips_lib', 'gobject_lib', 'Error', 'leak_set', 
            'type_find', 'type_name',

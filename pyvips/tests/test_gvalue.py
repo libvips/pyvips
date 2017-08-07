@@ -1,8 +1,11 @@
 # vim: set fileencoding=utf-8 :
 
-from helpers import *
+from .helpers import *
 
 class TestGValue(PyvipsTester):
+    def type_from_name(self, name):
+        return pyvips.gobject_lib.g_type_from_name(name.encode())
+
     def test_bool(self):
         gv = pyvips.GValue()
         gv.init(pyvips.GValue.gbool_type)
@@ -32,8 +35,7 @@ class TestGValue(PyvipsTester):
         # the Interpretation enum is created when the first image is made --
         # make it ourselves in case we are run before the first image
         pyvips.vips_lib.vips_interpretation_get_type()
-        interpretation_gtype = pyvips.gobject_lib. \
-            g_type_from_name('VipsInterpretation')
+        interpretation_gtype = self.type_from_name('VipsInterpretation')
         gv = pyvips.GValue()
         gv.init(interpretation_gtype)
         gv.set('xyz')
@@ -44,8 +46,7 @@ class TestGValue(PyvipsTester):
         # the OperationFlags enum is created when the first op is made --
         # make it ourselves in case we are run before that
         pyvips.vips_lib.vips_operation_flags_get_type()
-        operationflags_gtype = pyvips.gobject_lib. \
-            g_type_from_name('VipsOperationFlags')
+        operationflags_gtype = self.type_from_name('VipsOperationFlags')
         gv = pyvips.GValue()
         gv.init(operationflags_gtype)
         gv.set(12)

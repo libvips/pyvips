@@ -91,7 +91,7 @@ class Operation(VipsObject):
         def add_construct(self, pspec, argument_class, argument_instance, a, b):
             flags = argument_class.flags
             if (flags & _CONSTRUCT) != 0:
-                name = ffi.string(pspec.name)
+                name = ffi.string(pspec.name).decode('utf-8')
 
                 # libvips uses '-' to separate parts of arg names, but we
                 # need '_' for Python
@@ -121,7 +121,7 @@ class Operation(VipsObject):
         logger.debug('VipsOperation.call: string_options = {0}'.
             format(string_options))
 
-        vop = vips_lib.vips_operation_new(operation_name)
+        vop = vips_lib.vips_operation_new(operation_name.encode())
         if vop == ffi.NULL:
             raise Error('no such operation {0}'.format(operation_name))
         op = Operation(vop)
@@ -159,7 +159,7 @@ class Operation(VipsObject):
 
         # set any string options before any args so they can't be
         # overridden
-        if not op.set_string(string_options):
+        if not op.set_string(string_options.encode()):
             raise Error('unable to call {0}'.format(operation_name))
 
         # set required and optional args

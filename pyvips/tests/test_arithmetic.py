@@ -1,6 +1,7 @@
 # vim: set fileencoding=utf-8 :
 
-from helpers import *
+import math
+from .helpers import *
 
 class TestArithmetic(PyvipsTester):
     def run_arith(self, fn, fmt = all_formats):
