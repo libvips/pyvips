@@ -375,13 +375,14 @@ class TestCreate(PyvipsTester):
         self.assertEqual(im.format, pyvips.BandFormat.FLOAT)
 
     def test_text(self):
-        im = pyvips.Image.text("Hello, world!")
-        self.assertTrue(im.width > 10)
-        self.assertTrue(im.height > 10)
-        self.assertEqual(im.bands, 1)
-        self.assertEqual(im.format, pyvips.BandFormat.UCHAR)
-        self.assertEqual(im.max(), 255)
-        self.assertEqual(im.min(), 0)
+        if pyvips.type_find("VipsOperation", "text") != 0:
+            im = pyvips.Image.text("Hello, world!")
+            self.assertTrue(im.width > 10)
+            self.assertTrue(im.height > 10)
+            self.assertEqual(im.bands, 1)
+            self.assertEqual(im.format, pyvips.BandFormat.UCHAR)
+            self.assertEqual(im.max(), 255)
+            self.assertEqual(im.min(), 0)
 
     def test_tonelut(self):
         im = pyvips.Image.tonelut()
