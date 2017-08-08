@@ -92,9 +92,10 @@ library. It should update itself as new features are added.
 Automatic wrapping
 ==================
 
-``pyvips`` adds a {Image.method_missing} handler to {Image} and uses
-it to look up vips operations. For example, the libvips operation `add`, which
-appears in C as `vips_add()`, appears in Ruby as {Image#add}. 
+``pyvips`` adds a {Image.__getattr__} handler to {Image} and to the Image
+metaclass, then uses it to look up vips operations. For example, the libvips
+operation ``add``, which appears in C as ``vips_add()``, appears in Python
+as {Image#add}.
 
 The operation's list of required arguments is searched and the first input 
 image is set to the value of `self`. Operations which do not take an input 
@@ -103,75 +104,60 @@ the arguments you supply in the function call are used to set the other
 required input arguments. Any trailing keyword arguments are used to set
 options on the operation.
 
-The result is the required output 
-argument if there is only one result, or an array of values if the operation
-produces several results. If the operation has optional output objects, they
-are returned as a final hash.
+The result is the required output argument if there is only one result,
+or an array of values if the operation produces several results. If the
+operation has optional output objects, they are returned as a final hash.
 
 For example, {Image#min}, the vips operation that searches an image for 
 the minimum value, has a large number of optional arguments. You can use it to
-find the minimum value like this:
+find the minimum value like this::
 
-```ruby
-min_value = image.min
-```
+    min_value = image.min()
 
-You can ask it to return the position of the minimum with `:x` and `:y`.
+You can ask it to return the position of the minimum with `:x` and `:y`::
   
-```ruby
-min_value, opts = min x: true, y: true
-x_pos = opts['x']
-y_pos = opts['y']
-```
+    min_value, opts = image.min(x=True, y=True)
+    x_pos = opts['x']
+    y_pos = opts['y']
 
-Now `x_pos` and `y_pos` will have the coordinates of the minimum value. 
+Now ``x_pos`` and ``y_pos`` will have the coordinates of the minimum value. 
 There's actually a convenience method for this, {Image#minpos}.
 
-You can also ask for the top *n* minimum, for example:
+You can also ask for the top *n* minimum, for example::
 
-```ruby
-min_value, opts = min size: 10, x_array: true, y_array: true
-x_pos = opts['x_array']
-y_pos = opts['y_array']
-```
+    min_value, opts = min size: 10, x_array: true, y_array: true
+    x_pos = opts['x_array']
+    y_pos = opts['y_array']
 
-Now `x_pos` and `y_pos` will be 10-element arrays. 
+Now ``x_pos`` and ``y_pos`` will be 10-element arrays. 
 
 Because operations are member functions and return the result image, you can
-chain them. For example, you can write:
+chain them. For example, you can write::
 
-```ruby
-result_image = image.real.cos
-```
+    result_image = image.real().cos()
 
-to calculate the cosine of the real part of a complex image. 
-There are also a full set
-of arithmetic operator overloads, see below.
+to calculate the cosine of the real part of a complex image.  There are
+also a full set of arithmetic operator overloads, see below.
 
-libvips types are also automatically wrapped. The override looks at the type 
-of argument required by the operation and converts the value you supply, 
-when it can. For example, {Image#linear} takes a `VipsArrayDouble` as 
-an argument 
-for the set of constants to use for multiplication. You can supply this 
-value as an integer, a float, or some kind of compound object and it 
-will be converted for you. You can write:
+libvips types are also automatically wrapped. The binding looks at the type
+of argument required by the operation and converts the value you supply,
+when it can. For example, {Image#linear} takes a ``VipsArrayDouble`` as an
+argument for the set of constants to use for multiplication. You can supply
+this value as an integer, a float, or some kind of compound object and it
+will be converted for you. You can write::
 
-```ruby
-result_image = image.linear 1, 3 
-result_image = image.linear 12.4, 13.9 
-result_image = image.linear [1, 2, 3], [4, 5, 6] 
-result_image = image.linear 1, [4, 5, 6] 
-```
+    result_image = image.linear(1, 3 )
+    result_image = image.linear(12.4, 13.9 )
+    result_image = image.linear([1, 2, 3], [4, 5, 6])
+    result_image = image.linear(1, [4, 5, 6])
 
 And so on. A set of overloads are defined for {Image#linear}, see below.
 
 It does a couple of more ambitious conversions. It will automatically convert
 to and from the various vips types, like `VipsBlob` and `VipsArrayImage`. For
-example, you can read the ICC profile out of an image like this: 
+example, you can read the ICC profile out of an image like this::
 
-```ruby
-profile = im.get_value "icc-profile-data"
-```
+    profile = im.get('icc-profile-data')
 
 and profile will be a byte array.
 
