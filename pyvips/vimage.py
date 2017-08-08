@@ -5,7 +5,8 @@ from __future__ import division
 import logging
 import numbers
 
-from pyvips import *
+import pyvips
+from pyvips import ffi, vips_lib, Error, to_bytes, to_string
 
 logger = logging.getLogger(__name__)
 
@@ -26,9 +27,9 @@ ffi.cdef('''
 
     VipsImage* vips_image_copy_memory (VipsImage* image);
 
-    GType vips_image_get_typeof (const VipsImage* image, 
+    GType vips_image_get_typeof (const VipsImage* image,
         const char* name);
-    int vips_image_get (const VipsImage* image, 
+    int vips_image_get (const VipsImage* image,
         const char* name, GValue* value_copy);
     void vips_image_set (VipsImage* image, const char* name, GValue* value);
     int vips_image_remove (VipsImage* image, const char* name);
@@ -42,11 +43,13 @@ ffi.cdef('''
 
 ''')
 
+
 # either a single number, or a table of numbers
 def _is_pixel(value):
-    return (isinstance(value, numbers.Number) or 
-            (isinstance(value, list) and not 
-             isinstance(value, package_index['Image'])))
+    return (isinstance(value, numbers.Number) or
+            (isinstance(value, list) and not
+            isinstance(value, pyvips.Image)))
+
 
 # test for rectangular array of something
 def _is_2D(array):
@@ -61,6 +64,7 @@ def _is_2D(array):
 
     return True
 
+
 # https://stackoverflow.com/a/22409540/1480019
 def _with_metaclass(mcls):
     def decorator(cls):
@@ -73,6 +77,7 @@ def _with_metaclass(mcls):
 
     return decorator
 
+
 # apply a function to a thing, or map over a list
 # we often need to do something like (1.0 / other) and need to work for lists
 # as well as scalars
@@ -82,11 +87,13 @@ def _smap(func, x):
     else:
         return func(x)
 
+
 def _call_enum(image, other, base, operation):
     if _is_pixel(other):
-        return Operation.call(base + '_const', image, operation, other)
+        return pyvips.Operation.call(base + '_const', image, operation, other)
     else:
-        return Operation.call(base, image, other, operation)
+        return pyvips.Operation.call(base, image, other, operation)
+
 
 def _run_cmplx(fn, image):
     """Run a complex function on a non-complex image.
@@ -96,44 +103,46 @@ def _run_cmplx(fn, image):
     """
     original_format = image.format
 
-    if image.format != "complex" and image.format != "dpcomplex":
+    if image.format != 'complex' and image.format != 'dpcomplex':
         if image.bands % 2 != 0:
-            raise Error("not an even number of bands")
+            raise Error('not an even number of bands')
 
-        if image.format != "float" and image.format != "double":
-            image = image.cast("float")
+        if image.format != 'float' and image.format != 'double':
+            image = image.cast('float')
 
-        if image.format == "double":
-            new_format = "dpcomplex"
+        if image.format == 'double':
+            new_format = 'dpcomplex'
         else:
-            new_format = "complex"
+            new_format = 'complex'
 
-        image = image.copy(format = new_format, bands = image.bands / 2)
+        image = image.copy(format=new_format, bands=image.bands / 2)
 
     image = fn(image)
 
-    if original_format != "complex" and original_format != "dpcomplex":
-        if image.format == "dpcomplex":
-            new_format = "double"
+    if original_format != 'complex' and original_format != 'dpcomplex':
+        if image.format == 'dpcomplex':
+            new_format = 'double'
         else:
-            new_format = "float"
+            new_format = 'float'
 
-        image = image.copy(format = new_format, bands = image.bands * 2)
+        image = image.copy(format=new_format, bands=image.bands * 2)
 
     return image
+
 
 # metaclass for Image ... getattr on this implements the class methods
 class ImageType(type):
     def __getattr__(cls, name):
-        # logger.debug('ImageType.__getattr__ {0}'.format(name))
+        # logger.debug('ImageType.__getattr__ %s', name)
 
         def call_function(*args, **kwargs):
-            return Operation.call(name, *args, **kwargs)
+            return pyvips.Operation.call(name, *args, **kwargs)
 
         return call_function
 
+
 @_with_metaclass(ImageType)
-class Image(VipsObject):
+class Image(pyvips.VipsObject):
     # private static
 
     @staticmethod
@@ -147,7 +156,7 @@ class Image(VipsObject):
             return self.new_from_image(value)
 
     def __init__(self, pointer):
-        # logger.debug('Image.__init__: pointer = {0}'.format(pointer))
+        # logger.debug('Image.__init__: pointer = %s', pointer)
         super(Image, self).__init__(pointer)
 
     # constructors
@@ -161,10 +170,11 @@ class Image(VipsObject):
         if name == ffi.NULL:
             raise Error('unable to load from file {0}'.format(vips_filename))
 
-        return Operation.call(to_string(ffi.string(name)), 
-                              to_string(ffi.string(filename)),
-                              string_options = to_string(ffi.string(options)), 
-                              **kwargs)
+        return pyvips.Operation.call(to_string(ffi.string(name)),
+                                     to_string(ffi.string(filename)),
+                                     string_options=to_string(
+                                         ffi.string(options)
+                                     ), **kwargs)
 
     @staticmethod
     def new_from_buffer(data, options, **kwargs):
@@ -172,11 +182,11 @@ class Image(VipsObject):
         if name == ffi.NULL:
             raise Error('unable to load from buffer')
 
-        return Operation.call(to_string(ffi.string(name)), data,
-                              string_options = options, **kwargs)
+        return pyvips.Operation.call(to_string(ffi.string(name)), data,
+                                     string_options=options, **kwargs)
 
     @staticmethod
-    def new_from_array(array, scale = 1.0, offset = 0.0):
+    def new_from_array(array, scale=1.0, offset=0.0):
         if not _is_2D(array):
             array = [array]
 
@@ -184,7 +194,7 @@ class Image(VipsObject):
         width = len(array[0])
 
         n = width * height
-        a = ffi.new("double[]", n)
+        a = ffi.new('double[]', n)
         for y in range(0, height):
             for x in range(0, width):
                 a[x + y * width] = array[y][x]
@@ -192,10 +202,10 @@ class Image(VipsObject):
         vi = vips_lib.vips_image_new_matrix_from_array(width, height, a, n)
         if vi == ffi.NULL:
             raise Error('unable to make image from matrix')
-        image = package_index['Image'](vi)
+        image = pyvips.Image(vi)
 
-        image.set_type(GValue.gdouble_type, "scale", scale)
-        image.set_type(GValue.gdouble_type, "offset", offset)
+        image.set_type(pyvips.GValue.gdouble_type, 'scale', scale)
+        image.set_type(pyvips.GValue.gdouble_type, 'offset', offset)
 
         return image
 
@@ -205,17 +215,17 @@ class Image(VipsObject):
         if vi == ffi.NULL:
             raise Error('unable to make temp file')
 
-        return package_index['Image'](vi)
+        return pyvips.Image(vi)
 
     def new_from_image(self, value):
         pixel = (Image.black(1, 1) + value).cast(self.format)
         image = pixel.embed(0, 0, self.width, self.height,
-                            extend = "copy")
-        image = image.copy(interpretation = self.interpretation,
-                           xres = self.xres,
-                           yres =  self.yres,
-                           xoffset = self.xoffset,
-                           yoffset = self.yoffset)
+                            extend='copy')
+        image = image.copy(interpretation=self.interpretation,
+                           xres=self.xres,
+                           yres=self.yres,
+                           xoffset=self.xoffset,
+                           yoffset=self.yoffset)
 
         return image
 
@@ -224,7 +234,7 @@ class Image(VipsObject):
         if vi == ffi.NULL:
             raise Error('unable to copy to memory')
 
-        return package_index['Image'](vi)
+        return pyvips.Image(vi)
 
     # writers
 
@@ -236,9 +246,10 @@ class Image(VipsObject):
         if name == ffi.NULL:
             raise Error('unable to write to file {0}'.format(vips_filename))
 
-        return Operation.call(to_string(ffi.string(name)), self, filename,
-                              string_options = to_string(ffi.string(options)), 
-                              **kwargs)
+        return pyvips.Operation.call(to_string(ffi.string(name)), self,
+                                     filename, string_options=to_string(
+                                         ffi.string(options)
+                                     ), **kwargs)
 
     def write_to_buffer(self, format_string, **kwargs):
         format_string = to_bytes(format_string)
@@ -247,9 +258,10 @@ class Image(VipsObject):
         if name == ffi.NULL:
             raise Error('unable to write to buffer')
 
-        return Operation.call(to_string(ffi.string(name)), self,
-                              string_options = to_string(ffi.string(options)), 
-                              **kwargs)
+        return pyvips.Operation.call(to_string(ffi.string(name)), self,
+                                     string_options=to_string(
+                                         ffi.string(options)
+                                     ), **kwargs)
 
     def write(self, other):
         result = vips_lib.vips_image_write(self.pointer, other.pointer)
@@ -262,8 +274,8 @@ class Image(VipsObject):
         return vips_lib.vips_image_get_typeof(self.pointer, to_bytes(name))
 
     def get(self, name):
-        gv = GValue()
-        result = vips_lib.vips_image_get(self.pointer, to_bytes(name), 
+        gv = pyvips.GValue()
+        result = vips_lib.vips_image_get(self.pointer, to_bytes(name),
                                          gv.pointer)
         if result != 0:
             raise Error('unable to get {0}'.format(name))
@@ -271,7 +283,7 @@ class Image(VipsObject):
         return gv.get()
 
     def set_type(self, gtype, name, value):
-        gv = GValue()
+        gv = pyvips.GValue()
         gv.init(gtype)
         gv.set(value)
         vips_lib.vips_image_set(self.pointer, to_bytes(name), gv.pointer)
@@ -284,14 +296,14 @@ class Image(VipsObject):
         return vips_lib.vips_image_remove(self.pointer, to_bytes(name)) != 0
 
     def __getattr__(self, name):
-        # logger.debug('Image.__getattr__ {0}'.format(name))
+        # logger.debug('Image.__getattr__ %s', name)
 
         # look up in props first (but not metadata)
         if super(Image, self).get_typeof(name) != 0:
             return super(Image, self).get(name)
 
         def call_function(*args, **kwargs):
-            return Operation.call(name, self, *args, **kwargs)
+            return pyvips.Operation.call(name, self, *args, **kwargs)
 
         return call_function
 
@@ -302,14 +314,14 @@ class Image(VipsObject):
     # scale and offset with default values
 
     def get_scale(self):
-        if self.get_typeof("scale") != 0:
-            return self.get("scale")
+        if self.get_typeof('scale') != 0:
+            return self.get('scale')
         else:
             return 1.0
 
     def get_offset(self):
-        if self.get_typeof("offset") != 0:
-            return self.get("offset")
+        if self.get_typeof('offset') != 0:
+            return self.get('offset')
         else:
             return 0.0
 
@@ -317,6 +329,7 @@ class Image(VipsObject):
 
     def __enter__(self):
         return self
+
     def __exit__(self, type, value, traceback):
         pass
 
@@ -324,11 +337,11 @@ class Image(VipsObject):
     def __getitem__(self, arg):
         if isinstance(arg, slice):
             i = 0
-            if arg.start != None:
+            if arg.start is not None:
                 i = arg.start
 
             n = self.bands - i
-            if arg.stop != None:
+            if arg.stop is not None:
                 if arg.stop < 0:
                     n = self.bands + arg.stop - i
                 else:
@@ -345,7 +358,7 @@ class Image(VipsObject):
         if i < 0 or i >= self.bands:
             raise IndexError
 
-        return self.extract_band(i, n = n)
+        return self.extract_band(i, n=n)
 
     # overload () to mean fetch pixel
     def __call__(self, x, y):
@@ -354,7 +367,7 @@ class Image(VipsObject):
     # operator overloads
 
     def __add__(self, other):
-        if isinstance(other, package_index['Image']):
+        if isinstance(other, pyvips.Image):
             return self.add(other)
         else:
             return self.linear(1, other)
@@ -363,7 +376,7 @@ class Image(VipsObject):
         return self.__add__(other)
 
     def __sub__(self, other):
-        if isinstance(other, package_index['Image']):
+        if isinstance(other, pyvips.Image):
             return self.subtract(other)
         else:
             return self.linear(1, _smap(lambda x: -1 * x, other))
@@ -380,10 +393,10 @@ class Image(VipsObject):
     def __rmul__(self, other):
         return self.__mul__(other)
 
-    # a / const has always been a float in vips, so div and truediv are the 
+    # a / const has always been a float in vips, so div and truediv are the
     # same
     def __div__(self, other):
-        if isinstance(other, package_index['Image']):
+        if isinstance(other, pyvips.Image):
             return self.divide(other)
         else:
             return self.linear(_smap(lambda x: 1.0 / x, other), 0)
@@ -398,7 +411,7 @@ class Image(VipsObject):
         return self.__rdiv__(other)
 
     def __floordiv__(self, other):
-        if isinstance(other, package_index['Image']):
+        if isinstance(other, pyvips.Image):
             return self.divide(other).floor()
         else:
             return self.linear(_smap(lambda x: 1.0 / x, other), 0).floor()
@@ -407,7 +420,7 @@ class Image(VipsObject):
         return ((self ** -1) * other).floor()
 
     def __mod__(self, other):
-        if isinstance(other, package_index['Image']):
+        if isinstance(other, pyvips.Image):
             return self.remainder(other)
         else:
             return self.remainder_const(other)
@@ -468,14 +481,14 @@ class Image(VipsObject):
 
     def __eq__(self, other):
         # _eq version allows comparison to None
-        if other == None:
+        if other is None:
             return False
 
         return _call_enum(self, other, 'relational', 'equal')
 
     def __ne__(self, other):
         # _eq version allows comparison to None
-        if other == None:
+        if other is None:
             return True
 
         return _call_enum(self, other, 'relational', 'noteq')
@@ -514,32 +527,32 @@ class Image(VipsObject):
             other = [other]
 
         # if [other] is all numbers, we can use bandjoin_const
-        non_number = next((x for x in other 
-                           if not isinstance(x, numbers.Number)), 
-                           None)
+        non_number = next((x for x in other
+                           if not isinstance(x, numbers.Number)),
+                          None)
 
-        if non_number == None:
+        if non_number is None:
             return self.bandjoin_const(other)
         else:
-            return Operation.call("bandjoin", [self] + other)
+            return pyvips.Operation.call('bandjoin', [self] + other)
 
     def bandrank(self, other, **kwargs):
         """Band-wise rank filter a set of images."""
         if not isinstance(other, list):
             other = [other]
 
-        return Operation.call("bandrank", [self] + other, **kwargs)
+        return pyvips.Operation.call('bandrank', [self] + other, **kwargs)
 
     def maxpos(self):
         """Return the coordinates of the image maximum."""
-        v, opts = self.max(x = True, y = True)
+        v, opts = self.max(x=True, y=True)
         x = opts['x']
         y = opts['y']
         return v, x, y
 
     def minpos(self):
         """Return the coordinates of the image minimum."""
-        v, opts = self.min(x = True, y = True)
+        v, opts = self.min(x=True, y=True)
         x = opts['x']
         y = opts['y']
         return v, x, y
@@ -636,18 +649,19 @@ class Image(VipsObject):
         """Rotate 270 degrees clockwise."""
         return self.rot('d270')
 
-    # we need different imageize rules for this operator ... we need to 
+    # we need different imageize rules for this operator ... we need to
     # imageize th and el to match each other first
     def ifthenelse(self, th, el, **kwargs):
         for match_image in [th, el, self]:
-            if isinstance(match_image, package_index['Image']):
+            if isinstance(match_image, pyvips.Image):
                 break
 
-        if not isinstance(th, package_index['Image']):
+        if not isinstance(th, pyvips.Image):
             th = Image.imageize(match_image, th)
-        if not isinstance(el, package_index['Image']):
+        if not isinstance(el, pyvips.Image):
             el = Image.imageize(match_image, el)
 
-        return Operation.call("ifthenelse", self, th, el, **kwargs)
+        return pyvips.Operation.call('ifthenelse', self, th, el, **kwargs)
+
 
 __all__ = ['Image']

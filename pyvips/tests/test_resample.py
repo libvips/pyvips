@@ -1,6 +1,9 @@
 # vim: set fileencoding=utf-8 :
+import unittest
 
-from .helpers import *
+import pyvips
+from .helpers import PyvipsTester, JPEG_FILE, all_formats
+
 
 # Run a function expecting a complex image on a two-band image
 def run_cmplx(fn, image):
@@ -12,10 +15,11 @@ def run_cmplx(fn, image):
         raise pyvips.Error("run_cmplx: not float or double")
 
     # tag as complex, run, revert tagging
-    cmplx = image.copy(bands = 1, format = new_format)
+    cmplx = image.copy(bands=1, format=new_format)
     cmplx_result = fn(cmplx)
 
-    return cmplx_result.copy(bands = 2, format = image.format)
+    return cmplx_result.copy(bands=2, format=image.format)
+
 
 def to_polar(image):
     """Transform image coordinates to polar.
@@ -36,6 +40,7 @@ def to_polar(image):
 
     return image.mapim(index)
 
+
 def to_rectangular(image):
     """Transform image coordinates to rectangular.
 
@@ -55,8 +60,8 @@ def to_rectangular(image):
 
     return image.mapim(index)
 
-class TestResample(PyvipsTester):
 
+class TestResample(PyvipsTester):
     def test_affine(self):
         im = pyvips.Image.new_from_file(JPEG_FILE)
 
@@ -65,8 +70,8 @@ class TestResample(PyvipsTester):
             x = im
             interpolate = pyvips.Interpolate.new(name)
             for i in range(4):
-                x = x.affine([0, 1, 1, 0], interpolate = interpolate)
- 
+                x = x.affine([0, 1, 1, 0], interpolate=interpolate)
+
             self.assertEqual((x - im).abs().max(), 0)
 
     def test_reduce(self):
@@ -76,27 +81,26 @@ class TestResample(PyvipsTester):
         im = im.cast(pyvips.BandFormat.CHAR)
         bicubic = pyvips.Interpolate.new("bicubic")
         bilinear = pyvips.Interpolate.new("bilinear")
-        nearest = pyvips.Interpolate.new("nearest")
 
         for fac in [1, 1.1, 1.5, 1.999]:
             for fmt in all_formats:
                 x = im.cast(fmt)
-                r = x.reduce(fac, fac, kernel = "cubic")
-                a = x.affine([1.0 / fac, 0, 0, 1.0 / fac], 
-                             interpolate = bicubic,
-                             oarea = [0, 0, 
-                                      int(x.width / fac), int(x.height / fac)])
+                r = x.reduce(fac, fac, kernel="cubic")
+                a = x.affine([1.0 / fac, 0, 0, 1.0 / fac],
+                             interpolate=bicubic,
+                             oarea=[0, 0,
+                                    int(x.width / fac), int(x.height / fac)])
                 d = (r - a).abs().max()
                 self.assertLess(d, 10)
 
         for fac in [1, 1.1, 1.5, 1.999]:
             for fmt in all_formats:
                 x = im.cast(fmt)
-                r = x.reduce(fac, fac, kernel = "linear")
-                a = x.affine([1.0 / fac, 0, 0, 1.0 / fac], 
-                             interpolate = bilinear,
-                             oarea = [0, 0, 
-                                      int(x.width / fac), int(x.height / fac)])
+                r = x.reduce(fac, fac, kernel="linear")
+                a = x.affine([1.0 / fac, 0, 0, 1.0 / fac],
+                             interpolate=bilinear,
+                             oarea=[0, 0,
+                                    int(x.width / fac), int(x.height / fac)])
                 d = (r - a).abs().max()
                 self.assertLess(d, 10)
 
@@ -105,17 +109,18 @@ class TestResample(PyvipsTester):
             for fmt in all_formats:
                 for kernel in ["nearest", "lanczos2", "lanczos3"]:
                     x = im.cast(fmt)
-                    r = x.reduce(fac, fac, kernel = kernel)
+                    r = x.reduce(fac, fac, kernel=kernel)
                     d = abs(r.avg() - im.avg())
                     self.assertLess(d, 2)
 
         # try constant images ... should not change the constant
         for const in [0, 1, 2, 254, 255]:
             im = (pyvips.Image.black(10, 10) + const).cast("uchar")
-            for kernel in ["nearest", "linear", "cubic", "lanczos2", "lanczos3"]:
+            for kernel in ["nearest", "linear",
+                           "cubic", "lanczos2", "lanczos3"]:
                 # print "testing kernel =", kernel
                 # print "testing const =", const
-                shr = im.reduce(2, 2, kernel = kernel)
+                shr = im.reduce(2, 2, kernel=kernel)
                 d = abs(shr.avg() - im.avg())
                 self.assertEqual(d, 0)
 
@@ -160,16 +165,16 @@ class TestResample(PyvipsTester):
             self.assertEqual(im.width, width)
 
         # should fit one of width or height
-        im = pyvips.Image.thumbnail(JPEG_FILE, 100, height = 300)
+        im = pyvips.Image.thumbnail(JPEG_FILE, 100, height=300)
         self.assertEqual(im.width, 100)
         self.assertNotEqual(im.height, 300)
-        im = pyvips.Image.thumbnail(JPEG_FILE, 300, height = 100)
+        im = pyvips.Image.thumbnail(JPEG_FILE, 300, height=100)
         self.assertNotEqual(im.width, 300)
         self.assertEqual(im.height, 100)
 
         # with @crop, should fit both width and height
-        im = pyvips.Image.thumbnail(JPEG_FILE, 100, 
-                                  height = 300, crop = True)
+        im = pyvips.Image.thumbnail(JPEG_FILE, 100,
+                                    height=300, crop=True)
         self.assertEqual(im.width, 100)
         self.assertEqual(im.height, 300)
 
@@ -181,15 +186,15 @@ class TestResample(PyvipsTester):
 
     def test_similarity(self):
         im = pyvips.Image.new_from_file(JPEG_FILE)
-        im2 = im.similarity(angle = 90)
+        im2 = im.similarity(angle=90)
         im3 = im.affine([0, -1, 1, 0])
-        # rounding in calculating the affine transform from the angle stops 
+        # rounding in calculating the affine transform from the angle stops
         # this being exactly true
         self.assertLess((im2 - im3).abs().max(), 50)
 
     def test_similarity_scale(self):
         im = pyvips.Image.new_from_file(JPEG_FILE)
-        im2 = im.similarity(scale = 2)
+        im2 = im.similarity(scale=2)
         im3 = im.affine([2, 0, 0, 2])
         self.assertEqual((im2 - im3).abs().max(), 0)
 
@@ -204,6 +209,7 @@ class TestResample(PyvipsTester):
         a = r.crop(50, 0, im.width - 50, im.height).gaussblur(2)
         b = im.crop(50, 0, im.width - 50, im.height).gaussblur(2)
         self.assertLess((a - b).abs().max(), 20)
+
 
 if __name__ == '__main__':
     unittest.main()
