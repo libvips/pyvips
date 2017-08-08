@@ -77,3 +77,6 @@ Run test suite::
 	$ nosetests --logging-level=WARNING
 	$ python3 -m "nose" --logging-level=WARNING
 
+Stylecheck::
+
+        $ flake8

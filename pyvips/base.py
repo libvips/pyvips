@@ -13,6 +13,8 @@ logger = logging.getLogger(__name__)
 ffi = FFI()
 
 _is_windows = os.name == 'nt'
+_is_PY3 = sys.version_info[0] == 3
+_is_64bits = sys.maxsize > 2 ** 32
 
 # possibly use ctypes.util.find_library() to locate the lib
 # need a different name on os x?
@@ -29,28 +31,10 @@ else:
 logger.debug('Loaded lib %s', vips_lib)
 logger.debug('Loaded lib %s', gobject_lib)
 
-_is_PY3 = sys.version_info[0] == 3
-
 if _is_PY3:
     text_type = str
 else:
     text_type = unicode
-
-
-def to_bytes(x):
-    if isinstance(x, text_type):
-        x = x.encode()
-    return x
-
-
-def to_string(x):
-    if _is_PY3 and isinstance(x, bytes):
-        x = x.decode('utf-8')
-    return x
-
-
-# apparently the best way to find out
-_is_64bits = sys.maxsize > 2 ** 32
 
 # GType is an int the size of a pointer ... I don't think we can just use
 # size_t, sadly
@@ -85,6 +69,18 @@ ffi.cdef('''
     const char* g_type_name (GType gtype);
 
 ''')
+
+
+def to_bytes(x):
+    if isinstance(x, text_type):
+        x = x.encode()
+    return x
+
+
+def to_string(x):
+    if _is_PY3 and isinstance(x, bytes):
+        x = x.decode('utf-8')
+    return x
 
 
 class Error(Exception):
@@ -141,6 +137,8 @@ def type_name(gtype):
     return to_string(ffi.string(gobject_lib.g_type_name(gtype)))
 
 
-__all__ = ['ffi', 'vips_lib', 'gobject_lib', 'glib_lib', 'Error',
-           'leak_set', 'to_bytes', 'to_string', 'type_find',
-           'type_name', 'path_filename7', 'path_mode7', 'shutdown']
+__all__ = [
+    'ffi', 'vips_lib', 'gobject_lib', 'glib_lib', 'Error',
+    'leak_set', 'to_bytes', 'to_string', 'type_find',
+    'type_name', 'path_filename7', 'path_mode7', 'shutdown',
+]
