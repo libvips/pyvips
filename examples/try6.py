@@ -1,11 +1,10 @@
 #!/usr/bin/python
 
 import sys
-
-#import logging
-#logging.basicConfig(level = logging.DEBUG)
-
+# import logging
 import pyvips
+
+# logging.basicConfig(level = logging.DEBUG)
 
 a = pyvips.Image.new_from_file(sys.argv[1])
 

@@ -1,11 +1,10 @@
 #!/usr/bin/python
 
 import sys
-
 import logging
-logging.basicConfig(level = logging.DEBUG)
-
 import pyvips
+
+logging.basicConfig(level=logging.DEBUG)
 
 a = pyvips.Image.black(100, 100)
 

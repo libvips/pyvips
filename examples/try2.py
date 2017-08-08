@@ -1,10 +1,9 @@
 #!/usr/bin/python
 
 import logging
-logging.basicConfig(level = logging.DEBUG)
-
 import pyvips
 
+logging.basicConfig(level=logging.DEBUG)
 pyvips.cache_set_trace(True)
 
 try:

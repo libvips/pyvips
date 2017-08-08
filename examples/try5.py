@@ -1,21 +1,23 @@
 #!/usr/bin/python
 
 import sys
-
-#import logging
-#logging.basicConfig(level = logging.DEBUG)
-
+# import logging
 import pyvips
 
-a = pyvips.Image.new_from_file(sys.argv[1])
+# logging.basicConfig(level = logging.DEBUG)
+
 
 def should_equal(test, a, b):
     if abs(a - b) > 0.01:
         print '%s: seen %g and %g' % (test, a, b)
         sys.exit(1)
 
+
 def bandsplit(a):
     return [a.extract_band(i) for i in range(0, a.bands)]
+
+
+a = pyvips.Image.new_from_file(sys.argv[1])
 
 # test operator overloads
 
@@ -24,8 +26,8 @@ b = a + 12
 should_equal('add constant', a.avg() + 12, b.avg())
 
 b = a + [12, 0, 0]
-x = map (lambda x: x.avg()) bandsplit(a)
-y = map (lambda x: x.avg()) bandsplit(b)
+x = map(lambda x: x.avg()) bandsplit(a)
+y = map(lambda x: x.avg()) bandsplit(b)
 x[0] += 12
 should_equal('add multiband constant', sum(x), sum(y))
 
@@ -99,4 +101,3 @@ b = -a
 b = +a
 b = abs(a)
 b = ~a
-

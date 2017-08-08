@@ -3,11 +3,12 @@
 import sys
 
 import logging
-#logging.basicConfig(level = logging.DEBUG)
- 
+# logging.basicConfig(level = logging.DEBUG)
+
 import pyvips
 
-#pyvips.cache_set_trace(True)
+# pyvips.cache_set_trace(True)
+
 
 def to_polar(image):
     """Transform image coordinates to polar.
@@ -29,6 +30,7 @@ def to_polar(image):
 
     return image.mapim(index)
 
+
 def to_rectangular(image):
     """Transform image coordinates to rectangular.
 
@@ -49,9 +51,8 @@ def to_rectangular(image):
 
     return image.mapim(index)
 
+
 a = pyvips.Image.new_from_file(sys.argv[1])
 a = to_polar(a)
 a = to_rectangular(a)
 a.write_to_file(sys.argv[2])
-
-
