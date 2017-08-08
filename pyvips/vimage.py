@@ -324,11 +324,11 @@ class Image(VipsObject):
     def __getitem__(self, arg):
         if isinstance(arg, slice):
             i = 0
-            if arg.start != None:
+            if arg.start is not None:
                 i = arg.start
 
             n = self.bands - i
-            if arg.stop != None:
+            if arg.stop is not None:
                 if arg.stop < 0:
                     n = self.bands + arg.stop - i
                 else:
@@ -468,14 +468,14 @@ class Image(VipsObject):
 
     def __eq__(self, other):
         # _eq version allows comparison to None
-        if other == None:
+        if other is None:
             return False
 
         return _call_enum(self, other, 'relational', 'equal')
 
     def __ne__(self, other):
         # _eq version allows comparison to None
-        if other == None:
+        if other is None:
             return True
 
         return _call_enum(self, other, 'relational', 'noteq')
@@ -518,7 +518,7 @@ class Image(VipsObject):
                            if not isinstance(x, numbers.Number)), 
                            None)
 
-        if non_number == None:
+        if non_number is None:
             return self.bandjoin_const(other)
         else:
             return Operation.call("bandjoin", [self] + other)

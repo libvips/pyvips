@@ -139,16 +139,16 @@ class GValue(object):
             vips_lib.vips_value_set_array_image(self.gvalue, len(value))
             array = vips_lib.vips_value_get_array_image(self.gvalue, ffi.NULL)
             for i, image in enumerate(value):
-                vips_lib.g_object_ref(image.pointer)
+                gobject_lib.g_object_ref(image.pointer)
                 array[i] = image.pointer
         elif gtype == GValue.blob_type:
             # we need to set the blob to a copy of the string that vips_lib
             # can own
-            memory = gobject_lib.g_malloc(len(value))
+            memory = glib_lib.g_malloc(len(value))
             ffi.memmove(memory, value, len(value))
 
-            vips_lib.vips_value_set_blob(self.gvalue, 
-                    gobject_lib.g_free, memory, len(value))
+            vips_lib.vips_value_set_blob(self.gvalue,
+                    glib_lib.g_free, memory, len(value))
         else:
             raise Error('unsupported gtype for set {0}, fundamental {1}'.
                         format(type_name(gtype), type_name(fundamental)))
@@ -219,7 +219,7 @@ class GValue(object):
             result = []
             for i in range(0, pint[0]):
                 vi = array[i]
-                vips_lib.g_object_ref(vi)
+                gobject_lib.g_object_ref(vi)
                 image = package_index['Image'](vi)
                 result.append(image)
         elif gtype == GValue.blob_type:

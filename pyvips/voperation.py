@@ -51,7 +51,7 @@ def _find_inside(pred, thing):
         for x in thing:
             result = _find_inside(pred, x)
 
-            if result != None:
+            if result is not None:
                 return result
 
     return None

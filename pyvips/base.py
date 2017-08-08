@@ -4,17 +4,24 @@ from __future__ import division
 
 import logging
 import sys
+import os
 from cffi import FFI
 
 logger = logging.getLogger(__name__)
 
 ffi = FFI()
 
+_is_windows = os.name == 'nt'
+
 # possibly use ctypes.util.find_library() to locate the lib
-# need a different name on windows? or os x?
-# on win, may need to explcitly load other libraries as well
-vips_lib = ffi.dlopen('libvips.so')
-gobject_lib = ffi.dlopen('libgobject-2.0.so')
+# need a different name on os x?
+vips_lib = ffi.dlopen('libvips-42.dll' if _is_windows else 'libvips.so')
+gobject_lib = ffi.dlopen('libgobject-2.0-0.dll' if _is_windows else 'libgobject-2.0.so')
+
+if _is_windows:
+    glib_lib = ffi.dlopen('libglib-2.0-0.dll')
+else:
+    glib_lib = gobject_lib
 
 logger.debug('Loaded lib {0}'.format(vips_lib))
 logger.debug('Loaded lib {0}'.format(gobject_lib))
@@ -116,6 +123,6 @@ def type_find(basename, nickname):
 def type_name(gtype):
     return to_string(ffi.string(gobject_lib.g_type_name(gtype)))
 
-__all__ = ['ffi', 'vips_lib', 'gobject_lib', 'Error', 'leak_set',
-           'to_bytes', 'to_string', 'type_find', 'type_name',
-           'path_filename7', 'path_mode7', 'shutdown']
+__all__ = ['ffi', 'vips_lib', 'gobject_lib', 'glib_lib', 'Error',
+           'leak_set', 'to_bytes', 'to_string', 'type_find',
+           'type_name', 'path_filename7', 'path_mode7', 'shutdown']
