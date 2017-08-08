@@ -1,33 +1,37 @@
 # vim: set fileencoding=utf-8 :
-
 import math
-from .helpers import *
+import unittest
+
+import pyvips
+from .helpers import PyvipsTester, unsigned_formats, \
+    float_formats, noncomplex_formats, all_formats, run_fn
+
 
 class TestArithmetic(PyvipsTester):
-    def run_arith(self, fn, fmt = all_formats):
+    def run_arith(self, fn, fmt=all_formats):
         [self.run_image2(fn.__name__ + ' image', x.cast(y), x.cast(z), fn)
          for x in self.all_images for y in fmt for z in fmt]
 
-    def run_arith_const(self, fn, fmt = all_formats):
+    def run_arith_const(self, fn, fmt=all_formats):
         [self.run_const(fn.__name__ + ' scalar', fn, x.cast(y), 2)
          for x in self.all_images for y in fmt]
-        [self.run_const(fn.__name__ + ' vector', fn, self.colour.cast(y), 
+        [self.run_const(fn.__name__ + ' vector', fn, self.colour.cast(y),
                         [1, 2, 3])
          for y in fmt]
 
-    # run a function on an image, 
+    # run a function on an image,
     # 50,50 and 10,10 should have different values on the test image
     def run_imageunary(self, message, im, fn):
         self.run_cmp(message, im, 50, 50, lambda x: run_fn(fn, x))
         self.run_cmp(message, im, 10, 10, lambda x: run_fn(fn, x))
 
-    def run_unary(self, images, fn, fmt = all_formats):
+    def run_unary(self, images, fn, fmt=all_formats):
         [self.run_imageunary(fn.__name__ + ' image', x.cast(y), fn)
          for x in images for y in fmt]
 
     def setUp(self):
-        im = pyvips.Image.mask_ideal(100, 100, 0.5, 
-                                     reject = True, optical = True)
+        im = pyvips.Image.mask_ideal(100, 100, 0.5,
+                                     reject=True, optical=True)
         self.colour = im * [1, 2, 3] + [2, 3, 4]
         self.mono = self.colour.extract_band(1)
         self.all_images = [self.mono, self.colour]
@@ -60,7 +64,7 @@ class TestArithmetic(PyvipsTester):
             return x / y
 
         # (const / image) needs (image ** -1), which won't work for complex
-        self.run_arith_const(div, fmt = noncomplex_formats)
+        self.run_arith_const(div, fmt=noncomplex_formats)
         self.run_arith(div)
 
     def test_floordiv(self):
@@ -68,52 +72,52 @@ class TestArithmetic(PyvipsTester):
             return x // y
 
         # (const // image) needs (image ** -1), which won't work for complex
-        self.run_arith_const(my_floordiv, fmt = noncomplex_formats)
-        self.run_arith(my_floordiv, fmt = noncomplex_formats)
+        self.run_arith_const(my_floordiv, fmt=noncomplex_formats)
+        self.run_arith(my_floordiv, fmt=noncomplex_formats)
 
     def test_pow(self):
         def my_pow(x, y):
             return x ** y
 
         # (image ** x) won't work for complex images ... just test non-complex
-        self.run_arith_const(my_pow, fmt = noncomplex_formats)
-        self.run_arith(my_pow, fmt = noncomplex_formats)
+        self.run_arith_const(my_pow, fmt=noncomplex_formats)
+        self.run_arith(my_pow, fmt=noncomplex_formats)
 
     def test_and(self):
         def my_and(x, y):
-            # python doesn't allow bools on float 
+            # python doesn't allow bools on float
             if isinstance(x, float):
                 x = int(x)
             if isinstance(y, float):
                 y = int(y)
             return x & y
 
-        self.run_arith_const(my_and, fmt = noncomplex_formats)
-        self.run_arith(my_and, fmt = noncomplex_formats)
+        self.run_arith_const(my_and, fmt=noncomplex_formats)
+        self.run_arith(my_and, fmt=noncomplex_formats)
 
     def test_or(self):
         def my_or(x, y):
-            # python doesn't allow bools on float 
+            # python doesn't allow bools on float
             if isinstance(x, float):
                 x = int(x)
             if isinstance(y, float):
                 y = int(y)
             return x | y
 
-        self.run_arith_const(my_or, fmt = noncomplex_formats)
-        self.run_arith(my_or, fmt = noncomplex_formats)
+        self.run_arith_const(my_or, fmt=noncomplex_formats)
+        self.run_arith(my_or, fmt=noncomplex_formats)
 
     def test_xor(self):
         def my_xor(x, y):
-            # python doesn't allow bools on float 
+            # python doesn't allow bools on float
             if isinstance(x, float):
                 x = int(x)
             if isinstance(y, float):
                 y = int(y)
             return x ^ y
 
-        self.run_arith_const(my_xor, fmt = noncomplex_formats)
-        self.run_arith(my_xor, fmt = noncomplex_formats)
+        self.run_arith_const(my_xor, fmt=noncomplex_formats)
+        self.run_arith(my_xor, fmt=noncomplex_formats)
 
     def test_more(self):
         def more(x, y):
@@ -208,7 +212,7 @@ class TestArithmetic(PyvipsTester):
             return x << 2
 
         # we don't support constant << image, treat as a unary
-        self.run_unary(self.all_images, my_lshift, fmt = noncomplex_formats)
+        self.run_unary(self.all_images, my_lshift, fmt=noncomplex_formats)
 
     def test_rshift(self):
         def my_rshift(x):
@@ -218,14 +222,14 @@ class TestArithmetic(PyvipsTester):
             return x >> 2
 
         # we don't support constant >> image, treat as a unary
-        self.run_unary(self.all_images, my_rshift, fmt = noncomplex_formats)
+        self.run_unary(self.all_images, my_rshift, fmt=noncomplex_formats)
 
     def test_mod(self):
         def my_mod(x):
             return x % 2
 
         # we don't support constant % image, treat as a unary
-        self.run_unary(self.all_images, my_mod, fmt = noncomplex_formats)
+        self.run_unary(self.all_images, my_mod, fmt=noncomplex_formats)
 
     def test_pos(self):
         def my_pos(x):
@@ -247,24 +251,24 @@ class TestArithmetic(PyvipsTester):
 
         # ~image is trimmed to image max so it's hard to test for all formats
         # just test uchar
-        self.run_unary(self.all_images, my_invert, 
-                       fmt = [pyvips.BandFormat.UCHAR])
+        self.run_unary(self.all_images, my_invert,
+                       fmt=[pyvips.BandFormat.UCHAR])
 
     # test the rest of VipsArithmetic
 
     def test_avg(self):
         im = pyvips.Image.black(50, 100)
-        test = im.insert(im + 100, 50, 0, expand = True)
+        test = im.insert(im + 100, 50, 0, expand=True)
 
         for fmt in all_formats:
             self.assertAlmostEqual(test.cast(fmt).avg(), 50)
 
     def test_deviate(self):
         im = pyvips.Image.black(50, 100)
-        test = im.insert(im + 100, 50, 0, expand = True)
+        test = im.insert(im + 100, 50, 0, expand=True)
 
         for fmt in noncomplex_formats:
-            self.assertAlmostEqual(test.cast(fmt).deviate(), 50, places = 2)
+            self.assertAlmostEqual(test.cast(fmt).deviate(), 50, places=2)
 
     def test_polar(self):
         im = pyvips.Image.black(100, 100) + 100
@@ -295,30 +299,30 @@ class TestArithmetic(PyvipsTester):
 
     def test_histfind(self):
         im = pyvips.Image.black(50, 100)
-        test = im.insert(im + 10, 50, 0, expand = True)
+        test = im.insert(im + 10, 50, 0, expand=True)
 
         for fmt in all_formats:
             hist = test.cast(fmt).hist_find()
-            self.assertAlmostEqualObjects(hist(0,0), [5000])
-            self.assertAlmostEqualObjects(hist(10,0), [5000])
-            self.assertAlmostEqualObjects(hist(5,0), [0])
+            self.assertAlmostEqualObjects(hist(0, 0), [5000])
+            self.assertAlmostEqualObjects(hist(10, 0), [5000])
+            self.assertAlmostEqualObjects(hist(5, 0), [0])
 
         test = test * [1, 2, 3]
 
         for fmt in all_formats:
-            hist = test.cast(fmt).hist_find(band = 0)
-            self.assertAlmostEqualObjects(hist(0,0), [5000])
-            self.assertAlmostEqualObjects(hist(10,0), [5000])
-            self.assertAlmostEqualObjects(hist(5,0), [0])
+            hist = test.cast(fmt).hist_find(band=0)
+            self.assertAlmostEqualObjects(hist(0, 0), [5000])
+            self.assertAlmostEqualObjects(hist(10, 0), [5000])
+            self.assertAlmostEqualObjects(hist(5, 0), [0])
 
-            hist = test.cast(fmt).hist_find(band = 1)
-            self.assertAlmostEqualObjects(hist(0,0), [5000])
-            self.assertAlmostEqualObjects(hist(20,0), [5000])
-            self.assertAlmostEqualObjects(hist(5,0), [0])
+            hist = test.cast(fmt).hist_find(band=1)
+            self.assertAlmostEqualObjects(hist(0, 0), [5000])
+            self.assertAlmostEqualObjects(hist(20, 0), [5000])
+            self.assertAlmostEqualObjects(hist(5, 0), [0])
 
     def test_histfind_indexed(self):
         im = pyvips.Image.black(50, 100)
-        test = im.insert(im + 10, 50, 0, expand = True)
+        test = im.insert(im + 10, 50, 0, expand=True)
         index = test // 10
 
         for x in noncomplex_formats:
@@ -327,8 +331,8 @@ class TestArithmetic(PyvipsTester):
                 b = index.cast(y)
                 hist = a.hist_find_indexed(b)
 
-                self.assertAlmostEqualObjects(hist(0,0), [0])
-                self.assertAlmostEqualObjects(hist(1,0), [50000])
+                self.assertAlmostEqualObjects(hist(0, 0), [0])
+                self.assertAlmostEqualObjects(hist(1, 0), [50000])
 
     def test_histfind_ndim(self):
         im = pyvips.Image.black(100, 100) + [1, 2, 3]
@@ -336,12 +340,12 @@ class TestArithmetic(PyvipsTester):
         for fmt in noncomplex_formats:
             hist = im.cast(fmt).hist_find_ndim()
 
-            self.assertAlmostEqualObjects(hist(0,0)[0], 10000)
-            self.assertAlmostEqualObjects(hist(5,5)[5], 0)
+            self.assertAlmostEqualObjects(hist(0, 0)[0], 10000)
+            self.assertAlmostEqualObjects(hist(5, 5)[5], 0)
 
-            hist = im.cast(fmt).hist_find_ndim(bins = 1)
+            hist = im.cast(fmt).hist_find_ndim(bins=1)
 
-            self.assertAlmostEqualObjects(hist(0,0)[0], 10000)
+            self.assertAlmostEqualObjects(hist(0, 0)[0], 10000)
             self.assertEqual(hist.width, 1)
             self.assertEqual(hist.height, 1)
             self.assertEqual(hist.bands, 1)
@@ -351,7 +355,7 @@ class TestArithmetic(PyvipsTester):
 
         for fmt in all_formats:
             im = test.cast(fmt)
-            hough = im.hough_circle(min_radius = 35, max_radius = 45)
+            hough = im.hough_circle(min_radius=35, max_radius=45)
 
             v, x, y = hough.maxpos()
             vec = hough(x, y)
@@ -367,10 +371,10 @@ class TestArithmetic(PyvipsTester):
         for fmt in all_formats:
             im = test.cast(fmt)
             hough = im.hough_line()
-            
+
             v, x, y = hough.maxpos()
 
-            angle = 360.0 * x // hough.width 
+            angle = 360.0 * x // hough.width
             distance = test.height * y // hough.height
 
             self.assertAlmostEqual(angle, 45)
@@ -383,7 +387,7 @@ class TestArithmetic(PyvipsTester):
             else:
                 return math.sin(math.radians(x))
 
-        self.run_unary(self.all_images, my_sin, fmt = noncomplex_formats)
+        self.run_unary(self.all_images, my_sin, fmt=noncomplex_formats)
 
     def test_cos(self):
         def my_cos(x):
@@ -392,7 +396,7 @@ class TestArithmetic(PyvipsTester):
             else:
                 return math.cos(math.radians(x))
 
-        self.run_unary(self.all_images, my_cos, fmt = noncomplex_formats)
+        self.run_unary(self.all_images, my_cos, fmt=noncomplex_formats)
 
     def test_tan(self):
         def my_tan(x):
@@ -401,7 +405,7 @@ class TestArithmetic(PyvipsTester):
             else:
                 return math.tan(math.radians(x))
 
-        self.run_unary(self.all_images, my_tan, fmt = noncomplex_formats)
+        self.run_unary(self.all_images, my_tan, fmt=noncomplex_formats)
 
     def test_asin(self):
         def my_asin(x):
@@ -411,7 +415,7 @@ class TestArithmetic(PyvipsTester):
                 return math.degrees(math.asin(x))
 
         im = (pyvips.Image.black(100, 100) + [1, 2, 3]) / 3.0
-        self.run_unary([im], my_asin, fmt = noncomplex_formats)
+        self.run_unary([im], my_asin, fmt=noncomplex_formats)
 
     def test_acos(self):
         def my_acos(x):
@@ -421,7 +425,7 @@ class TestArithmetic(PyvipsTester):
                 return math.degrees(math.acos(x))
 
         im = (pyvips.Image.black(100, 100) + [1, 2, 3]) / 3.0
-        self.run_unary([im], my_acos, fmt = noncomplex_formats)
+        self.run_unary([im], my_acos, fmt=noncomplex_formats)
 
     def test_atan(self):
         def my_atan(x):
@@ -431,7 +435,7 @@ class TestArithmetic(PyvipsTester):
                 return math.degrees(math.atan(x))
 
         im = (pyvips.Image.black(100, 100) + [1, 2, 3]) / 3.0
-        self.run_unary([im], my_atan, fmt = noncomplex_formats)
+        self.run_unary([im], my_atan, fmt=noncomplex_formats)
 
     def test_log(self):
         def my_log(x):
@@ -440,7 +444,7 @@ class TestArithmetic(PyvipsTester):
             else:
                 return math.log(x)
 
-        self.run_unary(self.all_images, my_log, fmt = noncomplex_formats)
+        self.run_unary(self.all_images, my_log, fmt=noncomplex_formats)
 
     def test_log10(self):
         def my_log10(x):
@@ -449,7 +453,7 @@ class TestArithmetic(PyvipsTester):
             else:
                 return math.log10(x)
 
-        self.run_unary(self.all_images, my_log10, fmt = noncomplex_formats)
+        self.run_unary(self.all_images, my_log10, fmt=noncomplex_formats)
 
     def test_exp(self):
         def my_exp(x):
@@ -458,7 +462,7 @@ class TestArithmetic(PyvipsTester):
             else:
                 return math.exp(x)
 
-        self.run_unary(self.all_images, my_exp, fmt = noncomplex_formats)
+        self.run_unary(self.all_images, my_exp, fmt=noncomplex_formats)
 
     def test_exp10(self):
         def my_exp10(x):
@@ -467,7 +471,7 @@ class TestArithmetic(PyvipsTester):
             else:
                 return math.pow(10, x)
 
-        self.run_unary(self.all_images, my_exp10, fmt = noncomplex_formats)
+        self.run_unary(self.all_images, my_exp10, fmt=noncomplex_formats)
 
     def test_floor(self):
         def my_floor(x):
@@ -536,7 +540,7 @@ class TestArithmetic(PyvipsTester):
 
     def test_measure(self):
         im = pyvips.Image.black(50, 50)
-        test = im.insert(im + 10, 50, 0, expand = True)
+        test = im.insert(im + 10, 50, 0, expand=True)
 
         for x in noncomplex_formats:
             a = test.cast(x)
@@ -550,7 +554,7 @@ class TestArithmetic(PyvipsTester):
     def test_find_trim(self):
         if pyvips.type_find("VipsOperation", "find_trim") != 0:
             im = pyvips.Image.black(50, 60) + 100
-            test = im.embed(10, 20, 200, 300, extend = "white")
+            test = im.embed(10, 20, 200, 300, extend="white")
 
             for x in unsigned_formats + float_formats:
                 a = test.cast(x)
@@ -579,19 +583,19 @@ class TestArithmetic(PyvipsTester):
 
     def test_project(self):
         im = pyvips.Image.black(50, 50)
-        test = im.insert(im + 10, 50, 0, expand = True)
+        test = im.insert(im + 10, 50, 0, expand=True)
 
         for fmt in noncomplex_formats:
             columns, rows = test.cast(fmt).project()
 
-            self.assertAlmostEqualObjects(columns(10,0), [0])
-            self.assertAlmostEqualObjects(columns(70,0), [50 * 10])
+            self.assertAlmostEqualObjects(columns(10, 0), [0])
+            self.assertAlmostEqualObjects(columns(70, 0), [50 * 10])
 
-            self.assertAlmostEqualObjects(rows(0,10), [50 * 10])
+            self.assertAlmostEqualObjects(rows(0, 10), [50 * 10])
 
     def test_stats(self):
         im = pyvips.Image.black(50, 50)
-        test = im.insert(im + 10, 50, 0, expand = True)
+        test = im.insert(im + 10, 50, 0, expand=True)
 
         for x in noncomplex_formats:
             a = test.cast(x)
@@ -617,6 +621,7 @@ class TestArithmetic(PyvipsTester):
             im2 = [(im + x).cast(fmt) for x in range(0, 100, 10)]
             im3 = pyvips.Image.sum(im2)
             self.assertAlmostEqual(im3.max(), sum(range(0, 100, 10)))
+
 
 if __name__ == '__main__':
     unittest.main()

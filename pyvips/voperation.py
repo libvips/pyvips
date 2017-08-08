@@ -4,7 +4,8 @@ from __future__ import division
 
 import logging
 
-from pyvips import *
+import pyvips
+from pyvips import ffi, vips_lib, Error, to_bytes, to_string
 
 logger = logging.getLogger(__name__)
 
@@ -17,10 +18,10 @@ ffi.cdef('''
 
     VipsOperation* vips_operation_new (const char* name);
 
-    typedef void *(*VipsArgumentMapFn) (VipsOperation* object, 
+    typedef void *(*VipsArgumentMapFn) (VipsOperation* object,
         GParamSpec* pspec,
         VipsArgumentClass* argument_class,
-        VipsArgumentInstance* argument_instance, 
+        VipsArgumentInstance* argument_instance,
         void* a, void* b);
 
     void* vips_argument_map (VipsOperation* object,
@@ -41,6 +42,7 @@ _OUTPUT = 32
 _DEPRECATED = 64
 _MODIFY = 128
 
+
 # search an array with a predicate, recursing into subarrays as we see them
 # used to find the match_image for an operation
 def _find_inside(pred, thing):
@@ -56,10 +58,10 @@ def _find_inside(pred, thing):
 
     return None
 
-class Operation(VipsObject):
 
+class Operation(pyvips.VipsObject):
     def __init__(self, pointer):
-        # logger.debug('Operation.__init__: pointer = {0}'.format(pointer))
+        # logger.debug('Operation.__init__: pointer = %s', pointer)
         super(Operation, self).__init__(pointer)
 
     def set(self, name, flags, match_image, value):
@@ -70,15 +72,15 @@ class Operation(VipsObject):
         if match_image:
             gtype = self.get_typeof(name)
 
-            if gtype == GValue.image_type:
-                value = package_index['Image'].imageize(match_image, value)
-            elif gtype == GValue.array_image_type:
-                value = [package_index['Image'].imageize(match_image, x) 
+            if gtype == pyvips.GValue.image_type:
+                value = pyvips.Image.imageize(match_image, value)
+            elif gtype == pyvips.GValue.array_image_type:
+                value = [pyvips.Image.imageize(match_image, x)
                          for x in value]
 
         # MODIFY args need to be copied before they are set
         if (flags & _MODIFY) != 0:
-            # logger.debug('copying MODIFY arg {0}'.format(name))
+            # logger.debug('copying MODIFY arg %s', name)
             # make sure we have a unique copy
             value = value.copy().copy_memory()
 
@@ -88,7 +90,8 @@ class Operation(VipsObject):
     def getargs(self):
         args = []
 
-        def add_construct(self, pspec, argument_class, argument_instance, a, b):
+        def add_construct(self, pspec, argument_class,
+                          argument_instance, a, b):
             flags = argument_class.flags
             if (flags & _CONSTRUCT) != 0:
                 name = to_string(ffi.string(pspec.name))
@@ -98,7 +101,7 @@ class Operation(VipsObject):
                 name = name.replace('-', '_')
 
                 args.append([name, flags])
-            
+
             return ffi.NULL
 
         cb = ffi.callback('VipsArgumentMapFn', add_construct)
@@ -110,16 +113,15 @@ class Operation(VipsObject):
     # '[strip,tile=true]'
     @staticmethod
     def call(operation_name, *args, **kwargs):
-        logger.debug('VipsOperation.call: operation_name = {0}'.
-                     format(operation_name))
-        # logger.debug('VipsOperation.call: args = {1}, kwargs = {2}'.
-        #              format(args, kwargs))
+        logger.debug('VipsOperation.call: operation_name = %s',
+                     operation_name)
+        # logger.debug('VipsOperation.call: args = %s, kwargs =%s',
+        #              args, kwargs)
 
         # pull out the special string_options kwarg
         string_options = kwargs.pop('string_options', '')
 
-        logger.debug('VipsOperation.call: string_options = {0}'.
-            format(string_options))
+        logger.debug('VipsOperation.call: string_options = %s', string_options)
 
         vop = vips_lib.vips_operation_new(to_bytes(operation_name))
         if vop == ffi.NULL:
@@ -128,7 +130,7 @@ class Operation(VipsObject):
         vop = None
 
         arguments = op.getargs()
-        # logger.debug('arguments = {0}'.format(arguments))
+        # logger.debug('arguments = %s', arguments)
 
         # make a thing to quickly get flags from an arg name
         flags_from_name = {}
@@ -138,24 +140,24 @@ class Operation(VipsObject):
         # count required input args
         n_required = 0
         for name, flags in arguments:
-            if ((flags & _INPUT) != 0 and 
-                (flags & _REQUIRED) != 0 and 
-                (flags & _DEPRECATED) == 0):
+            if ((flags & _INPUT) != 0 and
+                    (flags & _REQUIRED) != 0 and
+                    (flags & _DEPRECATED) == 0):
                 n_required += 1
 
         if n_required != len(args):
-            raise Error(('unable to call {0}: {1} arguments given, ' +
-                         'but {2} required').
-                        format(operation_name, len(args), n_required))
+            raise Error('unable to call {0}: {1} arguments given, '
+                        'but {2} required'.format(operation_name, len(args),
+                                                  n_required))
 
         # the first image argument is the thing we expand constants to
         # match ... look inside tables for images, since we may be passing
         # an array of image as a single param
-        match_image = _find_inside(lambda x: 
-                                   isinstance(x, package_index['Image']),
+        match_image = _find_inside(lambda x:
+                                   isinstance(x, pyvips.Image),
                                    args)
 
-        logger.debug('VipsOperation.call: match_image = {0}'.format(match_image))
+        logger.debug('VipsOperation.call: match_image = %s', match_image)
 
         # set any string options before any args so they can't be
         # overridden
@@ -165,9 +167,9 @@ class Operation(VipsObject):
         # set required and optional args
         n = 0
         for name, flags in arguments:
-            if ((flags & _INPUT) != 0 and 
-                (flags & _REQUIRED) != 0 and 
-                (flags & _DEPRECATED) == 0):
+            if ((flags & _INPUT) != 0 and
+                    (flags & _REQUIRED) != 0 and
+                    (flags & _DEPRECATED) == 0):
                 op.set(name, flags, match_image, args[n])
                 n += 1
 
@@ -183,13 +185,12 @@ class Operation(VipsObject):
         # fetch required output args, plus modified input images
         result = []
         for name, flags in arguments:
-            if ((flags & _OUTPUT) != 0 and 
-                (flags & _REQUIRED) != 0 and 
-                (flags & _DEPRECATED) == 0):
+            if ((flags & _OUTPUT) != 0 and
+                    (flags & _REQUIRED) != 0 and
+                    (flags & _DEPRECATED) == 0):
                 result.append(op.get(name))
 
-            if ((flags & _INPUT) != 0 and 
-                (flags & _MODIFY) != 0):
+            if (flags & _INPUT) != 0 and (flags & _MODIFY) != 0:
                 result.append(op.get(name))
 
         # fetch optional output args
@@ -197,9 +198,9 @@ class Operation(VipsObject):
         for name, value in kwargs.items():
             flags = flags_from_name[name]
 
-            if ((flags & _OUTPUT) != 0 and 
-                (flags & _REQUIRED) == 0 and 
-                (flags & _DEPRECATED) == 0):
+            if ((flags & _OUTPUT) != 0 and
+                    (flags & _REQUIRED) == 0 and
+                    (flags & _DEPRECATED) == 0):
                 opts[name] = op.get(name)
 
         vips_lib.vips_object_unref_outputs(op.pointer)
@@ -210,8 +211,9 @@ class Operation(VipsObject):
         if len(result) == 1:
             result = result[0]
 
-        logger.debug('VipsOperation.call: result = {0}'.format(result))
+        logger.debug('VipsOperation.call: result = %s', result)
 
         return result
+
 
 __all__ = ['Operation']

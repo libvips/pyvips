@@ -1,13 +1,16 @@
 # wrap GValue
 
 from __future__ import division
-from __future__ import unicode_literals 
+from __future__ import unicode_literals
 
 import logging
-import sys
 import numbers
+import sys
 
-from pyvips import *
+import pyvips
+from pyvips import ffi, vips_lib, gobject_lib, \
+    glib_lib, Error, to_bytes, to_string, type_find, \
+    type_name
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +19,7 @@ _is_PY2 = sys.version_info.major == 2
 ffi.cdef('''
     typedef struct _GValue {
         GType gtype;
-        uint64_t data[2]; 
+        uint64_t data[2];
     } GValue;
 
     void g_value_init (GValue* value, GType gtype);
@@ -24,7 +27,7 @@ ffi.cdef('''
     GType g_type_from_name (const char* name);
     GType g_type_fundamental (GType gtype);
 
-    int vips_enum_from_nick (const char* domain, 
+    int vips_enum_from_nick (const char* domain,
         GType gtype, const char* str);
     const char *vips_enum_nick (GType gtype, int value);
 
@@ -35,13 +38,13 @@ ffi.cdef('''
     void g_value_set_flags (GValue* value, unsigned int f);
     void g_value_set_string (GValue* value, const char *str);
     void g_value_set_object (GValue* value, void* object);
-    void vips_value_set_array_double (GValue* value, 
+    void vips_value_set_array_double (GValue* value,
         const double* array, int n );
-    void vips_value_set_array_int (GValue* value, 
+    void vips_value_set_array_int (GValue* value,
         const int* array, int n );
     void vips_value_set_array_image (GValue *value, int n);
     void vips_value_set_blob (GValue* value,
-            void (*free_fn)(void* data), void* data, size_t length);
+        void (*free_fn)(void* data), void* data, size_t length);
 
     int g_value_get_boolean (const GValue* value);
     int g_value_get_int (GValue* value);
@@ -49,7 +52,8 @@ ffi.cdef('''
     int g_value_get_enum (GValue* value);
     unsigned int g_value_get_flags (GValue* value);
     const char* g_value_get_string (GValue* value);
-    const char* vips_value_get_ref_string (const GValue* value, size_t* length);
+    const char* vips_value_get_ref_string (const GValue* value,
+        size_t* length);
     void* g_value_get_object (GValue* value);
     double* vips_value_get_array_double (const GValue* value, int* n);
     int* vips_value_get_array_int (const GValue* value, int* n);
@@ -62,8 +66,8 @@ ffi.cdef('''
 
 ''')
 
-class GValue(object):
 
+class GValue(object):
     # look up some common gtypes at init for speed
     gbool_type = gobject_lib.g_type_from_name(b'gboolean')
     gint_type = gobject_lib.g_type_from_name(b'gint')
@@ -82,17 +86,17 @@ class GValue(object):
     def __init__(self):
         # allocate memory for the gvalue which will be freed on GC
         self.pointer = ffi.new('GValue *')
-        # logger.debug('GValue.__init__: pointer = {0}'.format(self.pointer))
+        # logger.debug('GValue.__init__: pointer = %s', self.pointer)
 
         # and tag it to be unset on GC as well
         self.gvalue = ffi.gc(self.pointer, gobject_lib.g_value_unset)
-        # logger.debug('GValue.__init__: gvalue = {0}'.format(self.gvalue))
+        # logger.debug('GValue.__init__: gvalue = %s', self.gvalue)
 
     def init(self, gtype):
         gobject_lib.g_value_init(self.gvalue, gtype)
 
     def set(self, value):
-        # logger.debug('GValue.set: self = {0}, value = {1}'.format(self, value))
+        # logger.debug('GValue.set: self = %s, value = %s', self, value)
 
         gtype = self.gvalue.gtype
         fundamental = gobject_lib.g_type_fundamental(gtype)
@@ -105,11 +109,11 @@ class GValue(object):
             gobject_lib.g_value_set_double(self.gvalue, value)
         elif fundamental == GValue.genum_type:
             if isinstance(value, basestring if _is_PY2 else str):
-                enum_value = vips_lib.vips_enum_from_nick(b'pyvips', gtype, 
+                enum_value = vips_lib.vips_enum_from_nick(b'pyvips', gtype,
                                                           to_bytes(value))
 
                 if enum_value < 0:
-                    raise Error('no such enum {0}')
+                    raise Error('no such enum {0}'.format(value))
             else:
                 enum_value = value
 
@@ -131,9 +135,10 @@ class GValue(object):
                 value = [value]
 
             array = ffi.new('double[]', value)
-            vips_lib.vips_value_set_array_double(self.gvalue, array, len(value))
+            vips_lib.vips_value_set_array_double(self.gvalue, array,
+                                                 len(value))
         elif gtype == GValue.array_image_type:
-            if isinstance(value, package_index['Image']):
+            if isinstance(value, pyvips.Image):
                 value = [value]
 
             vips_lib.vips_value_set_array_image(self.gvalue, len(value))
@@ -148,13 +153,13 @@ class GValue(object):
             ffi.memmove(memory, value, len(value))
 
             vips_lib.vips_value_set_blob(self.gvalue,
-                    glib_lib.g_free, memory, len(value))
+                                         glib_lib.g_free, memory, len(value))
         else:
             raise Error('unsupported gtype for set {0}, fundamental {1}'.
                         format(type_name(gtype), type_name(fundamental)))
 
     def get(self):
-        # logger.debug('GValue.get: self = {0}'.format(self))
+        # logger.debug('GValue.get: self = %s', self)
 
         gtype = self.gvalue.gtype
         fundamental = gobject_lib.g_type_fundamental(gtype)
@@ -192,12 +197,12 @@ class GValue(object):
             go = gobject_lib.g_value_get_object(self.gvalue)
             vi = ffi.cast('VipsImage *', go)
 
-            # we want a ref that will last with the life of the vimage: 
+            # we want a ref that will last with the life of the vimage:
             # this ref is matched by the unref that's attached to finalize
-            # by Image() 
+            # by Image()
             gobject_lib.g_object_ref(go)
 
-            result = package_index['Image'](vi)
+            result = pyvips.Image(vi)
         elif gtype == GValue.array_int_type:
             pint = ffi.new('int *')
             array = vips_lib.vips_value_get_array_int(self.gvalue, pint)
@@ -220,7 +225,7 @@ class GValue(object):
             for i in range(0, pint[0]):
                 vi = array[i]
                 gobject_lib.g_object_ref(vi)
-                image = package_index['Image'](vi)
+                image = pyvips.Image(vi)
                 result.append(image)
         elif gtype == GValue.blob_type:
             psize = ffi.new('size_t *')
@@ -229,9 +234,10 @@ class GValue(object):
 
             result = ffi.unpack(buf, psize[0])
         else:
-             raise Error('unsupported gtype for get {0}'.
-                         format(type_name(gtype)))
+            raise Error('unsupported gtype for get {0}'.
+                        format(type_name(gtype)))
 
         return result
+
 
 __all__ = ['GValue', 'type_find', 'type_name']

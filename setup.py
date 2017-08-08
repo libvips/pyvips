@@ -4,9 +4,10 @@ See:
 https://github.com/jcupitt/pyvips
 """
 
-from setuptools import setup, find_packages
 from codecs import open
 from os import path
+
+from setuptools import setup, find_packages
 
 here = path.abspath(path.dirname(__file__))
 
