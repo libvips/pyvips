@@ -80,18 +80,19 @@ image data to a raw memory array.
 How it works
 ============
 
-The binding uses [ruby-ffi](https://github.com/ffi/ffi) to open the libvips
+The binding uses https://pypi.python.org/pypi/cffi to open the libvips
 shared library. When you call a method on the image class, it uses libvips
-introspection system (based on GObject) to search the
+introspection system (based on ``GObject``) to search the
 library for an operation of that name, transforms the arguments to a form
 libvips can digest, and runs the operation. 
 
-This means ruby-vips always presents the API implemented by the libvips shared
+This means pyvips always presents the API implemented by the libvips shared
 library. It should update itself as new features are added. 
 
- Automatic wrapping
+Automatic wrapping
+==================
 
-`ruby-vips` adds a {Image.method_missing} handler to {Image} and uses
+``pyvips`` adds a {Image.method_missing} handler to {Image} and uses
 it to look up vips operations. For example, the libvips operation `add`, which
 appears in C as `vips_add()`, appears in Ruby as {Image#add}. 
 
