@@ -4,7 +4,8 @@ from __future__ import division
 
 import logging
 
-from pyvips import *
+import pyvips
+from pyvips import ffi, vips_lib, Error, to_bytes
 
 logger = logging.getLogger(__name__)
 
@@ -19,15 +20,15 @@ ffi.cdef('''
 
 ''')
 
-class Interpolate(VipsObject):
 
+class Interpolate(pyvips.VipsObject):
     def __init__(self, pointer):
-        # logger.debug('Operation.__init__: pointer = {0}'.format(pointer))
+        # logger.debug('Operation.__init__: pointer = %s', pointer)
         super(Interpolate, self).__init__(pointer)
 
     @staticmethod
     def new(name):
-        # logger.debug('VipsInterpolate.new: name = {0}'.format(name))
+        # logger.debug('VipsInterpolate.new: name = %s', name)
 
         vi = vips_lib.vips_interpolate_new(to_bytes(name))
         if vi == ffi.NULL:

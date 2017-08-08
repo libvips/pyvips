@@ -2,9 +2,11 @@
 
 from __future__ import division
 
+import gc
 import logging
 
-from pyvips import *
+import pyvips
+from pyvips import ffi, vips_lib, gobject_lib, Error, to_bytes
 
 logger = logging.getLogger(__name__)
 
@@ -55,8 +57,8 @@ ffi.cdef('''
         uint64_t offset;
     } VipsArgumentClass;
 
-    int vips_object_get_argument (VipsObject* object, 
-        const char *name, GParamSpec** pspec, 
+    int vips_object_get_argument (VipsObject* object,
+        const char *name, GParamSpec** pspec,
         VipsArgumentClass** argument_class,
         VipsArgumentInstance** argument_instance);
 
@@ -66,10 +68,10 @@ ffi.cdef('''
 
 ''')
 
-class VipsObject(GObject):
 
+class VipsObject(pyvips.GObject):
     def __init__(self, pointer):
-        # logger.debug('VipsObject.__init__: pointer = {0}'.format(pointer))
+        # logger.debug('VipsObject.__init__: pointer = %s', pointer)
         super(VipsObject, self).__init__(pointer)
 
     @staticmethod
@@ -81,15 +83,16 @@ class VipsObject(GObject):
 
     # slow! eeeeew
     def get_typeof(self, name):
-        # logger.debug('VipsObject.get_typeof: self = {0}, name = {1}'.
-        #              format(self, name))
+        # logger.debug('VipsObject.get_typeof: self = %s, name = %s',
+        #              self, name)
 
         pspec = ffi.new('GParamSpec **')
         argument_class = ffi.new('VipsArgumentClass **')
         argument_instance = ffi.new('VipsArgumentInstance **')
         vo = ffi.cast('VipsObject *', self.pointer)
         result = vips_lib.vips_object_get_argument(vo, to_bytes(name),
-            pspec, argument_class, argument_instance)
+                                                   pspec, argument_class,
+                                                   argument_instance)
 
         if result != 0:
             # need to clear any error, this is horrible
@@ -99,11 +102,11 @@ class VipsObject(GObject):
         return pspec[0].value_type
 
     def get(self, name):
-        logger.debug('VipsObject.get: self = {0}, name = {1}'.format(self, name))
+        logger.debug('VipsObject.get: self = %s, name = %s', self, name)
 
         gtype = self.get_typeof(name)
 
-        gv = GValue()
+        gv = pyvips.GValue()
         gv.init(gtype)
         go = ffi.cast('GObject *', self.pointer)
         gobject_lib.g_object_get_property(go, to_bytes(name), gv.pointer)
@@ -111,12 +114,12 @@ class VipsObject(GObject):
         return gv.get()
 
     def set(self, name, value):
-        logger.debug('VipsObject.set: self = {0}, name = {1}, value = {2}'.
-            format(self, name, value))
+        logger.debug('VipsObject.set: self = %s, name = %s, value = %s',
+                     self, name, value)
 
         gtype = self.get_typeof(name)
 
-        gv = GValue()
+        gv = pyvips.GValue()
         gv.init(gtype)
         gv.set(value)
         go = ffi.cast('GObject *', self.pointer)
@@ -125,9 +128,10 @@ class VipsObject(GObject):
     # set a series of options using a string, perhaps 'fred=12, tile'
     def set_string(self, string_options):
         vo = ffi.cast('VipsObject *', self.pointer)
-        result = vips_lib.vips_object_set_from_string(vo, 
-                                                      to_bytes(string_options)) 
+        result = vips_lib.vips_object_set_from_string(vo,
+                                                      to_bytes(string_options))
 
         return result == 0
+
 
 __all__ = ['VipsObject']

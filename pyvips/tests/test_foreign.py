@@ -1,10 +1,18 @@
 # vim: set fileencoding=utf-8 :
-
 import shutil
-from .helpers import *
+import unittest
+
+import os
+
+import pyvips
+from .helpers import PyvipsTester, JPEG_FILE, SRGB_FILE,\
+    MATLAB_FILE, PNG_FILE, TIF_FILE, OME_FILE, ANALYZE_FILE, \
+    GIF_FILE, WEBP_FILE, EXR_FILE, FITS_FILE, OPENSLIDE_FILE, \
+    PDF_FILE, SVG_FILE, SVGZ_FILE, SVG_GZ_FILE, GIF_ANIM_FILE, \
+    DICOM_FILE, temp_filename
+
 
 class TestForeign(PyvipsTester):
-
     def setUp(self):
         self.colour = pyvips.Image.jpegload(JPEG_FILE)
         self.mono = self.colour.extract_band(1)
@@ -13,7 +21,7 @@ class TestForeign(PyvipsTester):
         self.rad = self.colour.float2rad()
         self.rad.remove("icc-profile-data")
         self.cmyk = self.colour.bandjoin(self.mono)
-        self.cmyk = self.cmyk.copy(interpretation = pyvips.Interpretation.CMYK)
+        self.cmyk = self.cmyk.copy(interpretation=pyvips.Interpretation.CMYK)
         self.cmyk.remove("icc-profile-data")
 
         im = pyvips.Image.new_from_file(GIF_FILE)
@@ -46,7 +54,7 @@ class TestForeign(PyvipsTester):
         self.assertEqual(max_diff, 0)
 
     def save_load_file(self, format, options, im, thresh):
-        # yuk! 
+        # yuk!
         # but we can't set format parameters for pyvips.Image.new_temp_file()
         filename = temp_filename(format)
 
@@ -62,7 +70,7 @@ class TestForeign(PyvipsTester):
 
         os.unlink(filename)
 
-    def save_load_buffer(self, saver, loader, im, max_diff = 0):
+    def save_load_buffer(self, saver, loader, im, max_diff=0):
         buf = pyvips.Operation.call(saver, im)
         x = pyvips.Operation.call(loader, buf)
 
@@ -71,7 +79,7 @@ class TestForeign(PyvipsTester):
         self.assertEqual(im.bands, x.bands)
         self.assertLessEqual((im - x).abs().max(), max_diff)
 
-    def save_buffer_tempfile(self, saver, suf, im, max_diff = 0):
+    def save_buffer_tempfile(self, saver, suf, im, max_diff=0):
         filename = temp_filename(suf)
 
         buf = pyvips.Operation.call(saver, im)
@@ -124,7 +132,7 @@ class TestForeign(PyvipsTester):
         self.save_load("%s.jpg", self.colour)
 
         self.buffer_loader("jpegload_buffer", JPEG_FILE, jpeg_valid)
-        self.save_load_buffer("jpegsave_buffer", "jpegload_buffer", 
+        self.save_load_buffer("jpegsave_buffer", "jpegload_buffer",
                               self.colour, 80)
 
         # see if we have exif parsing: our test image has this field
@@ -169,14 +177,14 @@ class TestForeign(PyvipsTester):
             x.set_value("orientation", 6)
             x.write_to_file(filename)
             x1 = pyvips.Image.new_from_file(filename)
-            x2 = pyvips.Image.new_from_file(filename, autorotate = True)
+            x2 = pyvips.Image.new_from_file(filename, autorotate=True)
             self.assertEqual(x1.width, x2.height)
             self.assertEqual(x1.height, x2.width)
             os.unlink(filename)
 
     def test_png(self):
         if pyvips.type_find("VipsForeign", "pngload") == 0 or \
-            not os.path.isfile(PNG_FILE):
+                not os.path.isfile(PNG_FILE):
             print("no png support, skipping test")
 
         def png_valid(self, im):
@@ -194,7 +202,7 @@ class TestForeign(PyvipsTester):
 
     def test_tiff(self):
         if pyvips.type_find("VipsForeign", "tiffload") == 0 or \
-            not os.path.isfile(TIF_FILE):
+                not os.path.isfile(TIF_FILE):
             print("no tiff support, skipping test")
             return
 
@@ -207,7 +215,9 @@ class TestForeign(PyvipsTester):
 
         self.file_loader("tiffload", TIF_FILE, tiff_valid)
         self.buffer_loader("tiffload_buffer", TIF_FILE, tiff_valid)
-        self.save_load_buffer("tiffsave_buffer", "tiffload_buffer", self.colour)
+        self.save_load_buffer("tiffsave_buffer",
+                              "tiffload_buffer",
+                              self.colour)
         self.save_load("%s.tif", self.mono)
         self.save_load("%s.tif", self.colour)
         self.save_load("%s.tif", self.cmyk)
@@ -222,11 +232,11 @@ class TestForeign(PyvipsTester):
                             self.colour, 0)
         self.save_load_file(".tif", "[tile]", self.colour, 0)
         self.save_load_file(".tif", "[tile,pyramid]", self.colour, 0)
-        self.save_load_file(".tif", 
+        self.save_load_file(".tif",
                             "[tile,pyramid,compression=jpeg]", self.colour, 80)
         self.save_load_file(".tif", "[bigtiff]", self.colour, 0)
         self.save_load_file(".tif", "[compression=jpeg]", self.colour, 80)
-        self.save_load_file(".tif", 
+        self.save_load_file(".tif",
                             "[tile,tile-width=256]", self.colour, 10)
 
         # we need a copy of the image to set the new metadata on
@@ -269,7 +279,7 @@ class TestForeign(PyvipsTester):
         x.write_to_file(filename)
 
         x1 = pyvips.Image.new_from_file(filename)
-        x2 = pyvips.Image.new_from_file(filename, autorotate = True)
+        x2 = pyvips.Image.new_from_file(filename, autorotate=True)
         self.assertEqual(x1.width, x2.height)
         self.assertEqual(x1.height, x2.width)
         os.unlink(filename)
@@ -279,44 +289,44 @@ class TestForeign(PyvipsTester):
         self.assertEqual(x.height, 167)
         page_height = x.height
 
-        x = pyvips.Image.new_from_file(OME_FILE, n = -1)
+        x = pyvips.Image.new_from_file(OME_FILE, n=-1)
         self.assertEqual(x.width, 439)
         self.assertEqual(x.height, page_height * 15)
 
-        x = pyvips.Image.new_from_file(OME_FILE, page = 1, n = -1)
+        x = pyvips.Image.new_from_file(OME_FILE, page=1, n=-1)
         self.assertEqual(x.width, 439)
         self.assertEqual(x.height, page_height * 14)
 
-        x = pyvips.Image.new_from_file(OME_FILE, page = 1, n = 2)
+        x = pyvips.Image.new_from_file(OME_FILE, page=1, n=2)
         self.assertEqual(x.width, 439)
         self.assertEqual(x.height, page_height * 2)
 
-        x = pyvips.Image.new_from_file(OME_FILE, n = -1)
-        self.assertEqual(x(0,166)[0], 96)
-        self.assertEqual(x(0,167)[0], 0)
-        self.assertEqual(x(0,168)[0], 1)
+        x = pyvips.Image.new_from_file(OME_FILE, n=-1)
+        self.assertEqual(x(0, 166)[0], 96)
+        self.assertEqual(x(0, 167)[0], 0)
+        self.assertEqual(x(0, 168)[0], 1)
 
         filename = temp_filename('.tif')
         x.write_to_file(filename)
 
-        x = pyvips.Image.new_from_file(filename, n = -1)
+        x = pyvips.Image.new_from_file(filename, n=-1)
         self.assertEqual(x.width, 439)
         self.assertEqual(x.height, page_height * 15)
-        self.assertEqual(x(0,166)[0], 96)
-        self.assertEqual(x(0,167)[0], 0)
-        self.assertEqual(x(0,168)[0], 1)
+        self.assertEqual(x(0, 166)[0], 96)
+        self.assertEqual(x(0, 167)[0], 0)
+        self.assertEqual(x(0, 168)[0], 1)
 
         os.unlink(filename)
 
     def test_magickload(self):
         if pyvips.type_find("VipsForeign", "magickload") == 0 or \
-            not os.path.isfile(GIF_FILE):
+                not os.path.isfile(GIF_FILE):
             print("no magick support, skipping test")
             return
 
         def gif_valid(self, im):
             # some libMagick produce an RGB for this image, some a mono, some
-            # rgba, some have a valid alpha, some don't :-( 
+            # rgba, some have a valid alpha, some don't :-(
             # therefore ... just test channel 0
             a = im(10, 10)[0]
 
@@ -332,21 +342,21 @@ class TestForeign(PyvipsTester):
         self.assertEqual(im.bands, 4)
 
         # density should change size of generated svg
-        im = pyvips.Image.magickload(SVG_FILE, density = '100')
+        im = pyvips.Image.magickload(SVG_FILE, density='100')
         width = im.width
         height = im.height
-        im = pyvips.Image.magickload(SVG_FILE, density = '200')
+        im = pyvips.Image.magickload(SVG_FILE, density='200')
         # This seems to fail on travis, no idea why, some problem in their IM
         # perhaps
-        #self.assertEqual(im.width, width * 2)
-        #self.assertEqual(im.height, height * 2)
+        # self.assertEqual(im.width, width * 2)
+        # self.assertEqual(im.height, height * 2)
 
         # all-frames should load every frame of the animation
         # (though all-frames is deprecated)
         im = pyvips.Image.magickload(GIF_ANIM_FILE)
         width = im.width
         height = im.height
-        im = pyvips.Image.magickload(GIF_ANIM_FILE, all_frames = True)
+        im = pyvips.Image.magickload(GIF_ANIM_FILE, all_frames=True)
         self.assertEqual(im.width, width)
         self.assertEqual(im.height, height * 5)
 
@@ -354,7 +364,7 @@ class TestForeign(PyvipsTester):
         im = pyvips.Image.magickload(GIF_ANIM_FILE)
         width = im.width
         height = im.height
-        im = pyvips.Image.magickload(GIF_ANIM_FILE, page = 1, n = 2)
+        im = pyvips.Image.magickload(GIF_ANIM_FILE, page=1, n=2)
         self.assertEqual(im.width, width)
         self.assertEqual(im.height, height * 2)
         page_height = im.get_value("page-height")
@@ -365,11 +375,11 @@ class TestForeign(PyvipsTester):
         self.assertEqual(im.width, 128)
         self.assertEqual(im.height, 128)
         # some IMs are 3 bands, some are 1, can't really test
-        #self.assertEqual(im.bands, 1)
+        # self.assertEqual(im.bands, 1)
 
     def test_webp(self):
         if pyvips.type_find("VipsForeign", "webpload") == 0 or \
-            not os.path.isfile(WEBP_FILE):
+                not os.path.isfile(WEBP_FILE):
             print("no webp support, skipping test")
             return
 
@@ -382,19 +392,19 @@ class TestForeign(PyvipsTester):
 
         self.file_loader("webpload", WEBP_FILE, webp_valid)
         self.buffer_loader("webpload_buffer", WEBP_FILE, webp_valid)
-        self.save_load_buffer("webpsave_buffer", "webpload_buffer", 
+        self.save_load_buffer("webpsave_buffer", "webpload_buffer",
                               self.colour, 60)
         self.save_load("%s.webp", self.colour)
 
         # test lossless mode
         im = pyvips.Image.new_from_file(WEBP_FILE)
-        buf = im.webpsave_buffer(lossless = True)
+        buf = im.webpsave_buffer(lossless=True)
         im2 = pyvips.Image.new_from_buffer(buf, "")
         self.assertEqual(im.avg(), im2.avg())
 
         # higher Q should mean a bigger buffer
-        b1 = im.webpsave_buffer(Q = 10)
-        b2 = im.webpsave_buffer(Q = 90)
+        b1 = im.webpsave_buffer(Q=10)
+        b2 = im.webpsave_buffer(Q=90)
         self.assertGreater(len(b2), len(b1))
 
         # try saving an image with an ICC profile and reading it back ... if we
@@ -408,8 +418,8 @@ class TestForeign(PyvipsTester):
             self.assertEqual(p1, p2)
 
             # add tests for exif, xmp, exif
-            # the exif test will need us to be able to walk the header, we can't
-            # just check exif-data
+            # the exif test will need us to be able to walk the header,
+            # we can't just check exif-data
 
             # we can test that exif changes change the output of webpsave
             x = self.colour.copy()
@@ -420,7 +430,7 @@ class TestForeign(PyvipsTester):
 
     def test_analyzeload(self):
         if pyvips.type_find("VipsForeign", "analyzeload") == 0 or \
-            not os.path.isfile(ANALYZE_FILE):
+                not os.path.isfile(ANALYZE_FILE):
             print("no analyze support, skipping test")
             return
 
@@ -435,7 +445,7 @@ class TestForeign(PyvipsTester):
 
     def test_matload(self):
         if pyvips.type_find("VipsForeign", "matload") == 0 or \
-            not os.path.isfile(MATLAB_FILE):
+                not os.path.isfile(MATLAB_FILE):
             print("no matlab support, skipping test")
             return
 
@@ -450,15 +460,15 @@ class TestForeign(PyvipsTester):
 
     def test_openexrload(self):
         if pyvips.type_find("VipsForeign", "openexrload") == 0 or \
-            not os.path.isfile(EXR_FILE):
+                not os.path.isfile(EXR_FILE):
             print("no openexr support, skipping test")
             return
 
         def exr_valid(self, im):
             a = im(10, 10)
-            self.assertAlmostEqualObjects(a, [0.124512, 0.159668, 
-                                              0.040375, 1.0], 
-                                          places = 5)
+            self.assertAlmostEqualObjects(a, [0.124512, 0.159668,
+                                              0.040375, 1.0],
+                                          places=5)
             self.assertEqual(im.width, 610)
             self.assertEqual(im.height, 406)
             self.assertEqual(im.bands, 4)
@@ -467,15 +477,15 @@ class TestForeign(PyvipsTester):
 
     def test_fitsload(self):
         if pyvips.type_find("VipsForeign", "fitsload") == 0 or \
-            not os.path.isfile(FITS_FILE):
+                not os.path.isfile(FITS_FILE):
             print("no fits support, skipping test")
             return
 
         def fits_valid(self, im):
             a = im(10, 10)
             self.assertAlmostEqualObjects(a, [-0.165013, -0.148553, 1.09122,
-                                              -0.942242], 
-                                          places = 5)
+                                              -0.942242],
+                                          places=5)
             self.assertEqual(im.width, 200)
             self.assertEqual(im.height, 200)
             self.assertEqual(im.bands, 4)
@@ -485,7 +495,7 @@ class TestForeign(PyvipsTester):
 
     def test_openslideload(self):
         if pyvips.type_find("VipsForeign", "openslideload") == 0 or \
-            not os.path.isfile(OPENSLIDE_FILE):
+                not os.path.isfile(OPENSLIDE_FILE):
             print("no openslide support, skipping test")
             return
 
@@ -500,7 +510,7 @@ class TestForeign(PyvipsTester):
 
     def test_pdfload(self):
         if pyvips.type_find("VipsForeign", "pdfload") == 0 or \
-            not os.path.isfile(PDF_FILE):
+                not os.path.isfile(PDF_FILE):
             print("no pdf support, skipping test")
             return
 
@@ -515,18 +525,18 @@ class TestForeign(PyvipsTester):
         self.buffer_loader("pdfload_buffer", PDF_FILE, pdf_valid)
 
         im = pyvips.Image.new_from_file(PDF_FILE)
-        x = pyvips.Image.new_from_file(PDF_FILE, scale = 2)
+        x = pyvips.Image.new_from_file(PDF_FILE, scale=2)
         self.assertLess(abs(im.width * 2 - x.width), 2)
         self.assertLess(abs(im.height * 2 - x.height), 2)
 
         im = pyvips.Image.new_from_file(PDF_FILE)
-        x = pyvips.Image.new_from_file(PDF_FILE, dpi = 144)
+        x = pyvips.Image.new_from_file(PDF_FILE, dpi=144)
         self.assertLess(abs(im.width * 2 - x.width), 2)
         self.assertLess(abs(im.height * 2 - x.height), 2)
 
     def test_gifload(self):
         if pyvips.type_find("VipsForeign", "gifload") == 0 or \
-            not os.path.isfile(GIF_FILE):
+                not os.path.isfile(GIF_FILE):
             print("no gif support, skipping test")
             return
 
@@ -540,21 +550,21 @@ class TestForeign(PyvipsTester):
         self.file_loader("gifload", GIF_FILE, gif_valid)
         self.buffer_loader("gifload_buffer", GIF_FILE, gif_valid)
 
-        x1 = pyvips.Image.new_from_file(GIF_ANIM_FILE )
-        x2 = pyvips.Image.new_from_file(GIF_ANIM_FILE, n = 2 )
+        x1 = pyvips.Image.new_from_file(GIF_ANIM_FILE)
+        x2 = pyvips.Image.new_from_file(GIF_ANIM_FILE, n=2)
         self.assertEqual(x2.height, 2 * x1.height)
         page_height = x2.get_value("page-height")
         self.assertEqual(page_height, x1.height)
 
-        x2 = pyvips.Image.new_from_file(GIF_ANIM_FILE, n = -1 )
+        x2 = pyvips.Image.new_from_file(GIF_ANIM_FILE, n=-1)
         self.assertEqual(x2.height, 5 * x1.height)
 
-        x2 = pyvips.Image.new_from_file(GIF_ANIM_FILE, page = 1, n = -1 )
+        x2 = pyvips.Image.new_from_file(GIF_ANIM_FILE, page=1, n=-1)
         self.assertEqual(x2.height, 4 * x1.height)
 
     def test_svgload(self):
         if pyvips.type_find("VipsForeign", "svgload") == 0 or \
-            not os.path.isfile(SVG_FILE):
+                not os.path.isfile(SVG_FILE):
             print("no svg support, skipping test")
             return
 
@@ -574,12 +584,12 @@ class TestForeign(PyvipsTester):
         self.file_loader("svgload", SVG_GZ_FILE, svg_valid)
 
         im = pyvips.Image.new_from_file(SVG_FILE)
-        x = pyvips.Image.new_from_file(SVG_FILE, scale = 2)
+        x = pyvips.Image.new_from_file(SVG_FILE, scale=2)
         self.assertLess(abs(im.width * 2 - x.width), 2)
         self.assertLess(abs(im.height * 2 - x.height), 2)
 
         im = pyvips.Image.new_from_file(SVG_FILE)
-        x = pyvips.Image.new_from_file(SVG_FILE, dpi = 144)
+        x = pyvips.Image.new_from_file(SVG_FILE, dpi=144)
         self.assertLess(abs(im.width * 2 - x.width), 2)
         self.assertLess(abs(im.height * 2 - x.height), 2)
 
@@ -590,7 +600,7 @@ class TestForeign(PyvipsTester):
         self.save_load("%s.mat", self.mono)
 
     def test_ppm(self):
-        if pyvips.type_find("VipsForeign", "ppmload") == 0: 
+        if pyvips.type_find("VipsForeign", "ppmload") == 0:
             print("no PPM support, skipping test")
             return
 
@@ -603,11 +613,11 @@ class TestForeign(PyvipsTester):
             return
 
         self.save_load("%s.hdr", self.colour)
-        self.save_buffer_tempfile("radsave_buffer", ".hdr", 
-                                  self.rad, max_diff = 0)
+        self.save_buffer_tempfile("radsave_buffer", ".hdr",
+                                  self.rad, max_diff=0)
 
     def test_dzsave(self):
-        if pyvips.type_find("VipsForeign", "dzsave") == 0: 
+        if pyvips.type_find("VipsForeign", "dzsave") == 0:
             print("no dzsave support, skipping test")
             return
 
@@ -618,9 +628,9 @@ class TestForeign(PyvipsTester):
         # default deepzoom layout ... we must use png here, since we want to
         # test the overlap for equality
         filename = temp_filename('')
-        self.colour.dzsave(filename, suffix = ".png")
+        self.colour.dzsave(filename, suffix=".png")
 
-        # test horizontal overlap ... expect 256 step, overlap 1 
+        # test horizontal overlap ... expect 256 step, overlap 1
         x = pyvips.Image.new_from_file(filename + "_files/10/0_0.png")
         self.assertEqual(x.width, 255)
         y = pyvips.Image.new_from_file(filename + "_files/10/1_0.png")
@@ -654,7 +664,7 @@ class TestForeign(PyvipsTester):
 
         # default google layout
         filename = temp_filename('')
-        self.colour.dzsave(filename, layout = "google")
+        self.colour.dzsave(filename, layout="google")
 
         # test bottom-right tile ... default is 256x256 tiles, overlap 0
         x = pyvips.Image.new_from_file(filename + "/2/2/3.jpg")
@@ -672,8 +682,8 @@ class TestForeign(PyvipsTester):
         # with overlap 192 tile size 256, we should step by 64 pixels each time
         # so 3x3 tiles exactly
         filename = temp_filename('')
-        self.colour.crop(0, 0, 384, 384).dzsave(filename, layout = "google", 
-                                                overlap = 192, depth = "one")
+        self.colour.crop(0, 0, 384, 384).dzsave(filename, layout="google",
+                                                overlap=192, depth="one")
 
         # test bottom-right tile ... default is 256x256 tiles, overlap 0
         x = pyvips.Image.new_from_file(filename + "/0/2/2.jpg")
@@ -684,8 +694,8 @@ class TestForeign(PyvipsTester):
         shutil.rmtree(filename)
 
         filename = temp_filename('')
-        self.colour.crop(0, 0, 385, 385).dzsave(filename, layout = "google", 
-                                                overlap = 192, depth = "one")
+        self.colour.crop(0, 0, 385, 385).dzsave(filename, layout="google",
+                                                overlap=192, depth="one")
 
         # test bottom-right tile ... default is 256x256 tiles, overlap 0
         x = pyvips.Image.new_from_file(filename + "/0/3/3.jpg")
@@ -697,7 +707,7 @@ class TestForeign(PyvipsTester):
 
         # default zoomify layout
         filename = temp_filename('')
-        self.colour.dzsave(filename, layout = "zoomify")
+        self.colour.dzsave(filename, layout="zoomify")
 
         # 256x256 tiles, no overlap
         self.assertTrue(os.path.exists(filename + "/ImageProperties.xml"))
@@ -715,15 +725,15 @@ class TestForeign(PyvipsTester):
 
         # test compressed zip output
         filename2 = temp_filename('.zip')
-        self.colour.dzsave(filename2, compression = -1)
+        self.colour.dzsave(filename2, compression=-1)
         self.assertLess(os.path.getsize(filename2),
                         os.path.getsize(filename))
         os.unlink(filename2)
         os.unlink(filename)
 
-        # test suffix 
+        # test suffix
         filename = temp_filename('')
-        self.colour.dzsave(filename, suffix = ".png")
+        self.colour.dzsave(filename, suffix=".png")
 
         x = pyvips.Image.new_from_file(filename + "_files/10/0_0.png")
         self.assertEqual(x.width, 255)
@@ -733,7 +743,7 @@ class TestForeign(PyvipsTester):
 
         # test overlap
         filename = temp_filename('')
-        self.colour.dzsave(filename, overlap = 200)
+        self.colour.dzsave(filename, overlap=200)
 
         y = pyvips.Image.new_from_file(filename + "_files/10/1_1.jpeg")
         self.assertEqual(y.width, 654)
@@ -743,7 +753,7 @@ class TestForeign(PyvipsTester):
 
         # test tile-size
         filename = temp_filename('')
-        self.colour.dzsave(filename, tile_size = 512)
+        self.colour.dzsave(filename, tile_size=512)
 
         y = pyvips.Image.new_from_file(filename + "_files/10/0_0.jpeg")
         self.assertEqual(y.width, 513)
@@ -761,11 +771,12 @@ class TestForeign(PyvipsTester):
         with open(filename, 'rb') as f:
             buf1 = f.read()
         os.unlink(filename)
-        buf2 = self.colour.dzsave_buffer(basename = root)
+        buf2 = self.colour.dzsave_buffer(basename=root)
         self.assertEqual(len(buf1), len(buf2))
 
         # we can't test the bytes are exactly equal, the timestamps will be
         # different
+
 
 if __name__ == '__main__':
     unittest.main()

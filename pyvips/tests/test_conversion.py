@@ -1,10 +1,16 @@
 # vim: set fileencoding=utf-8 :
-
+import unittest
 from functools import reduce
-from .helpers import *
+
+import pyvips
+from .helpers import PyvipsTester, JPEG_FILE, unsigned_formats,\
+    signed_formats, float_formats, int_formats, \
+    noncomplex_formats, all_formats, max_value, \
+    sizeof_format, rot45_angles, rot45_angle_bonds, \
+    rot_angles, rot_angle_bonds
+
 
 class TestConversion(PyvipsTester):
-
     # run a function on an image,
     # 50,50 and 10,10 should have different values on the test image
     # don't loop over band elements
@@ -19,18 +25,18 @@ class TestConversion(PyvipsTester):
         self.run_cmp2(message, left, right, 50, 50, fn)
         self.run_cmp2(message, left, right, 10, 10, fn)
 
-    def run_unary(self, images, fn, fmt = all_formats):
+    def run_unary(self, images, fn, fmt=all_formats):
         [self.run_image_pixels(fn.__name__ + (' %s' % y), x.cast(y), fn)
          for x in images for y in fmt]
 
-    def run_binary(self, images, fn, fmt = all_formats):
+    def run_binary(self, images, fn, fmt=all_formats):
         [self.run_image_pixels2(fn.__name__ + (' %s %s' % (y, z)),
-                         x.cast(y), x.cast(z), fn)
+                                x.cast(y), x.cast(z), fn)
          for x in images for y in fmt for z in fmt]
 
     def setUp(self):
         im = pyvips.Image.mask_ideal(100, 100, 0.5,
-                                     reject = True, optical = True)
+                                     reject=True, optical=True)
         self.colour = im * [1, 2, 3] + [2, 3, 4]
         self.mono = self.colour[1]
         self.all_images = [self.mono, self.colour]
@@ -43,7 +49,7 @@ class TestConversion(PyvipsTester):
             else:
                 return [reduce(lambda a, b: int(a) & int(b), x)]
 
-        self.run_unary(self.all_images, band_and, fmt = int_formats)
+        self.run_unary(self.all_images, band_and, fmt=int_formats)
 
     def test_band_or(self):
         def band_or(x):
@@ -52,7 +58,7 @@ class TestConversion(PyvipsTester):
             else:
                 return [reduce(lambda a, b: int(a) | int(b), x)]
 
-        self.run_unary(self.all_images, band_or, fmt = int_formats)
+        self.run_unary(self.all_images, band_or, fmt=int_formats)
 
     def test_band_eor(self):
         def band_eor(x):
@@ -61,7 +67,7 @@ class TestConversion(PyvipsTester):
             else:
                 return [reduce(lambda a, b: int(a) ^ int(b), x)]
 
-        self.run_unary(self.all_images, band_eor, fmt = int_formats)
+        self.run_unary(self.all_images, band_eor, fmt=int_formats)
 
     def test_bandjoin(self):
         def bandjoin(x, y):
@@ -77,7 +83,7 @@ class TestConversion(PyvipsTester):
         self.assertEqual(x.bands, 4)
         self.assertEqual(x[3].avg(), 1)
 
-        x = self.colour.bandjoin([1,2])
+        x = self.colour.bandjoin([1, 2])
         self.assertEqual(x.bands, 5)
         self.assertEqual(x[3].avg(), 1)
         self.assertEqual(x[4].avg(), 2)
@@ -89,15 +95,15 @@ class TestConversion(PyvipsTester):
             else:
                 return [sum(x) // len(x)]
 
-        self.run_unary(self.all_images, bandmean, fmt = noncomplex_formats)
+        self.run_unary(self.all_images, bandmean, fmt=noncomplex_formats)
 
     def test_bandrank(self):
         def median(x, y):
             joined = [[a, b] for a, b in zip(x, y)]
             # .sort() isn't a function, so we have to run this as a separate
             # pass
-            [x.sort() for x in joined]
-            return [x[len(x) // 2] for x in joined]
+            [z.sort() for z in joined]
+            return [z[len(z) // 2] for z in joined]
 
         def bandrank(x, y):
             if isinstance(x, pyvips.Image) and isinstance(y, pyvips.Image):
@@ -105,10 +111,10 @@ class TestConversion(PyvipsTester):
             else:
                 return median(x, y)
 
-        self.run_binary(self.all_images, bandrank, fmt = noncomplex_formats)
+        self.run_binary(self.all_images, bandrank, fmt=noncomplex_formats)
 
         # we can mix images and constants, and set the index arg
-        a = self.mono.bandrank([2], index = 0)
+        a = self.mono.bandrank([2], index=0)
         b = (self.mono < 2).ifthenelse(self.mono, 2)
         self.assertEqual((a - b).abs().min(), 0)
 
@@ -122,17 +128,17 @@ class TestConversion(PyvipsTester):
         self.run_unary(self.all_images, cache)
 
     def test_copy(self):
-        x = self.colour.copy(interpretation = pyvips.Interpretation.LAB)
+        x = self.colour.copy(interpretation=pyvips.Interpretation.LAB)
         self.assertEqual(x.interpretation, pyvips.Interpretation.LAB)
-        x = self.colour.copy(xres = 42)
+        x = self.colour.copy(xres=42)
         self.assertEqual(x.xres, 42)
-        x = self.colour.copy(yres = 42)
+        x = self.colour.copy(yres=42)
         self.assertEqual(x.yres, 42)
-        x = self.colour.copy(xoffset = 42)
+        x = self.colour.copy(xoffset=42)
         self.assertEqual(x.xoffset, 42)
-        x = self.colour.copy(yoffset = 42)
+        x = self.colour.copy(yoffset=42)
         self.assertEqual(x.yoffset, 42)
-        x = self.colour.copy(coding = pyvips.Coding.NONE)
+        x = self.colour.copy(coding=pyvips.Coding.NONE)
         self.assertEqual(x.coding, pyvips.Coding.NONE)
 
     def test_bandfold(self):
@@ -145,11 +151,11 @@ class TestConversion(PyvipsTester):
         self.assertEqual(y.bands, 1)
         self.assertEqual(x.avg(), y.avg())
 
-        x = self.mono.bandfold(factor = 2)
+        x = self.mono.bandfold(factor=2)
         self.assertEqual(x.width, self.mono.width / 2)
         self.assertEqual(x.bands, 2)
 
-        y = x.bandunfold(factor = 2)
+        y = x.bandunfold(factor=2)
         self.assertEqual(y.width, self.mono.width)
         self.assertEqual(y.bands, 1)
         self.assertEqual(x.avg(), y.avg())
@@ -179,7 +185,7 @@ class TestConversion(PyvipsTester):
             im = test.embed(20, 20,
                             self.colour.width + 40,
                             self.colour.height + 40,
-                            extend = pyvips.Extend.COPY)
+                            extend=pyvips.Extend.COPY)
             pixel = im(10, 10)
             self.assertAlmostEqualObjects(pixel, [2, 3, 4])
             pixel = im(im.width - 10, im.height - 10)
@@ -188,8 +194,8 @@ class TestConversion(PyvipsTester):
             im = test.embed(20, 20,
                             self.colour.width + 40,
                             self.colour.height + 40,
-                            extend = pyvips.Extend.BACKGROUND,
-                            background = [7, 8, 9])
+                            extend=pyvips.Extend.BACKGROUND,
+                            background=[7, 8, 9])
             pixel = im(10, 10)
             self.assertAlmostEqualObjects(pixel, [7, 8, 9])
             pixel = im(im.width - 10, im.height - 10)
@@ -198,7 +204,7 @@ class TestConversion(PyvipsTester):
             im = test.embed(20, 20,
                             self.colour.width + 40,
                             self.colour.height + 40,
-                            extend = pyvips.Extend.WHITE)
+                            extend=pyvips.Extend.WHITE)
             pixel = im(10, 10)
             # uses 255 in all bytes of ints, 255.0 for float
             pixel = [int(x) & 0xff for x in pixel]
@@ -219,7 +225,7 @@ class TestConversion(PyvipsTester):
             pixel = sub(5, 5)
             self.assertAlmostEqualObjects(pixel, [2, 3, 4])
 
-            sub = test.extract_band(1, n = 2)
+            sub = test.extract_band(1, n=2)
 
             pixel = sub(30, 30)
             self.assertAlmostEqualObjects(pixel, [3, 4])
@@ -281,7 +287,7 @@ class TestConversion(PyvipsTester):
 
     def test_flatten(self):
         for fmt in unsigned_formats + [pyvips.BandFormat.SHORT,
-                pyvips.BandFormat.INT] + float_formats:
+                                       pyvips.BandFormat.INT] + float_formats:
             mx = 255
             alpha = mx / 2.0
             nalpha = mx - alpha
@@ -299,7 +305,7 @@ class TestConversion(PyvipsTester):
                 # differs ... don't require huge accuracy
                 self.assertLess(abs(x - y), 2)
 
-            im = test.flatten(background = [100, 100, 100])
+            im = test.flatten(background=[100, 100, 100])
 
             pixel = test(30, 30)
             predict = [int(x) * alpha / mx + (100 * nalpha) / mx
@@ -312,10 +318,9 @@ class TestConversion(PyvipsTester):
 
     def test_premultiply(self):
         for fmt in unsigned_formats + [pyvips.BandFormat.SHORT,
-                pyvips.BandFormat.INT] + float_formats:
+                                       pyvips.BandFormat.INT] + float_formats:
             mx = 255
             alpha = mx / 2.0
-            nalpha = mx - alpha
             test = self.colour.bandjoin(alpha).cast(fmt)
             pixel = test(30, 30)
 
@@ -332,10 +337,9 @@ class TestConversion(PyvipsTester):
 
     def test_unpremultiply(self):
         for fmt in unsigned_formats + [pyvips.BandFormat.SHORT,
-                pyvips.BandFormat.INT] + float_formats:
+                                       pyvips.BandFormat.INT] + float_formats:
             mx = 255
             alpha = mx / 2.0
-            nalpha = mx - alpha
             test = self.colour.bandjoin(alpha).cast(fmt)
             pixel = test(30, 30)
 
@@ -375,8 +379,8 @@ class TestConversion(PyvipsTester):
             after = result(30, 30)
             predict = [x ** exponent / norm for x in before]
             for a, b in zip(after, predict):
-                # ie. less than 1% error, rounding on 7-bit images means this is
-                # all we can expect
+                # ie. less than 1% error, rounding on 7-bit images
+                # means this is all we can expect
                 self.assertLess(abs(a - b), mx / 100.0)
 
         exponent = 1.2
@@ -385,13 +389,13 @@ class TestConversion(PyvipsTester):
             test = (self.colour + mx / 2.0).cast(fmt)
 
             norm = mx ** exponent / mx
-            result = test.gamma(exponent = 1.0 / 1.2)
+            result = test.gamma(exponent=1.0 / 1.2)
             before = test(30, 30)
             after = result(30, 30)
             predict = [x ** exponent / norm for x in before]
             for a, b in zip(after, predict):
-                # ie. less than 1% error, rounding on 7-bit images means this is
-                # all we can expect
+                # ie. less than 1% error, rounding on 7-bit images
+                # means this is all we can expect
                 self.assertLess(abs(a - b), mx / 100.0)
 
     def test_grid(self):
@@ -465,7 +469,7 @@ class TestConversion(PyvipsTester):
             for y in all_formats:
                 t = (self.mono + 10).cast(x)
                 e = self.mono.cast(y)
-                r = test.ifthenelse(t, e, blend = True)
+                r = test.ifthenelse(t, e, blend=True)
 
                 self.assertEqual(r.width, self.colour.width)
                 self.assertEqual(r.height, self.colour.height)
@@ -487,16 +491,16 @@ class TestConversion(PyvipsTester):
         self.assertAlmostEqualObjects(result, [1, 2, 3])
 
         test = self.mono
-        r = test.ifthenelse([1, 2, 3], self.colour, blend = True)
+        r = test.ifthenelse([1, 2, 3], self.colour, blend=True)
         self.assertEqual(r.width, self.colour.width)
         self.assertEqual(r.height, self.colour.height)
         self.assertEqual(r.bands, self.colour.bands)
         self.assertEqual(r.format, self.colour.format)
         self.assertEqual(r.interpretation, self.colour.interpretation)
         result = r(10, 10)
-        self.assertAlmostEqualObjects(result, [2, 3, 4], places = 1)
+        self.assertAlmostEqualObjects(result, [2, 3, 4], places=1)
         result = r(50, 50)
-        self.assertAlmostEqualObjects(result, [3.0, 4.9, 6.9], places = 1)
+        self.assertAlmostEqualObjects(result, [3.0, 4.9, 6.9], places=1)
 
     def test_insert(self):
         for x in all_formats:
@@ -521,7 +525,7 @@ class TestConversion(PyvipsTester):
             for y in all_formats:
                 main = self.mono.cast(x)
                 sub = self.colour.cast(y)
-                r = main.insert(sub, 10, 10, expand = True, background = 100)
+                r = main.insert(sub, 10, 10, expand=True, background=100)
 
                 self.assertEqual(r.width, main.width + 10)
                 self.assertEqual(r.height, main.height + 10)
@@ -547,12 +551,12 @@ class TestConversion(PyvipsTester):
         self.assertEqual(im.height, max_height)
         self.assertEqual(im.bands, max_bands)
 
-        im = pyvips.Image.arrayjoin(self.all_images, across = 1)
+        im = pyvips.Image.arrayjoin(self.all_images, across=1)
         self.assertEqual(im.width, max_width)
         self.assertEqual(im.height, max_height * len(self.all_images))
         self.assertEqual(im.bands, max_bands)
 
-        im = pyvips.Image.arrayjoin(self.all_images, shim = 10)
+        im = pyvips.Image.arrayjoin(self.all_images, shim=10)
         self.assertEqual(im.width, max_width * len(self.all_images) +
                          10 * (len(self.all_images) - 1))
         self.assertEqual(im.height, max_height)
@@ -595,7 +599,7 @@ class TestConversion(PyvipsTester):
             mx = max_value[fmt]
             size = sizeof_format[fmt]
             test = (self.colour + mx / 8.0).cast(fmt)
-            im = test.msb(band = 1)
+            im = test.msb(band=1)
 
             before = [test(10, 10)[1]]
             predict = [int(x) >> ((size - 1) * 8) for x in before]
@@ -619,7 +623,7 @@ class TestConversion(PyvipsTester):
                     sum += i * c
                 return [sum]
 
-        self.run_unary([self.colour], recomb, fmt = noncomplex_formats)
+        self.run_unary([self.colour], recomb, fmt=noncomplex_formats)
 
     def test_replicate(self):
         for fmt in all_formats:
@@ -649,8 +653,8 @@ class TestConversion(PyvipsTester):
             self.assertAlmostEqualObjects(before, after)
 
             for a, b in zip(rot45_angles, rot45_angle_bonds):
-                im2 = im.rot45(angle = a)
-                after = im2.rot45(angle = b)
+                im2 = im.rot45(angle=a)
+                after = im2.rot45(angle=b)
                 diff = (after - im).abs().max()
                 self.assertEqual(diff, 0)
 
@@ -679,7 +683,7 @@ class TestConversion(PyvipsTester):
             self.assertEqual(im.max(), 255)
             self.assertEqual(im.min(), 0)
 
-            im = test.scale(log = True)
+            im = test.scale(log=True)
             self.assertEqual(im.max(), 255)
 
     def test_subsample(self):
@@ -722,6 +726,6 @@ class TestConversion(PyvipsTester):
             after = im(0, 0)
             self.assertAlmostEqualObjects(before, after)
 
+
 if __name__ == '__main__':
     unittest.main()
-

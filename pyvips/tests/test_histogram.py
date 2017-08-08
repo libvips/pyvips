@@ -1,9 +1,11 @@
 # vim: set fileencoding=utf-8 :
+import unittest
 
-from .helpers import *
+import pyvips
+from .helpers import PyvipsTester, JPEG_FILE
+
 
 class TestHistogram(PyvipsTester):
-
     def test_hist_cum(self):
         im = pyvips.Image.identity()
 
@@ -40,7 +42,7 @@ class TestHistogram(PyvipsTester):
         self.assertTrue(im.avg() < im2.avg())
         self.assertTrue(im.deviate() < im2.deviate())
 
-        im3 = im.hist_local(10, 10, max_slope = 3)
+        im3 = im.hist_local(10, 10, max_slope=3)
 
         self.assertEqual(im.width, im2.width)
         self.assertEqual(im.height, im2.height)
@@ -86,14 +88,14 @@ class TestHistogram(PyvipsTester):
         n_set = (msk.avg() * msk.width * msk.height) / 255.0
         pc_set = 100 * n_set / (msk.width * msk.height)
 
-        self.assertAlmostEqual(pc_set, 90, places = 0)
+        self.assertAlmostEqual(pc_set, 90, places=0)
 
     def test_hist_entropy(self):
         im = pyvips.Image.new_from_file(JPEG_FILE).extract_band(1)
 
         ent = im.hist_find().hist_entropy()
 
-        self.assertAlmostEqual(ent, 4.37, places = 2)
+        self.assertAlmostEqual(ent, 4.37, places=2)
 
     def test_stdif(self):
         im = pyvips.Image.new_from_file(JPEG_FILE)
@@ -106,6 +108,6 @@ class TestHistogram(PyvipsTester):
         # new mean should be closer to target mean
         self.assertTrue(abs(im.avg() - 128) > abs(im2.avg() - 128))
 
+
 if __name__ == '__main__':
     unittest.main()
-

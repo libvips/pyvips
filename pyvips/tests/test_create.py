@@ -1,6 +1,9 @@
 # vim: set fileencoding=utf-8 :
+import unittest
 
-from .helpers import *
+import pyvips
+from .helpers import PyvipsTester
+
 
 class TestCreate(PyvipsTester):
     def test_black(self):
@@ -10,25 +13,25 @@ class TestCreate(PyvipsTester):
         self.assertEqual(im.height, 100)
         self.assertEqual(im.format, pyvips.BandFormat.UCHAR)
         self.assertEqual(im.bands, 1)
-        for i in range (0, 100):
+        for i in range(0, 100):
             pixel = im(i, i)
             self.assertEqual(len(pixel), 1)
             self.assertEqual(pixel[0], 0)
 
-        im = pyvips.Image.black(100, 100, bands = 3)
+        im = pyvips.Image.black(100, 100, bands=3)
 
         self.assertEqual(im.width, 100)
         self.assertEqual(im.height, 100)
         self.assertEqual(im.format, pyvips.BandFormat.UCHAR)
         self.assertEqual(im.bands, 3)
-        for i in range (0, 100):
+        for i in range(0, 100):
             pixel = im(i, i)
             self.assertEqual(len(pixel), 3)
             self.assertAlmostEqualObjects(pixel, [0, 0, 0])
 
     def test_buildlut(self):
-        M = pyvips.Image.new_from_array([[0, 0], 
-                                       [255, 100]])
+        M = pyvips.Image.new_from_array([[0, 0],
+                                         [255, 100]])
         lut = M.buildlut()
         self.assertEqual(lut.width, 256)
         self.assertEqual(lut.height, 1)
@@ -40,9 +43,9 @@ class TestCreate(PyvipsTester):
         p = lut(10, 0)
         self.assertEqual(p[0], 100 * 10.0 / 255.0)
 
-        M = pyvips.Image.new_from_array([[0, 0, 100], 
-                                       [255, 100, 0],
-                                       [128, 10, 90]])
+        M = pyvips.Image.new_from_array([[0, 0, 100],
+                                         [255, 100, 0],
+                                         [128, 10, 90]])
         lut = M.buildlut()
         self.assertEqual(lut.width, 256)
         self.assertEqual(lut.height, 1)
@@ -61,7 +64,7 @@ class TestCreate(PyvipsTester):
         self.assertEqual(im.max(), 1.0)
         self.assertEqual(im.min(), -1.0)
 
-        im = pyvips.Image.eye(100, 90, uchar = True)
+        im = pyvips.Image.eye(100, 90, uchar=True)
         self.assertEqual(im.width, 100)
         self.assertEqual(im.height, 90)
         self.assertEqual(im.bands, 1)
@@ -89,8 +92,8 @@ class TestCreate(PyvipsTester):
         p = im(im.width / 2, im.height / 2)
         self.assertEqual(p[0], 20.0)
 
-        im = pyvips.Image.gaussmat(1, 0.1, 
-                                 separable = True, precision = "float")
+        im = pyvips.Image.gaussmat(1, 0.1,
+                                   separable=True, precision="float")
         self.assertEqual(im.width, 5)
         self.assertEqual(im.height, 1)
         self.assertEqual(im.bands, 1)
@@ -109,7 +112,7 @@ class TestCreate(PyvipsTester):
         self.assertEqual(im.bands, 1)
         self.assertEqual(im.format, pyvips.BandFormat.FLOAT)
 
-        im = pyvips.Image.gaussnoise(100, 90, sigma = 10, mean = 100)
+        im = pyvips.Image.gaussnoise(100, 90, sigma=10, mean=100)
         self.assertEqual(im.width, 100)
         self.assertEqual(im.height, 90)
         self.assertEqual(im.bands, 1)
@@ -118,8 +121,8 @@ class TestCreate(PyvipsTester):
         sigma = im.deviate()
         mean = im.avg()
 
-        self.assertAlmostEqual(sigma, 10, places = 0)
-        self.assertAlmostEqual(mean, 100, places = 0)
+        self.assertAlmostEqual(sigma, 10, places=0)
+        self.assertAlmostEqual(mean, 100, places=0)
 
     def test_grey(self):
         im = pyvips.Image.grey(100, 90)
@@ -137,7 +140,7 @@ class TestCreate(PyvipsTester):
         p = im(99, 89)
         self.assertEqual(p[0], 1.0)
 
-        im = pyvips.Image.grey(100, 90, uchar = True)
+        im = pyvips.Image.grey(100, 90, uchar=True)
         self.assertEqual(im.width, 100)
         self.assertEqual(im.height, 90)
         self.assertEqual(im.bands, 1)
@@ -166,7 +169,7 @@ class TestCreate(PyvipsTester):
         p = im(128, 0)
         self.assertEqual(p[0], 128.0)
 
-        im = pyvips.Image.identity(ushort = True)
+        im = pyvips.Image.identity(ushort=True)
         self.assertEqual(im.width, 65536)
         self.assertEqual(im.height, 1)
         self.assertEqual(im.bands, 1)
@@ -180,9 +183,9 @@ class TestCreate(PyvipsTester):
         self.assertEqual(p[0], 65535)
 
     def test_invertlut(self):
-        lut = pyvips.Image.new_from_array([[0.1, 0.2, 0.3, 0.1], 
-                                         [0.2, 0.4, 0.4, 0.2], 
-                                         [0.7, 0.5, 0.6, 0.3]])
+        lut = pyvips.Image.new_from_array([[0.1, 0.2, 0.3, 0.1],
+                                           [0.2, 0.4, 0.4, 0.2],
+                                           [0.7, 0.5, 0.6, 0.3]])
         im = lut.invertlut()
         self.assertEqual(im.width, 256)
         self.assertEqual(im.height, 1)
@@ -194,11 +197,11 @@ class TestCreate(PyvipsTester):
         p = im(255, 0)
         self.assertAlmostEqualObjects(p, [1, 1, 1])
         p = im(0.2 * 255, 0)
-        self.assertAlmostEqual(p[0], 0.1, places = 2)
+        self.assertAlmostEqual(p[0], 0.1, places=2)
         p = im(0.3 * 255, 0)
-        self.assertAlmostEqual(p[1], 0.1, places = 2)
+        self.assertAlmostEqual(p[1], 0.1, places=2)
         p = im(0.1 * 255, 0)
-        self.assertAlmostEqual(p[2], 0.1, places = 2)
+        self.assertAlmostEqual(p[2], 0.1, places=2)
 
     def test_logmat(self):
         im = pyvips.Image.logmat(1, 0.1)
@@ -213,8 +216,8 @@ class TestCreate(PyvipsTester):
         p = im(im.width / 2, im.height / 2)
         self.assertEqual(p[0], 20.0)
 
-        im = pyvips.Image.logmat(1, 0.1, 
-                               separable = True, precision = "float")
+        im = pyvips.Image.logmat(1, 0.1,
+                                 separable=True, precision="float")
         self.assertEqual(im.width, 7)
         self.assertEqual(im.height, 1)
         self.assertEqual(im.bands, 1)
@@ -227,17 +230,20 @@ class TestCreate(PyvipsTester):
         self.assertEqual(p[0], 1.0)
 
     def test_mask_butterworth_band(self):
-        im = pyvips.Image.mask_butterworth_band(128, 128, 2, 0.5, 0.5, 0.7, 0.1)
+        im = pyvips.Image.mask_butterworth_band(128, 128, 2,
+                                                0.5, 0.5, 0.7,
+                                                0.1)
         self.assertEqual(im.width, 128)
         self.assertEqual(im.height, 128)
         self.assertEqual(im.bands, 1)
         self.assertEqual(im.format, pyvips.BandFormat.FLOAT)
-        self.assertAlmostEqual(im.max(), 1, places = 2)
+        self.assertAlmostEqual(im.max(), 1, places=2)
         p = im(32, 32)
         self.assertEqual(p[0], 1.0)
 
-        im = pyvips.Image.mask_butterworth_band(128, 128, 2, 0.5, 0.5, 0.7, 0.1,
-                                             uchar = True, optical = True)
+        im = pyvips.Image.mask_butterworth_band(128, 128, 2,
+                                                0.5, 0.5, 0.7,
+                                                0.1, uchar=True, optical=True)
         self.assertEqual(im.width, 128)
         self.assertEqual(im.height, 128)
         self.assertEqual(im.bands, 1)
@@ -248,9 +254,10 @@ class TestCreate(PyvipsTester):
         p = im(64, 64)
         self.assertEqual(p[0], 255.0)
 
-        im = pyvips.Image.mask_butterworth_band(128, 128, 2, 0.5, 0.5, 0.7, 0.1,
-                                             uchar = True, optical = True, 
-                                             nodc = True)
+        im = pyvips.Image.mask_butterworth_band(128, 128, 2,
+                                                0.5, 0.5, 0.7,
+                                                0.1, uchar=True, optical=True,
+                                                nodc=True)
         self.assertEqual(im.width, 128)
         self.assertEqual(im.height, 128)
         self.assertEqual(im.bands, 1)
@@ -262,38 +269,38 @@ class TestCreate(PyvipsTester):
         self.assertNotEqual(p[0], 255)
 
     def test_mask_butterworth(self):
-        im = pyvips.Image.mask_butterworth(128, 128, 2, 0.7, 0.1, 
-                                         nodc = True)
+        im = pyvips.Image.mask_butterworth(128, 128, 2, 0.7, 0.1,
+                                           nodc=True)
         self.assertEqual(im.width, 128)
         self.assertEqual(im.height, 128)
         self.assertEqual(im.bands, 1)
         self.assertEqual(im.format, pyvips.BandFormat.FLOAT)
-        self.assertAlmostEqual(im.min(), 0, places = 2)
+        self.assertAlmostEqual(im.min(), 0, places=2)
         p = im(0, 0)
         self.assertEqual(p[0], 0.0)
         v, x, y = im.maxpos()
         self.assertEqual(x, 64)
         self.assertEqual(y, 64)
 
-        im = pyvips.Image.mask_butterworth(128, 128, 2, 0.7, 0.1, 
-                                         optical = True, uchar = True)
+        im = pyvips.Image.mask_butterworth(128, 128, 2, 0.7, 0.1,
+                                           optical=True, uchar=True)
         self.assertEqual(im.width, 128)
         self.assertEqual(im.height, 128)
         self.assertEqual(im.bands, 1)
         self.assertEqual(im.format, pyvips.BandFormat.UCHAR)
-        self.assertAlmostEqual(im.min(), 0, places = 2)
+        self.assertAlmostEqual(im.min(), 0, places=2)
         p = im(64, 64)
         self.assertEqual(p[0], 255)
 
     def test_mask_butterworth_ring(self):
         im = pyvips.Image.mask_butterworth_ring(128, 128, 2, 0.7, 0.1, 0.5,
-                                         nodc = True)
+                                                nodc=True)
         self.assertEqual(im.width, 128)
         self.assertEqual(im.height, 128)
         self.assertEqual(im.bands, 1)
         self.assertEqual(im.format, pyvips.BandFormat.FLOAT)
         p = im(45, 0)
-        self.assertAlmostEqual(p[0], 1.0, places = 4)
+        self.assertAlmostEqual(p[0], 1.0, places=4)
         v, x, y = im.minpos()
         self.assertEqual(x, 64)
         self.assertEqual(y, 64)
@@ -311,30 +318,30 @@ class TestCreate(PyvipsTester):
         self.assertEqual(im.height, 128)
         self.assertEqual(im.bands, 1)
         self.assertEqual(im.format, pyvips.BandFormat.FLOAT)
-        self.assertAlmostEqual(im.max(), 1, places = 2)
+        self.assertAlmostEqual(im.max(), 1, places=2)
         p = im(32, 32)
         self.assertEqual(p[0], 1.0)
 
     def test_mask_gaussian(self):
-        im = pyvips.Image.mask_gaussian(128, 128, 0.7, 0.1, 
-                                         nodc = True)
+        im = pyvips.Image.mask_gaussian(128, 128, 0.7, 0.1,
+                                        nodc=True)
         self.assertEqual(im.width, 128)
         self.assertEqual(im.height, 128)
         self.assertEqual(im.bands, 1)
         self.assertEqual(im.format, pyvips.BandFormat.FLOAT)
-        self.assertAlmostEqual(im.min(), 0, places = 2)
+        self.assertAlmostEqual(im.min(), 0, places=2)
         p = im(0, 0)
         self.assertEqual(p[0], 0.0)
 
     def test_mask_gaussian_ring(self):
         im = pyvips.Image.mask_gaussian_ring(128, 128, 0.7, 0.1, 0.5,
-                                         nodc = True)
+                                             nodc=True)
         self.assertEqual(im.width, 128)
         self.assertEqual(im.height, 128)
         self.assertEqual(im.bands, 1)
         self.assertEqual(im.format, pyvips.BandFormat.FLOAT)
         p = im(45, 0)
-        self.assertAlmostEqual(p[0], 1.0, places = 3)
+        self.assertAlmostEqual(p[0], 1.0, places=3)
 
     def test_mask_ideal_band(self):
         im = pyvips.Image.mask_ideal_band(128, 128, 0.5, 0.5, 0.7)
@@ -342,30 +349,30 @@ class TestCreate(PyvipsTester):
         self.assertEqual(im.height, 128)
         self.assertEqual(im.bands, 1)
         self.assertEqual(im.format, pyvips.BandFormat.FLOAT)
-        self.assertAlmostEqual(im.max(), 1, places = 2)
+        self.assertAlmostEqual(im.max(), 1, places=2)
         p = im(32, 32)
         self.assertEqual(p[0], 1.0)
 
     def test_mask_ideal(self):
-        im = pyvips.Image.mask_ideal(128, 128, 0.7, 
-                                         nodc = True)
+        im = pyvips.Image.mask_ideal(128, 128, 0.7,
+                                     nodc=True)
         self.assertEqual(im.width, 128)
         self.assertEqual(im.height, 128)
         self.assertEqual(im.bands, 1)
         self.assertEqual(im.format, pyvips.BandFormat.FLOAT)
-        self.assertAlmostEqual(im.min(), 0, places = 2)
+        self.assertAlmostEqual(im.min(), 0, places=2)
         p = im(0, 0)
         self.assertEqual(p[0], 0.0)
 
-    def test_mask_gaussian_ring(self):
+    def test_mask_gaussian_ring_2(self):
         im = pyvips.Image.mask_ideal_ring(128, 128, 0.7, 0.5,
-                                         nodc = True)
+                                          nodc=True)
         self.assertEqual(im.width, 128)
         self.assertEqual(im.height, 128)
         self.assertEqual(im.bands, 1)
         self.assertEqual(im.format, pyvips.BandFormat.FLOAT)
         p = im(45, 0)
-        self.assertAlmostEqual(p[0], 1.0, places = 3)
+        self.assertAlmostEqual(p[0], 1.0, places=3)
 
     def test_sines(self):
         im = pyvips.Image.sines(128, 128)
@@ -375,13 +382,14 @@ class TestCreate(PyvipsTester):
         self.assertEqual(im.format, pyvips.BandFormat.FLOAT)
 
     def test_text(self):
-        im = pyvips.Image.text("Hello, world!")
-        self.assertTrue(im.width > 10)
-        self.assertTrue(im.height > 10)
-        self.assertEqual(im.bands, 1)
-        self.assertEqual(im.format, pyvips.BandFormat.UCHAR)
-        self.assertEqual(im.max(), 255)
-        self.assertEqual(im.min(), 0)
+        if pyvips.type_find("VipsOperation", "text") != 0:
+            im = pyvips.Image.text("Hello, world!")
+            self.assertTrue(im.width > 10)
+            self.assertTrue(im.height > 10)
+            self.assertEqual(im.bands, 1)
+            self.assertEqual(im.format, pyvips.BandFormat.UCHAR)
+            self.assertEqual(im.max(), 255)
+            self.assertEqual(im.min(), 0)
 
     def test_tonelut(self):
         im = pyvips.Image.tonelut()
@@ -421,6 +429,6 @@ class TestCreate(PyvipsTester):
         self.assertEqual(im.bands, 1)
         self.assertEqual(im.format, pyvips.BandFormat.FLOAT)
 
+
 if __name__ == '__main__':
     unittest.main()
-

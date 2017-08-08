@@ -1,9 +1,11 @@
 # vim: set fileencoding=utf-8 :
+import unittest
 
-from .helpers import *
+import pyvips
+from .helpers import PyvipsTester
+
 
 class TestIofuncs(PyvipsTester):
-
     # test the vips7 filename splitter ... this is very fragile and annoying
     # code with lots of cases
     def test_split7(self):
@@ -15,28 +17,28 @@ class TestIofuncs(PyvipsTester):
 
         cases = [
             ["c:\\silly:dir:name\\fr:ed.tif:jpeg:95,,,,c:\\icc\\srgb.icc",
-                ["c:\\silly:dir:name\\fr:ed.tif", 
-                 "jpeg:95,,,,c:\\icc\\srgb.icc"]],
+             ["c:\\silly:dir:name\\fr:ed.tif",
+              "jpeg:95,,,,c:\\icc\\srgb.icc"]],
             ["I180:",
-                ["I180",
-                 ""]],
+             ["I180",
+              ""]],
             ["c:\\silly:",
-                ["c:\\silly",
-                 ""]],
+             ["c:\\silly",
+              ""]],
             ["c:\\program files\\x:hello",
-                ["c:\\program files\\x",
-                 "hello"]],
+             ["c:\\program files\\x",
+              "hello"]],
             ["C:\\fixtures\\2569067123_aca715a2ee_o.jpg",
-                ["C:\\fixtures\\2569067123_aca715a2ee_o.jpg",
-                 ""]]
+             ["C:\\fixtures\\2569067123_aca715a2ee_o.jpg",
+              ""]]
         ]
-            
+
         for case in cases:
             self.assertEqualObjects(split(case[0]), case[1])
 
     def test_new_from_image(self):
-        im = pyvips.Image.mask_ideal(100, 100, 0.5, 
-                                     reject = True, optical = True)
+        im = pyvips.Image.mask_ideal(100, 100, 0.5,
+                                     reject=True, optical=True)
 
         im2 = im.new_from_image(12)
 
@@ -51,10 +53,11 @@ class TestIofuncs(PyvipsTester):
         self.assertEqual(im2.bands, 1)
         self.assertEqual(im2.avg(), 12)
 
-        im2 = im.new_from_image([1,2,3])
+        im2 = im.new_from_image([1, 2, 3])
 
         self.assertEqual(im2.bands, 3)
         self.assertEqual(im2.avg(), 2)
+
 
 if __name__ == '__main__':
     unittest.main()

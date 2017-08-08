@@ -2,9 +2,10 @@
 
 from __future__ import division
 
+import gc
 import logging
 
-from pyvips import *
+from pyvips import ffi, vips_lib, gobject_lib
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +19,7 @@ ffi.cdef('''
     typedef struct _GParamSpec {
         void* g_type_instance;
 
-        const char* name;     
+        const char* name;
         unsigned int flags;
         GType value_type;
         GType owner_type;
@@ -29,23 +30,23 @@ ffi.cdef('''
     void g_object_ref (void* object);
     void g_object_unref (void* object);
 
-    void g_object_set_property (GObject* object, 
+    void g_object_set_property (GObject* object,
         const char *name, GValue* value);
-    void g_object_get_property (GObject* object, 
+    void g_object_get_property (GObject* object,
         const char* name, GValue* value);
 
 ''')
 
-class GObject(object):
 
+class GObject(object):
     def __init__(self, pointer):
         # record the pointer we were given to manage
         self.pointer = pointer
-        # logger.debug('GObject.__init__: pointer = {0}'.format(self.pointer))
+        # logger.debug('GObject.__init__: pointer = %s', str(self.pointer))
 
         # on GC, unref
         self.gobject = ffi.gc(self.pointer, gobject_lib.g_object_unref)
-        # logger.debug('GObject.__init__: gobject = {0}'.format(self.gobject))
+        # logger.debug('GObject.__init__: gobject = %s', str(self.gobject))
 
     @staticmethod
     def print_all(msg):
@@ -53,5 +54,6 @@ class GObject(object):
         print(msg)
         vips_lib.vips_object_print_all()
         print()
+
 
 __all__ = ['GObject']

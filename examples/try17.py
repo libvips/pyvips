@@ -1,11 +1,13 @@
 #!/usr/bin/python3
 
 import sys
-import logging
+
 import pyvips
 
-# pyvips.cache_set_trace(True)
+# import logging
 # logging.basicConfig(level = logging.DEBUG)
+
+# pyvips.cache_set_trace(True)
 
 a = pyvips.Image.new_from_file(sys.argv[1])
 

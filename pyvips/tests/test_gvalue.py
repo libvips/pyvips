@@ -1,6 +1,9 @@
 # vim: set fileencoding=utf-8 :
+import unittest
 
-from .helpers import *
+import pyvips
+from .helpers import PyvipsTester, JPEG_FILE
+
 
 class TestGValue(PyvipsTester):
     def test_bool(self):
@@ -99,6 +102,6 @@ class TestGValue(PyvipsTester):
         value = gv.get()
         self.assertEqual(value, blob)
 
+
 if __name__ == '__main__':
     unittest.main()
-
