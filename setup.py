@@ -10,21 +10,21 @@ from os import path
 
 here = path.abspath(path.dirname(__file__))
 
-with open(path.join(here, 'README.rst'), encoding = 'utf-8') as f:
+with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name = 'pyvips',
-    version = '2.0.0.dev1',
-    description = 'binding for the libvips image processing library',
-    long_description = long_description,
-    url = 'https://github.com/jcupitt/pyvips',
-    author = 'John Cupitt',
-    author_email = 'jcupitt@gmail.com',
-    license = 'MIT',
+    name='pyvips',
+    version='2.0.0.dev1',
+    description='binding for the libvips image processing library',
+    long_description=long_description,
+    url='https://github.com/jcupitt/pyvips',
+    author='John Cupitt',
+    author_email='jcupitt@gmail.com',
+    license='MIT',
 
     # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
-    classifiers = [
+    classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Console',
         'Intended Audience :: Developers',
@@ -39,15 +39,15 @@ setup(
         'Programming Language :: Python :: 3.5',
     ],
 
-    keywords = 'image processing',
-    packages = find_packages(exclude = ['contrib', 'docs', 'tests', 'examples',
-                                        'test_images']),
+    keywords='image processing',
+    packages=find_packages(exclude=['contrib', 'docs', 'tests', 'examples',
+                                    'test_images']),
 
-    install_requires = ['cffi'],
+    install_requires=['cffi'],
 
-    extras_require = {
+    extras_require={
         'test': ['nose'],
     },
-    test_suite = 'nose.collector',
+    test_suite='nose.collector',
 
 )
