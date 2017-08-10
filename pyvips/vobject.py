@@ -1,3 +1,16 @@
+"""
+:mod:`vobject` -- Wrap the VipsObject class
+===========================================
+
+.. module:: vobject
+    :synopsis: Easy interface to VipsObject 
+.. moduleauthor:: John Cupitt <jcupitt@gmail.com>
+.. moduleauthor:: Kleis Auke Wolthuizen <x@y.z>
+
+Get and set object argument properties.
+
+"""
+
 # wrap VipsObject
 
 from __future__ import division

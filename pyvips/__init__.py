@@ -1,14 +1,22 @@
-# wrapper for libvips
 # flake8: noqa
 
 """
-This module wraps the libvips image processing library.
+:mod:`pyvips` -- Image processing with libvips
+==============================================
 
-It needs vips-8.2 or later to be installed, and it uses cffi to call into the
-library, so you need to have the compiled library on your library search path.
+.. module:: pyvips
+    :synopsis: Interface to the libvips image processing library.
+.. moduleauthor:: John Cupitt <jcupitt@gmail.com>
+.. moduleauthor:: Kleis Auke Wolthuizen <x@y.z>
 
-See https://jcupitt.github.io/libvips for an introduction to the underlying
-library. These notes introduce the Python binding.
+This module wraps the libvips image processing library. It needs vips-8.2
+or later to be installed, and it uses cffi to call into the library, so
+you need to have the compiled library on your library search path.
+
+See the main libvips site for an introduction to the underlying library. These
+notes introduce the Python binding.
+
+https://jcupitt.github.io/libvips 
 
 Example
 =======
@@ -18,31 +26,30 @@ sharpens the image, and saves it back to disc again::
 
     import pyvips
 
-    image = pyvips.Image.new_from_file('some-image.jpg', access = 'sequential')
+    image = pyvips.Image.new_from_file('some-image.jpg', access='sequential')
     image *= [1, 2, 1]
     mask = pyvips.Image.new_from_array([
         [-1, -1, -1],
         [-1, 16, -1],
         [-1, -1, -1]
-       ], scale = 8)
-    image = image.conv(mask, precision = 'integer')
+       ], scale=8)
+    image = image.conv(mask, precision='integer')
     image.write_to_file('x.jpg')
 
 Reading this example line by line, we have::
 
-    image = pyvips.Image.new_from_file('some-image.jpg', access = 'sequential')
+    image = pyvips.Image.new_from_file('some-image.jpg', access='sequential')
 
-`Image.new_from_file` can load any image file supported by vips. In this
-example, we will be accessing pixels top-to-bottom as we sweep through the
-image reading and writing, so `sequential` access mode is best for us.
+:func:`Image.new_from_file` can load any image file supported by libvips. In
+this example, we will be accessing pixels top-to-bottom as we sweep through
+the image reading and writing, so `sequential` access mode is best for us.
 
 The default mode is `random` which allows for full random access to image
-pixels, but is slower and needs more memory. See `Access` for full details
-on the various modes available.
+pixels, but is slower and needs more memory. See :class:`Access` for full
+details on the various modes available.
 
-You can also load formatted images from
-memory buffers, create images that wrap C-style memory arrays, or make images
-from constants.
+You can also load formatted images from memory buffers, create images that
+wrap C-style memory arrays, or make images from constants.
 
 The next line::
 
@@ -167,64 +174,59 @@ and profile will be a byte array.
 If an operation takes several input images, you can use a constant for all but
 one of them and the wrapper will expand the constant to an image for you. For
 example, {Image#ifthenelse} uses a condition image to pick pixels
-between a then and an else image:
+between a then and an else image::
 
-```ruby
-result_image = condition_image.ifthenelse then_image, else_image
-```
+    result_image = condition_image.ifthenelse(then_image, else_image)
 
 You can use a constant instead of either the then or the else parts and it
 will be expanded to an image for you. If you use a constant for both then and
-else, it will be expanded to match the condition image. For example:
+else, it will be expanded to match the condition image. For example::
 
-```ruby
-result_image = condition_image.ifthenelse [0, 255, 0], [255, 0, 0]
-```
+    result_image = condition_image.ifthenelse([0, 255, 0], [255, 0, 0])
 
 Will make an image where true pixels are green and false pixels are red.
 
 This is useful for {Image#bandjoin}, the thing to join two or more
-images up bandwise. You can write:
+images up bandwise. You can write::
 
-```ruby
-rgba = rgb.bandjoin 255
-```
+    rgba = rgb.bandjoin(255)
 
 to append a constant 255 band to an image, perhaps to add an alpha channel. Of
-course you can also write:
+course you can also write::
 
-```ruby
-result_image = image1.bandjoin image2
-result_image = image1.bandjoin [image2, image3]
-result_image = Vips::Image.bandjoin [image1, image2, image3]
-result_image = image1.bandjoin [image2, 255]
-```
+    result_image = image1.bandjoin(image2)
+    result_image = image1.bandjoin([image2, image3])
+    result_image = pyvips.Image.bandjoin([image1, image2, image3])
+    result_image = image1.bandjoin([image2, 255])
 
 and so on.
 
- Automatic YARD documentation
+Automatic YARD documentation
+============================
 
 The bulk of these API docs are generated automatically by
-{Vips::generate_yard}. It examines
-libvips and writes a summary of each operation and the arguments and options
-that that operation expects.
+{Vips::generate_yard}. It examines libvips and writes a summary of each
+operation and the arguments and options that that operation expects.
 
-Use the [C API
-docs](https://jcupitt.github.io/libvips/API/current)
-for more detail.
+Use the C API docs for more detail:
 
- Exceptions
+https://jcupitt.github.io/libvips/API/current
 
-The wrapper spots errors from vips operations and raises the {Vips::Error}
+Exceptions
+==========
+
+The wrapper spots errors from vips operations and raises the {pyvips.Error}
 exception. You can catch it in the usual way.
 
- Enums
+Enums
+=====
 
-The libvips enums, such as `VipsBandFormat` appear in ruby-vips as Symbols
-like `:uchar`. They are documented as a set of classes for convenience, see
+The libvips enums, such as ``VipsBandFormat``, appear in pyvips as strings
+like ``'uchar'``. They are documented as a set of classes for convenience, see
 the class list.
 
- Draw operations
+Draw operations
+===============
 
 Paint operations like {Image#draw_circle} and {Image#draw_line}
 modify their input image. This
@@ -240,39 +242,34 @@ where possible, so you won't have 100 copies in memory.
 If you want to avoid the copies, you'll need to call drawing operations
 yourself.
 
- Overloads
+Overloads
+=========
 
 The wrapper defines the usual set of arithmetic, boolean and relational
 overloads on image. You can mix images, constants and lists of constants
-(almost) freely. For example, you can write:
+(almost) freely. For example, you can write::
 
-```ruby
-result_image = ((image * [1, 2, 3]).abs < 128) | 4
-```
+    result_image = ((image * [1, 2, 3]).abs() < 128) | 4
 
- Expansions
+Expansions
+==========
 
 Some vips operators take an enum to select an action, for example
-{Image#math} can be used to calculate sine of every pixel like this:
+{Image#math} can be used to calculate sine of every pixel like this::
 
-```ruby
-result_image = image.math :sin
-```
+    result_image = image.math('sin')
 
 This is annoying, so the wrapper expands all these enums into separate members
-named after the enum. So you can write:
+named after the enum. So you can also write::
 
-```ruby
-result_image = image.sin
-```
+    result_image = image.sin()
 
- Convenience functions
+Convenience functions
+=====================
 
 The wrapper defines a few extra useful utility functions:
-{Image#get_value}, {Image#set_value}, {Image#bandsplit},
-{Image#maxpos}, {Image#minpos},
+{Image#get}, {Image#set}, {Image#bandsplit}, {Image#maxpos}, {Image#minpos},
 {Image#median}.
-
 
 """
 

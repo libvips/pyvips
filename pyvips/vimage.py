@@ -1,4 +1,15 @@
-# wrap VipsImage
+"""
+:mod:`Image` -- An image
+========================
+
+.. module:: Image
+    :synopsis: The base image class. 
+.. moduleauthor:: John Cupitt <jcupitt@gmail.com>
+.. moduleauthor:: Kleis Auke Wolthuizen <x@y.z>
+
+This module defines the pyvips Image class. 
+
+"""
 
 from __future__ import division
 
@@ -143,6 +154,12 @@ class ImageType(type):
 
 @_with_metaclass(ImageType)
 class Image(pyvips.VipsObject):
+    """The pyvips image class.
+
+    This class represents a VipsImage object.
+
+    """
+
     # private static
 
     @staticmethod
@@ -163,6 +180,53 @@ class Image(pyvips.VipsObject):
 
     @staticmethod
     def new_from_file(vips_filename, **kwargs):
+        """Load an image from a file.
+
+        This method can load images in any format supported by vips. The 
+        filename can include load options, for example::
+
+            image = pyvips.Image.new_from_file('fred.jpg[shrink=2]')
+
+        You can also supply options as keyword arguments, for example::
+        
+            image = pyvips.Image.new_from_file('fred.jpg', shrink=2)
+
+        The full set of options available depend upon the load operation that 
+        will be executed. Try something like::
+        
+            $ vips jpegload
+        
+        at the command-line to see a summary of the available options for the
+        JPEG loader.
+
+        Loading is fast: only enough of the image is loaded to be able to fill
+        out the header. Pixels will only be decompressed when they are needed.
+
+        Args:
+            ``vips_filename``: The disc file to load the image from, with
+            optional appended arguments.
+
+        All loaders support the following options:
+
+        ``memory``:
+            If set True, load the image via memory rather than via a temporary
+            disc file. See temp_image_file for notes on where temporary files
+            are created. Small images are loaded via memory by default, use
+            VIPS_DISC_THRESHOLD to set the definition of small.
+        ``access``:
+            Hint the expected access pattern for the image, see :class:`Access`.
+        ``fail``:
+            If set True, the loader will fail with an error on the first serious 
+            error in the file. By default, libvips will attempt to read 
+            everything it can from a damanged image. 
+
+        Returns:
+            An :class:`Image`. 
+
+        Raises:
+            :class:`Error`
+
+        """
         vips_filename = to_bytes(vips_filename)
         filename = vips_lib.vips_filename_get_filename(vips_filename)
         options = vips_lib.vips_filename_get_options(vips_filename)
@@ -178,6 +242,13 @@ class Image(pyvips.VipsObject):
 
     @staticmethod
     def new_from_buffer(data, options, **kwargs):
+        """Load a formatted image from memory.
+    
+        This behaves as :func:`new_from_file`, but the image is loaded from the
+        memory object rather than from a file. The memory object can be a string
+        or buffer. 
+
+        """
         name = vips_lib.vips_foreign_find_load_buffer(data, len(data))
         if name == ffi.NULL:
             raise Error('unable to load from buffer')
@@ -239,6 +310,11 @@ class Image(pyvips.VipsObject):
     # writers
 
     def write_to_file(self, vips_filename, **kwargs):
+        """Write an image to a file on disc.
+
+        The image is written to a file on disc. 
+
+        """
         vips_filename = to_bytes(vips_filename)
         filename = vips_lib.vips_filename_get_filename(vips_filename)
         options = vips_lib.vips_filename_get_options(vips_filename)

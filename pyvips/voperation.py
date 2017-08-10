@@ -1,4 +1,15 @@
-# wrap VipsOperation
+"""
+:mod:`voperation` -- Wrap the VipsOperation class
+=================================================
+
+.. module:: voperation
+    :synopsis: Call VipsOperations in an easy way.
+.. moduleauthor:: John Cupitt <jcupitt@gmail.com>
+.. moduleauthor:: Kleis Auke Wolthuizen <x@y.z>
+
+Call *all* the operations.
+
+"""
 
 from __future__ import division
 

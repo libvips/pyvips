@@ -1,4 +1,18 @@
-# enums
+"""
+:mod:`enums` -- The libvips enums
+=================================
+
+.. module:: enums
+    :synopsis: The various libvips enums
+.. moduleauthor:: John Cupitt <jcupitt@gmail.com>
+.. moduleauthor:: Kleis Auke Wolthuizen <x@y.z>
+
+This module contains the various libvips enums as Python classes.
+
+Enums values are represented in pyvips as strings. These classes contain the 
+valid strings for each enum. 
+
+"""
 
 from __future__ import division
 
@@ -8,6 +22,34 @@ logger = logging.getLogger(__name__)
 
 
 class BandFormat(object):
+    """The format of image bands.
+
+    The format used for each band element. Each corresponds to a native C type
+    for the current machine.
+
+    ``notset`` 
+        invalid setting
+    ``uchar`` 
+        unsigned char format
+    ``char`` 
+        char format
+    ``ushort`` 
+        unsigned short format
+    ``short`` 
+        short format
+    ``uint`` 
+        unsigned int format
+    ``int`` 
+        int format
+    ``float`` 
+        float format
+    ``complex`` 
+        complex (two floats) format
+    ``double`` 
+        double float format
+    ``dpcomplex`` 
+        double complex (two double) format
+    """
     UCHAR = 'uchar'
     CHAR = 'char'
     USHORT = 'ushort'
@@ -18,6 +60,20 @@ class BandFormat(object):
     COMPLEX = 'complex'
     DOUBLE = 'double'
     DPCOMPLEX = 'dpcomplex'
+
+
+class Access(object):
+    """The type of access an operation has to supply. 
+
+    ``random`` 
+        requests can come in any order. 
+    ``sequential`` 
+        means requests will be top-to-bottom, but with some
+        amount of buffering behind the read point for small non-local
+        accesses. 
+    """
+    RANDOM = 'random'
+    SEQUENTIAL = 'sequential'
 
 
 class Interpretation(object):

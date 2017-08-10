@@ -80,3 +80,8 @@ Run test suite::
 Stylecheck::
 
         $ flake8
+
+Generate HTML docs in ``doc/build/html``::
+
+        $ cd doc; sphinx-build -bhtml . build/html
+

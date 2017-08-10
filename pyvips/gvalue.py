@@ -1,4 +1,16 @@
-# wrap GValue
+"""
+:mod:`GValue` -- A value
+========================
+
+.. module:: GValue
+    :synopsis: A value of some sort
+.. moduleauthor:: John Cupitt <jcupitt@gmail.com>
+.. moduleauthor:: Kleis Auke Wolthuizen <x@y.z>
+
+This module defines the pyvips GValue class. You can use instances of
+this class to get and set GObject properties. 
+
+"""
 
 from __future__ import division
 from __future__ import unicode_literals
@@ -68,6 +80,19 @@ ffi.cdef('''
 
 
 class GValue(object):
+
+    """Wrap GValue in a Python class.
+
+    This class wraps GValue in a convenient interface. You can use instances of
+    this class to get and set GObject properties. 
+
+    On construction, GValue is all zero (empty). You can pass it to a get
+    function to have it filled by gobject, or use init to set a type, set to
+    set a value, then use it to set an object property. 
+
+    GValue lifetime is managed automatically. 
+    """
+
     # look up some common gtypes at init for speed
     gbool_type = gobject_lib.g_type_from_name(b'gboolean')
     gint_type = gobject_lib.g_type_from_name(b'gint')
@@ -93,9 +118,22 @@ class GValue(object):
         # logger.debug('GValue.__init__: gvalue = %s', self.gvalue)
 
     def init(self, gtype):
+        """Set the type of a GValue.
+
+        GValues have a set type, fixed at creation time. Use init to set the
+        type of a GValue before assigning to it.
+
+        GTypes are 32 or 64-bit integers (depending on the platform). See
+        type_find. 
+        """
         gobject_lib.g_value_init(self.gvalue, gtype)
 
     def set(self, value):
+        """Set a GValue.
+
+        The value is converted to the type of the GValue, if possible, and
+        assigned.
+        """
         # logger.debug('GValue.set: self = %s, value = %s', self, value)
 
         gtype = self.gvalue.gtype
@@ -159,6 +197,11 @@ class GValue(object):
                         format(type_name(gtype), type_name(fundamental)))
 
     def get(self):
+        """Get the contents of a GValue.
+
+        The contents of the GValue are read out as a Python type.
+        """
+
         # logger.debug('GValue.get: self = %s', self)
 
         gtype = self.gvalue.gtype

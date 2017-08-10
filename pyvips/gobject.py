@@ -1,4 +1,15 @@
-# wrap GObject
+"""
+:mod:`gobject` -- Wrap the GObject class
+========================================
+
+.. module:: gobject
+    :synopsis: Easy interface to GObject 
+.. moduleauthor:: John Cupitt <jcupitt@gmail.com>
+.. moduleauthor:: Kleis Auke Wolthuizen <x@y.z>
+
+Manage object lifetime.
+
+"""
 
 from __future__ import division
 
