@@ -19,7 +19,7 @@ notes introduce the Python binding.
 https://jcupitt.github.io/libvips 
 
 Example
-=======
+-------
 
 This example loads a file, boosts the green channel (I'm not sure why),
 sharpens the image, and saves it back to disc again::
@@ -28,11 +28,10 @@ sharpens the image, and saves it back to disc again::
 
     image = pyvips.Image.new_from_file('some-image.jpg', access='sequential')
     image *= [1, 2, 1]
-    mask = pyvips.Image.new_from_array([
-        [-1, -1, -1],
-        [-1, 16, -1],
-        [-1, -1, -1]
-       ], scale=8)
+    mask = pyvips.Image.new_from_array([[-1, -1, -1],
+                                        [-1, 16, -1],
+                                        [-1, -1, -1]
+                                       ], scale=8)
     image = image.conv(mask, precision='integer')
     image.write_to_file('x.jpg')
 
@@ -44,8 +43,8 @@ Reading this example line by line, we have::
 this example, we will be accessing pixels top-to-bottom as we sweep through
 the image reading and writing, so `sequential` access mode is best for us.
 
-The default mode is `random` which allows for full random access to image
-pixels, but is slower and needs more memory. See :class:`Access` for full
+The default mode is ``random`` which allows for full random access to image
+pixels, but is slower and needs more memory. See :class:`enums.Access` for full
 details on the various modes available.
 
 You can also load formatted images from memory buffers, create images that
@@ -63,32 +62,31 @@ There are the usual range of arithmetic operator overloads.
 
 Next we have::
 
-    mask = pyvips.Image.new_from_array([
-        [-1, -1, -1],
-        [-1, 16, -1],
-        [-1, -1, -1]
-       ], scale = 8)
+    mask = pyvips.Image.new_from_array([[-1, -1, -1],
+                                        [-1, 16, -1],
+                                        [-1, -1, -1]
+                                       ], scale = 8)
     image = image.conv(mask, precision = 'integer')
 
-`Image.new_from_array` creates an image from an array constant. The scale is
-the amount to divide the image by after integer convolution.
+:func:`Image.new_from_array` creates an image from an array constant. The
+scale is the amount to divide the image by after integer convolution.
 
-See the libvips API docs for `vips_conv()` (the operation
-invoked by `Image.conv`) for details on the convolution operator. By default,
-it computes with a float mask, but `integer` is fine for this case, and is
-much faster.
+See the libvips API docs for ``vips_conv()`` (the operation
+invoked by :func:`Image.conv`) for details on the convolution operator. By
+default, it computes with a float mask, but ``integer`` is fine for this case,
+and is much faster.
 
 Finally::
 
     image.write_to_file('x.jpg')
 
-`Image.write_to_file` writes an image back to the filesystem. It can
+:func:`Image.write_to_file` writes an image back to the filesystem. It can
 write any format supported by vips: the file type is set from the filename
 suffix. You can also write formatted images to memory buffers, or dump
 image data to a raw memory array.
 
 How it works
-============
+------------
 
 The binding uses https://pypi.python.org/pypi/cffi to open the libvips
 shared library. When you call a method on the image class, it uses libvips
@@ -100,16 +98,16 @@ This means pyvips always presents the API implemented by the libvips shared
 library. It should update itself as new features are added.
 
 Automatic wrapping
-==================
+------------------
 
-``pyvips`` adds a {Image.__getattr__} handler to {Image} and to the Image
-metaclass, then uses it to look up vips operations. For example, the libvips
-operation ``add``, which appears in C as ``vips_add()``, appears in Python
-as {Image#add}.
+``pyvips`` adds a :func:`Image.__getattr__` handler to :class:`Image`
+and to the Image metaclass, then uses it to look up vips operations. For
+example, the libvips operation ``add``, which appears in C as ``vips_add()``,
+appears in Python as :func:`Image.add`.
 
 The operation's list of required arguments is searched and the first input
-image is set to the value of `self`. Operations which do not take an input
-image, such as {Image.black}, appear as class methods. The remainder of
+image is set to the value of ``self``. Operations which do not take an input
+image, such as :func:`Image.black`, appear as class methods. The remainder of
 the arguments you supply in the function call are used to set the other
 required input arguments. Any trailing keyword arguments are used to set
 options on the operation.
@@ -118,7 +116,7 @@ The result is the required output argument if there is only one result,
 or an array of values if the operation produces several results. If the
 operation has optional output objects, they are returned as a final hash.
 
-For example, {Image#min}, the vips operation that searches an image for
+For example, :func:`Image.min`, the vips operation that searches an image for
 the minimum value, has a large number of optional arguments. You can use it to
 find the minimum value like this::
 
@@ -131,11 +129,11 @@ You can ask it to return the position of the minimum with `:x` and `:y`::
     y_pos = opts['y']
 
 Now ``x_pos`` and ``y_pos`` will have the coordinates of the minimum value.
-There's actually a convenience method for this, {Image#minpos}.
+There's actually a convenience method for this, :func:`Image.minpos`.
 
 You can also ask for the top *n* minimum, for example::
 
-    min_value, opts = min size: 10, x_array: true, y_array: true
+    min_value, opts = min(size=10, x_array=True, y_array=True)
     x_pos = opts['x_array']
     y_pos = opts['y_array']
 
@@ -151,29 +149,30 @@ also a full set of arithmetic operator overloads, see below.
 
 libvips types are also automatically wrapped. The binding looks at the type
 of argument required by the operation and converts the value you supply,
-when it can. For example, {Image#linear} takes a ``VipsArrayDouble`` as an
+when it can. For example, :func:`Image.linear` takes a ``VipsArrayDouble`` as an
 argument for the set of constants to use for multiplication. You can supply
 this value as an integer, a float, or some kind of compound object and it
 will be converted for you. You can write::
 
-    result_image = image.linear(1, 3 )
-    result_image = image.linear(12.4, 13.9 )
+    result_image = image.linear(1, 3)
+    result_image = image.linear(12.4, 13.9)
     result_image = image.linear([1, 2, 3], [4, 5, 6])
     result_image = image.linear(1, [4, 5, 6])
 
-And so on. A set of overloads are defined for {Image#linear}, see below.
+And so on. A set of overloads are defined for :func:`Image.linear`, see below.
 
 It does a couple of more ambitious conversions. It will automatically convert
-to and from the various vips types, like `VipsBlob` and `VipsArrayImage`. For
-example, you can read the ICC profile out of an image like this::
+to and from the various vips types, like ``VipsBlob`` and
+``VipsArrayImage``. For example, you can read the ICC profile out of an
+image like this::
 
     profile = im.get('icc-profile-data')
 
-and profile will be a byte array.
+and profile will be a byte string.
 
 If an operation takes several input images, you can use a constant for all but
 one of them and the wrapper will expand the constant to an image for you. For
-example, {Image#ifthenelse} uses a condition image to pick pixels
+example, :func:`Image.ifthenelse` uses a condition image to pick pixels
 between a then and an else image::
 
     result_image = condition_image.ifthenelse(then_image, else_image)
@@ -186,7 +185,7 @@ else, it will be expanded to match the condition image. For example::
 
 Will make an image where true pixels are green and false pixels are red.
 
-This is useful for {Image#bandjoin}, the thing to join two or more
+This is useful for :func:`Image.bandjoin`, the thing to join two or more
 images up bandwise. You can write::
 
     rgba = rgb.bandjoin(255)
@@ -201,11 +200,11 @@ course you can also write::
 
 and so on.
 
-Automatic YARD documentation
-============================
+Automatic documentation
+-----------------------
 
 The bulk of these API docs are generated automatically by
-{Vips::generate_yard}. It examines libvips and writes a summary of each
+:func:`Image.generate_docs`. It examines libvips and writes a summary of each
 operation and the arguments and options that that operation expects.
 
 Use the C API docs for more detail:
@@ -213,25 +212,25 @@ Use the C API docs for more detail:
 https://jcupitt.github.io/libvips/API/current
 
 Exceptions
-==========
+----------
 
-The wrapper spots errors from vips operations and raises the {pyvips.Error}
+The wrapper spots errors from vips operations and raises the :class:`Error`
 exception. You can catch it in the usual way.
 
 Enums
-=====
+-----
 
 The libvips enums, such as ``VipsBandFormat``, appear in pyvips as strings
 like ``'uchar'``. They are documented as a set of classes for convenience, see
 the class list.
 
 Draw operations
-===============
+---------------
 
-Paint operations like {Image#draw_circle} and {Image#draw_line}
-modify their input image. This
-makes them hard to use with the rest of libvips: you need to be very careful
-about the order in which operations execute or you can get nasty crashes.
+Paint operations like :func:`Image.draw_circle` and :func:`Image.draw_line`
+modify their input image. This makes them hard to use with the rest of
+libvips: you need to be very careful about the order in which operations
+execute or you can get nasty crashes.
 
 The wrapper spots operations of this type and makes a private copy of the
 image in memory before calling the operation. This stops crashes, but it does
@@ -243,19 +242,19 @@ If you want to avoid the copies, you'll need to call drawing operations
 yourself.
 
 Overloads
-=========
+---------
 
 The wrapper defines the usual set of arithmetic, boolean and relational
 overloads on image. You can mix images, constants and lists of constants
-(almost) freely. For example, you can write::
+freely. For example, you can write::
 
     result_image = ((image * [1, 2, 3]).abs() < 128) | 4
 
 Expansions
-==========
+----------
 
 Some vips operators take an enum to select an action, for example
-{Image#math} can be used to calculate sine of every pixel like this::
+:func:`Image.math` can be used to calculate sine of every pixel like this::
 
     result_image = image.math('sin')
 
@@ -265,11 +264,12 @@ named after the enum. So you can also write::
     result_image = image.sin()
 
 Convenience functions
-=====================
+---------------------
 
 The wrapper defines a few extra useful utility functions:
-{Image#get}, {Image#set}, {Image#bandsplit}, {Image#maxpos}, {Image#minpos},
-{Image#median}.
+:func:`Image#get`, :func:`Image#set`, :func:`Image#bandsplit`,
+:func:`Image#maxpos`, :func:`Image#minpos`,
+:func:`Image#median`.
 
 """
 

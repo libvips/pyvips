@@ -27,27 +27,25 @@ class BandFormat(object):
     The format used for each band element. Each corresponds to a native C type
     for the current machine.
 
-    ``notset`` 
-        invalid setting
-    ``uchar`` 
+    ``uchar``
         unsigned char format
-    ``char`` 
+    ``char``
         char format
-    ``ushort`` 
+    ``ushort``
         unsigned short format
-    ``short`` 
+    ``short``
         short format
-    ``uint`` 
+    ``uint``
         unsigned int format
-    ``int`` 
+    ``int``
         int format
-    ``float`` 
+    ``float``
         float format
-    ``complex`` 
+    ``complex``
         complex (two floats) format
-    ``double`` 
+    ``double``
         double float format
-    ``dpcomplex`` 
+    ``dpcomplex``
         double complex (two double) format
     """
     UCHAR = 'uchar'
@@ -65,9 +63,9 @@ class BandFormat(object):
 class Access(object):
     """The type of access an operation has to supply. 
 
-    ``random`` 
+    ``random``
         requests can come in any order. 
-    ``sequential`` 
+    ``sequential``
         means requests will be top-to-bottom, but with some
         amount of buffering behind the read point for small non-local
         accesses. 
