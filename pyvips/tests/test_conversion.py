@@ -675,15 +675,15 @@ class TestConversion(PyvipsTester):
                 diff = (after - im).abs().max()
                 self.assertEqual(diff, 0)
 
-    def test_scale(self):
+    def test_scaleimage(self):
         for fmt in noncomplex_formats:
             test = self.colour.cast(fmt)
 
-            im = test.scale()
+            im = test.scaleimage()
             self.assertEqual(im.max(), 255)
             self.assertEqual(im.min(), 0)
 
-            im = test.scale(log=True)
+            im = test.scaleimage(log=True)
             self.assertEqual(im.max(), 255)
 
     def test_subsample(self):

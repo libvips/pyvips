@@ -1,15 +1,4 @@
-"""
-:mod:`Image` -- An image
-========================
-
-.. module:: Image
-    :synopsis: The base image class. 
-.. moduleauthor:: John Cupitt <jcupitt@gmail.com>
-.. moduleauthor:: Kleis Auke Wolthuizen <x@y.z>
-
-This module defines the pyvips Image class. 
-
-"""
+# wrap VipsImage
 
 from __future__ import division
 
@@ -182,20 +171,20 @@ class Image(pyvips.VipsObject):
     def new_from_file(vips_filename, **kwargs):
         """Load an image from a file.
 
-        This method can load images in any format supported by vips. The 
+        This method can load images in any format supported by vips. The
         filename can include load options, for example::
 
             image = pyvips.Image.new_from_file('fred.jpg[shrink=2]')
 
         You can also supply options as keyword arguments, for example::
-        
+
             image = pyvips.Image.new_from_file('fred.jpg', shrink=2)
 
-        The full set of options available depend upon the load operation that 
+        The full set of options available depend upon the load operation that
         will be executed. Try something like::
-        
+
             $ vips jpegload
-        
+
         at the command-line to see a summary of the available options for the
         JPEG loader.
 
@@ -205,7 +194,7 @@ class Image(pyvips.VipsObject):
         Args:
 
         ``vips_filename``
-            The disc file to load the image from, with optional appended 
+            The disc file to load the image from, with optional appended
             arguments.
 
         All loaders support at least the following options:
@@ -216,14 +205,15 @@ class Image(pyvips.VipsObject):
             are created. Small images are loaded via memory by default, use
             VIPS_DISC_THRESHOLD to set the definition of small.
         ``access``
-            Hint the expected access pattern for the image, see :class:`Access`.
+            Hint the expected access pattern for the image, see
+            :class:`Access`.
         ``fail``
-            If set True, the loader will fail with an error on the first serious 
-            error in the file. By default, libvips will attempt to read 
-            everything it can from a damanged image. 
+            If set True, the loader will fail with an error on the first
+            serious error in the file. By default, libvips will attempt to
+            read everything it can from a damanged image.
 
         Returns:
-            A new :class:`Image`. 
+            A new :class:`Image`.
 
         Raises:
             :class:`Error`
@@ -245,10 +235,10 @@ class Image(pyvips.VipsObject):
     @staticmethod
     def new_from_buffer(data, options, **kwargs):
         """Load a formatted image from memory.
-    
-        This behaves exactly as :func:`Image.new_from_file`, but the image is 
-        loaded from the memory object rather than from a file. The memory object 
-        can be a string or buffer. 
+
+        This behaves exactly as :func:`Image.new_from_file`, but the image is
+        loaded from the memory object rather than from a file. The memory
+        object can be a string or buffer.
 
         Args:
 
@@ -256,19 +246,20 @@ class Image(pyvips.VipsObject):
             The memory object to load the image from. It can be a string or
             buffer.
         ``options``
-            Load options as a string. Use ``""`` for no options. 
+            Load options as a string. Use ``""`` for no options.
 
         All loaders support at least the following options:
 
         ``access``
-            Hint the expected access pattern for the image, see :class:`Access`.
+            Hint the expected access pattern for the image, see
+            :class:`Access`.
         ``fail``
-            If set True, the loader will fail with an error on the first serious 
-            error in the image. By default, libvips will attempt to read 
-            everything it can from a damanged image. 
+            If set True, the loader will fail with an error on the first
+            serious error in the image. By default, libvips will attempt
+            to read everything it can from a damanged image.
 
         Returns:
-            A new :class:`Image`. 
+            A new :class:`Image`.
 
         Raises:
             :class:`Error`
@@ -285,14 +276,14 @@ class Image(pyvips.VipsObject):
     def new_from_array(array, scale=1.0, offset=0.0):
         """Create an image from a 1D or 2D array.
 
-        A new one-band image with :class:`BandFormat` 'double' pixels is 
+        A new one-band image with :class:`BandFormat` 'double' pixels is
         created from the array. These image are useful with the libvips
         convolution operator :func:`Image.conv`.
 
         Args:
 
         ``array``
-            Create the image from these values. 1D arrays become a single row 
+            Create the image from these values. 1D arrays become a single row
             of pixels.
         ``scale``
             Default to 1.0. What to divide each pixel by after convolution.
@@ -302,7 +293,7 @@ class Image(pyvips.VipsObject):
             Useful for integer convolution masks.
 
         Returns:
-            A new :class:`Image`. 
+            A new :class:`Image`.
 
         Raises:
             :class:`Error`
@@ -334,10 +325,10 @@ class Image(pyvips.VipsObject):
     def new_temp_file(format):
         """Make a new temporary image.
 
-        Returns an image backed by a temporary file. When written to with 
+        Returns an image backed by a temporary file. When written to with
         :func:`Image.write`, a temporary file will be created on disc in the
         specified format. When the image is closed, the file will be deleted
-        automatically. 
+        automatically.
 
         The file is created in the temporary directory. This is set with
         the environment variable ``TMPDIR``. If this is not set, then on
@@ -352,10 +343,10 @@ class Image(pyvips.VipsObject):
         ``format``
             The format for the temp file, for example ``"%s.v"`` for a vips
             format file. The ``%s`` is
-            substituted by the file path. 
+            substituted by the file path.
 
         Returns:
-            A new :class:`Image`. 
+            A new :class:`Image`.
 
         Raises:
             :class:`Error`
@@ -378,10 +369,10 @@ class Image(pyvips.VipsObject):
 
         ``value``
             The value for the pixels. Use a single number to make a one-band
-            image; use an array constant to make a many-band image. 
+            image; use an array constant to make a many-band image.
 
         Returns:
-            A new :class:`Image`. 
+            A new :class:`Image`.
 
         Raises:
             :class:`Error`
@@ -407,7 +398,7 @@ class Image(pyvips.VipsObject):
         area.
 
         Returns:
-            A new :class:`Image`. 
+            A new :class:`Image`.
 
         Raises:
             :class:`Error`
@@ -426,31 +417,31 @@ class Image(pyvips.VipsObject):
 
         This method can save images in any format supported by vips. The format
         is selected from the filename suffix. The filename can include embedded
-        save options, see :func:`Image.new_from_file`. 
+        save options, see :func:`Image.new_from_file`.
 
         For example::
 
             image.write_to_file('fred.jpg[Q=95]')
 
         You can also supply options as keyword arguments, for example::
-        
+
             image.write_to_file('fred.jpg', Q=95)
 
-        The full set of options available depend upon the load operation that 
+        The full set of options available depend upon the load operation that
         will be executed. Try something like::
-        
+
             $ vips jpegsave
-        
+
         at the command-line to see a summary of the available options for the
         JPEG saver.
 
         Args:
 
         ``vips_filename``
-            The disc file to save the image to, with optional appended 
+            The disc file to save the image to, with optional appended
             arguments.
 
-        Other arguments depend upon the save operation. 
+        Other arguments depend upon the save operation.
 
         Returns:
             None
@@ -475,22 +466,22 @@ class Image(pyvips.VipsObject):
         """Write an image to memory.
 
         This method can save images in any format supported by vips. The format
-        is selected from the suffix in the format string. This can include 
-        embedded save options, see :func:`Image.new_from_file`. 
+        is selected from the suffix in the format string. This can include
+        embedded save options, see :func:`Image.new_from_file`.
 
         For example::
 
             data = image.write_to_buffer('.jpg[Q=95]')
 
         You can also supply options as keyword arguments, for example::
-        
+
             data = image.write_to_buffer('.jpg', Q=95)
 
-        The full set of options available depend upon the load operation that 
+        The full set of options available depend upon the load operation that
         will be executed. Try something like::
-        
+
             $ vips jpegsave_buffer
-        
+
         at the command-line to see a summary of the available options for the
         JPEG saver.
 
@@ -499,7 +490,7 @@ class Image(pyvips.VipsObject):
         ``format_string``
             The suffix, plus any string-form arguments.
 
-        Other arguments depend upon the save operation. 
+        Other arguments depend upon the save operation.
 
         Returns:
             A byte string.
@@ -597,8 +588,8 @@ class Image(pyvips.VipsObject):
     def set_type(self, gtype, name, value):
         """Set the type and value of an item of metadata.
 
-        Sets the type and value of an item of metadata. Any old item of the same
-        name is removed. See :class:`GValue` for types.
+        Sets the type and value of an item of metadata. Any old item of the
+        same name is removed. See :class:`GValue` for types.
 
         Args:
 
@@ -627,7 +618,7 @@ class Image(pyvips.VipsObject):
         """Set the value of an item of metadata.
 
         Sets the value of an item of metadata. The metadata item must already
-        exist. 
+        exist.
 
         Args:
 
@@ -670,14 +661,14 @@ class Image(pyvips.VipsObject):
     def __getattr__(self, name):
         """Divert unknown names to libvips.
 
-        Unknown attributes are first looked up in the image properties as 
+        Unknown attributes are first looked up in the image properties as
         accessors, for example::
 
             width = image.width
 
-        and then in the libvips operation table, where they become method calls, 
-        for example::
-            
+        and then in the libvips operation table, where they become method
+        calls, for example::
+
             new_image = image.invert()
 
         Use :func:`get` to fetch image metadata.
@@ -718,10 +709,12 @@ class Image(pyvips.VipsObject):
         return call_function
 
     # compatibility: these used to be called get_value / set_value
+
     get_value = get
     set_value = set
 
-    # we used to have longer names for these too
+    # we used to have longer names for these
+
     def get_scale(self):
         return self.scale
 
@@ -736,8 +729,23 @@ class Image(pyvips.VipsObject):
     def __exit__(self, type, value, traceback):
         pass
 
-    # access as an array
     def __getitem__(self, arg):
+        """Overload []
+
+        Use [] to pull out band elements from an image. You can use all the
+        usual slicing syntax, for example::
+
+            green = rgb_image[1]
+
+        Will make a new one-band image from band 1 (the middle band). You can
+        also write:
+
+            last_two = rgb_image[1:]
+            last_band = rgb_image[-1]
+            middle_few = multiband[1:-2]
+
+        """
+
         if isinstance(arg, slice):
             i = 0
             if arg.start is not None:
@@ -1073,7 +1081,7 @@ class Image(pyvips.VipsObject):
     # imageize th and el to match each other first
     def ifthenelse(self, th, el, **kwargs):
         """Use a condition image to select pixels from then or else.
-    
+
         Where the condition image is non-zero, take pixels from then; otherwise
         take pixels from else.
 
@@ -1087,7 +1095,7 @@ class Image(pyvips.VipsObject):
             If True, blend pixels smoothly between th and el.
 
         Returns:
-            A new :class:`Image`. 
+            A new :class:`Image`.
 
         Raises:
             :class:`Error`
@@ -1104,6 +1112,29 @@ class Image(pyvips.VipsObject):
             el = Image.imageize(match_image, el)
 
         return pyvips.Operation.call('ifthenelse', self, th, el, **kwargs)
+
+    def scaleimage(self, **kwargs):
+        """Scale an image to 0 - 255.
+
+        This is the libvips ``scale`` operation, renamed to avoid a clash with
+        the ``scale`` for convolution masks.
+
+        Args:
+
+        ``exp``
+            Optional exponent for log scale.
+        ``log``
+            Optional switch to turn on log scaling.
+
+        Returns:
+            A new :class:`Image`.
+
+        Raises:
+            :class:`Error`
+
+        """
+
+        return pyvips.Operation.call('scale', self, **kwargs)
 
 
 __all__ = ['Image']

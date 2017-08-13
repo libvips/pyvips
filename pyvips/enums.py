@@ -1,19 +1,3 @@
-"""
-:mod:`enums` -- The libvips enums
-=================================
-
-.. module:: enums
-    :synopsis: The various libvips enums
-.. moduleauthor:: John Cupitt <jcupitt@gmail.com>
-.. moduleauthor:: Kleis Auke Wolthuizen <x@y.z>
-
-This module contains the various libvips enums as Python classes.
-
-Enums values are represented in pyvips as strings. These classes contain the 
-valid strings for each enum. 
-
-"""
-
 from __future__ import division
 
 import logging
@@ -61,14 +45,14 @@ class BandFormat(object):
 
 
 class Access(object):
-    """The type of access an operation has to supply. 
+    """The type of access an operation has to supply.
 
     ``random``
-        requests can come in any order. 
+        requests can come in any order.
     ``sequential``
         means requests will be top-to-bottom, but with some
         amount of buffering behind the read point for small non-local
-        accesses. 
+        accesses.
     """
     RANDOM = 'random'
     SEQUENTIAL = 'sequential'

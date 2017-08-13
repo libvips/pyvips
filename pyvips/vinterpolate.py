@@ -1,16 +1,3 @@
-"""
-:mod:`vinterpolate` -- An interpolator
-======================================
-
-.. module:: vinterpolate
-    :synopsis: Interpolate values between points in various ways. 
-.. moduleauthor:: John Cupitt <jcupitt@gmail.com>
-.. moduleauthor:: Kleis Auke Wolthuizen <x@y.z>
-
-Interpolators!
-
-"""
-
 from __future__ import division
 
 import logging
