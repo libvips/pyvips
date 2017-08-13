@@ -59,6 +59,52 @@ class Access(object):
 
 
 class Interpretation(object):
+    """How the values in an image should be interpreted. 
+    
+    For example, a three-band float image of type :lab should have its 
+    pixels interpreted as coordinates in CIE Lab space.
+
+    ``multiband`` 
+        generic many-band image
+    ``b_w`` 
+        some kind of single-band image
+    ``histogram`` 
+        a 1D image, eg. histogram or lookup table
+    ``fourier`` 
+        image is in fourier space
+    ``xyz`` 
+        the first three bands are CIE XYZ 
+    ``lab`` 
+        pixels are in CIE Lab space
+    ``cmyk`` 
+        the first four bands are in CMYK space
+    ``labq`` 
+        implies #VIPS_CODING_LABQ
+    ``rgb`` 
+        generic RGB space
+    ``cmc`` 
+        a uniform colourspace based on CMC(1:1)
+    ``lch`` 
+        pixels are in CIE LCh space
+    ``labs`` 
+        CIE LAB coded as three signed 16-bit values
+    ``srgb`` 
+        pixels are sRGB
+    ``hsv`` 
+        pixels are HSV
+    ``scrgb`` 
+        pixels are scRGB
+    ``yxy`` 
+        pixels are CIE Yxy
+    ``rgb16`` 
+        generic 16-bit RGB
+    ``grey16`` 
+        generic 16-bit mono
+    ``matrix`` 
+        a matrix
+
+    """
+
     MULTIBAND = 'multiband'
     B_W = 'b-w'
     HISTOGRAM = 'histogram'
@@ -81,6 +127,21 @@ class Interpretation(object):
 
 
 class Angle(object):
+    """Various fixed 90 degree rotation angles. 
+    
+    See for example :meth:`.rot`.
+
+    ``d0`` 
+        no rotate
+    ``d90`` 
+        90 degrees clockwise
+    ``d180`` 
+        180 degrees 
+    ``d270`` 
+        90 degrees anti-clockwise
+
+    """
+
     D0 = 'd0'
     D90 = 'd90'
     D180 = 'd180'
@@ -88,6 +149,29 @@ class Angle(object):
 
 
 class Angle45(object):
+    """Various fixed 45 degree rotation angles. 
+    
+    See for example :meth:`.rot45`.
+
+    ``d0`` 
+        no rotate
+    ``d45`` 
+        45 degrees clockwise 
+    ``d90`` 
+        90 degrees clockwise
+    ``d135`` 
+        135 degrees clockwise
+    ``d180`` 
+        180 degrees 
+    ``d225`` 
+        135 degrees anti-clockwise
+    ``d270`` 
+        90 degrees anti-clockwise
+    ``d315`` 
+        45 degrees anti-clockwise
+
+    """
+
     D0 = 'd0'
     D45 = 'd45'
     D90 = 'd90'
@@ -106,6 +190,28 @@ class Intent(object):
 
 
 class Extend(object):
+    """How to extend image edges.
+
+    When the edges of an image are extended, you can specify
+    how you want the extension done. 
+    See :meth:`.embed`, :meth:`.conv`, :meth:`.affine` and 
+    so on.
+
+    ``black`` 
+        new pixels are black, ie. all bits are zero. 
+    ``copy`` 
+        each new pixel takes the value of the nearest edge pixel
+    ``repeat`` 
+        the image is tiled to fill the new area
+    ``mirror`` 
+        the image is reflected and tiled to reduce hash edges
+    ``white`` 
+        new pixels are white, ie. all bits are set
+    ``background`` 
+        colour set from the @background property
+
+    """
+
     BLACK = 'black'
     COPY = 'copy'
     REPEAT = 'repeat'
@@ -121,17 +227,57 @@ class Precision(object):
 
 
 class Coding(object):
+    """How pixels are coded. 
+
+    Normally, pixels are uncoded and can be manipulated as you would expect.
+    However some file formats code pixels for compression, and sometimes it's
+    useful to be able to manipulate images in the coded format.
+
+    ``none`` 
+        pixels are not coded
+    ``labq`` 
+        pixels encode 3 float CIELAB values as 4 uchar
+    ``rad`` 
+        pixels encode 3 float RGB as 4 uchar (Radiance coding)
+
+    """
+
     NONE = 'none'
     LABQ = 'labq'
     RAD = 'rad'
 
 
 class Direction(object):
+    """A direction.
+
+    Operations like :meth:`.flip` need to be told whether to flip 
+    left-right or top-bottom. 
+
+    ``horizontal`` 
+        left-right 
+    ``vertical`` 
+        top-bottom
+
+    """
+
     HORIZONTAL = 'horizontal'
     VERTICAL = 'vertical'
 
 
 class Align(object):
+    """Various types of alignment. 
+    
+    See :meth:`.join`, for example.
+
+    ``low`` 
+        Align on the low coordinate edge
+    ``centre`` 
+        Align on the centre
+    ``high`` 
+        Align on the high coordinate edge
+
+    """
+
     LOW = 'low'
     CENTRE = 'centre'
     HIGH = 'high'

@@ -140,12 +140,15 @@ class ImageType(type):
 
         return call_function
 
+    def __repr__(self):
+        return ('<Image {0}x{1} {2}, {3} bands, {4}>'.
+                format(self.width, self.height, self.format, self.bands, 
+                       self.interpretation))
+
 
 @_with_metaclass(ImageType)
 class Image(pyvips.VipsObject):
-    """The pyvips image class.
-
-    This class represents a VipsImage object.
+    """Wrap a VipsImage object. 
 
     """
 
@@ -216,7 +219,7 @@ class Image(pyvips.VipsObject):
             A new :class:`Image`.
 
         Raises:
-            :class:`Error`
+            :class:`.Error`
 
         """
         vips_filename = to_bytes(vips_filename)
@@ -262,7 +265,7 @@ class Image(pyvips.VipsObject):
             A new :class:`Image`.
 
         Raises:
-            :class:`Error`
+            :class:`.Error`
 
         """
         name = vips_lib.vips_foreign_find_load_buffer(data, len(data))
@@ -296,7 +299,7 @@ class Image(pyvips.VipsObject):
             A new :class:`Image`.
 
         Raises:
-            :class:`Error`
+            :class:`.Error`
 
         """
         if not _is_2D(array):
@@ -349,7 +352,7 @@ class Image(pyvips.VipsObject):
             A new :class:`Image`.
 
         Raises:
-            :class:`Error`
+            :class:`.Error`
 
         """
 
@@ -375,7 +378,7 @@ class Image(pyvips.VipsObject):
             A new :class:`Image`.
 
         Raises:
-            :class:`Error`
+            :class:`.Error`
 
         """
 
@@ -401,7 +404,7 @@ class Image(pyvips.VipsObject):
             A new :class:`Image`.
 
         Raises:
-            :class:`Error`
+            :class:`.Error`
 
         """
         vi = vips_lib.vips_image_copy_memory(self.pointer)
@@ -447,7 +450,7 @@ class Image(pyvips.VipsObject):
             None
 
         Raises:
-            :class:`Error`
+            :class:`.Error`
 
         """
         vips_filename = to_bytes(vips_filename)
@@ -496,7 +499,7 @@ class Image(pyvips.VipsObject):
             A byte string.
 
         Raises:
-            :class:`Error`
+            :class:`.Error`
 
         """
         format_string = to_bytes(format_string)
@@ -525,7 +528,7 @@ class Image(pyvips.VipsObject):
             None
 
         Raises:
-            :class:`Error`
+            :class:`.Error`
 
         """
         result = vips_lib.vips_image_write(self.pointer, other.pointer)
@@ -573,7 +576,7 @@ class Image(pyvips.VipsObject):
             The metadata item as a Python value.
 
         Raises:
-            :class:`Error`
+            :class:`.Error`
 
         """
 
@@ -605,7 +608,7 @@ class Image(pyvips.VipsObject):
             None
 
         Raises:
-            :class:`Error`
+            :class:`.Error`
 
         """
 
@@ -632,7 +635,7 @@ class Image(pyvips.VipsObject):
             None
 
         Raises:
-            :class:`Error`
+            :class:`.Error`
 
         """
         gtype = self.get_typeof(name)
@@ -652,7 +655,7 @@ class Image(pyvips.VipsObject):
             None
 
         Raises:
-            :class:`Error`
+            :class:`.Error`
 
         """
 
@@ -680,7 +683,7 @@ class Image(pyvips.VipsObject):
             Mixed.
 
         Raises:
-            :class:`Error`
+            :class:`.Error`
 
         """
 
@@ -786,7 +789,7 @@ class Image(pyvips.VipsObject):
             Pixel as an array of floating point numbers.
 
         Raises:
-            :class:`Error`
+            :class:`.Error`
 
         """
 
@@ -1098,7 +1101,7 @@ class Image(pyvips.VipsObject):
             A new :class:`Image`.
 
         Raises:
-            :class:`Error`
+            :class:`.Error`
 
         """
 
@@ -1130,7 +1133,7 @@ class Image(pyvips.VipsObject):
             A new :class:`Image`.
 
         Raises:
-            :class:`Error`
+            :class:`.Error`
 
         """
 

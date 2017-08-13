@@ -58,6 +58,12 @@ def _find_inside(pred, thing):
 
 
 class Operation(pyvips.VipsObject):
+    """Call libvips operations.
+
+    This class wraps the libvips VipsOperation class. 
+
+    """
+
     def __init__(self, pointer):
         # logger.debug('Operation.__init__: pointer = %s', pointer)
         super(Operation, self).__init__(pointer)
@@ -111,6 +117,16 @@ class Operation(pyvips.VipsObject):
     # '[strip,tile=true]'
     @staticmethod
     def call(operation_name, *args, **kwargs):
+        """Call a libvips operation.
+
+        Use this method to call any libvips operation. For example::
+
+            black_image = pyvips.Operation.call('black', 10, 10)
+
+        See the Introduction for notes on how this works. 
+
+        """
+
         logger.debug('VipsOperation.call: operation_name = %s',
                      operation_name)
         # logger.debug('VipsOperation.call: args = %s, kwargs =%s',

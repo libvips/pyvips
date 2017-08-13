@@ -38,6 +38,13 @@ ffi.cdef('''
 
 class GObject(object):
     def __init__(self, pointer):
+        """Wrap around a pointer.
+
+        Wraps a GObject instance around an underlying pointer. When the instance
+        is garbage-collected, the underlying object is unreferenced.
+
+        """
+
         # record the pointer we were given to manage
         self.pointer = pointer
         # logger.debug('GObject.__init__: pointer = %s', str(self.pointer))
@@ -45,13 +52,6 @@ class GObject(object):
         # on GC, unref
         self.gobject = ffi.gc(self.pointer, gobject_lib.g_object_unref)
         # logger.debug('GObject.__init__: gobject = %s', str(self.gobject))
-
-    @staticmethod
-    def print_all(msg):
-        gc.collect()
-        print(msg)
-        vips_lib.vips_object_print_all()
-        print()
 
 
 __all__ = ['GObject']

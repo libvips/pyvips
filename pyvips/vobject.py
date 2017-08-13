@@ -76,6 +76,12 @@ class VipsObject(pyvips.GObject):
 
     @staticmethod
     def print_all(msg):
+        """Print all objects.
+
+        Print a table of all active libvips objects. Handy for debugging. 
+
+        """
+
         gc.collect()
         logger.debug(msg)
         vips_lib.vips_object_print_all()

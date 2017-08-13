@@ -26,6 +26,22 @@ class Interpolate(pyvips.VipsObject):
 
     @staticmethod
     def new(name):
+        """Make a new interpolator by name.
+
+        Make a new interpolator from the libvips class nickname. For example::
+
+            inter = pyvips.Interpolator.new('bicubic')
+
+        You can get a list of all supported interpolators from the command-line
+        with::
+
+            $ vips -l interpolate
+
+        See for example :func:`Image.affine`.
+
+
+        """
+
         # logger.debug('VipsInterpolate.new: name = %s', name)
 
         vi = vips_lib.vips_interpolate_new(to_bytes(name))
