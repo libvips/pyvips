@@ -3,7 +3,7 @@ from __future__ import division
 import logging
 
 import pyvips
-from pyvips import ffi, vips_lib, Error, to_bytes, to_string, GValue, type_name
+from pyvips import ffi, vips_lib, Error, to_bytes, to_string, GValue
 
 logger = logging.getLogger(__name__)
 
@@ -293,7 +293,7 @@ class Operation(pyvips.VipsObject):
                 optional_output.append(name)
 
         result += "   " + ", ".join(required_output) + " = "
-        if member_x:
+        if member_x is not None:
             result += member_x + "." + operation_name + "("
         else:
             result += "pyvips.Image." + operation_name + "("
@@ -301,28 +301,37 @@ class Operation(pyvips.VipsObject):
         result += ", ".join(required_input)
         if len(optional_input) > 0 and len(required_input) > 0:
             result += ", "
-        result += ", ".join([x + " = " + 
-                                GValue.gtype_to_python(op.get_typeof(x))
+        result += ", ".join([x + " = " +
+                             GValue.gtype_to_python(op.get_typeof(x))
                              for x in optional_input])
         result += ")\n"
 
-        result += "Where:\n"
-        for name in required_output:
-            result += "   " + op.get_blurb(name) + "\n"
+        names = required_output
+        if member_x is not None:
+            names += [member_x]
+        names += required_input
 
-        for name in required_input:
-            result += "   " + op.get_blurb(name) + "\n"
+        result += "Where:\n"
+        for name in names:
+            result += "   " + name + ' ' * (10 - len(name)) + '- '
+            result += op.get_blurb(name) + ', '
+            result += GValue.gtype_to_python(op.get_typeof(name)) + '\n'
 
         if len(optional_input) > 0:
             result += "Keyword parameters:\n"
             for name in optional_input:
-                result += "   " + op.get_blurb(name) + "\n"
+                result += "   " + name + ' ' * (10 - len(name)) + '- '
+                result += op.get_blurb(name) + ', '
+                result += GValue.gtype_to_python(op.get_typeof(name)) + '\n'
 
         if len(optional_output) > 0:
             result += "Extra output options:\n"
             for name in optional_output:
-                result += "   " + op.get_blurb(name) + "\n"
+                result += "   " + name + ' ' * (10 - len(name)) + '- '
+                result += op.get_blurb(name) + ', '
+                result += GValue.gtype_to_python(op.get_typeof(name)) + '\n'
 
         return result
+
 
 __all__ = ['Operation']
