@@ -95,6 +95,36 @@ class GValue(object):
     refstr_type = gobject_lib.g_type_from_name(b'VipsRefString')
     blob_type = gobject_lib.g_type_from_name(b'VipsBlob')
 
+    # map a gtype to the name of the corresponding Python type
+    _gtype_to_python = {
+        gbool_type: 'bool',
+        gint_type: 'int',
+        gdouble_type: 'float',
+        gstr_type: 'str',
+        refstr_type: 'str',
+        genum_type: 'str',
+        gflags_type: 'int',
+        gobject_type: 'pyvips.GObject',
+        image_type: 'pyvips.Image',
+        array_int_type: 'list[int]',
+        array_double_type: 'list[float]',
+        array_image_type: 'list[pyvips.Image]',
+        blob_type: 'str'
+    }
+
+    @staticmethod
+    def gtype_to_python(gtype):
+        """Map a gtype to a python name.
+
+        """
+        fundamental = gobject_lib.g_type_fundamental(gtype)
+
+        if fundamental in GValue._gtype_to_python:
+            return GValue._gtype_to_python[fundamental]
+        if gtype in GValue._gtype_to_python:
+            return GValue._gtype_to_python[gtype]
+        return '<unknown type>'
+
     def __init__(self):
         # allocate memory for the gvalue which will be freed on GC
         self.pointer = ffi.new('GValue *')

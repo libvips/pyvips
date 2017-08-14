@@ -3,7 +3,7 @@ from __future__ import division
 import logging
 
 import pyvips
-from pyvips import ffi, vips_lib, Error, to_bytes, to_string
+from pyvips import ffi, vips_lib, Error, to_bytes, to_string, GValue, type_name
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +26,9 @@ ffi.cdef('''
         VipsArgumentMapFn fn, void* a, void* b);
 
     VipsOperation* vips_cache_operation_build (VipsOperation* operation);
-    void vips_object_unref_outputs (VipsOperation *operation);
+    void vips_object_unref_outputs (VipsOperation* operation);
+
+    int vips_operation_get_flags (VipsOperation* operation);
 
 ''')
 
@@ -39,6 +41,9 @@ _INPUT = 16
 _OUTPUT = 32
 _DEPRECATED = 64
 _MODIFY = 128
+
+# for VipsOperationFlags
+_OPERATION_DEPRECATED = 8
 
 
 # search an array with a predicate, recursing into subarrays as we see them
@@ -60,7 +65,7 @@ def _find_inside(pred, thing):
 class Operation(pyvips.VipsObject):
     """Call libvips operations.
 
-    This class wraps the libvips VipsOperation class. 
+    This class wraps the libvips VipsOperation class.
 
     """
 
@@ -90,6 +95,9 @@ class Operation(pyvips.VipsObject):
 
         super(Operation, self).set(name, value)
 
+    def get_flags(self):
+        return vips_lib.vips_operation_get_flags(self.pointer)
+
     # this is slow ... call as little as possible
     def getargs(self):
         args = []
@@ -113,8 +121,6 @@ class Operation(pyvips.VipsObject):
 
         return args
 
-    # string_options is any optional args coded as a string, perhaps
-    # '[strip,tile=true]'
     @staticmethod
     def call(operation_name, *args, **kwargs):
         """Call a libvips operation.
@@ -123,7 +129,7 @@ class Operation(pyvips.VipsObject):
 
             black_image = pyvips.Operation.call('black', 10, 10)
 
-        See the Introduction for notes on how this works. 
+        See the Introduction for notes on how this works.
 
         """
 
@@ -229,5 +235,94 @@ class Operation(pyvips.VipsObject):
 
         return result
 
+    @staticmethod
+    def generate_docstring(operation_name):
+        vop = vips_lib.vips_operation_new(to_bytes(operation_name))
+        if vop == ffi.NULL:
+            raise Error('no such operation {0}'.format(operation_name))
+        op = Operation(vop)
+        vop = None
+
+        if (op.get_flags() & _OPERATION_DEPRECATED) != 0:
+            raise Error('No such operator.',
+                        'operator "{0}" is deprecated'.format(operation_name))
+
+        # find all the args for this op
+        args = op.getargs()
+
+        # we are only interested in non-deprecated args
+        args = [[name, flags] for name, flags in args
+                if not flags & _DEPRECATED]
+
+        # find the first required input image arg, if any ... that will be self
+        member_x = None
+        for name, flags in args:
+            if ((flags & _INPUT) != 0 and
+                    (flags & _REQUIRED) != 0 and
+                    op.get_typeof(name) == GValue.image_type):
+                member_x = name
+                break
+
+        description = op.get_description()
+        result = description[0].upper() + description[1:] + ".\n\n"
+        result += "Usage:\n"
+
+        required_input = []
+        for name, flags in args:
+            if ((flags & _INPUT) != 0 and
+                    (flags & _REQUIRED) != 0 and
+                    name != member_x):
+                required_input.append(name)
+
+        optional_input = []
+        for name, flags in args:
+            if ((flags & _INPUT) != 0 and
+                    (flags & _REQUIRED) == 0):
+                optional_input.append(name)
+
+        required_output = []
+        for name, flags in args:
+            if ((flags & _OUTPUT) != 0 and
+                    (flags & _REQUIRED) != 0):
+                required_output.append(name)
+
+        optional_output = []
+        for name, flags in args:
+            if ((flags & _OUTPUT) != 0 and
+                    (flags & _REQUIRED) == 0):
+                optional_output.append(name)
+
+        result += "   " + ", ".join(required_output) + " = "
+        if member_x:
+            result += member_x + "." + operation_name + "("
+        else:
+            result += "pyvips.Image." + operation_name + "("
+
+        result += ", ".join(required_input)
+        if len(optional_input) > 0 and len(required_input) > 0:
+            result += ", "
+        result += ", ".join([x + " = " + 
+                                GValue.gtype_to_python(op.get_typeof(x))
+                             for x in optional_input])
+        result += ")\n"
+
+        result += "Where:\n"
+        for name in required_output:
+            result += "   " + op.get_blurb(name) + "\n"
+
+        for name in required_input:
+            result += "   " + op.get_blurb(name) + "\n"
+
+        if len(optional_input) > 0:
+            result += "Keyword parameters:\n"
+            for name in optional_input:
+                result += "   " + op.get_blurb(name) + "\n"
+
+        if len(optional_output) > 0:
+            result += "Extra output options:\n"
+            for name in optional_output:
+                result += "   " + op.get_blurb(name) + "\n"
+
+        return result
 
 __all__ = ['Operation']

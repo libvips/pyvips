@@ -59,48 +59,48 @@ class Access(object):
 
 
 class Interpretation(object):
-    """How the values in an image should be interpreted. 
-    
-    For example, a three-band float image of type :lab should have its 
+    """How the values in an image should be interpreted.
+
+    For example, a three-band float image of type :lab should have its
     pixels interpreted as coordinates in CIE Lab space.
 
-    ``multiband`` 
+    ``multiband``
         generic many-band image
-    ``b_w`` 
+    ``b_w``
         some kind of single-band image
-    ``histogram`` 
+    ``histogram``
         a 1D image, eg. histogram or lookup table
-    ``fourier`` 
+    ``fourier``
         image is in fourier space
-    ``xyz`` 
-        the first three bands are CIE XYZ 
-    ``lab`` 
+    ``xyz``
+        the first three bands are CIE XYZ
+    ``lab``
         pixels are in CIE Lab space
-    ``cmyk`` 
+    ``cmyk``
         the first four bands are in CMYK space
-    ``labq`` 
+    ``labq``
         implies #VIPS_CODING_LABQ
-    ``rgb`` 
+    ``rgb``
         generic RGB space
-    ``cmc`` 
+    ``cmc``
         a uniform colourspace based on CMC(1:1)
-    ``lch`` 
+    ``lch``
         pixels are in CIE LCh space
-    ``labs`` 
+    ``labs``
         CIE LAB coded as three signed 16-bit values
-    ``srgb`` 
+    ``srgb``
         pixels are sRGB
-    ``hsv`` 
+    ``hsv``
         pixels are HSV
-    ``scrgb`` 
+    ``scrgb``
         pixels are scRGB
-    ``yxy`` 
+    ``yxy``
         pixels are CIE Yxy
-    ``rgb16`` 
+    ``rgb16``
         generic 16-bit RGB
-    ``grey16`` 
+    ``grey16``
         generic 16-bit mono
-    ``matrix`` 
+    ``matrix``
         a matrix
 
     """
@@ -127,17 +127,17 @@ class Interpretation(object):
 
 
 class Angle(object):
-    """Various fixed 90 degree rotation angles. 
-    
+    """Various fixed 90 degree rotation angles.
+
     See for example :meth:`.rot`.
 
-    ``d0`` 
+    ``d0``
         no rotate
-    ``d90`` 
+    ``d90``
         90 degrees clockwise
-    ``d180`` 
-        180 degrees 
-    ``d270`` 
+    ``d180``
+        180 degrees
+    ``d270``
         90 degrees anti-clockwise
 
     """
@@ -149,25 +149,25 @@ class Angle(object):
 
 
 class Angle45(object):
-    """Various fixed 45 degree rotation angles. 
-    
+    """Various fixed 45 degree rotation angles.
+
     See for example :meth:`.rot45`.
 
-    ``d0`` 
+    ``d0``
         no rotate
-    ``d45`` 
-        45 degrees clockwise 
-    ``d90`` 
+    ``d45``
+        45 degrees clockwise
+    ``d90``
         90 degrees clockwise
-    ``d135`` 
+    ``d135``
         135 degrees clockwise
-    ``d180`` 
-        180 degrees 
-    ``d225`` 
+    ``d180``
+        180 degrees
+    ``d225``
         135 degrees anti-clockwise
-    ``d270`` 
+    ``d270``
         90 degrees anti-clockwise
-    ``d315`` 
+    ``d315``
         45 degrees anti-clockwise
 
     """
@@ -193,21 +193,21 @@ class Extend(object):
     """How to extend image edges.
 
     When the edges of an image are extended, you can specify
-    how you want the extension done. 
-    See :meth:`.embed`, :meth:`.conv`, :meth:`.affine` and 
+    how you want the extension done.
+    See :meth:`.embed`, :meth:`.conv`, :meth:`.affine` and
     so on.
 
-    ``black`` 
-        new pixels are black, ie. all bits are zero. 
-    ``copy`` 
+    ``black``
+        new pixels are black, ie. all bits are zero.
+    ``copy``
         each new pixel takes the value of the nearest edge pixel
-    ``repeat`` 
+    ``repeat``
         the image is tiled to fill the new area
-    ``mirror`` 
+    ``mirror``
         the image is reflected and tiled to reduce hash edges
-    ``white`` 
+    ``white``
         new pixels are white, ie. all bits are set
-    ``background`` 
+    ``background``
         colour set from the @background property
 
     """
@@ -227,17 +227,17 @@ class Precision(object):
 
 
 class Coding(object):
-    """How pixels are coded. 
+    """How pixels are coded.
 
     Normally, pixels are uncoded and can be manipulated as you would expect.
     However some file formats code pixels for compression, and sometimes it's
     useful to be able to manipulate images in the coded format.
 
-    ``none`` 
+    ``none``
         pixels are not coded
-    ``labq`` 
+    ``labq``
         pixels encode 3 float CIELAB values as 4 uchar
-    ``rad`` 
+    ``rad``
         pixels encode 3 float RGB as 4 uchar (Radiance coding)
 
     """
@@ -250,12 +250,12 @@ class Coding(object):
 class Direction(object):
     """A direction.
 
-    Operations like :meth:`.flip` need to be told whether to flip 
-    left-right or top-bottom. 
+    Operations like :meth:`.flip` need to be told whether to flip
+    left-right or top-bottom.
 
-    ``horizontal`` 
-        left-right 
-    ``vertical`` 
+    ``horizontal``
+        left-right
+    ``vertical``
         top-bottom
 
     """
@@ -265,15 +265,15 @@ class Direction(object):
 
 
 class Align(object):
-    """Various types of alignment. 
-    
+    """Various types of alignment.
+
     See :meth:`.join`, for example.
 
-    ``low`` 
+    ``low``
         Align on the low coordinate edge
-    ``centre`` 
+    ``centre``
         Align on the centre
-    ``high`` 
+    ``high``
         Align on the high coordinate edge
 
     """

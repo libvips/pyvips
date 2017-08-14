@@ -65,19 +65,6 @@ def _is_2D(array):
     return True
 
 
-# https://stackoverflow.com/a/22409540/1480019
-def _with_metaclass(mcls):
-    def decorator(cls):
-        body = vars(cls).copy()
-        # clean out class body
-        body.pop('__dict__', None)
-        body.pop('__weakref__', None)
-
-        return mcls(cls.__name__, cls.__bases__, body)
-
-    return decorator
-
-
 # apply a function to a thing, or map over a list
 # we often need to do something like (1.0 / other) and need to work for lists
 # as well as scalars
@@ -130,6 +117,28 @@ def _run_cmplx(fn, image):
     return image
 
 
+# https://stackoverflow.com/a/22409540/1480019
+def _with_metaclass(mcls):
+    def decorator(cls):
+        body = vars(cls).copy()
+        # clean out class body
+        body.pop('__dict__', None)
+        body.pop('__weakref__', None)
+
+        return mcls(cls.__name__, cls.__bases__, body)
+
+    return decorator
+
+
+# decorator to set docstring
+def _add_doc(value):
+    def _doc(func):
+        func.__doc__ = value
+        return func
+
+    return _doc
+
+
 # metaclass for Image ... getattr on this implements the class methods
 class ImageType(type):
     def __getattr__(cls, name):
@@ -142,13 +151,13 @@ class ImageType(type):
 
     def __repr__(self):
         return ('<Image {0}x{1} {2}, {3} bands, {4}>'.
-                format(self.width, self.height, self.format, self.bands, 
+                format(self.width, self.height, self.format, self.bands,
                        self.interpretation))
 
 
 @_with_metaclass(ImageType)
 class Image(pyvips.VipsObject):
-    """Wrap a VipsImage object. 
+    """Wrap a VipsImage object.
 
     """
 
@@ -1082,29 +1091,8 @@ class Image(pyvips.VipsObject):
 
     # we need different imageize rules for this operator ... we need to
     # imageize th and el to match each other first
+    @_add_doc(pyvips.Operation.generate_docstring('ifthenelse'))
     def ifthenelse(self, th, el, **kwargs):
-        """Use a condition image to select pixels from then or else.
-
-        Where the condition image is non-zero, take pixels from then; otherwise
-        take pixels from else.
-
-        Args:
-
-        ``th``
-            The then image, or constant, or vector constant.
-        ``el``
-            The else image, or constant, or vector constant.
-        ``blend``
-            If True, blend pixels smoothly between th and el.
-
-        Returns:
-            A new :class:`Image`.
-
-        Raises:
-            :class:`.Error`
-
-        """
-
         for match_image in [th, el, self]:
             if isinstance(match_image, pyvips.Image):
                 break

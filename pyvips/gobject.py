@@ -1,9 +1,8 @@
 from __future__ import division
 
-import gc
 import logging
 
-from pyvips import ffi, vips_lib, gobject_lib
+from pyvips import ffi, gobject_lib
 
 logger = logging.getLogger(__name__)
 
@@ -40,8 +39,8 @@ class GObject(object):
     def __init__(self, pointer):
         """Wrap around a pointer.
 
-        Wraps a GObject instance around an underlying pointer. When the instance
-        is garbage-collected, the underlying object is unreferenced.
+        Wraps a GObject instance around an underlying pointer. When the
+        instance is garbage-collected, the underlying object is unreferenced.
 
         """
 

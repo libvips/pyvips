@@ -6,7 +6,7 @@ import gc
 import logging
 
 import pyvips
-from pyvips import ffi, vips_lib, gobject_lib, Error, to_bytes
+from pyvips import ffi, vips_lib, gobject_lib, Error, to_bytes, to_string
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +66,10 @@ ffi.cdef('''
 
     int vips_object_set_from_string (VipsObject* object, const char* options);
 
+    const char* vips_object_get_description (VipsObject* object);
+
+    const char* g_param_spec_get_blurb (GParamSpec* pspec);
+
 ''')
 
 
@@ -78,7 +82,7 @@ class VipsObject(pyvips.GObject):
     def print_all(msg):
         """Print all objects.
 
-        Print a table of all active libvips objects. Handy for debugging. 
+        Print a table of all active libvips objects. Handy for debugging.
 
         """
 
@@ -88,7 +92,7 @@ class VipsObject(pyvips.GObject):
         logger.debug()
 
     # slow! eeeeew
-    def get_typeof(self, name):
+    def get_pspec(self, name):
         # logger.debug('VipsObject.get_typeof: self = %s, name = %s',
         #              self, name)
 
@@ -103,9 +107,23 @@ class VipsObject(pyvips.GObject):
         if result != 0:
             # need to clear any error, this is horrible
             Error('')
+            return None
+
+        return pspec[0]
+
+    def get_typeof(self, name):
+        # logger.debug('VipsObject.get_typeof: self = %s, name = %s',
+        #              self, name)
+
+        pspec = self.get_pspec(name)
+        if pspec is not None:
+            return pspec.value_type
+        else:
             return 0
 
-        return pspec[0].value_type
+    def get_blurb(self, name):
+        c_str = gobject_lib.g_param_spec_get_blurb(self.get_pspec(name))
+        return to_string(ffi.string(c_str))
 
     def get(self, name):
         logger.debug('VipsObject.get: self = %s, name = %s', self, name)
@@ -138,6 +156,10 @@ class VipsObject(pyvips.GObject):
                                                       to_bytes(string_options))
 
         return result == 0
+
+    def get_description(self):
+        vo = ffi.cast('VipsObject *', self.pointer)
+        return to_string(ffi.string(vips_lib.vips_object_get_description(vo)))
 
 
 __all__ = ['VipsObject']
