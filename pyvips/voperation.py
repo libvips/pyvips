@@ -3,7 +3,8 @@ from __future__ import division
 import logging
 
 import pyvips
-from pyvips import ffi, vips_lib, Error, to_bytes, to_string, GValue
+from pyvips import ffi, vips_lib, Error, to_bytes, to_string, GValue, \
+    type_map, type_find, type_from_name, type_name, nickname_find
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +17,7 @@ ffi.cdef('''
 
     VipsOperation* vips_operation_new (const char* name);
 
-    typedef void *(*VipsArgumentMapFn) (VipsOperation* object,
+    typedef void* (*VipsArgumentMapFn) (VipsOperation* object,
         GParamSpec* pspec,
         VipsArgumentClass* argument_class,
         VipsArgumentInstance* argument_instance,
@@ -72,6 +73,13 @@ class Operation(pyvips.VipsObject):
     def __init__(self, pointer):
         # logger.debug('Operation.__init__: pointer = %s', pointer)
         super(Operation, self).__init__(pointer)
+
+    @staticmethod
+    def new_from_name(operation_name):
+        vop = vips_lib.vips_operation_new(to_bytes(operation_name))
+        if vop == ffi.NULL:
+            raise Error('no such operation {0}'.format(operation_name))
+        return Operation(vop)
 
     def set(self, name, flags, match_image, value):
         # if the object wants an image and we have a constant, imageize it
@@ -143,11 +151,7 @@ class Operation(pyvips.VipsObject):
 
         logger.debug('VipsOperation.call: string_options = %s', string_options)
 
-        vop = vips_lib.vips_operation_new(to_bytes(operation_name))
-        if vop == ffi.NULL:
-            raise Error('no such operation {0}'.format(operation_name))
-        op = Operation(vop)
-        vop = None
+        op = Operation.new_from_name(operation_name)
 
         arguments = op.getargs()
         # logger.debug('arguments = %s', arguments)
@@ -237,12 +241,7 @@ class Operation(pyvips.VipsObject):
 
     @staticmethod
     def generate_docstring(operation_name):
-        vop = vips_lib.vips_operation_new(to_bytes(operation_name))
-        if vop == ffi.NULL:
-            raise Error('no such operation {0}'.format(operation_name))
-        op = Operation(vop)
-        vop = None
-
+        op = Operation.new_from_name(operation_name)
         if (op.get_flags() & _OPERATION_DEPRECATED) != 0:
             raise Error('No such operator.',
                         'operator "{0}" is deprecated'.format(operation_name))
@@ -332,6 +331,22 @@ class Operation(pyvips.VipsObject):
                 result += GValue.gtype_to_python(op.get_typeof(name)) + '\n'
 
         return result
+
+
+    @staticmethod
+    def generate_docstring_all():
+        def generate_docstring_type(gtype):
+            nickname = nickname_find(gtype)
+            try:
+                docstr = Operation.generate_docstring(nickname)
+                print docstr
+                print 
+            except Error:
+                pass
+            type_map(gtype, generate_docstring_type)
+            return ffi.NULL
+
+        type_map(type_from_name('VipsOperation'), generate_docstring_type)
 
 
 __all__ = ['Operation']

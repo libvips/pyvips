@@ -8,7 +8,7 @@ import sys
 import pyvips
 from pyvips import ffi, vips_lib, gobject_lib, \
     glib_lib, Error, to_bytes, to_string, type_find, \
-    type_name
+    type_name, type_from_name
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +22,6 @@ ffi.cdef('''
 
     void g_value_init (GValue* value, GType gtype);
     void g_value_unset (GValue* value);
-    GType g_type_from_name (const char* name);
     GType g_type_fundamental (GType gtype);
 
     int vips_enum_from_nick (const char* domain,
@@ -81,19 +80,19 @@ class GValue(object):
     """
 
     # look up some common gtypes at init for speed
-    gbool_type = gobject_lib.g_type_from_name(b'gboolean')
-    gint_type = gobject_lib.g_type_from_name(b'gint')
-    gdouble_type = gobject_lib.g_type_from_name(b'gdouble')
-    gstr_type = gobject_lib.g_type_from_name(b'gchararray')
-    genum_type = gobject_lib.g_type_from_name(b'GEnum')
-    gflags_type = gobject_lib.g_type_from_name(b'GFlags')
-    gobject_type = gobject_lib.g_type_from_name(b'GObject')
-    image_type = gobject_lib.g_type_from_name(b'VipsImage')
-    array_int_type = gobject_lib.g_type_from_name(b'VipsArrayInt')
-    array_double_type = gobject_lib.g_type_from_name(b'VipsArrayDouble')
-    array_image_type = gobject_lib.g_type_from_name(b'VipsArrayImage')
-    refstr_type = gobject_lib.g_type_from_name(b'VipsRefString')
-    blob_type = gobject_lib.g_type_from_name(b'VipsBlob')
+    gbool_type = type_from_name('gboolean')
+    gint_type = type_from_name('gint')
+    gdouble_type = type_from_name('gdouble')
+    gstr_type = type_from_name('gchararray')
+    genum_type = type_from_name('GEnum')
+    gflags_type = type_from_name('GFlags')
+    gobject_type = type_from_name('GObject')
+    image_type = type_from_name('VipsImage')
+    array_int_type = type_from_name('VipsArrayInt')
+    array_double_type = type_from_name('VipsArrayDouble')
+    array_image_type = type_from_name('VipsArrayImage')
+    refstr_type = type_from_name('VipsRefString')
+    blob_type = type_from_name('VipsBlob')
 
     # map a gtype to the name of the corresponding Python type
     _gtype_to_python = {
@@ -119,10 +118,10 @@ class GValue(object):
         """
         fundamental = gobject_lib.g_type_fundamental(gtype)
 
-        if fundamental in GValue._gtype_to_python:
-            return GValue._gtype_to_python[fundamental]
         if gtype in GValue._gtype_to_python:
             return GValue._gtype_to_python[gtype]
+        if fundamental in GValue._gtype_to_python:
+            return GValue._gtype_to_python[fundamental]
         return '<unknown type>'
 
     def __init__(self):

@@ -15,7 +15,13 @@ ffi.cdef('''
     char* vips_path_mode7 (const char* path);
 
     GType vips_type_find (const char* basename, const char* nickname);
+    const char* vips_nickname_find (GType type);
+
     const char* g_type_name (GType gtype);
+    GType g_type_from_name (const char* name);
+
+    typedef void* (*VipsTypeMap2Fn) (GType type);
+    void* vips_type_map (GType base, VipsTypeMap2Fn fn);
 
 ''')
 
@@ -48,11 +54,26 @@ def type_find(basename, nickname):
 
 
 def type_name(gtype):
-    """Return the name for a GType.
+    """Return the name for a GType."""
 
-    Looks up the name of a GType.
-    """
     return to_string(ffi.string(gobject_lib.g_type_name(gtype)))
+
+
+def nickname_find(gtype):
+    """Return the nickname for a GType."""
+
+    return to_string(ffi.string(vips_lib.vips_nickname_find(gtype)))
+
+
+def type_from_name(name):
+    """Return the GType for a name."""
+
+    return gobject_lib.g_type_from_name(to_bytes(name))
+
+
+def type_map(gtype, fn):
+    cb = ffi.callback('VipsTypeMap2Fn', fn)
+    return vips_lib.vips_type_map (gtype, cb)
 
 
 __all__ = [
@@ -60,5 +81,8 @@ __all__ = [
     'path_filename7',
     'path_mode7',
     'type_find',
+    'nickname_find',
     'type_name',
+    'type_map',
+    'type_from_name',
 ]
