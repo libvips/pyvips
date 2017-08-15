@@ -144,15 +144,11 @@ class ImageType(type):
     def __getattr__(cls, name):
         # logger.debug('ImageType.__getattr__ %s', name)
 
+        @_add_doc(pyvips.Operation.generate_docstring(name))
         def call_function(*args, **kwargs):
             return pyvips.Operation.call(name, *args, **kwargs)
 
         return call_function
-
-    def __repr__(self):
-        return ('<Image {0}x{1} {2}, {3} bands, {4}>'.
-                format(self.width, self.height, self.format, self.bands,
-                       self.interpretation))
 
 
 @_with_metaclass(ImageType)
@@ -670,6 +666,11 @@ class Image(pyvips.VipsObject):
 
         return vips_lib.vips_image_remove(self.pointer, to_bytes(name)) != 0
 
+    def __repr__(self):
+        return ('<pyvips.Image {0}x{1} {2}, {3} bands, {4}>'.
+                format(self.width, self.height, self.format, self.bands,
+                       self.interpretation))
+
     def __getattr__(self, name):
         """Divert unknown names to libvips.
 
@@ -715,6 +716,7 @@ class Image(pyvips.VipsObject):
         if super(Image, self).get_typeof(name) != 0:
             return super(Image, self).get(name)
 
+        @_add_doc(pyvips.Operation.generate_docstring(name))
         def call_function(*args, **kwargs):
             return pyvips.Operation.call(name, self, *args, **kwargs)
 
