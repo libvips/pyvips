@@ -70,6 +70,9 @@ class Operation(pyvips.VipsObject):
 
     """
 
+    # cache nickname -> docstring here
+    _docstring_cache = {}
+
     def __init__(self, pointer):
         # logger.debug('Operation.__init__: pointer = %s', pointer)
         super(Operation, self).__init__(pointer)
@@ -241,6 +244,9 @@ class Operation(pyvips.VipsObject):
 
     @staticmethod
     def generate_docstring(operation_name):
+        if operation_name in Operation._docstring_cache:
+            return Operation._docstring_cache[operation_name]
+
         op = Operation.new_from_name(operation_name)
         if (op.get_flags() & _OPERATION_DEPRECATED) != 0:
             raise Error('No such operator.',
@@ -329,6 +335,9 @@ class Operation(pyvips.VipsObject):
                 result += "   " + name + ' ' * (10 - len(name)) + '- '
                 result += op.get_blurb(name) + ', '
                 result += GValue.gtype_to_python(op.get_typeof(name)) + '\n'
+
+        # add to cache to save building again
+        Operation._docstring_cache[operation_name] = result
 
         return result
 
