@@ -244,6 +244,10 @@ class Operation(pyvips.VipsObject):
 
     @staticmethod
     def generate_docstring(operation_name):
+        """Make a google-style docstring.
+
+        """
+
         if operation_name in Operation._docstring_cache:
             return Operation._docstring_cache[operation_name]
 
@@ -252,11 +256,8 @@ class Operation(pyvips.VipsObject):
             raise Error('No such operator.',
                         'operator "{0}" is deprecated'.format(operation_name))
 
-        # find all the args for this op
-        args = op.getargs()
-
         # we are only interested in non-deprecated args
-        args = [[name, flags] for name, flags in args
+        args = [[name, flags] for name, flags in op.getargs()
                 if not flags & _DEPRECATED]
 
         # find the first required input image arg, if any ... that will be self
@@ -268,34 +269,26 @@ class Operation(pyvips.VipsObject):
                 member_x = name
                 break
 
+        required_input = [name for name, flags in args
+                          if (flags & _INPUT) != 0 and
+                             (flags & _REQUIRED) != 0 and
+                             name != member_x]
+
+        optional_input = [name for name, flags in args
+                          if (flags & _INPUT) != 0 and
+                             (flags & _REQUIRED) == 0]
+
+        required_output = [name for name, flags in args
+                           if (flags & _OUTPUT) != 0 and
+                              (flags & _REQUIRED) != 0]
+
+        optional_output = [name for name, flags in args
+                           if (flags & _OUTPUT) != 0 and
+                              (flags & _REQUIRED) == 0]
+
         description = op.get_description()
         result = description[0].upper() + description[1:] + ".\n\n"
-        result += "Usage:\n"
-
-        required_input = []
-        for name, flags in args:
-            if ((flags & _INPUT) != 0 and
-                    (flags & _REQUIRED) != 0 and
-                    name != member_x):
-                required_input.append(name)
-
-        optional_input = []
-        for name, flags in args:
-            if ((flags & _INPUT) != 0 and
-                    (flags & _REQUIRED) == 0):
-                optional_input.append(name)
-
-        required_output = []
-        for name, flags in args:
-            if ((flags & _OUTPUT) != 0 and
-                    (flags & _REQUIRED) != 0):
-                required_output.append(name)
-
-        optional_output = []
-        for name, flags in args:
-            if ((flags & _OUTPUT) != 0 and
-                    (flags & _REQUIRED) == 0):
-                optional_output.append(name)
+        result += "Example:\n"
 
         result += "   " + ", ".join(required_output) + " = "
         if member_x is not None:
@@ -311,51 +304,147 @@ class Operation(pyvips.VipsObject):
                              for x in optional_input])
         result += ")\n"
 
-        names = required_output
+        def argstr(name):
+            return ('    {0} ({1}): {2}\n'.
+                    format(name, 
+                           GValue.gtype_to_python(op.get_typeof(name)),
+                           op.get_blurb(name)))
+
+        result += "\nReturns:\n"
+        for name in required_output:
+            result += argstr(name)
+
+        names = []
         if member_x is not None:
             names += [member_x]
         names += required_input
 
-        result += "Where:\n"
+        result += "\nArgs:\n"
         for name in names:
-            result += "   " + name + ' ' * (10 - len(name)) + '- '
-            result += op.get_blurb(name) + ', '
-            result += GValue.gtype_to_python(op.get_typeof(name)) + '\n'
+            result += argstr(name)
 
         if len(optional_input) > 0:
-            result += "Keyword parameters:\n"
+            result += "\nKeyword args:\n"
             for name in optional_input:
-                result += "   " + name + ' ' * (10 - len(name)) + '- '
-                result += op.get_blurb(name) + ', '
-                result += GValue.gtype_to_python(op.get_typeof(name)) + '\n'
+                result += argstr(name)
 
         if len(optional_output) > 0:
-            result += "Extra output options:\n"
+            result += "\nOther Parameters:\n"
             for name in optional_output:
-                result += "   " + name + ' ' * (10 - len(name)) + '- '
-                result += op.get_blurb(name) + ', '
-                result += GValue.gtype_to_python(op.get_typeof(name)) + '\n'
+                result += argstr(name)
+
+        result += "\nRaises:\n    :class:`.Error`\n"
 
         # add to cache to save building again
         Operation._docstring_cache[operation_name] = result
 
         return result
 
+    @staticmethod
+    def generate_sphinx(operation_name):
+        """Make a sphinx-style doctsring.
+
+        """
+
+        op = Operation.new_from_name(operation_name)
+        if (op.get_flags() & _OPERATION_DEPRECATED) != 0:
+            raise Error('No such operator.',
+                        'operator "{0}" is deprecated'.format(operation_name))
+
+        # we are only interested in non-deprecated args
+        args = [[name, flags] for name, flags in op.getargs()
+                if not flags & _DEPRECATED]
+
+        # find the first required input image arg, if any ... that will be self
+        member_x = None
+        for name, flags in args:
+            if ((flags & _INPUT) != 0 and
+                    (flags & _REQUIRED) != 0 and
+                    op.get_typeof(name) == GValue.image_type):
+                member_x = name
+                break
+
+        required_input = [name for name, flags in args
+                          if (flags & _INPUT) != 0 and
+                             (flags & _REQUIRED) != 0 and
+                             name != member_x]
+
+        optional_input = [name for name, flags in args
+                          if (flags & _INPUT) != 0 and
+                             (flags & _REQUIRED) == 0]
+
+        required_output = [name for name, flags in args
+                           if (flags & _OUTPUT) != 0 and
+                              (flags & _REQUIRED) != 0]
+
+        optional_output = [name for name, flags in args
+                           if (flags & _OUTPUT) != 0 and
+                              (flags & _REQUIRED) == 0]
+
+        if member_x is not None:
+            result = '.. method:: ' 
+        else:
+            result = '.. staticmethod:: ' 
+        result += operation_name + "("
+        result += ", ".join(required_input)
+        if len(optional_input) > 0 and len(required_input) > 0:
+            result += ', '
+        result += ', '.join([x + ' = ' +
+                             GValue.gtype_to_python(op.get_typeof(x))
+                             for x in optional_input])
+        result += ')\n\n'
+
+        description = op.get_description()
+        result += description[0].upper() + description[1:] + '.\n\n'
+
+        result += 'Example:\n'
+        result += '   ' + ', '.join(required_output) + ' = '
+        if member_x is not None:
+            result += member_x + "." + operation_name + '('
+        else:
+            result += 'pyvips.Image.' + operation_name + '('
+        result += ', '.join(required_input)
+        if len(optional_input) > 0 and len(required_input) > 0:
+            result += ', '
+        result += ', '.join([x + ' = ' +
+                             GValue.gtype_to_python(op.get_typeof(x))
+                             for x in optional_input])
+        result += ')\n\n'
+
+        for name in required_input + optional_input:
+            result += (':param {0} {1}: {2}\n'.
+                       format(GValue.gtype_to_python(op.get_typeof(name)),
+                              name,
+                              op.get_blurb(name)))
+
+        output_types = [GValue.gtype_to_python(op.get_typeof(name))
+                        for name in required_output + optional_output]
+        if len(output_types) == 1:
+            output_type = output_types[0]
+        else:
+            output_type = 'list[' + ', '.join(output_types) + ']'
+
+        result += ':rtype: ' + output_type + '\n'
+        result += ':raises Error:\n'
+
+        return result
 
     @staticmethod
-    def generate_docstring_all():
-        def generate_docstring_type(gtype):
+    def generate_sphinx_all():
+        print('.. class:: pyvips.Image\n')
+
+        def generate_sphinx_type(gtype):
             nickname = nickname_find(gtype)
             try:
-                docstr = Operation.generate_docstring(nickname)
-                print docstr
-                print 
+                docstr = Operation.generate_sphinx(nickname)
+                docstr = docstr.replace('\n', '\n      ')
+                print('   ' + docstr)
             except Error:
                 pass
-            type_map(gtype, generate_docstring_type)
+            type_map(gtype, generate_sphinx_type)
             return ffi.NULL
 
-        type_map(type_from_name('VipsOperation'), generate_docstring_type)
+        type_map(type_from_name('VipsOperation'), generate_sphinx_type)
 
 
 __all__ = ['Operation']

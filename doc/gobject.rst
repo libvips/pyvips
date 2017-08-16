@@ -1,7 +1,7 @@
 .. include global.rst
 
 ``GObject``
------------
+===========
 
 Manage object lifetime.
 

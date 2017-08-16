@@ -1,7 +1,7 @@
 .. include global.rst
 
 The libvips enums
------------------
+=================
 
 This module contains the various libvips enums as Python classes.
 

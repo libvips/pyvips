@@ -103,11 +103,11 @@ class GValue(object):
         refstr_type: 'str',
         genum_type: 'str',
         gflags_type: 'int',
-        gobject_type: 'pyvips.GObject',
-        image_type: 'pyvips.Image',
+        gobject_type: 'GObject',
+        image_type: 'Image',
         array_int_type: 'list[int]',
         array_double_type: 'list[float]',
-        array_image_type: 'list[pyvips.Image]',
+        array_image_type: 'list[Image]',
         blob_type: 'str'
     }
 

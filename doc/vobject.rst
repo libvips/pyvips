@@ -1,7 +1,7 @@
 .. include global.rst
 
 ``VipsObject``
---------------
+==============
 
 Get and set object argument properties.
 

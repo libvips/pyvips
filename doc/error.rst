@@ -1,7 +1,7 @@
 .. include global.rst
 
 ``Error``
----------
+=========
 
 Errors from libvips.
 

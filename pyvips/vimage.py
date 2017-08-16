@@ -200,28 +200,24 @@ class Image(pyvips.VipsObject):
         out the header. Pixels will only be decompressed when they are needed.
 
         Args:
-
-        ``vips_filename``
-            The disc file to load the image from, with optional appended
-            arguments.
+            vips_filename (str): The disc file to load the image from, with 
+                optional appended arguments.
 
         All loaders support at least the following options:
 
-        ``memory``
-            If set True, load the image via memory rather than via a temporary
-            disc file. See temp_image_file for notes on where temporary files
-            are created. Small images are loaded via memory by default, use
-            VIPS_DISC_THRESHOLD to set the definition of small.
-        ``access``
-            Hint the expected access pattern for the image, see
-            :class:`Access`.
-        ``fail``
-            If set True, the loader will fail with an error on the first
-            serious error in the file. By default, libvips will attempt to
-            read everything it can from a damanged image.
+        Keyword args:
+            memory (bool): If set True, load the image via memory rather than 
+                via a temporary disc file. See :meth:`temp_image_file` for notes
+                on where temporary files are created. Small images are
+                loaded via memory by default, use ``VIPS_DISC_THRESHOLD`` to
+                set the definition of small.
+            access (Access): Hint the expected access pattern for the image.
+            fail (bool): If set True, the loader will fail with an error on 
+                the first serious error in the file. By default, libvips 
+                will attempt to read everything it can from a damanged image.
 
         Returns:
-            A new :class:`Image`.
+            A new :class:`.Image`.
 
         Raises:
             :class:`.Error`
@@ -244,27 +240,21 @@ class Image(pyvips.VipsObject):
     def new_from_buffer(data, options, **kwargs):
         """Load a formatted image from memory.
 
-        This behaves exactly as :func:`Image.new_from_file`, but the image is
+        This behaves exactly as :meth:`new_from_file`, but the image is
         loaded from the memory object rather than from a file. The memory
         object can be a string or buffer.
 
         Args:
-
-        ``data``
-            The memory object to load the image from. It can be a string or
-            buffer.
-        ``options``
-            Load options as a string. Use ``""`` for no options.
+            data (str, buffer): The memory object to load the image from. 
+            options (str): Load options as a string. Use ``""`` for no options.
 
         All loaders support at least the following options:
 
-        ``access``
-            Hint the expected access pattern for the image, see
-            :class:`Access`.
-        ``fail``
-            If set True, the loader will fail with an error on the first
-            serious error in the image. By default, libvips will attempt
-            to read everything it can from a damanged image.
+        Keyword args:
+            access (Access): Hint the expected access pattern for the image.
+            fail (bool): If set True, the loader will fail with an error on the 
+                first serious error in the image. By default, libvips will 
+                attempt to read everything it can from a damanged image.
 
         Returns:
             A new :class:`Image`.
@@ -284,21 +274,17 @@ class Image(pyvips.VipsObject):
     def new_from_array(array, scale=1.0, offset=0.0):
         """Create an image from a 1D or 2D array.
 
-        A new one-band image with :class:`BandFormat` 'double' pixels is
+        A new one-band image with :class:`BandFormat` ``'double'`` pixels is
         created from the array. These image are useful with the libvips
-        convolution operator :func:`Image.conv`.
+        convolution operator :meth:`Image.conv`.
 
         Args:
-
-        ``array``
-            Create the image from these values. 1D arrays become a single row
-            of pixels.
-        ``scale``
-            Default to 1.0. What to divide each pixel by after convolution.
-            Useful for integer convolution masks.
-        ``offset``
-            Default to 0.0. What to subtract from each pixel after convolution.
-            Useful for integer convolution masks.
+            array (list[list[float]]): Create the image from these values. 
+                1D arrays become a single row of pixels.
+            scale (float): Default to 1.0. What to divide each pixel by after 
+                convolution.  Useful for integer convolution masks.
+            offset (float): Default to 0.0. What to subtract from each pixel 
+                after convolution.  Useful for integer convolution masks.
 
         Returns:
             A new :class:`Image`.
@@ -347,11 +333,9 @@ class Image(pyvips.VipsObject):
         generally look something like ``"vips-12-EJKJFGH.v"``.
 
         Args:
-
-        ``format``
-            The format for the temp file, for example ``"%s.v"`` for a vips
-            format file. The ``%s`` is
-            substituted by the file path.
+            format (str): The format for the temp file, for example 
+                ``"%s.v"`` for a vips format file. The ``%s`` is
+                substituted by the file path.
 
         Returns:
             A new :class:`Image`.
@@ -374,10 +358,9 @@ class Image(pyvips.VipsObject):
         and resolution as ``self``, but with every pixel set to ``value``.
 
         Args:
-
-        ``value``
-            The value for the pixels. Use a single number to make a one-band
-            image; use an array constant to make a many-band image.
+            value (float, list[float]): The value for the pixels. Use a 
+                single number to make a one-band image; use an array constant 
+                to make a many-band image.
 
         Returns:
             A new :class:`Image`.
@@ -444,10 +427,8 @@ class Image(pyvips.VipsObject):
         JPEG saver.
 
         Args:
-
-        ``vips_filename``
-            The disc file to save the image to, with optional appended
-            arguments.
+            vips_filename (str): The disc file to save the image to, with 
+                optional appended arguments.
 
         Other arguments depend upon the save operation.
 
@@ -494,9 +475,7 @@ class Image(pyvips.VipsObject):
         JPEG saver.
 
         Args:
-
-        ``format_string``
-            The suffix, plus any string-form arguments.
+            format_string (str): The suffix, plus any string-form arguments.
 
         Other arguments depend upon the save operation.
 
@@ -525,9 +504,7 @@ class Image(pyvips.VipsObject):
         :func:`Image.new_temp_file` to make an image that can be written to.
 
         Args:
-
-        ``other``
-            The :class:`Image` to write to,
+            other (Image): The :class:`Image` to write to,
 
         Returns:
             None
@@ -549,9 +526,7 @@ class Image(pyvips.VipsObject):
         exist. See :class:`GValue`.
 
         Args:
-
-        ``name``
-            The name of the piece of metadata to get the type of.
+            name (str): The name of the piece of metadata to get the type of.
 
         Returns:
             The ``GType``, or 0.
@@ -573,9 +548,7 @@ class Image(pyvips.VipsObject):
         would fetch the image orientation.
 
         Args:
-
-        ``name``
-            The name of the piece of metadata to get.
+            name (str): The name of the piece of metadata to get.
 
         Returns:
             The metadata item as a Python value.
@@ -600,14 +573,10 @@ class Image(pyvips.VipsObject):
         same name is removed. See :class:`GValue` for types.
 
         Args:
-
-        ``gtype``
-            The GType of the metadata item to create.
-        ``name``
-            The name of the piece of metadata to create.
-        ``value``
-            The value to set as a Python value. It is converted to the
-            ``gtype``, if possible.
+            gtype (int): The GType of the metadata item to create.
+            name (str): The name of the piece of metadata to create.
+            value (mixed): The value to set as a Python value. It is 
+                converted to the ``gtype``, if possible.
 
         Returns:
             None
@@ -629,12 +598,9 @@ class Image(pyvips.VipsObject):
         exist.
 
         Args:
-
-        ``name``
-            The name of the piece of metadata to set the value of.
-        ``value``
-            The value to set as a Python value. It is converted to the
-            type of the metadata item, if possible.
+            name (str): The name of the piece of metadata to set the value of.
+            value (mixed): The value to set as a Python value. It is 
+                converted to the type of the metadata item, if possible.
 
         Returns:
             None
@@ -652,9 +618,7 @@ class Image(pyvips.VipsObject):
         The named metadata item is removed.
 
         Args:
-
-        ``name``
-            The name of the piece of metadata to remove.
+            name (str): The name of the piece of metadata to remove.
 
         Returns:
             None
@@ -688,6 +652,9 @@ class Image(pyvips.VipsObject):
 
         A ``__getattr__`` on the metatype lets you call static members in the
         same way.
+
+        Args:
+            name (str): The name of the piece of metadata to get.
 
         Returns:
             Mixed.
@@ -752,7 +719,7 @@ class Image(pyvips.VipsObject):
             green = rgb_image[1]
 
         Will make a new one-band image from band 1 (the middle band). You can
-        also write:
+        also write::
 
             last_two = rgb_image[1:]
             last_band = rgb_image[-1]
@@ -790,11 +757,8 @@ class Image(pyvips.VipsObject):
         """Fetch a pixel value.
 
         Args:
-
-        ``x``
-            The x coordinate to fetch.
-        ``y``
-            The y coordinate to fetch.
+            x (int): The x coordinate to fetch.
+            y (int): The y coordinate to fetch.
 
         Returns:
             Pixel as an array of floating point numbers.
@@ -1112,12 +1076,9 @@ class Image(pyvips.VipsObject):
         This is the libvips ``scale`` operation, renamed to avoid a clash with
         the ``scale`` for convolution masks.
 
-        Args:
-
-        ``exp``
-            Optional exponent for log scale.
-        ``log``
-            Optional switch to turn on log scaling.
+        Keyword args:
+            exp (float): Exponent for log scale.
+            log (bool): Switch to turn on log scaling.
 
         Returns:
             A new :class:`Image`.
