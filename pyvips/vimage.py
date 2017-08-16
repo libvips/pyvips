@@ -200,20 +200,20 @@ class Image(pyvips.VipsObject):
         out the header. Pixels will only be decompressed when they are needed.
 
         Args:
-            vips_filename (str): The disc file to load the image from, with 
+            vips_filename (str): The disc file to load the image from, with
                 optional appended arguments.
 
         All loaders support at least the following options:
 
         Keyword args:
-            memory (bool): If set True, load the image via memory rather than 
-                via a temporary disc file. See :meth:`temp_image_file` for notes
-                on where temporary files are created. Small images are
+            memory (bool): If set True, load the image via memory rather than
+                via a temporary disc file. See :meth:`temp_image_file` for 
+                notes on where temporary files are created. Small images are
                 loaded via memory by default, use ``VIPS_DISC_THRESHOLD`` to
                 set the definition of small.
             access (Access): Hint the expected access pattern for the image.
-            fail (bool): If set True, the loader will fail with an error on 
-                the first serious error in the file. By default, libvips 
+            fail (bool): If set True, the loader will fail with an error on
+                the first serious error in the file. By default, libvips
                 will attempt to read everything it can from a damanged image.
 
         Returns:
@@ -245,15 +245,15 @@ class Image(pyvips.VipsObject):
         object can be a string or buffer.
 
         Args:
-            data (str, buffer): The memory object to load the image from. 
+            data (str, buffer): The memory object to load the image from.
             options (str): Load options as a string. Use ``""`` for no options.
 
         All loaders support at least the following options:
 
         Keyword args:
             access (Access): Hint the expected access pattern for the image.
-            fail (bool): If set True, the loader will fail with an error on the 
-                first serious error in the image. By default, libvips will 
+            fail (bool): If set True, the loader will fail with an error on the
+                first serious error in the image. By default, libvips will
                 attempt to read everything it can from a damanged image.
 
         Returns:
@@ -279,11 +279,11 @@ class Image(pyvips.VipsObject):
         convolution operator :meth:`Image.conv`.
 
         Args:
-            array (list[list[float]]): Create the image from these values. 
+            array (list[list[float]]): Create the image from these values.
                 1D arrays become a single row of pixels.
-            scale (float): Default to 1.0. What to divide each pixel by after 
+            scale (float): Default to 1.0. What to divide each pixel by after
                 convolution.  Useful for integer convolution masks.
-            offset (float): Default to 0.0. What to subtract from each pixel 
+            offset (float): Default to 0.0. What to subtract from each pixel
                 after convolution.  Useful for integer convolution masks.
 
         Returns:
@@ -333,7 +333,7 @@ class Image(pyvips.VipsObject):
         generally look something like ``"vips-12-EJKJFGH.v"``.
 
         Args:
-            format (str): The format for the temp file, for example 
+            format (str): The format for the temp file, for example
                 ``"%s.v"`` for a vips format file. The ``%s`` is
                 substituted by the file path.
 
@@ -358,8 +358,8 @@ class Image(pyvips.VipsObject):
         and resolution as ``self``, but with every pixel set to ``value``.
 
         Args:
-            value (float, list[float]): The value for the pixels. Use a 
-                single number to make a one-band image; use an array constant 
+            value (float, list[float]): The value for the pixels. Use a
+                single number to make a one-band image; use an array constant
                 to make a many-band image.
 
         Returns:
@@ -427,7 +427,7 @@ class Image(pyvips.VipsObject):
         JPEG saver.
 
         Args:
-            vips_filename (str): The disc file to save the image to, with 
+            vips_filename (str): The disc file to save the image to, with
                 optional appended arguments.
 
         Other arguments depend upon the save operation.
@@ -575,7 +575,7 @@ class Image(pyvips.VipsObject):
         Args:
             gtype (int): The GType of the metadata item to create.
             name (str): The name of the piece of metadata to create.
-            value (mixed): The value to set as a Python value. It is 
+            value (mixed): The value to set as a Python value. It is
                 converted to the ``gtype``, if possible.
 
         Returns:
@@ -599,7 +599,7 @@ class Image(pyvips.VipsObject):
 
         Args:
             name (str): The name of the piece of metadata to set the value of.
-            value (mixed): The value to set as a Python value. It is 
+            value (mixed): The value to set as a Python value. It is
                 converted to the type of the metadata item, if possible.
 
         Returns:

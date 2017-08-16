@@ -4,7 +4,7 @@ import logging
 
 import pyvips
 from pyvips import ffi, vips_lib, Error, to_bytes, to_string, GValue, \
-    type_map, type_find, type_from_name, type_name, nickname_find
+    type_map, type_from_name, nickname_find
 
 logger = logging.getLogger(__name__)
 
@@ -306,7 +306,7 @@ class Operation(pyvips.VipsObject):
 
         def argstr(name):
             return ('    {0} ({1}): {2}\n'.
-                    format(name, 
+                    format(name,
                            GValue.gtype_to_python(op.get_typeof(name)),
                            op.get_blurb(name)))
 
@@ -382,9 +382,9 @@ class Operation(pyvips.VipsObject):
                               (flags & _REQUIRED) == 0]
 
         if member_x is not None:
-            result = '.. method:: ' 
+            result = '.. method:: '
         else:
-            result = '.. staticmethod:: ' 
+            result = '.. staticmethod:: '
         result += operation_name + "("
         result += ", ".join(required_input)
         if len(optional_input) > 0 and len(required_input) > 0:

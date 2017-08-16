@@ -73,7 +73,7 @@ def type_from_name(name):
 
 def type_map(gtype, fn):
     cb = ffi.callback('VipsTypeMap2Fn', fn)
-    return vips_lib.vips_type_map (gtype, cb)
+    return vips_lib.vips_type_map(gtype, cb)
 
 
 __all__ = [
