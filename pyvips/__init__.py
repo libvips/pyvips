@@ -11,17 +11,28 @@ logger = logging.getLogger(__name__)
 ffi = FFI()
 
 _is_windows = os.name == 'nt'
+_is_mac = sys.platform == 'darwin'
 _is_64bits = sys.maxsize > 2 ** 32
 
-# possibly use ctypes.util.find_library() to locate the lib
-# need a different name on os x?
-vips_lib = ffi.dlopen('libvips-42.dll' if _is_windows
-                      else 'libvips.so')
-gobject_lib = ffi.dlopen('libgobject-2.0-0.dll' if _is_windows
-                         else 'libgobject-2.0.so')
-
+# yuk
 if _is_windows:
-    glib_lib = ffi.dlopen('libglib-2.0-0.dll')
+    _glib_libname = 'libglib-2.0-0.dll'
+    _gobject_libname = 'libgobject-2.0-0.dll'
+    _vips_libname = 'libvips-42.dll'
+elif _is_mac:
+    _glib_libname = None
+    _vips_libname = 'libvips.42.dylib'
+    _gobject_libname = 'libgobject-2.0.dylib'
+else:
+    _glib_libname = None
+    _vips_libname = 'libvips.so'
+    _gobject_libname = 'libgobject-2.0.so'
+
+# possibly use ctypes.util.find_library() to locate the lib?
+gobject_lib = ffi.dlopen(_gobject_libname)
+vips_lib = ffi.dlopen(_vips_libname)
+if _glib_libname:
+    glib_lib = ffi.dlopen(_glib_libname)
 else:
     glib_lib = gobject_lib
 
