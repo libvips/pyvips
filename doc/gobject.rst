@@ -3,7 +3,6 @@
 ``GObject``
 ===========
 
-Manage object lifetime.
-
 .. automodule:: pyvips.gobject
         :members:
+        :special-members:

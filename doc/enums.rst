@@ -10,4 +10,3 @@ valid strings for each enum.
 
 .. automodule:: pyvips.enums
         :members:
-        :undoc-members:

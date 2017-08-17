@@ -6,7 +6,7 @@ import logging
 import numbers
 
 import pyvips
-from pyvips import ffi, vips_lib, Error, to_bytes, to_string
+from pyvips import ffi, vips_lib, Error, _to_bytes, _to_string
 
 logger = logging.getLogger(__name__)
 
@@ -207,7 +207,7 @@ class Image(pyvips.VipsObject):
 
         Keyword args:
             memory (bool): If set True, load the image via memory rather than
-                via a temporary disc file. See :meth:`temp_image_file` for 
+                via a temporary disc file. See :meth:`temp_image_file` for
                 notes on where temporary files are created. Small images are
                 loaded via memory by default, use ``VIPS_DISC_THRESHOLD`` to
                 set the definition of small.
@@ -223,16 +223,16 @@ class Image(pyvips.VipsObject):
             :class:`.Error`
 
         """
-        vips_filename = to_bytes(vips_filename)
+        vips_filename = _to_bytes(vips_filename)
         filename = vips_lib.vips_filename_get_filename(vips_filename)
         options = vips_lib.vips_filename_get_options(vips_filename)
         name = vips_lib.vips_foreign_find_load(filename)
         if name == ffi.NULL:
             raise Error('unable to load from file {0}'.format(vips_filename))
 
-        return pyvips.Operation.call(to_string(ffi.string(name)),
-                                     to_string(ffi.string(filename)),
-                                     string_options=to_string(
+        return pyvips.Operation.call(_to_string(ffi.string(name)),
+                                     _to_string(ffi.string(filename)),
+                                     string_options=_to_string(
                                          ffi.string(options)
                                      ), **kwargs)
 
@@ -267,7 +267,7 @@ class Image(pyvips.VipsObject):
         if name == ffi.NULL:
             raise Error('unable to load from buffer')
 
-        return pyvips.Operation.call(to_string(ffi.string(name)), data,
+        return pyvips.Operation.call(_to_string(ffi.string(name)), data,
                                      string_options=options, **kwargs)
 
     @staticmethod
@@ -345,7 +345,7 @@ class Image(pyvips.VipsObject):
 
         """
 
-        vi = vips_lib.vips_image_new_temp_file(to_bytes(format))
+        vi = vips_lib.vips_image_new_temp_file(_to_bytes(format))
         if vi == ffi.NULL:
             raise Error('unable to make temp file')
 
@@ -439,15 +439,15 @@ class Image(pyvips.VipsObject):
             :class:`.Error`
 
         """
-        vips_filename = to_bytes(vips_filename)
+        vips_filename = _to_bytes(vips_filename)
         filename = vips_lib.vips_filename_get_filename(vips_filename)
         options = vips_lib.vips_filename_get_options(vips_filename)
         name = vips_lib.vips_foreign_find_save(filename)
         if name == ffi.NULL:
             raise Error('unable to write to file {0}'.format(vips_filename))
 
-        return pyvips.Operation.call(to_string(ffi.string(name)), self,
-                                     filename, string_options=to_string(
+        return pyvips.Operation.call(_to_string(ffi.string(name)), self,
+                                     filename, string_options=_to_string(
                                          ffi.string(options)
                                      ), **kwargs)
 
@@ -486,14 +486,14 @@ class Image(pyvips.VipsObject):
             :class:`.Error`
 
         """
-        format_string = to_bytes(format_string)
+        format_string = _to_bytes(format_string)
         options = vips_lib.vips_filename_get_options(format_string)
         name = vips_lib.vips_foreign_find_save_buffer(format_string)
         if name == ffi.NULL:
             raise Error('unable to write to buffer')
 
-        return pyvips.Operation.call(to_string(ffi.string(name)), self,
-                                     string_options=to_string(
+        return pyvips.Operation.call(_to_string(ffi.string(name)), self,
+                                     string_options=_to_string(
                                          ffi.string(options)
                                      ), **kwargs)
 
@@ -536,7 +536,7 @@ class Image(pyvips.VipsObject):
 
         """
 
-        return vips_lib.vips_image_get_typeof(self.pointer, to_bytes(name))
+        return vips_lib.vips_image_get_typeof(self.pointer, _to_bytes(name))
 
     def get(self, name):
         """Get an item of metadata.
@@ -559,7 +559,7 @@ class Image(pyvips.VipsObject):
         """
 
         gv = pyvips.GValue()
-        result = vips_lib.vips_image_get(self.pointer, to_bytes(name),
+        result = vips_lib.vips_image_get(self.pointer, _to_bytes(name),
                                          gv.pointer)
         if result != 0:
             raise Error('unable to get {0}'.format(name))
@@ -582,14 +582,14 @@ class Image(pyvips.VipsObject):
             None
 
         Raises:
-            :class:`.Error`
+            None
 
         """
 
         gv = pyvips.GValue()
-        gv.init(gtype)
+        gv.set_type(gtype)
         gv.set(value)
-        vips_lib.vips_image_set(self.pointer, to_bytes(name), gv.pointer)
+        vips_lib.vips_image_set(self.pointer, _to_bytes(name), gv.pointer)
 
     def set(self, name, value):
         """Set the value of an item of metadata.
@@ -606,7 +606,7 @@ class Image(pyvips.VipsObject):
             None
 
         Raises:
-            :class:`.Error`
+            None
 
         """
         gtype = self.get_typeof(name)
@@ -624,11 +624,11 @@ class Image(pyvips.VipsObject):
             None
 
         Raises:
-            :class:`.Error`
+            None
 
         """
 
-        return vips_lib.vips_image_remove(self.pointer, to_bytes(name)) != 0
+        return vips_lib.vips_image_remove(self.pointer, _to_bytes(name)) != 0
 
     def __repr__(self):
         return ('<pyvips.Image {0}x{1} {2}, {3} bands, {4}>'.

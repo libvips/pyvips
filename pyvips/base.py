@@ -1,6 +1,6 @@
 # basic defs and link to ffi
 
-from pyvips import ffi, vips_lib, gobject_lib, to_string, to_bytes
+from pyvips import ffi, vips_lib, gobject_lib, _to_string, _to_bytes
 
 ffi.cdef('''
     typedef struct _VipsImage VipsImage;
@@ -36,12 +36,12 @@ def leak_set(leak):
 
 
 def path_filename7(filename):
-    return to_string(ffi.string(vips_lib.vips_path_filename7(
-        to_bytes(filename))))
+    return _to_string(ffi.string(vips_lib.vips_path_filename7(
+        _to_bytes(filename))))
 
 
 def path_mode7(filename):
-    return to_string(ffi.string(vips_lib.vips_path_mode7(to_bytes(filename))))
+    return _to_string(ffi.string(vips_lib.vips_path_mode7(_to_bytes(filename))))
 
 
 def type_find(basename, nickname):
@@ -50,28 +50,29 @@ def type_find(basename, nickname):
     Looks up the GType for a nickname. Types below basename in the type
     hierarchy are searched.
     """
-    return vips_lib.vips_type_find(to_bytes(basename), to_bytes(nickname))
+    return vips_lib.vips_type_find(_to_bytes(basename), _to_bytes(nickname))
 
 
 def type_name(gtype):
     """Return the name for a GType."""
 
-    return to_string(ffi.string(gobject_lib.g_type_name(gtype)))
+    return _to_string(ffi.string(gobject_lib.g_type_name(gtype)))
 
 
 def nickname_find(gtype):
     """Return the nickname for a GType."""
 
-    return to_string(ffi.string(vips_lib.vips_nickname_find(gtype)))
+    return _to_string(ffi.string(vips_lib.vips_nickname_find(gtype)))
 
 
 def type_from_name(name):
     """Return the GType for a name."""
 
-    return gobject_lib.g_type_from_name(to_bytes(name))
+    return gobject_lib.g_type_from_name(_to_bytes(name))
 
 
 def type_map(gtype, fn):
+    """Map fn over all child types of gtype."""
     cb = ffi.callback('VipsTypeMap2Fn', fn)
     return vips_lib.vips_type_map(gtype, cb)
 

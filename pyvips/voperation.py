@@ -3,7 +3,7 @@ from __future__ import division
 import logging
 
 import pyvips
-from pyvips import ffi, vips_lib, Error, to_bytes, to_string, GValue, \
+from pyvips import ffi, vips_lib, Error, _to_bytes, _to_string, GValue, \
     type_map, type_from_name, nickname_find
 
 logger = logging.getLogger(__name__)
@@ -79,7 +79,7 @@ class Operation(pyvips.VipsObject):
 
     @staticmethod
     def new_from_name(operation_name):
-        vop = vips_lib.vips_operation_new(to_bytes(operation_name))
+        vop = vips_lib.vips_operation_new(_to_bytes(operation_name))
         if vop == ffi.NULL:
             raise Error('no such operation {0}'.format(operation_name))
         return Operation(vop)
@@ -117,7 +117,7 @@ class Operation(pyvips.VipsObject):
                           argument_instance, a, b):
             flags = argument_class.flags
             if (flags & _CONSTRUCT) != 0:
-                name = to_string(ffi.string(pspec.name))
+                name = _to_string(ffi.string(pspec.name))
 
                 # libvips uses '-' to separate parts of arg names, but we
                 # need '_' for Python
@@ -144,8 +144,7 @@ class Operation(pyvips.VipsObject):
 
         """
 
-        logger.debug('VipsOperation.call: operation_name = %s',
-                     operation_name)
+        logger.debug('VipsOperation.call: operation_name = %s', operation_name)
         # logger.debug('VipsOperation.call: args = %s, kwargs =%s',
         #              args, kwargs)
 
@@ -246,6 +245,8 @@ class Operation(pyvips.VipsObject):
     def generate_docstring(operation_name):
         """Make a google-style docstring.
 
+        This is used to generate help() output.
+
         """
 
         if operation_name in Operation._docstring_cache:
@@ -344,6 +345,8 @@ class Operation(pyvips.VipsObject):
     def generate_sphinx(operation_name):
         """Make a sphinx-style doctsring.
 
+        This is used to generate the off-line docs.
+
         """
 
         op = Operation.new_from_name(operation_name)
@@ -398,7 +401,7 @@ class Operation(pyvips.VipsObject):
         result += description[0].upper() + description[1:] + '.\n\n'
 
         result += 'Example:\n'
-        result += '   ' + ', '.join(required_output) + ' = '
+        result += '    ' + ', '.join(required_output) + ' = '
         if member_x is not None:
             result += member_x + "." + operation_name + '('
         else:
@@ -431,6 +434,19 @@ class Operation(pyvips.VipsObject):
 
     @staticmethod
     def generate_sphinx_all():
+        """Generate sphinx documentation.
+
+        This generates a .rst file for all auto-generated image methods. Use it
+        to regenerate the docs with something like::
+
+            $ python -c \
+"import pyvips; pyvips.Operation.generate_sphinx_all()" > x
+
+        And copy-paste the file contents into doc/vimage.rst in the appropriate
+        place.
+
+        """
+
         print('.. class:: pyvips.Image\n')
 
         def generate_sphinx_type(gtype):

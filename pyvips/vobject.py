@@ -6,7 +6,7 @@ import gc
 import logging
 
 import pyvips
-from pyvips import ffi, vips_lib, gobject_lib, Error, to_bytes, to_string
+from pyvips import ffi, vips_lib, gobject_lib, Error, _to_bytes, _to_string
 
 logger = logging.getLogger(__name__)
 
@@ -74,6 +74,8 @@ ffi.cdef('''
 
 
 class VipsObject(pyvips.GObject):
+    """Manage a VipsObject."""
+
     def __init__(self, pointer):
         # logger.debug('VipsObject.__init__: pointer = %s', pointer)
         super(VipsObject, self).__init__(pointer)
@@ -100,7 +102,7 @@ class VipsObject(pyvips.GObject):
         argument_class = ffi.new('VipsArgumentClass **')
         argument_instance = ffi.new('VipsArgumentInstance **')
         vo = ffi.cast('VipsObject *', self.pointer)
-        result = vips_lib.vips_object_get_argument(vo, to_bytes(name),
+        result = vips_lib.vips_object_get_argument(vo, _to_bytes(name),
                                                    pspec, argument_class,
                                                    argument_instance)
 
@@ -112,6 +114,12 @@ class VipsObject(pyvips.GObject):
         return pspec[0]
 
     def get_typeof(self, name):
+        """Get the GType of a GObject property.
+
+        This function returns 0 if the property does not exist.
+
+        """
+
         # logger.debug('VipsObject.get_typeof: self = %s, name = %s',
         #              self, name)
 
@@ -122,44 +130,68 @@ class VipsObject(pyvips.GObject):
             return 0
 
     def get_blurb(self, name):
+        """Get the blurb for a GObject property."""
+
         c_str = gobject_lib.g_param_spec_get_blurb(self.get_pspec(name))
-        return to_string(ffi.string(c_str))
+        return _to_string(ffi.string(c_str))
 
     def get(self, name):
+        """Get a GObject property.
+
+        The value of the property is converted to a Python value.
+
+        """
+
         logger.debug('VipsObject.get: self = %s, name = %s', self, name)
 
         gtype = self.get_typeof(name)
 
         gv = pyvips.GValue()
-        gv.init(gtype)
+        gv.set_type(gtype)
         go = ffi.cast('GObject *', self.pointer)
-        gobject_lib.g_object_get_property(go, to_bytes(name), gv.pointer)
+        gobject_lib.g_object_get_property(go, _to_bytes(name), gv.pointer)
 
         return gv.get()
 
     def set(self, name, value):
+        """Set a GObject property.
+
+        The value is converted to the property type, if possible.
+
+        """
+
         logger.debug('VipsObject.set: self = %s, name = %s, value = %s',
                      self, name, value)
 
         gtype = self.get_typeof(name)
 
         gv = pyvips.GValue()
-        gv.init(gtype)
+        gv.set_type(gtype)
         gv.set(value)
         go = ffi.cast('GObject *', self.pointer)
-        gobject_lib.g_object_set_property(go, to_bytes(name), gv.pointer)
+        gobject_lib.g_object_set_property(go, _to_bytes(name), gv.pointer)
 
-    # set a series of options using a string, perhaps 'fred=12, tile'
     def set_string(self, string_options):
+        """Set a series of properties using a string.
+
+        For example::
+
+            'fred=12, tile'
+            '[fred=12]'
+
+        """
+
         vo = ffi.cast('VipsObject *', self.pointer)
         result = vips_lib.vips_object_set_from_string(vo,
-                                                      to_bytes(string_options))
+                                                      _to_bytes(string_options))
 
         return result == 0
 
     def get_description(self):
+        """Get the description of a GObject."""
+
         vo = ffi.cast('VipsObject *', self.pointer)
-        return to_string(ffi.string(vips_lib.vips_object_get_description(vo)))
+        return _to_string(ffi.string(vips_lib.vips_object_get_description(vo)))
 
 
 __all__ = ['VipsObject']

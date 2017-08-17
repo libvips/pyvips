@@ -36,6 +36,10 @@ ffi.cdef('''
 
 
 class GObject(object):
+    """Manage GObject lifetime.
+
+    """
+
     def __init__(self, pointer):
         """Wrap around a pointer.
 

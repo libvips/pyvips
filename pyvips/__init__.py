@@ -45,7 +45,7 @@ ffi.cdef('''
     int vips_init (const char* argv0);
 ''')
 
-if vips_lib.vips_init(to_bytes(sys.argv[0])) != 0:
+if vips_lib.vips_init(_to_bytes(sys.argv[0])) != 0:
     raise Error('unable to init libvips')
 
 logger.debug('Inited libvips')

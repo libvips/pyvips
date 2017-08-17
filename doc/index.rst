@@ -17,6 +17,7 @@ Contents
    README
    intro
    vimage
+   base
    error
    enums
    vinterpolate

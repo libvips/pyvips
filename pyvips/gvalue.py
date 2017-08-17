@@ -7,7 +7,7 @@ import sys
 
 import pyvips
 from pyvips import ffi, vips_lib, gobject_lib, \
-    glib_lib, Error, to_bytes, to_string, type_find, \
+    glib_lib, Error, _to_bytes, _to_string, type_find, \
     type_name, type_from_name
 
 logger = logging.getLogger(__name__)
@@ -68,12 +68,12 @@ class GValue(object):
 
     """Wrap GValue in a Python class.
 
-    This class wraps GValue in a convenient interface. You can use instances of
-    this class to get and set GObject properties.
+    This class wraps :class:`.GValue` in a convenient interface. You can use
+    instances of this class to get and set :class:`.GObject` properties.
 
-    On construction, GValue is all zero (empty). You can pass it to a get
-    function to have it filled by gobject, or use init to set a type, set to
-    set a value, then use it to set an object property.
+    On construction, :class:`.GValue` is all zero (empty). You can pass it to
+    a get function to have it filled by :class:`.GObject`, or use init to
+    set a type, set to set a value, then use it to set an object property.
 
     GValue lifetime is managed automatically.
 
@@ -113,9 +113,10 @@ class GValue(object):
 
     @staticmethod
     def gtype_to_python(gtype):
-        """Map a gtype to a python name.
+        """Map a gtype to the name of the Python type we use to represent it.
 
         """
+
         fundamental = gobject_lib.g_type_fundamental(gtype)
 
         if gtype in GValue._gtype_to_python:
@@ -133,15 +134,17 @@ class GValue(object):
         self.gvalue = ffi.gc(self.pointer, gobject_lib.g_value_unset)
         # logger.debug('GValue.__init__: gvalue = %s', self.gvalue)
 
-    def init(self, gtype):
+    def set_type(self, gtype):
         """Set the type of a GValue.
 
-        GValues have a set type, fixed at creation time. Use init to set the
-        type of a GValue before assigning to it.
+        GValues have a set type, fixed at creation time. Use set_type to set 
+        the type of a GValue before assigning to it.
 
         GTypes are 32 or 64-bit integers (depending on the platform). See
         type_find.
+
         """
+
         gobject_lib.g_value_init(self.gvalue, gtype)
 
     def set(self, value):
@@ -149,7 +152,9 @@ class GValue(object):
 
         The value is converted to the type of the GValue, if possible, and
         assigned.
+
         """
+
         # logger.debug('GValue.set: self = %s, value = %s', self, value)
 
         gtype = self.gvalue.gtype
@@ -164,7 +169,7 @@ class GValue(object):
         elif fundamental == GValue.genum_type:
             if isinstance(value, basestring if _is_PY2 else str):
                 enum_value = vips_lib.vips_enum_from_nick(b'pyvips', gtype,
-                                                          to_bytes(value))
+                                                          _to_bytes(value))
 
                 if enum_value < 0:
                     raise Error('no such enum {0}'.format(value))
@@ -175,7 +180,7 @@ class GValue(object):
         elif fundamental == GValue.gflags_type:
             gobject_lib.g_value_set_flags(self.gvalue, value)
         elif gtype == GValue.gstr_type or gtype == GValue.refstr_type:
-            gobject_lib.g_value_set_string(self.gvalue, to_bytes(value))
+            gobject_lib.g_value_set_string(self.gvalue, _to_bytes(value))
         elif fundamental == GValue.gobject_type:
             gobject_lib.g_value_set_object(self.gvalue, value.pointer)
         elif gtype == GValue.array_int_type:
@@ -237,19 +242,19 @@ class GValue(object):
             if cstr == 0:
                 raise Error('value not in enum')
 
-            result = to_string(ffi.string(cstr))
+            result = _to_string(ffi.string(cstr))
         elif fundamental == GValue.gflags_type:
             result = gobject_lib.g_value_get_flags(self.gvalue)
         elif gtype == GValue.gstr_type:
             cstr = gobject_lib.g_value_get_string(self.gvalue)
 
             if cstr != ffi.NULL:
-                result = to_string(ffi.string(cstr))
+                result = _to_string(ffi.string(cstr))
         elif gtype == GValue.refstr_type:
             psize = ffi.new('size_t *')
             cstr = vips_lib.vips_value_get_ref_string(self.gvalue, psize)
 
-            result = to_string(ffi.string(cstr, psize[0]))
+            result = _to_string(ffi.string(cstr, psize[0]))
         elif gtype == GValue.image_type:
             # g_value_get_object() will not add a ref ... that is
             # held by the gvalue
@@ -299,4 +304,4 @@ class GValue(object):
         return result
 
 
-__all__ = ['GValue', 'type_find', 'type_name']
+__all__ = ['GValue']
