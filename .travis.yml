@@ -16,7 +16,7 @@ addons:
     packages:
       - libexpat1-dev
       - gettext
-      - liblcms1-dev
+      - liblcms2-dev
       - libmagickwand-dev
       - libopenexr-dev
       - libcfitsio3-dev
