@@ -28,6 +28,7 @@ addons:
       - liborc-0.4-dev
       - libpango1.0-dev
       - libpoppler-glib-dev
+      - librsvg2-dev
       - libwebp-dev
         # missing on trusty, unfortunately
         # - libwebpmux2
