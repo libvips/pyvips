@@ -29,6 +29,8 @@ addons:
       - libpango1.0-dev
       - libpoppler-glib-dev
       - libwebp-dev
+      - libwebpmux2
+      - fftw-dev
       - libglib2.0-dev
 
 cache:
@@ -49,7 +51,7 @@ language: python
 install:
   - pip install .
 
-script: pytest
+script: "nosetests --logging-level=WARNING"
 
 before_install:
   - uname -a
