@@ -78,18 +78,6 @@ write any format supported by vips: the file type is set from the filename
 suffix. You can also write formatted images to memory buffers, or dump
 image data to a raw memory array.
 
-How it works
-------------
-
-The binding uses https://pypi.python.org/pypi/cffi to open the libvips
-shared library. When you call a method on the image class, it uses libvips
-introspection system (based on ``GObject``) to search the
-library for an operation of that name, transforms the arguments to a form
-libvips can digest, and runs the operation.
-
-This means pyvips always presents the API implemented by the libvips shared
-library. It should update itself as new features are added.
-
 Automatic wrapping
 ------------------
 
@@ -137,10 +125,10 @@ chain them. For example, you can write::
 
     result_image = image.real().cos()
 
-to calculate the cosine of the real part of a complex image.  There are
+to calculate the cosine of the real part of a complex image.  There is
 also a full set of arithmetic operator overloads, see below.
 
-libvips types are also automatically wrapped. The binding looks at the type
+libvips types are automatically wrapped. The binding looks at the type
 of argument required by the operation and converts the value you supply,
 when it can. For example, :meth:`.linear` takes a ``VipsArrayDouble`` as an
 argument for the set of constants to use for multiplication. You can supply
@@ -154,8 +142,8 @@ will be converted for you. You can write::
 
 And so on. A set of overloads are defined for :meth:`.linear`, see below.
 
-It does a couple of more ambitious conversions. It will automatically convert
-to and from the various vips types, like ``VipsBlob`` and
+It also does a couple of more ambitious conversions. It will automatically
+convert to and from the various vips types, like ``VipsBlob`` and
 ``VipsArrayImage``. For example, you can read the ICC profile out of an
 image like this::
 
@@ -197,8 +185,9 @@ Automatic documentation
 -----------------------
 
 The bulk of these API docs are generated automatically by
-:meth:`.generate_docs`. It examines libvips and writes a summary of each
-operation and the arguments and options that that operation expects.
+:meth:`.Operation.generate_sphinx_all`. It examines libvips and writes a
+summary of each operation and the arguments and options that that operation
+expects.
 
 Use the C API docs for more detail:
 
@@ -215,7 +204,7 @@ Enums
 
 The libvips enums, such as ``VipsBandFormat``, appear in pyvips as strings
 like ``'uchar'``. They are documented as a set of classes for convenience, see
-the class list.
+:class:`.Access`, for example.
 
 Draw operations
 ---------------
@@ -252,7 +241,7 @@ Some vips operators take an enum to select an action, for example
     result_image = image.math('sin')
 
 This is annoying, so the wrapper expands all these enums into separate members
-named after the enum. So you can also write::
+named after the enum value. So you can also write::
 
     result_image = image.sin()
 
