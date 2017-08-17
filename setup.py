@@ -14,6 +14,14 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
+test_deps = [
+    'nose',
+]
+
+extras = {
+    'test': test_deps,
+}
+
 setup(
     name='pyvips',
     version='2.0.0.dev1',
@@ -46,9 +54,7 @@ setup(
 
     install_requires=['cffi'],
 
-    extras_require={
-        'test': ['nose'],
-    },
-    test_suite='nose.collector',
+    tests_require=test_deps,
+    extras_require=extras,
 
 )

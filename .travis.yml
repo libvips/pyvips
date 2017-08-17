@@ -31,9 +31,8 @@ addons:
       - libwebp-dev
         # missing on trusty, unfortunately
         # - libwebpmux2
-      - fftw-dev
+      - libfftw3-dev
       - libglib2.0-dev
-      - python-pytest
 
 cache:
   directories:
@@ -51,9 +50,9 @@ language: python
   - "pypy3"
 
 install:
-  - pip install .
+  - pip install .[test]
 
-script: py.test
+script: "nosetests --logging-level=WARNING"
 
 before_install:
   - uname -a
