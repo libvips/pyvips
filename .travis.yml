@@ -33,6 +33,7 @@ addons:
         # - libwebpmux2
       - fftw-dev
       - libglib2.0-dev
+      - python-pytest
 
 cache:
   directories:
