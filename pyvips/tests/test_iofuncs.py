@@ -58,6 +58,27 @@ class TestIofuncs(PyvipsTester):
         self.assertEqual(im2.bands, 3)
         self.assertEqual(im2.avg(), 2)
 
+    def test_new_from_memory(self):
+        s = bytearray(200)
+        im = pyvips.Image.new_from_memory(s, 20, 10, 1, 'uchar')
+
+        self.assertEqual(im.width, 20)
+        self.assertEqual(im.height, 10)
+        self.assertEqual(im.format, 'uchar')
+        self.assertEqual(im.bands, 1)
+        self.assertEqual(im.avg(), 0)
+
+        im += 10
+
+        self.assertEqual(im.avg(), 10)
+
+    def test_write_to_memory(self):
+        s = bytearray(200)
+        im = pyvips.Image.new_from_memory(s, 20, 10, 1, 'uchar')
+        t = im.write_to_memory()
+
+        self.assertEqual(s, t)
+
 
 if __name__ == '__main__':
     unittest.main()

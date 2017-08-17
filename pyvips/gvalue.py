@@ -57,9 +57,10 @@ ffi.cdef('''
     VipsImage** vips_value_get_array_image (const GValue* value, int* n);
     void* vips_value_get_blob (const GValue* value, size_t* length);
 
-    // just for testing
+    // need to make some of these by hand
     GType vips_interpretation_get_type (void);
     GType vips_operation_flags_get_type (void);
+    GType vips_band_format_get_type (void);
 
 ''')
 
@@ -94,6 +95,9 @@ class GValue(object):
     refstr_type = type_from_name('VipsRefString')
     blob_type = type_from_name('VipsBlob')
 
+    pyvips.vips_lib.vips_band_format_get_type()
+    format_type = type_from_name('VipsBandFormat')
+
     # map a gtype to the name of the corresponding Python type
     _gtype_to_python = {
         gbool_type: 'bool',
@@ -124,6 +128,35 @@ class GValue(object):
         if fundamental in GValue._gtype_to_python:
             return GValue._gtype_to_python[fundamental]
         return '<unknown type>'
+
+    @staticmethod
+    def to_enum(gtype, value):
+        """Turn a string into an enum value ready to be passed into libvips.
+
+        """
+
+        if isinstance(value, basestring if _is_PY2 else str):
+            enum_value = vips_lib.vips_enum_from_nick(b'pyvips', gtype,
+                                                      _to_bytes(value))
+            if enum_value < 0:
+                raise Error('no value {0} in gtype {1} ({2})'.
+                            format(value, type_name(gtype), gtype))
+        else:
+            enum_value = value
+
+        return enum_value
+
+    @staticmethod
+    def from_enum(gtype, enum_value):
+        """Turn an int back into an enum string.
+
+        """
+
+        cstr = vips_lib.vips_enum_nick(gtype, enum_value)
+        if cstr == 0:
+            raise Error('value not in enum')
+
+        return _to_string(ffi.string(cstr))
 
     def __init__(self):
         # allocate memory for the gvalue which will be freed on GC
@@ -167,16 +200,8 @@ class GValue(object):
         elif gtype == GValue.gdouble_type:
             gobject_lib.g_value_set_double(self.gvalue, value)
         elif fundamental == GValue.genum_type:
-            if isinstance(value, basestring if _is_PY2 else str):
-                enum_value = vips_lib.vips_enum_from_nick(b'pyvips', gtype,
-                                                          _to_bytes(value))
-
-                if enum_value < 0:
-                    raise Error('no such enum {0}'.format(value))
-            else:
-                enum_value = value
-
-            gobject_lib.g_value_set_enum(self.gvalue, enum_value)
+            gobject_lib.g_value_set_enum(self.gvalue, 
+                                         GValue.to_enum(gtype, value))
         elif fundamental == GValue.gflags_type:
             gobject_lib.g_value_set_flags(self.gvalue, value)
         elif gtype == GValue.gstr_type or gtype == GValue.refstr_type:
@@ -237,12 +262,8 @@ class GValue(object):
         elif gtype == GValue.gdouble_type:
             result = gobject_lib.g_value_get_double(self.gvalue)
         elif fundamental == GValue.genum_type:
-            enum_value = gobject_lib.g_value_get_enum(self.gvalue)
-            cstr = vips_lib.vips_enum_nick(gtype, enum_value)
-            if cstr == 0:
-                raise Error('value not in enum')
-
-            result = _to_string(ffi.string(cstr))
+            return GValue.from_enum(gtype, 
+                                    gobject_lib.g_value_get_enum(self.gvalue))
         elif fundamental == GValue.gflags_type:
             result = gobject_lib.g_value_get_flags(self.gvalue)
         elif gtype == GValue.gstr_type:

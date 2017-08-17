@@ -6,7 +6,8 @@ import logging
 import numbers
 
 import pyvips
-from pyvips import ffi, vips_lib, Error, _to_bytes, _to_string
+from pyvips import ffi, glib_lib, vips_lib, Error, _to_bytes, \
+    _to_string, GValue
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +25,8 @@ ffi.cdef('''
 
     VipsImage* vips_image_new_matrix_from_array (int width, int height,
             const double* array, int size);
+    VipsImage* vips_image_new_from_memory (const void* data, size_t size,
+            int width, int height, int bands, int format);
 
     VipsImage* vips_image_copy_memory (VipsImage* image);
 
@@ -40,6 +43,8 @@ ffi.cdef('''
     VipsImage* vips_image_new_temp_file (const char* format);
 
     int vips_image_write (VipsImage* image, VipsImage* out);
+    void* vips_image_write_to_memory (VipsImage* in, size_t* size_out);
+
 
 ''')
 
@@ -310,8 +315,58 @@ class Image(pyvips.VipsObject):
             raise Error('unable to make image from matrix')
         image = pyvips.Image(vi)
 
-        image.set_type(pyvips.GValue.gdouble_type, 'scale', scale)
-        image.set_type(pyvips.GValue.gdouble_type, 'offset', offset)
+        image.set_type(GValue.gdouble_type, 'scale', scale)
+        image.set_type(GValue.gdouble_type, 'offset', offset)
+
+        return image
+
+    @staticmethod
+    def new_from_memory(data, width, height, bands, format):
+        """Wrap an image around a memory array.
+
+        Wraps an Image around an area of memory containing a C-style array. For
+        example, if the ``data`` memory array contains four bytes with the
+        values 1, 2, 3, 4, you can make a one-band, 2x2 uchar image from
+        it like this::
+
+            image = Image.new_from_memory(data, 2, 2, 1, 'uchar')
+
+        A reference is kept to the data object, so it will not be
+        garbage-collected until the returned image is garbage-collected.
+
+        This method is useful for efficiently transferring images from PIL or
+        NumPy into libvips.
+
+        See :meth:`.write_to_memory` for the opposite operation.
+
+        Use :meth:`.copy` to set other image attributes. 
+
+        Args:
+            data (bytes): A memoryview or buffer object.
+            width (int): Image width in pixels.
+            height (int): Image height in pixels.
+            format (BandFormat): Band format.
+
+        Returns:
+            A new :class:`Image`.
+
+        Raises:
+            :class:`.Error`
+
+        """
+
+        format_value = GValue.to_enum(GValue.format_type, format)
+        vi = vips_lib.vips_image_new_from_memory(ffi.from_buffer(data), 
+                                                 len(data), 
+                                                 width, height, bands, 
+                                                 format_value)
+        if vi == ffi.NULL:
+            raise Error('unable to make image from memory')
+
+        image = pyvips.Image(vi)
+
+        # keep a secret ref to the underlying object
+        image._data = data
 
         return image
 
@@ -497,6 +552,33 @@ class Image(pyvips.VipsObject):
                                          ffi.string(options)
                                      ), **kwargs)
 
+    def write_to_memory(self):
+        """Write the image to a large memory array.
+
+        A large area of memory is allocated, the image is rendered to that
+        memory array, and the array is returned as a buffer.
+
+        For example, if you have a 2x2 uchar image containing the bytes 1, 2, 3,
+        4, read left-to-right, top-to-bottom, then::
+
+            buf = image.write_to_memory()
+
+        will return a four byte buffer containing the values 1, 2, 3, 4.
+
+        Returns:
+            buffer
+
+        Raises:
+            :class:`.Error`
+
+        """
+
+        psize = ffi.new('size_t *')
+        pointer = vips_lib.vips_image_write_to_memory(self.pointer, psize)
+        pointer = ffi.gc(pointer, glib_lib.g_free)
+
+        return ffi.buffer(pointer, psize[0])
+
     def write(self, other):
         """Write an image to another image.
 
@@ -558,7 +640,7 @@ class Image(pyvips.VipsObject):
 
         """
 
-        gv = pyvips.GValue()
+        gv = GValue()
         result = vips_lib.vips_image_get(self.pointer, _to_bytes(name),
                                          gv.pointer)
         if result != 0:
@@ -586,7 +668,7 @@ class Image(pyvips.VipsObject):
 
         """
 
-        gv = pyvips.GValue()
+        gv = GValue()
         gv.set_type(gtype)
         gv.set(value)
         vips_lib.vips_image_set(self.pointer, _to_bytes(name), gv.pointer)
