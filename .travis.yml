@@ -41,7 +41,6 @@ cache:
 
 language: python
 python:
-  - "2.6"
   - "2.7"
   - "3.2"
   - "3.3"
@@ -56,6 +55,7 @@ install:
 
 script: "nosetests --logging-level=WARNING"
 
+# the vips7 py binding won't work with pypy, make sure it's off
 before_install:
   - uname -a
-  - bash install-vips.sh
+  - bash install-vips.sh --without-python
