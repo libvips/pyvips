@@ -1,14 +1,15 @@
 README
 ======
 
-[![Build Status](https://travis-ci.org/jcupitt/pyvips.svg?branch=master)](https://travis-ci.org/jcupitt/pyvips)
+.. |badge| image:: https://travis-ci.org/jcupitt/pyvips.svg?branch=master
+
+|badge|(https://travis-ci.org/jcupitt/pyvips)
 
 Status
 ------
 
 This binding passes the vips test suite cleanly and with no leaks under python2
-and python3, on Windows and Linux. The docs are not quite done and it could 
-use a little polish.
+and python3, on Windows, macOS and Linux. 
 
 Install
 -------
