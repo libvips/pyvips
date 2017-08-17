@@ -29,7 +29,8 @@ addons:
       - libpango1.0-dev
       - libpoppler-glib-dev
       - libwebp-dev
-      - libwebpmux2
+        # missing on trusty, unfortunately
+        # - libwebpmux2
       - fftw-dev
       - libglib2.0-dev
 
