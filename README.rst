@@ -1,9 +1,9 @@
 README
 ======
 
-.. |badge| image:: https://travis-ci.org/jcupitt/pyvips.svg?branch=master
-
-|badge| (https://travis-ci.org/jcupitt/pyvips)
+.. image:: https://travis-ci.org/jcupitt/pyvips.svg?branch=master
+    :alt: Build Status
+    :target: https://travis-ci.org/jcupitt/pyvips
 
 Status
 ------
