@@ -1,0 +1,56 @@
+sudo: false
+
+env:
+  global:
+    - VIPS_VERSION_MAJOR=8
+    - VIPS_VERSION_MINOR=5
+    - VIPS_VERSION_MICRO=3
+    - PATH=$HOME/vips/bin:$PATH
+    - LD_LIBRARY_PATH=$HOME/vips/lib:$LD_LIBRARY_PATH
+    - PKG_CONFIG_PATH=$HOME/vips/lib/pkgconfig:$PKG_CONFIG_PATH
+
+dist: trusty
+
+addons:
+  apt:
+    packages:
+      - libexpat1-dev
+      - gettext
+      - liblcms1-dev
+      - libmagickwand-dev
+      - libopenexr-dev
+      - libcfitsio3-dev
+      - libgif-dev
+      - libgs-dev
+      - libgsf-1-dev
+      - libmatio-dev
+      - libopenslide-dev
+      - liborc-0.4-dev
+      - libpango1.0-dev
+      - libpoppler-glib-dev
+      - libwebp-dev
+      - libglib2.0-dev
+
+cache:
+  directories:
+    - $HOME/vips
+
+language: python
+  - "2.6"
+  - "2.7"
+  - "3.2"
+  - "3.3"
+  - "3.4"
+  - "3.5"
+  - "3.6"
+  - "pypy"
+  - "pypy3"
+
+install:
+  - pip install .
+
+script: pytest
+
+before_install:
+  - uname -a
+  - bash install-vips.sh

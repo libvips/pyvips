@@ -40,8 +40,9 @@ The default mode is ``random`` which allows for full random access to image
 pixels, but is slower and needs more memory. See :class:`pyvips.enums.Access`
 for full details on the various modes available.
 
-You can also load formatted images from memory buffers, create images that
-wrap C-style memory arrays, or make images from constants.
+You can also load formatted images from memory, create images that
+wrap C-style memory arrays held as Python buffers, or make images from 
+constants.
 
 The next line::
 
@@ -75,8 +76,8 @@ Finally::
 
 :meth:`.write_to_file` writes an image back to the filesystem. It can
 write any format supported by vips: the file type is set from the filename
-suffix. You can also write formatted images to memory buffers, or dump
-image data to a raw memory array.
+suffix. You can also write formatted images to memory, or dump
+image data to a C-style array in a Python buffer.
 
 Automatic wrapping
 ------------------
