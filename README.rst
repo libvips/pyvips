@@ -1,6 +1,8 @@
 README
 ======
 
+[![Build Status](https://travis-ci.org/jcupitt/pyvips.svg?branch=master)](https://travis-ci.org/jcupitt/pyvips)
+
 Status
 ------
 

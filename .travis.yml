@@ -52,7 +52,7 @@ language: python
 install:
   - pip install .
 
-script: "nosetests --logging-level=WARNING"
+script: py.test
 
 before_install:
   - uname -a
