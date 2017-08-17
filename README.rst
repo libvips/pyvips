@@ -3,13 +3,15 @@ README
 
 .. |badge| image:: https://travis-ci.org/jcupitt/pyvips.svg?branch=master
 
-|badge|(https://travis-ci.org/jcupitt/pyvips)
+|badge| (https://travis-ci.org/jcupitt/pyvips)
 
 Status
 ------
 
 This binding passes the vips test suite cleanly and with no leaks under python2
 and python3, on Windows, macOS and Linux. 
+
+It seems to leak under pypy, I'm not sure why. 
 
 Install
 -------
@@ -101,6 +103,7 @@ Run test suite::
 
 	$ nosetests --logging-level=WARNING
 	$ python3 -m nose --logging-level=WARNING
+	$ pypy -m nose --logging-level=WARNING
 
 Stylecheck::
 
