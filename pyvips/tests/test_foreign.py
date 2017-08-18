@@ -571,12 +571,7 @@ class TestForeign(PyvipsTester):
         def svg_valid(self, im):
             a = im(10, 10)
 
-            # some old rsvg versions are way, way off
-            self.assertLess(abs(a[0] - 79), 2)
-            self.assertLess(abs(a[1] - 79), 2)
-            self.assertLess(abs(a[2] - 132), 2)
-            self.assertLess(abs(a[3] - 255), 2)
-
+            self.assertAlmostEqualObjects(a, [79, 79, 132, 255])
             self.assertEqual(im.width, 288)
             self.assertEqual(im.height, 470)
             self.assertEqual(im.bands, 4)
