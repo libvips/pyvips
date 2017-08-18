@@ -178,10 +178,30 @@
   <div class="section" id="readme">
 <h1>README<a class="headerlink" href="#readme" title="Permalink to this headline">¶</a></h1>
 <a class="reference external image-reference" href="https://travis-ci.org/jcupitt/pyvips"><img alt="Build Status" src="https://travis-ci.org/jcupitt/pyvips.svg?branch=master" /></a>
+<p>This module provides a Python binding for the vips image processing
+library:</p>
+<p><a class="reference external" href="https://jcupitt.github.io/libvips">https://jcupitt.github.io/libvips</a></p>
+<p>Programs that use <code class="docutils literal"><span class="pre">pyvips</span></code> don’t manipulate images directly, instead
+they create pipelines of image processing operations building on a source
+image. When the end of the pipe is connected to a destination, the whole
+pipeline executes at once, streaming the image in parallel from source to
+destination a section at a time.</p>
+<p>Because <code class="docutils literal"><span class="pre">pyvips</span></code> is parallel, it’s quick, and because it doesn’t need to
+keep entire images in memory, it’s light.  For example, the libvips
+speed and memory use benchmark:</p>
+<p><a class="reference external" href="https://github.com/jcupitt/libvips/wiki/Speed-and-memory-use">https://github.com/jcupitt/libvips/wiki/Speed-and-memory-use</a></p>
+<p>Loads a large tiff image, shrinks by 10%, sharpens, and saves again. On this
+test, <code class="docutils literal"><span class="pre">pyvips</span></code> is typically 5x faster than Pillow-SIMD and needs 4x less
+memory.</p>
+<p>There’s a handy blog post explaining how libvips opens files, which gives
+some more background.</p>
+<p><a class="reference external" href="http://libvips.blogspot.co.uk/2012/06/how-libvips-opens-file.html">http://libvips.blogspot.co.uk/2012/06/how-libvips-opens-file.html</a></p>
 <div class="section" id="status">
 <h2>Status<a class="headerlink" href="#status" title="Permalink to this headline">¶</a></h2>
 <p>This binding passes the vips test suite cleanly and with no leaks under
-python2, python3, pypy and pypy3 on Windows, macOS and Linux.</p>
+python2.7 - python3.6, pypy and pypy3 on Windows, macOS and Linux.</p>
+<p>We have formatted docs online here:</p>
+<p><a class="reference external" href="https://jcupitt.github.io/pyvips/">https://jcupitt.github.io/pyvips/</a></p>
 </div>
 <div class="section" id="install">
 <h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
