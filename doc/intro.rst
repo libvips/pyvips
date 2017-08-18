@@ -79,6 +79,58 @@ write any format supported by vips: the file type is set from the filename
 suffix. You can also write formatted images to memory, or dump
 image data to a C-style array in a Python buffer.
 
+NumPy and PIL
+-------------
+
+You can use :meth:`.write_to_memory` and :meth:`.new_from_memory` to pass
+buffers of pixels between PIL, NumPy and pyvips. For example::
+
+    import pyvips
+    import numpy as np
+
+    format_to_dtype = {
+        'uchar': np.uint8,
+        'char': np.int8,
+        'ushort': np.uint16,
+        'short': np.int16,
+        'uint': np.uint32,
+        'int': np.int32,
+        'float': np.float32,
+        'double': np.float64,
+        'complex': np.complex64,
+        'dpcomplex': np.complex128,
+    }
+    
+    img = pyvips.Image.new_from_file(sys.argv[1], access='sequential')
+    np_3d = np.ndarray(buffer=img.write_to_memory(), 
+                       dtype=format_to_dtype[img.format], 
+                       shape=[img.height, img.width, img.bands])
+
+Will make a NumPy array from a vips image. This is a fast way to load many
+image formats. 
+
+Going in the other direction, you can write::
+
+    dtype_to_format = {
+        'uint8': 'uchar',
+        'int8': 'char',
+        'uint16': 'ushort',
+        'int16': 'short',
+        'uint32': 'uint',
+        'int32': 'int',
+        'float32': 'float',
+        'float64': 'double',
+        'complex64': 'complex',
+        'complex128': 'dpcomplex',
+    }
+    
+    height, width, bands = np_3d.shape
+    linear = np_3d.reshape(width * height * bands)
+    vi = pyvips.Image.new_from_memory(linear.data, width, height, bands,
+                                      dtype_to_format[str(np_3d.dtype)])
+
+To make a vips image that represents a numpy array.
+
 Automatic wrapping
 ------------------
 
