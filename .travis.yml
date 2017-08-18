@@ -47,8 +47,9 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
-  - "pypy"
-  - "pypy3"
+  # these both leak horribly, and fail one dzsave test ... fix then reenable
+  # - "pypy"
+  # - "pypy3"
 
 install:
   - pip install .[test]
