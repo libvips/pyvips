@@ -1,0 +1,301 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>VipsObject &mdash; pyvips 2.0-alpha1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="pyvips 2.0-alpha1 documentation" href="index.html"/>
+        <link rel="prev" title="Operation" href="voperation.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pyvips
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vimage.html"><code class="docutils literal"><span class="pre">Image</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">Base definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error.html"><code class="docutils literal"><span class="pre">Error</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="enums.html">The libvips enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vinterpolate.html"><code class="docutils literal"><span class="pre">Interpolate</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="gvalue.html"><code class="docutils literal"><span class="pre">GValue</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="gobject.html"><code class="docutils literal"><span class="pre">GObject</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="voperation.html"><code class="docutils literal"><span class="pre">Operation</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal"><span class="pre">VipsObject</span></code></a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyvips</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li><code class="docutils literal"><span class="pre">VipsObject</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/jcupitt/pyvips/blob/master/doc/vobject.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pyvips.vobject">
+<span id="vipsobject"></span><h1><code class="docutils literal"><span class="pre">VipsObject</span></code><a class="headerlink" href="#module-pyvips.vobject" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyvips.vobject.VipsObject">
+<em class="property">class </em><code class="descclassname">pyvips.vobject.</code><code class="descname">VipsObject</code><span class="sig-paren">(</span><em>pointer</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vobject.html#VipsObject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.vobject.VipsObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manage a VipsObject.</p>
+<dl class="staticmethod">
+<dt id="pyvips.vobject.VipsObject.print_all">
+<em class="property">static </em><code class="descname">print_all</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vobject.html#VipsObject.print_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.vobject.VipsObject.print_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print all objects.</p>
+<p>Print a table of all active libvips objects. Handy for debugging.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyvips.vobject.VipsObject.get_typeof">
+<code class="descname">get_typeof</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vobject.html#VipsObject.get_typeof"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.vobject.VipsObject.get_typeof" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the GType of a GObject property.</p>
+<p>This function returns 0 if the property does not exist.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyvips.vobject.VipsObject.get_blurb">
+<code class="descname">get_blurb</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vobject.html#VipsObject.get_blurb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.vobject.VipsObject.get_blurb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the blurb for a GObject property.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyvips.vobject.VipsObject.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vobject.html#VipsObject.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.vobject.VipsObject.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a GObject property.</p>
+<p>The value of the property is converted to a Python value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyvips.vobject.VipsObject.set">
+<code class="descname">set</code><span class="sig-paren">(</span><em>name</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vobject.html#VipsObject.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.vobject.VipsObject.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a GObject property.</p>
+<p>The value is converted to the property type, if possible.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyvips.vobject.VipsObject.set_string">
+<code class="descname">set_string</code><span class="sig-paren">(</span><em>string_options</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vobject.html#VipsObject.set_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.vobject.VipsObject.set_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a series of properties using a string.</p>
+<p>For example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s1">&#39;fred=12, tile&#39;</span>
+<span class="s1">&#39;[fred=12]&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyvips.vobject.VipsObject.get_description">
+<code class="descname">get_description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vobject.html#VipsObject.get_description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.vobject.VipsObject.get_description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the description of a GObject.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="voperation.html" class="btn btn-neutral" title="Operation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, John Cupitt.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'2.0-alpha1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

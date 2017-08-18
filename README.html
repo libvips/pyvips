@@ -1,0 +1,351 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>README &mdash; pyvips 2.0-alpha1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="pyvips 2.0-alpha1 documentation" href="index.html"/>
+        <link rel="next" title="Introduction" href="intro.html"/>
+        <link rel="prev" title="pyvips – Image processing with libvips" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pyvips
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">README</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#status">Status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#converting-old-code">Converting old code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#background">Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#notes">Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vimage.html"><code class="docutils literal"><span class="pre">Image</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">Base definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error.html"><code class="docutils literal"><span class="pre">Error</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="enums.html">The libvips enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vinterpolate.html"><code class="docutils literal"><span class="pre">Interpolate</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="gvalue.html"><code class="docutils literal"><span class="pre">GValue</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="gobject.html"><code class="docutils literal"><span class="pre">GObject</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="voperation.html"><code class="docutils literal"><span class="pre">Operation</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="vobject.html"><code class="docutils literal"><span class="pre">VipsObject</span></code></a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyvips</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>README</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/jcupitt/pyvips/blob/master/doc/README.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="readme">
+<h1>README<a class="headerlink" href="#readme" title="Permalink to this headline">¶</a></h1>
+<a class="reference external image-reference" href="https://travis-ci.org/jcupitt/pyvips"><img alt="Build Status" src="https://travis-ci.org/jcupitt/pyvips.svg?branch=master" /></a>
+<div class="section" id="status">
+<h2>Status<a class="headerlink" href="#status" title="Permalink to this headline">¶</a></h2>
+<p>This binding passes the vips test suite cleanly and with no leaks under
+python2, python3, pypy and pypy3 on Windows, macOS and Linux.</p>
+</div>
+<div class="section" id="install">
+<h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
+<p>You need the libvips shared library on your library search path, version 8.2 or
+later. On linux, you can install via your package manager; on Windows you
+can download a pre-compiled binary from the libvips website:</p>
+<p><a class="reference external" href="https://jcupitt.github.io/libvips/">https://jcupitt.github.io/libvips/</a></p>
+<p>Then just install this package, perhaps:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ pip install --user -e .
+</pre></div>
+</div>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>This sample program loads a JPG image, doubles the value of every green pixel,
+sharpens, and then writes the image back to the filesystem again:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyvips</span>
+
+<span class="n">image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_file</span><span class="p">(</span><span class="s1">&#39;some-image.jpg&#39;</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="s1">&#39;sequential&#39;</span><span class="p">)</span>
+<span class="n">image</span> <span class="o">*=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_array</span><span class="p">([[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                    <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                    <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                                   <span class="p">],</span> <span class="n">scale</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="s1">&#39;integer&#39;</span><span class="p">)</span>
+<span class="n">image</span><span class="o">.</span><span class="n">write_to_file</span><span class="p">(</span><span class="s1">&#39;x.jpg&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="converting-old-code">
+<h2>Converting old code<a class="headerlink" href="#converting-old-code" title="Permalink to this headline">¶</a></h2>
+<p>To convert old code, replace the lines:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gi</span>
+<span class="n">gi</span><span class="o">.</span><span class="n">require_version</span><span class="p">(</span><span class="s1">&#39;Vips&#39;</span><span class="p">,</span> <span class="s1">&#39;8.0&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">gi.repository</span> <span class="k">import</span> <span class="n">Vips</span>
+</pre></div>
+</div>
+<p>with:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyvips</span>
+<span class="n">Vips</span> <span class="o">=</span> <span class="n">pyvips</span>
+</pre></div>
+</div>
+<p>Instead of the <code class="docutils literal"><span class="pre">pyvips</span> <span class="pre">=</span> <span class="pre">Vips</span></code>, you can of course also swap all <code class="docutils literal"><span class="pre">Vips</span></code> for
+<code class="docutils literal"><span class="pre">pyvips</span></code> with eg.:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span><span class="o">/</span><span class="n">Vips</span><span class="o">/</span><span class="n">pyvips</span><span class="o">/</span><span class="n">g</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="background">
+<h2>Background<a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h2>
+<p>This is supposed to be an experiment with making a libvips binding using cffi.</p>
+<p><a class="reference external" href="http://cffi.readthedocs.io/en/latest/ref.html">http://cffi.readthedocs.io/en/latest/ref.html</a></p>
+<p>The Python binding included in libvips works, but porting and installation
+are more difficult than they should be.</p>
+<p>The hope is that a new Python binding on top of cffi would be:</p>
+<ul class="simple">
+<li>compatible with the current Python binding (it should run the same test suite,
+unmodified)</li>
+<li>easier to install, since the stack would be much smaller, and there would be
+no issues with the overrides directory</li>
+<li>faster, since we could implement Buffer and save some copies</li>
+<li>faster, since we could make it “thinner”. The ffi Ruby binding is about twice
+as fast as the gobject-introspection one, when running the test suite</li>
+<li>portable across CPython, PyPy and others</li>
+<li>more simply portable to Windows</li>
+<li>easy to package for pip</li>
+</ul>
+</div>
+<div class="section" id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<p>Local user install:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ pip install --user -e .
+$ pip3 install --user -e .
+$ pypy -m pip --user -e .
+</pre></div>
+</div>
+<p>Run test suite:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ nosetests --logging-level=WARNING
+$ python3 -m nose --logging-level=WARNING
+$ pypy -m nose --logging-level=WARNING
+</pre></div>
+</div>
+<p>Stylecheck:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ flake8
+</pre></div>
+</div>
+<p>Generate HTML docs in <code class="docutils literal"><span class="pre">doc/build/html</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ cd doc; sphinx-build -bhtml . build/html
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="intro.html" class="btn btn-neutral float-right" title="Introduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="pyvips – Image processing with libvips" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, John Cupitt.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'2.0-alpha1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

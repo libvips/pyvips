@@ -1,0 +1,327 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pyvips.base &mdash; pyvips 2.0-alpha1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="pyvips 2.0-alpha1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pyvips
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vimage.html"><code class="docutils literal"><span class="pre">Image</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../base.html">Base definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../error.html"><code class="docutils literal"><span class="pre">Error</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../enums.html">The libvips enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vinterpolate.html"><code class="docutils literal"><span class="pre">Interpolate</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gvalue.html"><code class="docutils literal"><span class="pre">GValue</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gobject.html"><code class="docutils literal"><span class="pre">GObject</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../voperation.html"><code class="docutils literal"><span class="pre">Operation</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vobject.html"><code class="docutils literal"><span class="pre">VipsObject</span></code></a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyvips</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyvips.base</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/jcupitt/pyvips/blob/master/doc/_modules/pyvips/base" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyvips.base</h1><div class="highlight"><pre>
+<span></span><span class="c1"># basic defs and link to ffi</span>
+
+<span class="kn">from</span> <span class="nn">pyvips</span> <span class="k">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="p">,</span> <span class="n">_to_string</span><span class="p">,</span> <span class="n">_to_bytes</span>
+
+<span class="n">ffi</span><span class="o">.</span><span class="n">cdef</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">    typedef struct _VipsImage VipsImage;</span>
+<span class="s1">    typedef struct _GValue GValue;</span>
+
+<span class="s1">    void* g_malloc (size_t size);</span>
+<span class="s1">    void g_free (void* data);</span>
+
+<span class="s1">    int vips_leak_set (int leak);</span>
+
+<span class="s1">    char* vips_path_filename7 (const char* path);</span>
+<span class="s1">    char* vips_path_mode7 (const char* path);</span>
+
+<span class="s1">    GType vips_type_find (const char* basename, const char* nickname);</span>
+<span class="s1">    const char* vips_nickname_find (GType type);</span>
+
+<span class="s1">    const char* g_type_name (GType gtype);</span>
+<span class="s1">    GType g_type_from_name (const char* name);</span>
+
+<span class="s1">    typedef void* (*VipsTypeMap2Fn) (GType type);</span>
+<span class="s1">    void* vips_type_map (GType base, VipsTypeMap2Fn fn);</span>
+
+<span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="leak_set"><a class="viewcode-back" href="../../base.html#pyvips.base.leak_set">[docs]</a><span class="k">def</span> <span class="nf">leak_set</span><span class="p">(</span><span class="n">leak</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Enable or disable libvips leak checking.</span>
+
+<span class="sd">    With this enabled, libvips will check for object and area leaks on exit.</span>
+<span class="sd">    Enabling this option will make libvips run slightly more slowly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_leak_set</span><span class="p">(</span><span class="n">leak</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">path_filename7</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_path_filename7</span><span class="p">(</span>
+        <span class="n">_to_bytes</span><span class="p">(</span><span class="n">filename</span><span class="p">))))</span>
+
+
+<span class="k">def</span> <span class="nf">path_mode7</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_path_mode7</span><span class="p">(</span>
+        <span class="n">_to_bytes</span><span class="p">(</span><span class="n">filename</span><span class="p">))))</span>
+
+
+<div class="viewcode-block" id="type_find"><a class="viewcode-back" href="../../base.html#pyvips.base.type_find">[docs]</a><span class="k">def</span> <span class="nf">type_find</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="n">nickname</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the GType for a name.</span>
+
+<span class="sd">    Looks up the GType for a nickname. Types below basename in the type</span>
+<span class="sd">    hierarchy are searched.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_type_find</span><span class="p">(</span><span class="n">_to_bytes</span><span class="p">(</span><span class="n">basename</span><span class="p">),</span> <span class="n">_to_bytes</span><span class="p">(</span><span class="n">nickname</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="type_name"><a class="viewcode-back" href="../../base.html#pyvips.base.type_name">[docs]</a><span class="k">def</span> <span class="nf">type_name</span><span class="p">(</span><span class="n">gtype</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the name for a GType.&quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_type_name</span><span class="p">(</span><span class="n">gtype</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="nickname_find"><a class="viewcode-back" href="../../base.html#pyvips.base.nickname_find">[docs]</a><span class="k">def</span> <span class="nf">nickname_find</span><span class="p">(</span><span class="n">gtype</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the nickname for a GType.&quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_nickname_find</span><span class="p">(</span><span class="n">gtype</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="type_from_name"><a class="viewcode-back" href="../../base.html#pyvips.base.type_from_name">[docs]</a><span class="k">def</span> <span class="nf">type_from_name</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the GType for a name.&quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_type_from_name</span><span class="p">(</span><span class="n">_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="type_map"><a class="viewcode-back" href="../../base.html#pyvips.base.type_map">[docs]</a><span class="k">def</span> <span class="nf">type_map</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Map fn over all child types of gtype.&quot;&quot;&quot;</span>
+    <span class="n">cb</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="s1">&#39;VipsTypeMap2Fn&#39;</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_type_map</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">cb</span><span class="p">)</span></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;leak_set&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;path_filename7&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;path_mode7&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;type_find&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;nickname_find&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;type_name&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;type_map&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;type_from_name&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, John Cupitt.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2.0-alpha1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

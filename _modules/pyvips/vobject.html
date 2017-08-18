@@ -1,0 +1,434 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pyvips.vobject &mdash; pyvips 2.0-alpha1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="pyvips 2.0-alpha1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pyvips
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vimage.html"><code class="docutils literal"><span class="pre">Image</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../base.html">Base definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../error.html"><code class="docutils literal"><span class="pre">Error</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../enums.html">The libvips enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vinterpolate.html"><code class="docutils literal"><span class="pre">Interpolate</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gvalue.html"><code class="docutils literal"><span class="pre">GValue</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gobject.html"><code class="docutils literal"><span class="pre">GObject</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../voperation.html"><code class="docutils literal"><span class="pre">Operation</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vobject.html"><code class="docutils literal"><span class="pre">VipsObject</span></code></a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyvips</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyvips.vobject</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/jcupitt/pyvips/blob/master/doc/_modules/pyvips/vobject" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyvips.vobject</h1><div class="highlight"><pre>
+<span></span><span class="c1"># wrap VipsObject</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+
+<span class="kn">import</span> <span class="nn">gc</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">import</span> <span class="nn">pyvips</span>
+<span class="kn">from</span> <span class="nn">pyvips</span> <span class="k">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="p">,</span> <span class="n">Error</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">,</span> <span class="n">_to_string</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">ffi</span><span class="o">.</span><span class="n">cdef</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">    typedef struct _VipsObject {</span>
+<span class="s1">        GObject parent_object;</span>
+<span class="s1">        bool constructed;</span>
+<span class="s1">        bool static_object;</span>
+<span class="s1">        void *argument_table;</span>
+<span class="s1">        char *nickname;</span>
+<span class="s1">        char *description;</span>
+<span class="s1">        bool preclose;</span>
+<span class="s1">        bool close;</span>
+<span class="s1">        bool postclose;</span>
+<span class="s1">        size_t local_memory;</span>
+<span class="s1">    } VipsObject;</span>
+
+<span class="s1">    typedef struct _VipsObjectClass VipsObjectClass;</span>
+
+<span class="s1">    typedef struct _VipsArgument {</span>
+<span class="s1">        GParamSpec *pspec;</span>
+<span class="s1">    } VipsArgument;</span>
+
+<span class="s1">    typedef struct _VipsArgumentInstance {</span>
+<span class="s1">        VipsArgument parent;</span>
+
+<span class="s1">        // opaque</span>
+<span class="s1">    } VipsArgumentInstance;</span>
+
+<span class="s1">    typedef enum _VipsArgumentFlags {</span>
+<span class="s1">        VIPS_ARGUMENT_NONE = 0,</span>
+<span class="s1">        VIPS_ARGUMENT_REQUIRED = 1,</span>
+<span class="s1">        VIPS_ARGUMENT_CONSTRUCT = 2,</span>
+<span class="s1">        VIPS_ARGUMENT_SET_ONCE = 4,</span>
+<span class="s1">        VIPS_ARGUMENT_SET_ALWAYS = 8,</span>
+<span class="s1">        VIPS_ARGUMENT_INPUT = 16,</span>
+<span class="s1">        VIPS_ARGUMENT_OUTPUT = 32,</span>
+<span class="s1">        VIPS_ARGUMENT_DEPRECATED = 64,</span>
+<span class="s1">        VIPS_ARGUMENT_MODIFY = 128</span>
+<span class="s1">    } VipsArgumentFlags;</span>
+
+<span class="s1">    typedef struct _VipsArgumentClass {</span>
+<span class="s1">        VipsArgument parent;</span>
+
+<span class="s1">        VipsObjectClass *object_class;</span>
+<span class="s1">        VipsArgumentFlags flags;</span>
+<span class="s1">        int priority;</span>
+<span class="s1">        uint64_t offset;</span>
+<span class="s1">    } VipsArgumentClass;</span>
+
+<span class="s1">    int vips_object_get_argument (VipsObject* object,</span>
+<span class="s1">        const char *name, GParamSpec** pspec,</span>
+<span class="s1">        VipsArgumentClass** argument_class,</span>
+<span class="s1">        VipsArgumentInstance** argument_instance);</span>
+
+<span class="s1">    void vips_object_print_all (void);</span>
+
+<span class="s1">    int vips_object_set_from_string (VipsObject* object, const char* options);</span>
+
+<span class="s1">    const char* vips_object_get_description (VipsObject* object);</span>
+
+<span class="s1">    const char* g_param_spec_get_blurb (GParamSpec* pspec);</span>
+
+<span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="VipsObject"><a class="viewcode-back" href="../../vobject.html#pyvips.vobject.VipsObject">[docs]</a><span class="k">class</span> <span class="nc">VipsObject</span><span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">GObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Manage a VipsObject.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointer</span><span class="p">):</span>
+        <span class="c1"># logger.debug(&#39;VipsObject.__init__: pointer = %s&#39;, pointer)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">VipsObject</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span>
+
+<div class="viewcode-block" id="VipsObject.print_all"><a class="viewcode-back" href="../../vobject.html#pyvips.vobject.VipsObject.print_all">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">print_all</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Print all objects.</span>
+
+<span class="sd">        Print a table of all active libvips objects. Handy for debugging.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_object_print_all</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">()</span></div>
+
+    <span class="c1"># slow! eeeeew</span>
+    <span class="k">def</span> <span class="nf">get_pspec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="c1"># logger.debug(&#39;VipsObject.get_typeof: self = %s, name = %s&#39;,</span>
+        <span class="c1">#              self, name)</span>
+
+        <span class="n">pspec</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;GParamSpec **&#39;</span><span class="p">)</span>
+        <span class="n">argument_class</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;VipsArgumentClass **&#39;</span><span class="p">)</span>
+        <span class="n">argument_instance</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;VipsArgumentInstance **&#39;</span><span class="p">)</span>
+        <span class="n">vo</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;VipsObject *&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_object_get_argument</span><span class="p">(</span><span class="n">vo</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
+                                                   <span class="n">pspec</span><span class="p">,</span> <span class="n">argument_class</span><span class="p">,</span>
+                                                   <span class="n">argument_instance</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># need to clear any error, this is horrible</span>
+            <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">pspec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<div class="viewcode-block" id="VipsObject.get_typeof"><a class="viewcode-back" href="../../vobject.html#pyvips.vobject.VipsObject.get_typeof">[docs]</a>    <span class="k">def</span> <span class="nf">get_typeof</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the GType of a GObject property.</span>
+
+<span class="sd">        This function returns 0 if the property does not exist.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># logger.debug(&#39;VipsObject.get_typeof: self = %s, name = %s&#39;,</span>
+        <span class="c1">#              self, name)</span>
+
+        <span class="n">pspec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pspec</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pspec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pspec</span><span class="o">.</span><span class="n">value_type</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="VipsObject.get_blurb"><a class="viewcode-back" href="../../vobject.html#pyvips.vobject.VipsObject.get_blurb">[docs]</a>    <span class="k">def</span> <span class="nf">get_blurb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the blurb for a GObject property.&quot;&quot;&quot;</span>
+
+        <span class="n">c_str</span> <span class="o">=</span> <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_param_spec_get_blurb</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_pspec</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">c_str</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="VipsObject.get"><a class="viewcode-back" href="../../vobject.html#pyvips.vobject.VipsObject.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get a GObject property.</span>
+
+<span class="sd">        The value of the property is converted to a Python value.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;VipsObject.get: self = </span><span class="si">%s</span><span class="s1">, name = </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+        <span class="n">gtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="n">gv</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">GValue</span><span class="p">()</span>
+        <span class="n">gv</span><span class="o">.</span><span class="n">set_type</span><span class="p">(</span><span class="n">gtype</span><span class="p">)</span>
+        <span class="n">go</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GObject *&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span>
+        <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_object_get_property</span><span class="p">(</span><span class="n">go</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">gv</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">gv</span><span class="o">.</span><span class="n">get</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="VipsObject.set"><a class="viewcode-back" href="../../vobject.html#pyvips.vobject.VipsObject.set">[docs]</a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set a GObject property.</span>
+
+<span class="sd">        The value is converted to the property type, if possible.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;VipsObject.set: self = </span><span class="si">%s</span><span class="s1">, name = </span><span class="si">%s</span><span class="s1">, value = </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span>
+                     <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+        <span class="n">gtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="n">gv</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">GValue</span><span class="p">()</span>
+        <span class="n">gv</span><span class="o">.</span><span class="n">set_type</span><span class="p">(</span><span class="n">gtype</span><span class="p">)</span>
+        <span class="n">gv</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">go</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GObject *&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span>
+        <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_object_set_property</span><span class="p">(</span><span class="n">go</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">gv</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VipsObject.set_string"><a class="viewcode-back" href="../../vobject.html#pyvips.vobject.VipsObject.set_string">[docs]</a>    <span class="k">def</span> <span class="nf">set_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string_options</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set a series of properties using a string.</span>
+
+<span class="sd">        For example::</span>
+
+<span class="sd">            &#39;fred=12, tile&#39;</span>
+<span class="sd">            &#39;[fred=12]&#39;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">vo</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;VipsObject *&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span>
+        <span class="n">cstr</span> <span class="o">=</span> <span class="n">_to_bytes</span><span class="p">(</span><span class="n">string_options</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_object_set_from_string</span><span class="p">(</span><span class="n">vo</span><span class="p">,</span> <span class="n">cstr</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span> <span class="o">==</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="VipsObject.get_description"><a class="viewcode-back" href="../../vobject.html#pyvips.vobject.VipsObject.get_description">[docs]</a>    <span class="k">def</span> <span class="nf">get_description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the description of a GObject.&quot;&quot;&quot;</span>
+
+        <span class="n">vo</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;VipsObject *&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_object_get_description</span><span class="p">(</span><span class="n">vo</span><span class="p">)))</span></div></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;VipsObject&#39;</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, John Cupitt.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2.0-alpha1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

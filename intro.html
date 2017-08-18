@@ -1,0 +1,529 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Introduction &mdash; pyvips 2.0-alpha1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="pyvips 2.0-alpha1 documentation" href="index.html"/>
+        <link rel="next" title="Image" href="vimage.html"/>
+        <link rel="prev" title="README" href="README.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pyvips
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#numpy-and-pil">NumPy and PIL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#automatic-wrapping">Automatic wrapping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#automatic-documentation">Automatic documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exceptions">Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#enums">Enums</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#draw-operations">Draw operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#overloads">Overloads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#expansions">Expansions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#convenience-functions">Convenience functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vimage.html"><code class="docutils literal"><span class="pre">Image</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">Base definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error.html"><code class="docutils literal"><span class="pre">Error</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="enums.html">The libvips enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vinterpolate.html"><code class="docutils literal"><span class="pre">Interpolate</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="gvalue.html"><code class="docutils literal"><span class="pre">GValue</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="gobject.html"><code class="docutils literal"><span class="pre">GObject</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="voperation.html"><code class="docutils literal"><span class="pre">Operation</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="vobject.html"><code class="docutils literal"><span class="pre">VipsObject</span></code></a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyvips</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Introduction</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/jcupitt/pyvips/blob/master/doc/intro.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>This module wraps the libvips image processing library. It needs the libvips
+shared library on your library search path, version 8.2 or later.</p>
+<p>See the main libvips site for an introduction to the underlying library. These
+notes introduce the Python binding.</p>
+<p><a class="reference external" href="https://jcupitt.github.io/libvips">https://jcupitt.github.io/libvips</a></p>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>This example loads a file, boosts the green channel, sharpens the image,
+and saves it back to disc again:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyvips</span>
+
+<span class="n">image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_file</span><span class="p">(</span><span class="s1">&#39;some-image.jpg&#39;</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="s1">&#39;sequential&#39;</span><span class="p">)</span>
+<span class="n">image</span> <span class="o">*=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_array</span><span class="p">([[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                    <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                    <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                                   <span class="p">],</span> <span class="n">scale</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="s1">&#39;integer&#39;</span><span class="p">)</span>
+<span class="n">image</span><span class="o">.</span><span class="n">write_to_file</span><span class="p">(</span><span class="s1">&#39;x.jpg&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Reading this example line by line, we have:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_file</span><span class="p">(</span><span class="s1">&#39;some-image.jpg&#39;</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="s1">&#39;sequential&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="vimage.html#pyvips.Image.new_from_file" title="pyvips.Image.new_from_file"><code class="xref py py-meth docutils literal"><span class="pre">new_from_file()</span></code></a> can load any image file supported by libvips. In
+this example, we will be accessing pixels top-to-bottom as we sweep through
+the image reading and writing, so <cite>sequential</cite> access mode is best for us.</p>
+<p>The default mode is <code class="docutils literal"><span class="pre">random</span></code> which allows for full random access to image
+pixels, but is slower and needs more memory. See <a class="reference internal" href="enums.html#pyvips.enums.Access" title="pyvips.enums.Access"><code class="xref py py-class docutils literal"><span class="pre">pyvips.enums.Access</span></code></a>
+for full details on the various modes available.</p>
+<p>You can also load formatted images from memory, create images that
+wrap C-style memory arrays held as Python buffers, or make images from
+constants.</p>
+<p>The next line:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">image</span> <span class="o">*=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Multiplying the image by an array constant uses one array element for each
+image band. This line assumes that the input image has three bands and will
+double the middle band. For RGB images, that’s doubling green.</p>
+<p>There are the usual range of arithmetic operator overloads.</p>
+<p>Next we have:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mask</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_array</span><span class="p">([[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                    <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                    <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                                   <span class="p">],</span> <span class="n">scale</span> <span class="o">=</span> <span class="mi">8</span><span class="p">)</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">precision</span> <span class="o">=</span> <span class="s1">&#39;integer&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="vimage.html#pyvips.Image.new_from_array" title="pyvips.Image.new_from_array"><code class="xref py py-meth docutils literal"><span class="pre">new_from_array()</span></code></a> creates an image from an array constant. The
+scale is the amount to divide the image by after integer convolution.</p>
+<p>See the libvips API docs for <code class="docutils literal"><span class="pre">vips_conv()</span></code> (the operation
+invoked by <a class="reference internal" href="vimage.html#pyvips.Image.conv" title="pyvips.Image.conv"><code class="xref py py-meth docutils literal"><span class="pre">conv()</span></code></a>) for details on the convolution operator. By
+default, it computes with a float mask, but <code class="docutils literal"><span class="pre">integer</span></code> is fine for this case,
+and is much faster.</p>
+<p>Finally:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">image</span><span class="o">.</span><span class="n">write_to_file</span><span class="p">(</span><span class="s1">&#39;x.jpg&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="vimage.html#pyvips.Image.write_to_file" title="pyvips.Image.write_to_file"><code class="xref py py-meth docutils literal"><span class="pre">write_to_file()</span></code></a> writes an image back to the filesystem. It can
+write any format supported by vips: the file type is set from the filename
+suffix. You can also write formatted images to memory, or dump
+image data to a C-style array in a Python buffer.</p>
+</div>
+<div class="section" id="numpy-and-pil">
+<h2>NumPy and PIL<a class="headerlink" href="#numpy-and-pil" title="Permalink to this headline">¶</a></h2>
+<p>You can use <a class="reference internal" href="vimage.html#pyvips.Image.write_to_memory" title="pyvips.Image.write_to_memory"><code class="xref py py-meth docutils literal"><span class="pre">write_to_memory()</span></code></a> and <a class="reference internal" href="vimage.html#pyvips.Image.new_from_memory" title="pyvips.Image.new_from_memory"><code class="xref py py-meth docutils literal"><span class="pre">new_from_memory()</span></code></a> to pass
+buffers of pixels between PIL, NumPy and pyvips. For example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyvips</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">format_to_dtype</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;uchar&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span>
+    <span class="s1">&#39;char&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">,</span>
+    <span class="s1">&#39;ushort&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">,</span>
+    <span class="s1">&#39;short&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">,</span>
+    <span class="s1">&#39;uint&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">,</span>
+    <span class="s1">&#39;int&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span>
+    <span class="s1">&#39;float&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+    <span class="s1">&#39;double&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span>
+    <span class="s1">&#39;complex&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">complex64</span><span class="p">,</span>
+    <span class="s1">&#39;dpcomplex&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">img</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_file</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">access</span><span class="o">=</span><span class="s1">&#39;sequential&#39;</span><span class="p">)</span>
+<span class="n">np_3d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">buffer</span><span class="o">=</span><span class="n">img</span><span class="o">.</span><span class="n">write_to_memory</span><span class="p">(),</span>
+                   <span class="n">dtype</span><span class="o">=</span><span class="n">format_to_dtype</span><span class="p">[</span><span class="n">img</span><span class="o">.</span><span class="n">format</span><span class="p">],</span>
+                   <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">img</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">bands</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Will make a NumPy array from a vips image. This is a fast way to load many
+image formats.</p>
+<p>Going in the other direction, you can write:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dtype_to_format</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;uint8&#39;</span><span class="p">:</span> <span class="s1">&#39;uchar&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;int8&#39;</span><span class="p">:</span> <span class="s1">&#39;char&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;uint16&#39;</span><span class="p">:</span> <span class="s1">&#39;ushort&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;int16&#39;</span><span class="p">:</span> <span class="s1">&#39;short&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;uint32&#39;</span><span class="p">:</span> <span class="s1">&#39;uint&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;int32&#39;</span><span class="p">:</span> <span class="s1">&#39;int&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;float32&#39;</span><span class="p">:</span> <span class="s1">&#39;float&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;float64&#39;</span><span class="p">:</span> <span class="s1">&#39;double&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;complex64&#39;</span><span class="p">:</span> <span class="s1">&#39;complex&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;complex128&#39;</span><span class="p">:</span> <span class="s1">&#39;dpcomplex&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">bands</span> <span class="o">=</span> <span class="n">np_3d</span><span class="o">.</span><span class="n">shape</span>
+<span class="n">linear</span> <span class="o">=</span> <span class="n">np_3d</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">width</span> <span class="o">*</span> <span class="n">height</span> <span class="o">*</span> <span class="n">bands</span><span class="p">)</span>
+<span class="n">vi</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_memory</span><span class="p">(</span><span class="n">linear</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">bands</span><span class="p">,</span>
+                                  <span class="n">dtype_to_format</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">np_3d</span><span class="o">.</span><span class="n">dtype</span><span class="p">)])</span>
+</pre></div>
+</div>
+<p>To make a vips image that represents a numpy array.</p>
+</div>
+<div class="section" id="automatic-wrapping">
+<h2>Automatic wrapping<a class="headerlink" href="#automatic-wrapping" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">pyvips</span></code> adds a <a class="reference internal" href="vimage.html#pyvips.Image.__getattr__" title="pyvips.Image.__getattr__"><code class="xref py py-meth docutils literal"><span class="pre">__getattr__()</span></code></a> handler to <a class="reference internal" href="vimage.html#pyvips.Image" title="pyvips.Image"><code class="xref py py-class docutils literal"><span class="pre">Image</span></code></a>
+and to the Image metaclass, then uses it to look up vips operations. For
+example, the libvips operation <code class="docutils literal"><span class="pre">add</span></code>, which appears in C as <code class="docutils literal"><span class="pre">vips_add()</span></code>,
+appears in Python as <a class="reference internal" href="vimage.html#pyvips.Image.add" title="pyvips.Image.add"><code class="xref py py-meth docutils literal"><span class="pre">add()</span></code></a>.</p>
+<p>The operation’s list of required arguments is searched and the first input
+image is set to the value of <code class="docutils literal"><span class="pre">self</span></code>. Operations which do not take an input
+image, such as <a class="reference internal" href="vimage.html#pyvips.Image.black" title="pyvips.Image.black"><code class="xref py py-meth docutils literal"><span class="pre">black()</span></code></a>, appear as class methods. The remainder of
+the arguments you supply in the function call are used to set the other
+required input arguments. Any trailing keyword arguments are used to set
+options on the operation.</p>
+<p>The result is the required output argument if there is only one result,
+or an array of values if the operation produces several results. If the
+operation has optional output objects, they are returned as a final hash.</p>
+<p>For example, <a class="reference internal" href="vimage.html#pyvips.Image.min" title="pyvips.Image.min"><code class="xref py py-meth docutils literal"><span class="pre">min()</span></code></a>, the vips operation that searches an image for
+the minimum value, has a large number of optional arguments. You can use it to
+find the minimum value like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">min_value</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>You can ask it to return the position of the minimum with <cite>:x</cite> and <cite>:y</cite>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">min_value</span><span class="p">,</span> <span class="n">opts</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">x_pos</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+<span class="n">y_pos</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Now <code class="docutils literal"><span class="pre">x_pos</span></code> and <code class="docutils literal"><span class="pre">y_pos</span></code> will have the coordinates of the minimum value.
+There’s actually a convenience method for this, <a class="reference internal" href="vimage.html#pyvips.Image.minpos" title="pyvips.Image.minpos"><code class="xref py py-meth docutils literal"><span class="pre">minpos()</span></code></a>.</p>
+<p>You can also ask for the top <em>n</em> minimum, for example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">min_value</span><span class="p">,</span> <span class="n">opts</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">x_array</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">y_array</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">x_pos</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="s1">&#39;x_array&#39;</span><span class="p">]</span>
+<span class="n">y_pos</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="s1">&#39;y_array&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Now <code class="docutils literal"><span class="pre">x_pos</span></code> and <code class="docutils literal"><span class="pre">y_pos</span></code> will be 10-element arrays.</p>
+<p>Because operations are member functions and return the result image, you can
+chain them. For example, you can write:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">result_image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">real</span><span class="p">()</span><span class="o">.</span><span class="n">cos</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>to calculate the cosine of the real part of a complex image.  There is
+also a full set of arithmetic operator overloads, see below.</p>
+<p>libvips types are automatically wrapped. The binding looks at the type
+of argument required by the operation and converts the value you supply,
+when it can. For example, <a class="reference internal" href="vimage.html#pyvips.Image.linear" title="pyvips.Image.linear"><code class="xref py py-meth docutils literal"><span class="pre">linear()</span></code></a> takes a <code class="docutils literal"><span class="pre">VipsArrayDouble</span></code> as an
+argument for the set of constants to use for multiplication. You can supply
+this value as an integer, a float, or some kind of compound object and it
+will be converted for you. You can write:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">result_image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">result_image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="mf">12.4</span><span class="p">,</span> <span class="mf">13.9</span><span class="p">)</span>
+<span class="n">result_image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">linear</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
+<span class="n">result_image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>And so on. A set of overloads are defined for <a class="reference internal" href="vimage.html#pyvips.Image.linear" title="pyvips.Image.linear"><code class="xref py py-meth docutils literal"><span class="pre">linear()</span></code></a>, see below.</p>
+<p>It also does a couple of more ambitious conversions. It will automatically
+convert to and from the various vips types, like <code class="docutils literal"><span class="pre">VipsBlob</span></code> and
+<code class="docutils literal"><span class="pre">VipsArrayImage</span></code>. For example, you can read the ICC profile out of an
+image like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">profile</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;icc-profile-data&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and profile will be a byte string.</p>
+<p>If an operation takes several input images, you can use a constant for all but
+one of them and the wrapper will expand the constant to an image for you. For
+example, <a class="reference internal" href="vimage.html#pyvips.Image.ifthenelse" title="pyvips.Image.ifthenelse"><code class="xref py py-meth docutils literal"><span class="pre">ifthenelse()</span></code></a> uses a condition image to pick pixels
+between a then and an else image:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">result_image</span> <span class="o">=</span> <span class="n">condition_image</span><span class="o">.</span><span class="n">ifthenelse</span><span class="p">(</span><span class="n">then_image</span><span class="p">,</span> <span class="n">else_image</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can use a constant instead of either the then or the else parts and it
+will be expanded to an image for you. If you use a constant for both then and
+else, it will be expanded to match the condition image. For example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">result_image</span> <span class="o">=</span> <span class="n">condition_image</span><span class="o">.</span><span class="n">ifthenelse</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Will make an image where true pixels are green and false pixels are red.</p>
+<p>This is useful for <a class="reference internal" href="vimage.html#pyvips.Image.bandjoin" title="pyvips.Image.bandjoin"><code class="xref py py-meth docutils literal"><span class="pre">bandjoin()</span></code></a>, the thing to join two or more
+images up bandwise. You can write:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">rgba</span> <span class="o">=</span> <span class="n">rgb</span><span class="o">.</span><span class="n">bandjoin</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>to append a constant 255 band to an image, perhaps to add an alpha channel. Of
+course you can also write:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">result_image</span> <span class="o">=</span> <span class="n">image1</span><span class="o">.</span><span class="n">bandjoin</span><span class="p">(</span><span class="n">image2</span><span class="p">)</span>
+<span class="n">result_image</span> <span class="o">=</span> <span class="n">image1</span><span class="o">.</span><span class="n">bandjoin</span><span class="p">([</span><span class="n">image2</span><span class="p">,</span> <span class="n">image3</span><span class="p">])</span>
+<span class="n">result_image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">bandjoin</span><span class="p">([</span><span class="n">image1</span><span class="p">,</span> <span class="n">image2</span><span class="p">,</span> <span class="n">image3</span><span class="p">])</span>
+<span class="n">result_image</span> <span class="o">=</span> <span class="n">image1</span><span class="o">.</span><span class="n">bandjoin</span><span class="p">([</span><span class="n">image2</span><span class="p">,</span> <span class="mi">255</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>and so on.</p>
+</div>
+<div class="section" id="automatic-documentation">
+<h2>Automatic documentation<a class="headerlink" href="#automatic-documentation" title="Permalink to this headline">¶</a></h2>
+<p>The bulk of these API docs are generated automatically by
+<a class="reference internal" href="voperation.html#pyvips.voperation.Operation.generate_sphinx_all" title="pyvips.voperation.Operation.generate_sphinx_all"><code class="xref py py-meth docutils literal"><span class="pre">Operation.generate_sphinx_all()</span></code></a>. It examines libvips and writes a
+summary of each operation and the arguments and options that that operation
+expects.</p>
+<p>Use the C API docs for more detail:</p>
+<p><a class="reference external" href="https://jcupitt.github.io/libvips/API/current">https://jcupitt.github.io/libvips/API/current</a></p>
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<p>The wrapper spots errors from vips operations and raises the <a class="reference internal" href="error.html#pyvips.error.Error" title="pyvips.error.Error"><code class="xref py py-class docutils literal"><span class="pre">Error</span></code></a>
+exception. You can catch it in the usual way.</p>
+</div>
+<div class="section" id="enums">
+<h2>Enums<a class="headerlink" href="#enums" title="Permalink to this headline">¶</a></h2>
+<p>The libvips enums, such as <code class="docutils literal"><span class="pre">VipsBandFormat</span></code>, appear in pyvips as strings
+like <code class="docutils literal"><span class="pre">'uchar'</span></code>. They are documented as a set of classes for convenience, see
+<a class="reference internal" href="enums.html#pyvips.enums.Access" title="pyvips.enums.Access"><code class="xref py py-class docutils literal"><span class="pre">Access</span></code></a>, for example.</p>
+</div>
+<div class="section" id="draw-operations">
+<h2>Draw operations<a class="headerlink" href="#draw-operations" title="Permalink to this headline">¶</a></h2>
+<p>Paint operations like <a class="reference internal" href="vimage.html#pyvips.Image.draw_circle" title="pyvips.Image.draw_circle"><code class="xref py py-meth docutils literal"><span class="pre">draw_circle()</span></code></a> and <a class="reference internal" href="vimage.html#pyvips.Image.draw_line" title="pyvips.Image.draw_line"><code class="xref py py-meth docutils literal"><span class="pre">draw_line()</span></code></a>
+modify their input image. This makes them hard to use with the rest of
+libvips: you need to be very careful about the order in which operations
+execute or you can get nasty crashes.</p>
+<p>The wrapper spots operations of this type and makes a private copy of the
+image in memory before calling the operation. This stops crashes, but it does
+make it inefficient. If you draw 100 lines on an image, for example, you’ll
+copy the image 100 times. The wrapper does make sure that memory is recycled
+where possible, so you won’t have 100 copies in memory.</p>
+<p>If you want to avoid the copies, you’ll need to call drawing operations
+yourself.</p>
+</div>
+<div class="section" id="overloads">
+<h2>Overloads<a class="headerlink" href="#overloads" title="Permalink to this headline">¶</a></h2>
+<p>The wrapper defines the usual set of arithmetic, boolean and relational
+overloads on image. You can mix images, constants and lists of constants
+freely. For example, you can write:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">result_image</span> <span class="o">=</span> <span class="p">((</span><span class="n">image</span> <span class="o">*</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">128</span><span class="p">)</span> <span class="o">|</span> <span class="mi">4</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="expansions">
+<h2>Expansions<a class="headerlink" href="#expansions" title="Permalink to this headline">¶</a></h2>
+<p>Some vips operators take an enum to select an action, for example
+<a class="reference internal" href="vimage.html#pyvips.Image.math" title="pyvips.Image.math"><code class="xref py py-meth docutils literal"><span class="pre">math()</span></code></a> can be used to calculate sine of every pixel like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">result_image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">math</span><span class="p">(</span><span class="s1">&#39;sin&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This is annoying, so the wrapper expands all these enums into separate members
+named after the enum value. So you can also write:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">result_image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">sin</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="convenience-functions">
+<h2>Convenience functions<a class="headerlink" href="#convenience-functions" title="Permalink to this headline">¶</a></h2>
+<p>The wrapper defines a few extra useful utility functions:
+<a class="reference internal" href="vimage.html#pyvips.Image.bandsplit" title="pyvips.Image.bandsplit"><code class="xref py py-meth docutils literal"><span class="pre">bandsplit()</span></code></a>, <a class="reference internal" href="vimage.html#pyvips.Image.maxpos" title="pyvips.Image.maxpos"><code class="xref py py-meth docutils literal"><span class="pre">maxpos()</span></code></a>, <a class="reference internal" href="vimage.html#pyvips.Image.minpos" title="pyvips.Image.minpos"><code class="xref py py-meth docutils literal"><span class="pre">minpos()</span></code></a>,
+<a class="reference internal" href="vimage.html#pyvips.Image.median" title="pyvips.Image.median"><code class="xref py py-meth docutils literal"><span class="pre">median()</span></code></a>.</p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="vimage.html" class="btn btn-neutral float-right" title="Image" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="README.html" class="btn btn-neutral" title="README" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, John Cupitt.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'2.0-alpha1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

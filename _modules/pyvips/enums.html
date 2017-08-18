@@ -1,0 +1,528 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pyvips.enums &mdash; pyvips 2.0-alpha1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="pyvips 2.0-alpha1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pyvips
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vimage.html"><code class="docutils literal"><span class="pre">Image</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../base.html">Base definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../error.html"><code class="docutils literal"><span class="pre">Error</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../enums.html">The libvips enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vinterpolate.html"><code class="docutils literal"><span class="pre">Interpolate</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gvalue.html"><code class="docutils literal"><span class="pre">GValue</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gobject.html"><code class="docutils literal"><span class="pre">GObject</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../voperation.html"><code class="docutils literal"><span class="pre">Operation</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vobject.html"><code class="docutils literal"><span class="pre">VipsObject</span></code></a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyvips</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyvips.enums</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/jcupitt/pyvips/blob/master/doc/_modules/pyvips/enums" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyvips.enums</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="BandFormat"><a class="viewcode-back" href="../../enums.html#pyvips.enums.BandFormat">[docs]</a><span class="k">class</span> <span class="nc">BandFormat</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The format of image bands.</span>
+
+<span class="sd">    The format used for each band element. Each corresponds to a native C type</span>
+<span class="sd">    for the current machine.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        UCHAR (str): unsigned char format</span>
+<span class="sd">        CHAR (str): char format</span>
+<span class="sd">        USHORT (str): unsigned short format</span>
+<span class="sd">        SHORT (str): short format</span>
+<span class="sd">        UINT (str): unsigned int format</span>
+<span class="sd">        INT (str): int format</span>
+<span class="sd">        FLOAT (str): float format</span>
+<span class="sd">        COMPLEX (str): complex (two floats) format</span>
+<span class="sd">        DOUBLE (str): double float format</span>
+<span class="sd">        DPCOMPLEX (str): double complex (two double) format</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">UCHAR</span> <span class="o">=</span> <span class="s1">&#39;uchar&#39;</span>
+    <span class="n">CHAR</span> <span class="o">=</span> <span class="s1">&#39;char&#39;</span>
+    <span class="n">USHORT</span> <span class="o">=</span> <span class="s1">&#39;ushort&#39;</span>
+    <span class="n">SHORT</span> <span class="o">=</span> <span class="s1">&#39;short&#39;</span>
+    <span class="n">UINT</span> <span class="o">=</span> <span class="s1">&#39;uint&#39;</span>
+    <span class="n">INT</span> <span class="o">=</span> <span class="s1">&#39;int&#39;</span>
+    <span class="n">FLOAT</span> <span class="o">=</span> <span class="s1">&#39;float&#39;</span>
+    <span class="n">COMPLEX</span> <span class="o">=</span> <span class="s1">&#39;complex&#39;</span>
+    <span class="n">DOUBLE</span> <span class="o">=</span> <span class="s1">&#39;double&#39;</span>
+    <span class="n">DPCOMPLEX</span> <span class="o">=</span> <span class="s1">&#39;dpcomplex&#39;</span></div>
+
+
+<div class="viewcode-block" id="Access"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Access">[docs]</a><span class="k">class</span> <span class="nc">Access</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The type of access an operation has to supply.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        RANDOM (str): Requests can come in any order.</span>
+<span class="sd">        SEQUENTIAL (str): Means requests will be top-to-bottom, but with some</span>
+<span class="sd">            amount of buffering behind the read point for small non-local</span>
+<span class="sd">            accesses.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">RANDOM</span> <span class="o">=</span> <span class="s1">&#39;random&#39;</span>
+    <span class="n">SEQUENTIAL</span> <span class="o">=</span> <span class="s1">&#39;sequential&#39;</span></div>
+
+
+<div class="viewcode-block" id="Interpretation"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Interpretation">[docs]</a><span class="k">class</span> <span class="nc">Interpretation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;How the values in an image should be interpreted.</span>
+
+<span class="sd">    For example, a three-band float image of type LAB should have its</span>
+<span class="sd">    pixels interpreted as coordinates in CIE Lab space.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        MULTIBAND (str): generic many-band image</span>
+<span class="sd">        B_W (str): some kind of single-band image</span>
+<span class="sd">        HISTOGRAM (str): a 1D image, eg. histogram or lookup table</span>
+<span class="sd">        FOURIER (str): image is in fourier space</span>
+<span class="sd">        XYZ (str): the first three bands are CIE XYZ</span>
+<span class="sd">        LAB (str): pixels are in CIE Lab space</span>
+<span class="sd">        CMYK (str): the first four bands are in CMYK space</span>
+<span class="sd">        LABQ (str): implies #VIPS_CODING_LABQ</span>
+<span class="sd">        RGB (str): generic RGB space</span>
+<span class="sd">        CMC (str): a uniform colourspace based on CMC(1:1)</span>
+<span class="sd">        LCH (str): pixels are in CIE LCh space</span>
+<span class="sd">        LABS (str): CIE LAB coded as three signed 16-bit values</span>
+<span class="sd">        SRGB (str): pixels are sRGB</span>
+<span class="sd">        HSV (str): pixels are HSV</span>
+<span class="sd">        SCRGB (str): pixels are scRGB</span>
+<span class="sd">        YXY (str): pixels are CIE Yxy</span>
+<span class="sd">        RGB16 (str): generic 16-bit RGB</span>
+<span class="sd">        GREY16 (str): generic 16-bit mono</span>
+<span class="sd">        MATRIX (str): a matrix</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">MULTIBAND</span> <span class="o">=</span> <span class="s1">&#39;multiband&#39;</span>
+    <span class="n">B_W</span> <span class="o">=</span> <span class="s1">&#39;b-w&#39;</span>
+    <span class="n">HISTOGRAM</span> <span class="o">=</span> <span class="s1">&#39;histogram&#39;</span>
+    <span class="n">XYZ</span> <span class="o">=</span> <span class="s1">&#39;xyz&#39;</span>
+    <span class="n">LAB</span> <span class="o">=</span> <span class="s1">&#39;lab&#39;</span>
+    <span class="n">CMYK</span> <span class="o">=</span> <span class="s1">&#39;cmyk&#39;</span>
+    <span class="n">LABQ</span> <span class="o">=</span> <span class="s1">&#39;labq&#39;</span>
+    <span class="n">RGB</span> <span class="o">=</span> <span class="s1">&#39;rgb&#39;</span>
+    <span class="n">CMC</span> <span class="o">=</span> <span class="s1">&#39;cmc&#39;</span>
+    <span class="n">LCH</span> <span class="o">=</span> <span class="s1">&#39;lch&#39;</span>
+    <span class="n">LABS</span> <span class="o">=</span> <span class="s1">&#39;labs&#39;</span>
+    <span class="n">SRGB</span> <span class="o">=</span> <span class="s1">&#39;srgb&#39;</span>
+    <span class="n">YXY</span> <span class="o">=</span> <span class="s1">&#39;yxy&#39;</span>
+    <span class="n">FOURIER</span> <span class="o">=</span> <span class="s1">&#39;fourier&#39;</span>
+    <span class="n">RGB16</span> <span class="o">=</span> <span class="s1">&#39;rgb16&#39;</span>
+    <span class="n">GREY16</span> <span class="o">=</span> <span class="s1">&#39;grey16&#39;</span>
+    <span class="n">MATRIX</span> <span class="o">=</span> <span class="s1">&#39;matrix&#39;</span>
+    <span class="n">SCRGB</span> <span class="o">=</span> <span class="s1">&#39;scrgb&#39;</span>
+    <span class="n">HSV</span> <span class="o">=</span> <span class="s1">&#39;hsv&#39;</span></div>
+
+
+<div class="viewcode-block" id="Angle"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Angle">[docs]</a><span class="k">class</span> <span class="nc">Angle</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Various fixed 90 degree rotation angles.</span>
+
+<span class="sd">    See for example :meth:`.rot`.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        D0 (str): no rotate</span>
+<span class="sd">        D90 (str): 90 degrees clockwise</span>
+<span class="sd">        D180 (str): 180 degrees</span>
+<span class="sd">        D270 (str): 90 degrees anti-clockwise</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">D0</span> <span class="o">=</span> <span class="s1">&#39;d0&#39;</span>
+    <span class="n">D90</span> <span class="o">=</span> <span class="s1">&#39;d90&#39;</span>
+    <span class="n">D180</span> <span class="o">=</span> <span class="s1">&#39;d180&#39;</span>
+    <span class="n">D270</span> <span class="o">=</span> <span class="s1">&#39;d270&#39;</span></div>
+
+
+<div class="viewcode-block" id="Angle45"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Angle45">[docs]</a><span class="k">class</span> <span class="nc">Angle45</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Various fixed 45 degree rotation angles.</span>
+
+<span class="sd">    See for example :meth:`.rot45`.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        D0 (str): no rotate</span>
+<span class="sd">        D45 (str): 45 degrees clockwise</span>
+<span class="sd">        D90 (str): 90 degrees clockwise</span>
+<span class="sd">        D135 (str): 135 degrees clockwise</span>
+<span class="sd">        D180 (str): 180 degrees</span>
+<span class="sd">        D225 (str): 135 degrees anti-clockwise</span>
+<span class="sd">        D270 (str): 90 degrees anti-clockwise</span>
+<span class="sd">        D315 (str): 45 degrees anti-clockwise</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">D0</span> <span class="o">=</span> <span class="s1">&#39;d0&#39;</span>
+    <span class="n">D45</span> <span class="o">=</span> <span class="s1">&#39;d45&#39;</span>
+    <span class="n">D90</span> <span class="o">=</span> <span class="s1">&#39;d90&#39;</span>
+    <span class="n">D135</span> <span class="o">=</span> <span class="s1">&#39;d135&#39;</span>
+    <span class="n">D180</span> <span class="o">=</span> <span class="s1">&#39;d180&#39;</span>
+    <span class="n">D225</span> <span class="o">=</span> <span class="s1">&#39;d225&#39;</span>
+    <span class="n">D270</span> <span class="o">=</span> <span class="s1">&#39;d270&#39;</span>
+    <span class="n">D315</span> <span class="o">=</span> <span class="s1">&#39;d315&#39;</span></div>
+
+
+<div class="viewcode-block" id="Intent"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Intent">[docs]</a><span class="k">class</span> <span class="nc">Intent</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The rendering intent.</span>
+
+<span class="sd">    See :meth:`.icc_transform`.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        PERCEPTUAL (str):</span>
+<span class="sd">        RELATIVE (str):</span>
+<span class="sd">        SATURATION (str):</span>
+<span class="sd">        ABSOLUTE (str):</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">PERCEPTUAL</span> <span class="o">=</span> <span class="s1">&#39;perceptual&#39;</span>
+    <span class="n">RELATIVE</span> <span class="o">=</span> <span class="s1">&#39;relative&#39;</span>
+    <span class="n">SATURATION</span> <span class="o">=</span> <span class="s1">&#39;saturation&#39;</span>
+    <span class="n">ABSOLUTE</span> <span class="o">=</span> <span class="s1">&#39;absolute&#39;</span></div>
+
+
+<div class="viewcode-block" id="Extend"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Extend">[docs]</a><span class="k">class</span> <span class="nc">Extend</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;How to extend image edges.</span>
+
+<span class="sd">    When the edges of an image are extended, you can specify how you want</span>
+<span class="sd">    the extension done.  See :meth:`.embed`, :meth:`.conv`, :meth:`.affine`</span>
+<span class="sd">    and so on.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        BLACK (str): new pixels are black, ie. all bits are zero.</span>
+<span class="sd">        COPY (str): each new pixel takes the value of the nearest edge pixel</span>
+<span class="sd">        REPEAT (str): the image is tiled to fill the new area</span>
+<span class="sd">        MIRROR (str): the image is reflected and tiled to reduce hash edges</span>
+<span class="sd">        WHITE (str): new pixels are white, ie. all bits are set</span>
+<span class="sd">        BACKGROUND (str): colour set from the @background property</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">BLACK</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span>
+    <span class="n">COPY</span> <span class="o">=</span> <span class="s1">&#39;copy&#39;</span>
+    <span class="n">REPEAT</span> <span class="o">=</span> <span class="s1">&#39;repeat&#39;</span>
+    <span class="n">MIRROR</span> <span class="o">=</span> <span class="s1">&#39;mirror&#39;</span>
+    <span class="n">WHITE</span> <span class="o">=</span> <span class="s1">&#39;white&#39;</span>
+    <span class="n">BACKGROUND</span> <span class="o">=</span> <span class="s1">&#39;background&#39;</span></div>
+
+
+<div class="viewcode-block" id="Precision"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Precision">[docs]</a><span class="k">class</span> <span class="nc">Precision</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Computation precision.</span>
+
+<span class="sd">    See for example :meth:`.conv`.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        INTEGER (str): Integer.</span>
+<span class="sd">        FLOAT (str): Floating point.</span>
+<span class="sd">        APPROXIMATE (str): Compute approximate result.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">INTEGER</span> <span class="o">=</span> <span class="s1">&#39;integer&#39;</span>
+    <span class="n">FLOAT</span> <span class="o">=</span> <span class="s1">&#39;float&#39;</span>
+    <span class="n">APPROXIMATE</span> <span class="o">=</span> <span class="s1">&#39;approximate&#39;</span></div>
+
+
+<div class="viewcode-block" id="Coding"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Coding">[docs]</a><span class="k">class</span> <span class="nc">Coding</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;How pixels are coded.</span>
+
+<span class="sd">    Normally, pixels are uncoded and can be manipulated as you would expect.</span>
+<span class="sd">    However some file formats code pixels for compression, and sometimes it&#39;s</span>
+<span class="sd">    useful to be able to manipulate images in the coded format.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        NONE (str): pixels are not coded</span>
+<span class="sd">        LABQ (str): pixels encode 3 float CIELAB values as 4 uchar</span>
+<span class="sd">        RAD (str): pixels encode 3 float RGB as 4 uchar (Radiance coding)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">NONE</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span>
+    <span class="n">LABQ</span> <span class="o">=</span> <span class="s1">&#39;labq&#39;</span>
+    <span class="n">RAD</span> <span class="o">=</span> <span class="s1">&#39;rad&#39;</span></div>
+
+
+<div class="viewcode-block" id="Direction"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Direction">[docs]</a><span class="k">class</span> <span class="nc">Direction</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A direction.</span>
+
+<span class="sd">    Operations like :meth:`.flip` need to be told whether to flip</span>
+<span class="sd">    left-right or top-bottom.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        HORIZONTAL (str): left-right</span>
+<span class="sd">        VERTICAL (str): top-bottom</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">HORIZONTAL</span> <span class="o">=</span> <span class="s1">&#39;horizontal&#39;</span>
+    <span class="n">VERTICAL</span> <span class="o">=</span> <span class="s1">&#39;vertical&#39;</span></div>
+
+
+<div class="viewcode-block" id="Align"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Align">[docs]</a><span class="k">class</span> <span class="nc">Align</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Various types of alignment.</span>
+
+<span class="sd">    See :meth:`.join`, for example.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        LOW (str): Align on the low coordinate edge</span>
+<span class="sd">        CENTRE (str): Align on the centre</span>
+<span class="sd">        HIGH (str): Align on the high coordinate edge</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">LOW</span> <span class="o">=</span> <span class="s1">&#39;low&#39;</span>
+    <span class="n">CENTRE</span> <span class="o">=</span> <span class="s1">&#39;centre&#39;</span>
+    <span class="n">HIGH</span> <span class="o">=</span> <span class="s1">&#39;high&#39;</span></div>
+
+
+<div class="viewcode-block" id="Combine"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Combine">[docs]</a><span class="k">class</span> <span class="nc">Combine</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;How to combine passes.</span>
+
+<span class="sd">    See for example :meth:`.compass`.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        MAX (str): Take the maximum of all values.</span>
+<span class="sd">        SUM (str): Take the sum of all values.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">MAX</span> <span class="o">=</span> <span class="s1">&#39;max&#39;</span>
+    <span class="n">SUM</span> <span class="o">=</span> <span class="s1">&#39;sum&#39;</span></div>
+
+
+<div class="viewcode-block" id="PCS"><a class="viewcode-back" href="../../enums.html#pyvips.enums.PCS">[docs]</a><span class="k">class</span> <span class="nc">PCS</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Set Perofile Connection Space.</span>
+
+<span class="sd">    See for example :meth:`.icc_import`.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        LAB (str): CIE Lab space.</span>
+<span class="sd">        XYZ (str): CIE XYZ space.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">LAB</span> <span class="o">=</span> <span class="s1">&#39;lab&#39;</span>
+    <span class="n">XYZ</span> <span class="o">=</span> <span class="s1">&#39;xyz&#39;</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, John Cupitt.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2.0-alpha1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

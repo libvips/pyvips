@@ -1,0 +1,1410 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pyvips.vimage &mdash; pyvips 2.0-alpha1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="pyvips 2.0-alpha1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pyvips
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vimage.html"><code class="docutils literal"><span class="pre">Image</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../base.html">Base definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../error.html"><code class="docutils literal"><span class="pre">Error</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../enums.html">The libvips enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vinterpolate.html"><code class="docutils literal"><span class="pre">Interpolate</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gvalue.html"><code class="docutils literal"><span class="pre">GValue</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gobject.html"><code class="docutils literal"><span class="pre">GObject</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../voperation.html"><code class="docutils literal"><span class="pre">Operation</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vobject.html"><code class="docutils literal"><span class="pre">VipsObject</span></code></a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyvips</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyvips.vimage</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/jcupitt/pyvips/blob/master/doc/_modules/pyvips/vimage" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyvips.vimage</h1><div class="highlight"><pre>
+<span></span><span class="c1"># wrap VipsImage</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+
+<span class="kn">import</span> <span class="nn">numbers</span>
+
+<span class="kn">import</span> <span class="nn">pyvips</span>
+<span class="kn">from</span> <span class="nn">pyvips</span> <span class="k">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">glib_lib</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">Error</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">,</span> \
+    <span class="n">_to_string</span><span class="p">,</span> <span class="n">GValue</span>
+
+<span class="n">ffi</span><span class="o">.</span><span class="n">cdef</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">    typedef struct _VipsImage {</span>
+<span class="s1">        VipsObject parent_instance;</span>
+
+<span class="s1">        // opaque</span>
+<span class="s1">    } VipsImage;</span>
+
+<span class="s1">    const char* vips_foreign_find_load (const char* name);</span>
+<span class="s1">    const char* vips_foreign_find_load_buffer (const void* data, size_t size);</span>
+<span class="s1">    const char* vips_foreign_find_save (const char* name);</span>
+<span class="s1">    const char* vips_foreign_find_save_buffer (const char* suffix);</span>
+
+<span class="s1">    VipsImage* vips_image_new_matrix_from_array (int width, int height,</span>
+<span class="s1">            const double* array, int size);</span>
+<span class="s1">    VipsImage* vips_image_new_from_memory (const void* data, size_t size,</span>
+<span class="s1">            int width, int height, int bands, int format);</span>
+
+<span class="s1">    VipsImage* vips_image_copy_memory (VipsImage* image);</span>
+
+<span class="s1">    GType vips_image_get_typeof (const VipsImage* image,</span>
+<span class="s1">        const char* name);</span>
+<span class="s1">    int vips_image_get (const VipsImage* image,</span>
+<span class="s1">        const char* name, GValue* value_copy);</span>
+<span class="s1">    void vips_image_set (VipsImage* image, const char* name, GValue* value);</span>
+<span class="s1">    int vips_image_remove (VipsImage* image, const char* name);</span>
+
+<span class="s1">    char* vips_filename_get_filename (const char* vips_filename);</span>
+<span class="s1">    char* vips_filename_get_options (const char* vips_filename);</span>
+
+<span class="s1">    VipsImage* vips_image_new_temp_file (const char* format);</span>
+
+<span class="s1">    int vips_image_write (VipsImage* image, VipsImage* out);</span>
+<span class="s1">    void* vips_image_write_to_memory (VipsImage* in, size_t* size_out);</span>
+
+
+<span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
+
+
+<span class="c1"># either a single number, or a table of numbers</span>
+<span class="k">def</span> <span class="nf">_is_pixel</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Number</span><span class="p">)</span> <span class="ow">or</span>
+            <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span>
+            <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="p">)))</span>
+
+
+<span class="c1"># test for rectangular array of something</span>
+<span class="k">def</span> <span class="nf">_is_2D</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">array</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="kc">True</span>
+
+
+<span class="c1"># apply a function to a thing, or map over a list</span>
+<span class="c1"># we often need to do something like (1.0 / other) and need to work for lists</span>
+<span class="c1"># as well as scalars</span>
+<span class="k">def</span> <span class="nf">_smap</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_call_enum</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">operation</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">_is_pixel</span><span class="p">(</span><span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="s1">&#39;_const&#39;</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">operation</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">operation</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_run_cmplx</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Run a complex function on a non-complex image.</span>
+
+<span class="sd">    The image needs to be complex, or have an even number of bands. The input</span>
+<span class="sd">    can be int, the output is always float or double.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">original_format</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">format</span>
+
+    <span class="k">if</span> <span class="n">image</span><span class="o">.</span><span class="n">format</span> <span class="o">!=</span> <span class="s1">&#39;complex&#39;</span> <span class="ow">and</span> <span class="n">image</span><span class="o">.</span><span class="n">format</span> <span class="o">!=</span> <span class="s1">&#39;dpcomplex&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">image</span><span class="o">.</span><span class="n">bands</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;not an even number of bands&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">image</span><span class="o">.</span><span class="n">format</span> <span class="o">!=</span> <span class="s1">&#39;float&#39;</span> <span class="ow">and</span> <span class="n">image</span><span class="o">.</span><span class="n">format</span> <span class="o">!=</span> <span class="s1">&#39;double&#39;</span><span class="p">:</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">image</span><span class="o">.</span><span class="n">format</span> <span class="o">==</span> <span class="s1">&#39;double&#39;</span><span class="p">:</span>
+            <span class="n">new_format</span> <span class="o">=</span> <span class="s1">&#39;dpcomplex&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_format</span> <span class="o">=</span> <span class="s1">&#39;complex&#39;</span>
+
+        <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="n">new_format</span><span class="p">,</span> <span class="n">bands</span><span class="o">=</span><span class="n">image</span><span class="o">.</span><span class="n">bands</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">image</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">original_format</span> <span class="o">!=</span> <span class="s1">&#39;complex&#39;</span> <span class="ow">and</span> <span class="n">original_format</span> <span class="o">!=</span> <span class="s1">&#39;dpcomplex&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">image</span><span class="o">.</span><span class="n">format</span> <span class="o">==</span> <span class="s1">&#39;dpcomplex&#39;</span><span class="p">:</span>
+            <span class="n">new_format</span> <span class="o">=</span> <span class="s1">&#39;double&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_format</span> <span class="o">=</span> <span class="s1">&#39;float&#39;</span>
+
+        <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="n">new_format</span><span class="p">,</span> <span class="n">bands</span><span class="o">=</span><span class="n">image</span><span class="o">.</span><span class="n">bands</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">image</span>
+
+
+<span class="c1"># https://stackoverflow.com/a/22409540/1480019</span>
+<span class="k">def</span> <span class="nf">_with_metaclass</span><span class="p">(</span><span class="n">mcls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="c1"># clean out class body</span>
+        <span class="n">body</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;__dict__&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">body</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;__weakref__&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">mcls</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__bases__</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">decorator</span>
+
+
+<span class="c1"># decorator to set docstring</span>
+<span class="k">def</span> <span class="nf">_add_doc</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_doc</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="n">func</span>
+
+    <span class="k">return</span> <span class="n">_doc</span>
+
+
+<span class="c1"># metaclass for Image ... getattr on this implements the class methods</span>
+<span class="k">class</span> <span class="nc">ImageType</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="c1"># logger.debug(&#39;ImageType.__getattr__ %s&#39;, name)</span>
+
+        <span class="nd">@_add_doc</span><span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">generate_docstring</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="k">def</span> <span class="nf">call_function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">call_function</span>
+
+
+<div class="viewcode-block" id="Image"><a class="viewcode-back" href="../../vimage.html#pyvips.Image">[docs]</a><span class="nd">@_with_metaclass</span><span class="p">(</span><span class="n">ImageType</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Image</span><span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">VipsObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Wrap a VipsImage object.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># private static</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">imageize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="c1"># careful! self can be None if value is a 2D array</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Image</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="n">_is_2D</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">Image</span><span class="o">.</span><span class="n">new_from_array</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_from_image</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointer</span><span class="p">):</span>
+        <span class="c1"># logger.debug(&#39;Image.__init__: pointer = %s&#39;, pointer)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Image</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span>
+
+    <span class="c1"># constructors</span>
+
+<div class="viewcode-block" id="Image.new_from_file"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.new_from_file">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">new_from_file</span><span class="p">(</span><span class="n">vips_filename</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Load an image from a file.</span>
+
+<span class="sd">        This method can load images in any format supported by vips. The</span>
+<span class="sd">        filename can include load options, for example::</span>
+
+<span class="sd">            image = pyvips.Image.new_from_file(&#39;fred.jpg[shrink=2]&#39;)</span>
+
+<span class="sd">        You can also supply options as keyword arguments, for example::</span>
+
+<span class="sd">            image = pyvips.Image.new_from_file(&#39;fred.jpg&#39;, shrink=2)</span>
+
+<span class="sd">        The full set of options available depend upon the load operation that</span>
+<span class="sd">        will be executed. Try something like::</span>
+
+<span class="sd">            $ vips jpegload</span>
+
+<span class="sd">        at the command-line to see a summary of the available options for the</span>
+<span class="sd">        JPEG loader.</span>
+
+<span class="sd">        Loading is fast: only enough of the image is loaded to be able to fill</span>
+<span class="sd">        out the header. Pixels will only be decompressed when they are needed.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            vips_filename (str): The disc file to load the image from, with</span>
+<span class="sd">                optional appended arguments.</span>
+
+<span class="sd">        All loaders support at least the following options:</span>
+
+<span class="sd">        Keyword args:</span>
+<span class="sd">            memory (bool): If set True, load the image via memory rather than</span>
+<span class="sd">                via a temporary disc file. See :meth:`temp_image_file` for</span>
+<span class="sd">                notes on where temporary files are created. Small images are</span>
+<span class="sd">                loaded via memory by default, use ``VIPS_DISC_THRESHOLD`` to</span>
+<span class="sd">                set the definition of small.</span>
+<span class="sd">            access (Access): Hint the expected access pattern for the image.</span>
+<span class="sd">            fail (bool): If set True, the loader will fail with an error on</span>
+<span class="sd">                the first serious error in the file. By default, libvips</span>
+<span class="sd">                will attempt to read everything it can from a damanged image.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A new :class:`.Image`.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            :class:`.Error`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">vips_filename</span> <span class="o">=</span> <span class="n">_to_bytes</span><span class="p">(</span><span class="n">vips_filename</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_filename_get_filename</span><span class="p">(</span><span class="n">vips_filename</span><span class="p">)</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_filename_get_options</span><span class="p">(</span><span class="n">vips_filename</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_foreign_find_load</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to load from file </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vips_filename</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">_to_string</span><span class="p">(</span><span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">name</span><span class="p">)),</span>
+                                     <span class="n">_to_string</span><span class="p">(</span><span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">filename</span><span class="p">)),</span>
+                                     <span class="n">string_options</span><span class="o">=</span><span class="n">_to_string</span><span class="p">(</span>
+                                         <span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+                                     <span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.new_from_buffer"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.new_from_buffer">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">new_from_buffer</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Load a formatted image from memory.</span>
+
+<span class="sd">        This behaves exactly as :meth:`new_from_file`, but the image is</span>
+<span class="sd">        loaded from the memory object rather than from a file. The memory</span>
+<span class="sd">        object can be a string or buffer.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data (str, buffer): The memory object to load the image from.</span>
+<span class="sd">            options (str): Load options as a string. Use ``&quot;&quot;`` for no options.</span>
+
+<span class="sd">        All loaders support at least the following options:</span>
+
+<span class="sd">        Keyword args:</span>
+<span class="sd">            access (Access): Hint the expected access pattern for the image.</span>
+<span class="sd">            fail (bool): If set True, the loader will fail with an error on the</span>
+<span class="sd">                first serious error in the image. By default, libvips will</span>
+<span class="sd">                attempt to read everything it can from a damanged image.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A new :class:`Image`.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            :class:`.Error`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_foreign_find_load_buffer</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to load from buffer&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">_to_string</span><span class="p">(</span><span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">name</span><span class="p">)),</span> <span class="n">data</span><span class="p">,</span>
+                                     <span class="n">string_options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.new_from_array"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.new_from_array">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">new_from_array</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create an image from a 1D or 2D array.</span>
+
+<span class="sd">        A new one-band image with :class:`BandFormat` ``&#39;double&#39;`` pixels is</span>
+<span class="sd">        created from the array. These image are useful with the libvips</span>
+<span class="sd">        convolution operator :meth:`Image.conv`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            array (list[list[float]]): Create the image from these values.</span>
+<span class="sd">                1D arrays become a single row of pixels.</span>
+<span class="sd">            scale (float): Default to 1.0. What to divide each pixel by after</span>
+<span class="sd">                convolution.  Useful for integer convolution masks.</span>
+<span class="sd">            offset (float): Default to 0.0. What to subtract from each pixel</span>
+<span class="sd">                after convolution.  Useful for integer convolution masks.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A new :class:`Image`.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            :class:`.Error`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_2D</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
+            <span class="n">array</span> <span class="o">=</span> <span class="p">[</span><span class="n">array</span><span class="p">]</span>
+
+        <span class="n">height</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="n">width</span> <span class="o">*</span> <span class="n">height</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;double[]&#39;</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
+                <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">width</span><span class="p">]</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span>
+
+        <span class="n">vi</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_new_matrix_from_array</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">vi</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to make image from matrix&#39;</span><span class="p">)</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="n">vi</span><span class="p">)</span>
+
+        <span class="n">image</span><span class="o">.</span><span class="n">set_type</span><span class="p">(</span><span class="n">GValue</span><span class="o">.</span><span class="n">gdouble_type</span><span class="p">,</span> <span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">set_type</span><span class="p">(</span><span class="n">GValue</span><span class="o">.</span><span class="n">gdouble_type</span><span class="p">,</span> <span class="s1">&#39;offset&#39;</span><span class="p">,</span> <span class="n">offset</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">image</span></div>
+
+<div class="viewcode-block" id="Image.new_from_memory"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.new_from_memory">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">new_from_memory</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">bands</span><span class="p">,</span> <span class="nb">format</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Wrap an image around a memory array.</span>
+
+<span class="sd">        Wraps an Image around an area of memory containing a C-style array. For</span>
+<span class="sd">        example, if the ``data`` memory array contains four bytes with the</span>
+<span class="sd">        values 1, 2, 3, 4, you can make a one-band, 2x2 uchar image from</span>
+<span class="sd">        it like this::</span>
+
+<span class="sd">            image = Image.new_from_memory(data, 2, 2, 1, &#39;uchar&#39;)</span>
+
+<span class="sd">        A reference is kept to the data object, so it will not be</span>
+<span class="sd">        garbage-collected until the returned image is garbage-collected.</span>
+
+<span class="sd">        This method is useful for efficiently transferring images from PIL or</span>
+<span class="sd">        NumPy into libvips.</span>
+
+<span class="sd">        See :meth:`.write_to_memory` for the opposite operation.</span>
+
+<span class="sd">        Use :meth:`.copy` to set other image attributes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data (bytes): A memoryview or buffer object.</span>
+<span class="sd">            width (int): Image width in pixels.</span>
+<span class="sd">            height (int): Image height in pixels.</span>
+<span class="sd">            format (BandFormat): Band format.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A new :class:`Image`.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            :class:`.Error`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">format_value</span> <span class="o">=</span> <span class="n">GValue</span><span class="o">.</span><span class="n">to_enum</span><span class="p">(</span><span class="n">GValue</span><span class="o">.</span><span class="n">format_type</span><span class="p">,</span> <span class="nb">format</span><span class="p">)</span>
+        <span class="n">vi</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_new_from_memory</span><span class="p">(</span><span class="n">ffi</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
+                                                 <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
+                                                 <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">bands</span><span class="p">,</span>
+                                                 <span class="n">format_value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">vi</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to make image from memory&#39;</span><span class="p">)</span>
+
+        <span class="n">image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="n">vi</span><span class="p">)</span>
+
+        <span class="c1"># keep a secret ref to the underlying object</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">data</span>
+
+        <span class="k">return</span> <span class="n">image</span></div>
+
+<div class="viewcode-block" id="Image.new_temp_file"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.new_temp_file">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">new_temp_file</span><span class="p">(</span><span class="nb">format</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Make a new temporary image.</span>
+
+<span class="sd">        Returns an image backed by a temporary file. When written to with</span>
+<span class="sd">        :func:`Image.write`, a temporary file will be created on disc in the</span>
+<span class="sd">        specified format. When the image is closed, the file will be deleted</span>
+<span class="sd">        automatically.</span>
+
+<span class="sd">        The file is created in the temporary directory. This is set with</span>
+<span class="sd">        the environment variable ``TMPDIR``. If this is not set, then on</span>
+<span class="sd">        Unix systems, vips will default to ``/tmp``. On Windows, vips uses</span>
+<span class="sd">        ``GetTempPath()`` to find the temporary directory.</span>
+
+<span class="sd">        vips uses ``g_mkstemp()`` to make the temporary filename. They</span>
+<span class="sd">        generally look something like ``&quot;vips-12-EJKJFGH.v&quot;``.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            format (str): The format for the temp file, for example</span>
+<span class="sd">                ``&quot;%s.v&quot;`` for a vips format file. The ``%s`` is</span>
+<span class="sd">                substituted by the file path.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A new :class:`Image`.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            :class:`.Error`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">vi</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_new_temp_file</span><span class="p">(</span><span class="n">_to_bytes</span><span class="p">(</span><span class="nb">format</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">vi</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to make temp file&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="n">vi</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.new_from_image"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.new_from_image">[docs]</a>    <span class="k">def</span> <span class="nf">new_from_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Make a new image from an existing one.</span>
+
+<span class="sd">        A new image is created which has the same size, format, interpretation</span>
+<span class="sd">        and resolution as ``self``, but with every pixel set to ``value``.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (float, list[float]): The value for the pixels. Use a</span>
+<span class="sd">                single number to make a one-band image; use an array constant</span>
+<span class="sd">                to make a many-band image.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A new :class:`Image`.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            :class:`.Error`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">pixel</span> <span class="o">=</span> <span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">black</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">)</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">pixel</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
+                            <span class="n">extend</span><span class="o">=</span><span class="s1">&#39;copy&#39;</span><span class="p">)</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">interpretation</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">interpretation</span><span class="p">,</span>
+                           <span class="n">xres</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">xres</span><span class="p">,</span>
+                           <span class="n">yres</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">yres</span><span class="p">,</span>
+                           <span class="n">xoffset</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">xoffset</span><span class="p">,</span>
+                           <span class="n">yoffset</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">yoffset</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">image</span></div>
+
+<div class="viewcode-block" id="Image.copy_memory"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.copy_memory">[docs]</a>    <span class="k">def</span> <span class="nf">copy_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Copy an image to memory.</span>
+
+<span class="sd">        A large area of memory is allocated, the image is rendered to that</span>
+<span class="sd">        memory area, and a new image is returned which wraps that large memory</span>
+<span class="sd">        area.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A new :class:`Image`.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            :class:`.Error`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">vi</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_copy_memory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">vi</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to copy to memory&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="n">vi</span><span class="p">)</span></div>
+
+    <span class="c1"># writers</span>
+
+<div class="viewcode-block" id="Image.write_to_file"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.write_to_file">[docs]</a>    <span class="k">def</span> <span class="nf">write_to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vips_filename</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write an image to a file on disc.</span>
+
+<span class="sd">        This method can save images in any format supported by vips. The format</span>
+<span class="sd">        is selected from the filename suffix. The filename can include embedded</span>
+<span class="sd">        save options, see :func:`Image.new_from_file`.</span>
+
+<span class="sd">        For example::</span>
+
+<span class="sd">            image.write_to_file(&#39;fred.jpg[Q=95]&#39;)</span>
+
+<span class="sd">        You can also supply options as keyword arguments, for example::</span>
+
+<span class="sd">            image.write_to_file(&#39;fred.jpg&#39;, Q=95)</span>
+
+<span class="sd">        The full set of options available depend upon the load operation that</span>
+<span class="sd">        will be executed. Try something like::</span>
+
+<span class="sd">            $ vips jpegsave</span>
+
+<span class="sd">        at the command-line to see a summary of the available options for the</span>
+<span class="sd">        JPEG saver.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            vips_filename (str): The disc file to save the image to, with</span>
+<span class="sd">                optional appended arguments.</span>
+
+<span class="sd">        Other arguments depend upon the save operation.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            :class:`.Error`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">vips_filename</span> <span class="o">=</span> <span class="n">_to_bytes</span><span class="p">(</span><span class="n">vips_filename</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_filename_get_filename</span><span class="p">(</span><span class="n">vips_filename</span><span class="p">)</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_filename_get_options</span><span class="p">(</span><span class="n">vips_filename</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_foreign_find_save</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to write to file </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vips_filename</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">_to_string</span><span class="p">(</span><span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">name</span><span class="p">)),</span> <span class="bp">self</span><span class="p">,</span>
+                                     <span class="n">filename</span><span class="p">,</span> <span class="n">string_options</span><span class="o">=</span><span class="n">_to_string</span><span class="p">(</span>
+                                         <span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+                                     <span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.write_to_buffer"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.write_to_buffer">[docs]</a>    <span class="k">def</span> <span class="nf">write_to_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_string</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write an image to memory.</span>
+
+<span class="sd">        This method can save images in any format supported by vips. The format</span>
+<span class="sd">        is selected from the suffix in the format string. This can include</span>
+<span class="sd">        embedded save options, see :func:`Image.new_from_file`.</span>
+
+<span class="sd">        For example::</span>
+
+<span class="sd">            data = image.write_to_buffer(&#39;.jpg[Q=95]&#39;)</span>
+
+<span class="sd">        You can also supply options as keyword arguments, for example::</span>
+
+<span class="sd">            data = image.write_to_buffer(&#39;.jpg&#39;, Q=95)</span>
+
+<span class="sd">        The full set of options available depend upon the load operation that</span>
+<span class="sd">        will be executed. Try something like::</span>
+
+<span class="sd">            $ vips jpegsave_buffer</span>
+
+<span class="sd">        at the command-line to see a summary of the available options for the</span>
+<span class="sd">        JPEG saver.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            format_string (str): The suffix, plus any string-form arguments.</span>
+
+<span class="sd">        Other arguments depend upon the save operation.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A byte string.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            :class:`.Error`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">format_string</span> <span class="o">=</span> <span class="n">_to_bytes</span><span class="p">(</span><span class="n">format_string</span><span class="p">)</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_filename_get_options</span><span class="p">(</span><span class="n">format_string</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_foreign_find_save_buffer</span><span class="p">(</span><span class="n">format_string</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to write to buffer&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">_to_string</span><span class="p">(</span><span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">name</span><span class="p">)),</span> <span class="bp">self</span><span class="p">,</span>
+                                     <span class="n">string_options</span><span class="o">=</span><span class="n">_to_string</span><span class="p">(</span>
+                                         <span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+                                     <span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.write_to_memory"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.write_to_memory">[docs]</a>    <span class="k">def</span> <span class="nf">write_to_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write the image to a large memory array.</span>
+
+<span class="sd">        A large area of memory is allocated, the image is rendered to that</span>
+<span class="sd">        memory array, and the array is returned as a buffer.</span>
+
+<span class="sd">        For example, if you have a 2x2 uchar image containing the bytes 1, 2,</span>
+<span class="sd">        3, 4, read left-to-right, top-to-bottom, then::</span>
+
+<span class="sd">            buf = image.write_to_memory()</span>
+
+<span class="sd">        will return a four byte buffer containing the values 1, 2, 3, 4.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            buffer</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            :class:`.Error`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">psize</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;size_t *&#39;</span><span class="p">)</span>
+        <span class="n">pointer</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_write_to_memory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span> <span class="n">psize</span><span class="p">)</span>
+        <span class="n">pointer</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">gc</span><span class="p">(</span><span class="n">pointer</span><span class="p">,</span> <span class="n">glib_lib</span><span class="o">.</span><span class="n">g_free</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ffi</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="n">pointer</span><span class="p">,</span> <span class="n">psize</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Image.write"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write an image to another image.</span>
+
+<span class="sd">        This function writes ``self`` to another image. Use something like</span>
+<span class="sd">        :func:`Image.new_temp_file` to make an image that can be written to.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            other (Image): The :class:`Image` to write to,</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            :class:`.Error`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to write to image&#39;</span><span class="p">)</span></div>
+
+    <span class="c1"># get/set metadata</span>
+
+<div class="viewcode-block" id="Image.get_typeof"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.get_typeof">[docs]</a>    <span class="k">def</span> <span class="nf">get_typeof</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the GType of an item of metadata.</span>
+
+<span class="sd">        Fetch the GType of a piece of metadata, or 0 if the named item does not</span>
+<span class="sd">        exist. See :class:`GValue`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str): The name of the piece of metadata to get the type of.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The ``GType``, or 0.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_get_typeof</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Image.get"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get an item of metadata.</span>
+
+<span class="sd">        Fetches an item of metadata as a Python value. For example::</span>
+
+<span class="sd">            orientation = image.get(&#39;orientation&#39;)</span>
+
+<span class="sd">        would fetch the image orientation.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str): The name of the piece of metadata to get.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The metadata item as a Python value.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            :class:`.Error`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">gv</span> <span class="o">=</span> <span class="n">GValue</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
+                                         <span class="n">gv</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to get </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">gv</span><span class="o">.</span><span class="n">get</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Image.set_type"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.set_type">[docs]</a>    <span class="k">def</span> <span class="nf">set_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gtype</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the type and value of an item of metadata.</span>
+
+<span class="sd">        Sets the type and value of an item of metadata. Any old item of the</span>
+<span class="sd">        same name is removed. See :class:`GValue` for types.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            gtype (int): The GType of the metadata item to create.</span>
+<span class="sd">            name (str): The name of the piece of metadata to create.</span>
+<span class="sd">            value (mixed): The value to set as a Python value. It is</span>
+<span class="sd">                converted to the ``gtype``, if possible.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">gv</span> <span class="o">=</span> <span class="n">GValue</span><span class="p">()</span>
+        <span class="n">gv</span><span class="o">.</span><span class="n">set_type</span><span class="p">(</span><span class="n">gtype</span><span class="p">)</span>
+        <span class="n">gv</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">gv</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.set"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.set">[docs]</a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the value of an item of metadata.</span>
+
+<span class="sd">        Sets the value of an item of metadata. The metadata item must already</span>
+<span class="sd">        exist.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str): The name of the piece of metadata to set the value of.</span>
+<span class="sd">            value (mixed): The value to set as a Python value. It is</span>
+<span class="sd">                converted to the type of the metadata item, if possible.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">gtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_type</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.remove"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Remove an item of metadata.</span>
+
+<span class="sd">        The named metadata item is removed.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str): The name of the piece of metadata to remove.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">0</span></div>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;&lt;pyvips.Image </span><span class="si">{0}</span><span class="s1">x</span><span class="si">{1}</span><span class="s1"> </span><span class="si">{2}</span><span class="s1">, </span><span class="si">{3}</span><span class="s1"> bands, </span><span class="si">{4}</span><span class="s1">&gt;&#39;</span><span class="o">.</span>
+                <span class="nb">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bands</span><span class="p">,</span>
+                       <span class="bp">self</span><span class="o">.</span><span class="n">interpretation</span><span class="p">))</span>
+
+<div class="viewcode-block" id="Image.__getattr__"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.__getattr__">[docs]</a>    <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Divert unknown names to libvips.</span>
+
+<span class="sd">        Unknown attributes are first looked up in the image properties as</span>
+<span class="sd">        accessors, for example::</span>
+
+<span class="sd">            width = image.width</span>
+
+<span class="sd">        and then in the libvips operation table, where they become method</span>
+<span class="sd">        calls, for example::</span>
+
+<span class="sd">            new_image = image.invert()</span>
+
+<span class="sd">        Use :func:`get` to fetch image metadata.</span>
+
+<span class="sd">        A ``__getattr__`` on the metatype lets you call static members in the</span>
+<span class="sd">        same way.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str): The name of the piece of metadata to get.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Mixed.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            :class:`.Error`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># logger.debug(&#39;Image.__getattr__ %s&#39;, name)</span>
+
+        <span class="c1"># scale and offset have default values</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;scale&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="s1">&#39;scale&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;scale&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mf">1.0</span>
+
+        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;offset&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="s1">&#39;offset&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;offset&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mf">0.0</span>
+
+        <span class="c1"># look up in props first (but not metadata)</span>
+        <span class="k">if</span> <span class="nb">super</span><span class="p">(</span><span class="n">Image</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">Image</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="nd">@_add_doc</span><span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">generate_docstring</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="k">def</span> <span class="nf">call_function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">call_function</span></div>
+
+    <span class="c1"># compatibility: these used to be called get_value / set_value</span>
+
+    <span class="n">get_value</span> <span class="o">=</span> <span class="n">get</span>
+    <span class="n">set_value</span> <span class="o">=</span> <span class="nb">set</span>
+
+    <span class="c1"># we used to have longer names for these</span>
+
+    <span class="k">def</span> <span class="nf">get_scale</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span>
+
+    <span class="k">def</span> <span class="nf">get_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">offset</span>
+
+    <span class="c1"># support with in the most trivial way</span>
+
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="Image.__getitem__"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Overload []</span>
+
+<span class="sd">        Use [] to pull out band elements from an image. You can use all the</span>
+<span class="sd">        usual slicing syntax, for example::</span>
+
+<span class="sd">            green = rgb_image[1]</span>
+
+<span class="sd">        Will make a new one-band image from band 1 (the middle band). You can</span>
+<span class="sd">        also write::</span>
+
+<span class="sd">            last_two = rgb_image[1:]</span>
+<span class="sd">            last_band = rgb_image[-1]</span>
+<span class="sd">            middle_few = multiband[1:-2]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">arg</span><span class="o">.</span><span class="n">start</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">start</span>
+
+            <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bands</span> <span class="o">-</span> <span class="n">i</span>
+            <span class="k">if</span> <span class="n">arg</span><span class="o">.</span><span class="n">stop</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">arg</span><span class="o">.</span><span class="n">stop</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bands</span> <span class="o">+</span> <span class="n">arg</span><span class="o">.</span><span class="n">stop</span> <span class="o">-</span> <span class="n">i</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">n</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">stop</span> <span class="o">-</span> <span class="n">i</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">arg</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span>
+
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bands</span> <span class="o">+</span> <span class="n">i</span>
+
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bands</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_band</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span></div>
+
+    <span class="c1"># overload () to mean fetch pixel</span>
+<div class="viewcode-block" id="Image.__call__"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fetch a pixel value.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (int): The x coordinate to fetch.</span>
+<span class="sd">            y (int): The y coordinate to fetch.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Pixel as an array of floating point numbers.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            :class:`.Error`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getpoint</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
+
+    <span class="c1"># operator overloads</span>
+
+    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__radd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__add__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">_smap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">x</span><span class="p">,</span> <span class="n">other</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">__rsub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Image</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__mul__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+    <span class="c1"># a / const has always been a float in vips, so div and truediv are the</span>
+    <span class="c1"># same</span>
+    <span class="k">def</span> <span class="nf">__div__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">_smap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">x</span><span class="p">,</span> <span class="n">other</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__rdiv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span> <span class="o">**</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">other</span>
+
+    <span class="k">def</span> <span class="nf">__truediv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__div__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__rtruediv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rdiv__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__floordiv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="o">.</span><span class="n">floor</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">_smap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">x</span><span class="p">,</span> <span class="n">other</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">floor</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__rfloordiv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">((</span><span class="bp">self</span> <span class="o">**</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">other</span><span class="p">)</span><span class="o">.</span><span class="n">floor</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__mod__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">remainder</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">remainder_const</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__pow__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_call_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;math2&#39;</span><span class="p">,</span> <span class="s1">&#39;pow&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__rpow__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_call_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;math2&#39;</span><span class="p">,</span> <span class="s1">&#39;wop&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__abs__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__lshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_call_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;boolean&#39;</span><span class="p">,</span> <span class="s1">&#39;lshift&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__rshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_call_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;boolean&#39;</span><span class="p">,</span> <span class="s1">&#39;rshift&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__and__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_call_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;boolean&#39;</span><span class="p">,</span> <span class="s1">&#39;and&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__rand__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__and__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__or__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_call_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;boolean&#39;</span><span class="p">,</span> <span class="s1">&#39;or&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__ror__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__or__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__xor__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_call_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;boolean&#39;</span><span class="p">,</span> <span class="s1">&#39;eor&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__rxor__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__xor__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__neg__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">__pos__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">__invert__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span> <span class="o">^</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">__gt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_call_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;relational&#39;</span><span class="p">,</span> <span class="s1">&#39;more&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__ge__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_call_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;relational&#39;</span><span class="p">,</span> <span class="s1">&#39;moreeq&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_call_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;relational&#39;</span><span class="p">,</span> <span class="s1">&#39;less&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__le__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_call_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;relational&#39;</span><span class="p">,</span> <span class="s1">&#39;lesseq&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># _eq version allows comparison to None</span>
+        <span class="k">if</span> <span class="n">other</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="n">_call_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;relational&#39;</span><span class="p">,</span> <span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># _eq version allows comparison to None</span>
+        <span class="k">if</span> <span class="n">other</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="n">_call_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;relational&#39;</span><span class="p">,</span> <span class="s1">&#39;noteq&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Image.floor"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.floor">[docs]</a>    <span class="k">def</span> <span class="nf">floor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the largest integral value not greater than the argument.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="s1">&#39;floor&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.ceil"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.ceil">[docs]</a>    <span class="k">def</span> <span class="nf">ceil</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the smallest integral value not less than the argument.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="s1">&#39;ceil&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.rint"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.rint">[docs]</a>    <span class="k">def</span> <span class="nf">rint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the nearest integral value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="s1">&#39;rint&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.bandand"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.bandand">[docs]</a>    <span class="k">def</span> <span class="nf">bandand</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;AND image bands together.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bandbool</span><span class="p">(</span><span class="s1">&#39;and&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.bandor"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.bandor">[docs]</a>    <span class="k">def</span> <span class="nf">bandor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;OR image bands together.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bandbool</span><span class="p">(</span><span class="s1">&#39;or&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.bandeor"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.bandeor">[docs]</a>    <span class="k">def</span> <span class="nf">bandeor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;EOR image bands together.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bandbool</span><span class="p">(</span><span class="s1">&#39;eor&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.bandsplit"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.bandsplit">[docs]</a>    <span class="k">def</span> <span class="nf">bandsplit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Split an n-band image into n separate images.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Image.bandjoin"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.bandjoin">[docs]</a>    <span class="k">def</span> <span class="nf">bandjoin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Append a set of images or constants bandwise.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">other</span> <span class="o">=</span> <span class="p">[</span><span class="n">other</span><span class="p">]</span>
+
+        <span class="c1"># if [other] is all numbers, we can use bandjoin_const</span>
+        <span class="n">non_number</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">other</span>
+                           <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Number</span><span class="p">)),</span>
+                          <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">non_number</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bandjoin_const</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;bandjoin&#39;</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="p">]</span> <span class="o">+</span> <span class="n">other</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.bandrank"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.bandrank">[docs]</a>    <span class="k">def</span> <span class="nf">bandrank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Band-wise rank filter a set of images.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">other</span> <span class="o">=</span> <span class="p">[</span><span class="n">other</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;bandrank&#39;</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="p">]</span> <span class="o">+</span> <span class="n">other</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.maxpos"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.maxpos">[docs]</a>    <span class="k">def</span> <span class="nf">maxpos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the coordinates of the image maximum.&quot;&quot;&quot;</span>
+        <span class="n">v</span><span class="p">,</span> <span class="n">opts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">v</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span></div>
+
+<div class="viewcode-block" id="Image.minpos"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.minpos">[docs]</a>    <span class="k">def</span> <span class="nf">minpos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the coordinates of the image minimum.&quot;&quot;&quot;</span>
+        <span class="n">v</span><span class="p">,</span> <span class="n">opts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">v</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span></div>
+
+<div class="viewcode-block" id="Image.real"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.real">[docs]</a>    <span class="k">def</span> <span class="nf">real</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the real part of a complex image.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">complexget</span><span class="p">(</span><span class="s1">&#39;real&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.imag"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.imag">[docs]</a>    <span class="k">def</span> <span class="nf">imag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the imaginary part of a complex image.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">complexget</span><span class="p">(</span><span class="s1">&#39;imag&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.polar"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.polar">[docs]</a>    <span class="k">def</span> <span class="nf">polar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return an image converted to polar coordinates.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_run_cmplx</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">complex</span><span class="p">(</span><span class="s1">&#39;polar&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.rect"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.rect">[docs]</a>    <span class="k">def</span> <span class="nf">rect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return an image converted to rectangular coordinates.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_run_cmplx</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">complex</span><span class="p">(</span><span class="s1">&#39;rect&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.conj"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.conj">[docs]</a>    <span class="k">def</span> <span class="nf">conj</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the complex conjugate of an image.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">complex</span><span class="p">(</span><span class="s1">&#39;conj&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.sin"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.sin">[docs]</a>    <span class="k">def</span> <span class="nf">sin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the sine of an image in degrees.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">math</span><span class="p">(</span><span class="s1">&#39;sin&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.cos"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.cos">[docs]</a>    <span class="k">def</span> <span class="nf">cos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the cosine of an image in degrees.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">math</span><span class="p">(</span><span class="s1">&#39;cos&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.tan"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.tan">[docs]</a>    <span class="k">def</span> <span class="nf">tan</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the tangent of an image in degrees.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">math</span><span class="p">(</span><span class="s1">&#39;tan&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.asin"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.asin">[docs]</a>    <span class="k">def</span> <span class="nf">asin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the inverse sine of an image in degrees.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">math</span><span class="p">(</span><span class="s1">&#39;asin&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.acos"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.acos">[docs]</a>    <span class="k">def</span> <span class="nf">acos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the inverse cosine of an image in degrees.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">math</span><span class="p">(</span><span class="s1">&#39;acos&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.atan"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.atan">[docs]</a>    <span class="k">def</span> <span class="nf">atan</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the inverse tangent of an image in degrees.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">math</span><span class="p">(</span><span class="s1">&#39;atan&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.log"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.log">[docs]</a>    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the natural log of an image.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">math</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.log10"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.log10">[docs]</a>    <span class="k">def</span> <span class="nf">log10</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the log base 10 of an image.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">math</span><span class="p">(</span><span class="s1">&#39;log10&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.exp"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.exp">[docs]</a>    <span class="k">def</span> <span class="nf">exp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return e ** pixel.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">math</span><span class="p">(</span><span class="s1">&#39;exp&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.exp10"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.exp10">[docs]</a>    <span class="k">def</span> <span class="nf">exp10</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return 10 ** pixel.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">math</span><span class="p">(</span><span class="s1">&#39;exp10&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.erode"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.erode">[docs]</a>    <span class="k">def</span> <span class="nf">erode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Erode with a structuring element.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">morph</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="s1">&#39;erode&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.dilate"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.dilate">[docs]</a>    <span class="k">def</span> <span class="nf">dilate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dilate with a structuring element.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">morph</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="s1">&#39;dilate&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.median"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.median">[docs]</a>    <span class="k">def</span> <span class="nf">median</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;size x size median filter.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="p">(</span><span class="n">size</span> <span class="o">*</span> <span class="n">size</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.fliphor"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.fliphor">[docs]</a>    <span class="k">def</span> <span class="nf">fliphor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Flip horizontally.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="s1">&#39;horizontal&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.flipver"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.flipver">[docs]</a>    <span class="k">def</span> <span class="nf">flipver</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Flip vertically.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="s1">&#39;vertical&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.rot90"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.rot90">[docs]</a>    <span class="k">def</span> <span class="nf">rot90</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Rotate 90 degrees clockwise.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rot</span><span class="p">(</span><span class="s1">&#39;d90&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.rot180"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.rot180">[docs]</a>    <span class="k">def</span> <span class="nf">rot180</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Rotate 180 degrees.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rot</span><span class="p">(</span><span class="s1">&#39;d180&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.rot270"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.rot270">[docs]</a>    <span class="k">def</span> <span class="nf">rot270</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Rotate 270 degrees clockwise.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rot</span><span class="p">(</span><span class="s1">&#39;d270&#39;</span><span class="p">)</span></div>
+
+    <span class="c1"># we need different imageize rules for this operator ... we need to</span>
+    <span class="c1"># imageize th and el to match each other first</span>
+<div class="viewcode-block" id="Image.ifthenelse"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.ifthenelse">[docs]</a>    <span class="nd">@_add_doc</span><span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">generate_docstring</span><span class="p">(</span><span class="s1">&#39;ifthenelse&#39;</span><span class="p">))</span>
+    <span class="k">def</span> <span class="nf">ifthenelse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">th</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">match_image</span> <span class="ow">in</span> <span class="p">[</span><span class="n">th</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="bp">self</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">match_image</span><span class="p">,</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="p">):</span>
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">th</span><span class="p">,</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="p">):</span>
+            <span class="n">th</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">imageize</span><span class="p">(</span><span class="n">match_image</span><span class="p">,</span> <span class="n">th</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">el</span><span class="p">,</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="p">):</span>
+            <span class="n">el</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">imageize</span><span class="p">(</span><span class="n">match_image</span><span class="p">,</span> <span class="n">el</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;ifthenelse&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">th</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.scaleimage"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.scaleimage">[docs]</a>    <span class="k">def</span> <span class="nf">scaleimage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Scale an image to 0 - 255.</span>
+
+<span class="sd">        This is the libvips ``scale`` operation, renamed to avoid a clash with</span>
+<span class="sd">        the ``scale`` for convolution masks.</span>
+
+<span class="sd">        Keyword args:</span>
+<span class="sd">            exp (float): Exponent for log scale.</span>
+<span class="sd">            log (bool): Switch to turn on log scaling.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A new :class:`Image`.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            :class:`.Error`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, John Cupitt.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2.0-alpha1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
