@@ -5,11 +5,41 @@ README
     :alt: Build Status
     :target: https://travis-ci.org/jcupitt/pyvips
 
+This module provides a Python binding for the vips image processing
+library:
+
+https://jcupitt.github.io/libvips
+
+Programs that use ``pyvips`` don't manipulate images directly, instead
+they create pipelines of image processing operations building on a source
+image. When the end of the pipe is connected to a destination, the whole
+pipeline executes at once, streaming the image in parallel from source to
+destination a section at a time.
+
+Because ``pyvips`` is parallel, it's quick, and because it doesn't need to
+keep entire images in memory, it's light.  For example, the libvips 
+speed and memory use benchmark: 
+
+https://github.com/jcupitt/libvips/wiki/Speed-and-memory-use
+
+Loads a large tiff image, shrinks by 10%, sharpens, and saves again. On this
+test, ``pyvips`` is typically 5x faster than Pillow-SIMD and needs 4x less
+memory. 
+
+There's a handy blog post explaining how libvips opens files, which gives
+some more background.
+
+http://libvips.blogspot.co.uk/2012/06/how-libvips-opens-file.html
+
 Status
 ------
 
 This binding passes the vips test suite cleanly and with no leaks under
-python2, python3, pypy and pypy3 on Windows, macOS and Linux. 
+python2.7 - python3.6, pypy and pypy3 on Windows, macOS and Linux. 
+
+We have formatted docs online here:
+
+https://jcupitt.github.io/pyvips/
 
 Install
 -------
