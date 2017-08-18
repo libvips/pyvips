@@ -18,6 +18,7 @@
 
 import os
 import sys
+import sphinx_rtd_theme
 sys.path.insert(0, os.path.abspath('..'))
 
 
@@ -90,7 +91,8 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = 'sphinx_rtd_theme'
+html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -116,11 +118,15 @@ html_sidebars = {
     ]
 }
 
-html_theme_options = {
+html_context = {
+    # Enable the "Edit on GitHub" link within the header of each page.
+    'display_github': True,
+    # Set the following variables to generate the resulting github URL for each page. 
+    # Format Template: https://{{ github_host|default("github.com") }}/{{ github_user }}/{{ github_repo }}/blob/{{ github_version }}{{ conf_py_path }}{{ pagename }}{{ suffix }}
     'github_user': 'jcupitt',
     'github_repo': 'pyvips',
+    'github_version': 'master/doc/' 
 }
-
 
 # -- Options for HTMLHelp output ------------------------------------------
 

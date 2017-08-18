@@ -16,10 +16,12 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 test_deps = [
     'nose',
+    'flake8'
 ]
 
 extras = {
     'test': test_deps,
+    'doc': ['sphinx', 'sphinx_rtd_theme']
 }
 
 setup(
