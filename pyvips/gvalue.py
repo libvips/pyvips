@@ -7,8 +7,7 @@ import sys
 
 import pyvips
 from pyvips import ffi, vips_lib, gobject_lib, \
-    glib_lib, Error, _to_bytes, _to_string, type_find, \
-    type_name, type_from_name
+    glib_lib, Error, _to_bytes, _to_string, type_name, type_from_name
 
 logger = logging.getLogger(__name__)
 
@@ -170,7 +169,7 @@ class GValue(object):
     def set_type(self, gtype):
         """Set the type of a GValue.
 
-        GValues have a set type, fixed at creation time. Use set_type to set 
+        GValues have a set type, fixed at creation time. Use set_type to set
         the type of a GValue before assigning to it.
 
         GTypes are 32 or 64-bit integers (depending on the platform). See
@@ -200,7 +199,7 @@ class GValue(object):
         elif gtype == GValue.gdouble_type:
             gobject_lib.g_value_set_double(self.gvalue, value)
         elif fundamental == GValue.genum_type:
-            gobject_lib.g_value_set_enum(self.gvalue, 
+            gobject_lib.g_value_set_enum(self.gvalue,
                                          GValue.to_enum(gtype, value))
         elif fundamental == GValue.gflags_type:
             gobject_lib.g_value_set_flags(self.gvalue, value)
@@ -262,7 +261,7 @@ class GValue(object):
         elif gtype == GValue.gdouble_type:
             result = gobject_lib.g_value_get_double(self.gvalue)
         elif fundamental == GValue.genum_type:
-            return GValue.from_enum(gtype, 
+            return GValue.from_enum(gtype,
                                     gobject_lib.g_value_get_enum(self.gvalue))
         elif fundamental == GValue.gflags_type:
             result = gobject_lib.g_value_get_flags(self.gvalue)

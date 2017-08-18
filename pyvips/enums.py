@@ -154,10 +154,10 @@ class Intent(object):
     See :meth:`.icc_transform`.
 
     Attributes:
-        PERCEPTUAL (str): 
-        RELATIVE (str): 
-        SATURATION (str): 
-        ABSOLUTE (str): 
+        PERCEPTUAL (str):
+        RELATIVE (str):
+        SATURATION (str):
+        ABSOLUTE (str):
 
     """
 

@@ -2,14 +2,11 @@
 
 from __future__ import division
 
-import logging
 import numbers
 
 import pyvips
 from pyvips import ffi, glib_lib, vips_lib, Error, _to_bytes, \
     _to_string, GValue
-
-logger = logging.getLogger(__name__)
 
 ffi.cdef('''
     typedef struct _VipsImage {
@@ -339,7 +336,7 @@ class Image(pyvips.VipsObject):
 
         See :meth:`.write_to_memory` for the opposite operation.
 
-        Use :meth:`.copy` to set other image attributes. 
+        Use :meth:`.copy` to set other image attributes.
 
         Args:
             data (bytes): A memoryview or buffer object.
@@ -356,9 +353,9 @@ class Image(pyvips.VipsObject):
         """
 
         format_value = GValue.to_enum(GValue.format_type, format)
-        vi = vips_lib.vips_image_new_from_memory(ffi.from_buffer(data), 
-                                                 len(data), 
-                                                 width, height, bands, 
+        vi = vips_lib.vips_image_new_from_memory(ffi.from_buffer(data),
+                                                 len(data),
+                                                 width, height, bands,
                                                  format_value)
         if vi == ffi.NULL:
             raise Error('unable to make image from memory')
@@ -558,8 +555,8 @@ class Image(pyvips.VipsObject):
         A large area of memory is allocated, the image is rendered to that
         memory array, and the array is returned as a buffer.
 
-        For example, if you have a 2x2 uchar image containing the bytes 1, 2, 3,
-        4, read left-to-right, top-to-bottom, then::
+        For example, if you have a 2x2 uchar image containing the bytes 1, 2,
+        3, 4, read left-to-right, top-to-bottom, then::
 
             buf = image.write_to_memory()
 

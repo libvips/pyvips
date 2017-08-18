@@ -41,7 +41,8 @@ def path_filename7(filename):
 
 
 def path_mode7(filename):
-    return _to_string(ffi.string(vips_lib.vips_path_mode7(_to_bytes(filename))))
+    return _to_string(ffi.string(vips_lib.vips_path_mode7(
+        _to_bytes(filename))))
 
 
 def type_find(basename, nickname):

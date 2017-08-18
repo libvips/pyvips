@@ -8,8 +8,6 @@ import unittest
 
 import pyvips
 
-pyvips.leak_set(True)
-
 IMAGES = os.path.join(os.path.dirname(__file__), 'images')
 JPEG_FILE = os.path.join(IMAGES, "йцук.jpg")
 SRGB_FILE = os.path.join(IMAGES, "sRGB.icm")

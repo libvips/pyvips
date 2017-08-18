@@ -1,8 +1,8 @@
 # vim: set fileencoding=utf-8 :
 import shutil
 import unittest
-
 import os
+import gc
 
 import pyvips
 from .helpers import PyvipsTester, JPEG_FILE, SRGB_FILE,\
@@ -726,14 +726,23 @@ class TestForeign(PyvipsTester):
         # test zip output
         filename = temp_filename('.zip')
         self.colour.dzsave(filename)
+        # before 8.5.8, you needed a gc on pypy to flush small zip output to
+        # disc
+        gc.collect()
+        self.assertTrue(os.path.exists(filename))
         self.assertFalse(os.path.exists(filename + "_files"))
         self.assertFalse(os.path.exists(filename + ".dzi"))
 
         # test compressed zip output
         filename2 = temp_filename('.zip')
         self.colour.dzsave(filename2, compression=-1)
+        # before 8.5.8, you needed a gc on pypy to flush small zip output to
+        # disc
+        gc.collect()
+        self.assertTrue(os.path.exists(filename2))
         self.assertLess(os.path.getsize(filename2),
                         os.path.getsize(filename))
+
         os.unlink(filename2)
         os.unlink(filename)
 
@@ -774,6 +783,9 @@ class TestForeign(PyvipsTester):
         root, ext = os.path.splitext(base)
 
         self.colour.dzsave(filename)
+        # before 8.5.8, you needed a gc on pypy to flush small zip output to
+        # disc
+        gc.collect()
         with open(filename, 'rb') as f:
             buf1 = f.read()
         os.unlink(filename)

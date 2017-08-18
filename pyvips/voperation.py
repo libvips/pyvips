@@ -234,7 +234,9 @@ class Operation(pyvips.VipsObject):
         if len(opts) > 0:
             result.append(opts)
 
-        if len(result) == 1:
+        if len(result) == 0:
+            result = None
+        elif len(result) == 1:
             result = result[0]
 
         logger.debug('VipsOperation.call: result = %s', result)

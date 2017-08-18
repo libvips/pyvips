@@ -182,8 +182,8 @@ class VipsObject(pyvips.GObject):
         """
 
         vo = ffi.cast('VipsObject *', self.pointer)
-        result = vips_lib.vips_object_set_from_string(vo,
-                                                      _to_bytes(string_options))
+        cstr = _to_bytes(string_options)
+        result = vips_lib.vips_object_set_from_string(vo, cstr)
 
         return result == 0
 
