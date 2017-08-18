@@ -8,10 +8,8 @@ README
 Status
 ------
 
-This binding passes the vips test suite cleanly and with no leaks under python2
-and python3, on Windows, macOS and Linux. 
-
-It seems to leak under pypy, I'm not sure why. 
+This binding passes the vips test suite cleanly and with no leaks under
+python2, python3, pypy and pypy3 on Windows, macOS and Linux. 
 
 Install
 -------
