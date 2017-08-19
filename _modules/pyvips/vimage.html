@@ -312,6 +312,15 @@
     <span class="k">return</span> <span class="n">_doc</span>
 
 
+<span class="c1"># decorator to set deprecated</span>
+<span class="k">def</span> <span class="nf">_deprecated</span><span class="p">(</span><span class="n">note</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_dep</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="n">func</span><span class="o">.</span><span class="n">__deprecated__</span> <span class="o">=</span> <span class="n">note</span>
+        <span class="k">return</span> <span class="n">func</span>
+
+    <span class="k">return</span> <span class="n">_dep</span>
+
+
 <span class="c1"># metaclass for Image ... getattr on this implements the class methods</span>
 <span class="k">class</span> <span class="nc">ImageType</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
@@ -333,7 +342,7 @@
     <span class="c1"># private static</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">imageize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_imageize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="c1"># careful! self can be None if value is a 2D array</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Image</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">value</span>
@@ -939,16 +948,21 @@
 
         <span class="k">return</span> <span class="n">call_function</span></div>
 
-    <span class="c1"># compatibility: these used to be called get_value / set_value</span>
+    <span class="c1"># compatibility methods</span>
 
-    <span class="n">get_value</span> <span class="o">=</span> <span class="n">get</span>
-    <span class="n">set_value</span> <span class="o">=</span> <span class="nb">set</span>
+    <span class="nd">@_deprecated</span><span class="p">(</span><span class="s1">&#39;use Image.get() instead&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
-    <span class="c1"># we used to have longer names for these</span>
+    <span class="nd">@_deprecated</span><span class="p">(</span><span class="s1">&#39;use Image.set() instead&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">set_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
+    <span class="nd">@_deprecated</span><span class="p">(</span><span class="s1">&#39;use Image.scale instead&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">get_scale</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span>
 
+    <span class="nd">@_deprecated</span><span class="p">(</span><span class="s1">&#39;use Image.offset instead&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">get_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">offset</span>
 
@@ -1305,8 +1319,8 @@
         <span class="sd">&quot;&quot;&quot;Rotate 270 degrees clockwise.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rot</span><span class="p">(</span><span class="s1">&#39;d270&#39;</span><span class="p">)</span></div>
 
-    <span class="c1"># we need different imageize rules for this operator ... we need to</span>
-    <span class="c1"># imageize th and el to match each other first</span>
+    <span class="c1"># we need different _imageize rules for this operator ... we need to</span>
+    <span class="c1"># _imageize th and el to match each other first</span>
 <div class="viewcode-block" id="Image.ifthenelse"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.ifthenelse">[docs]</a>    <span class="nd">@_add_doc</span><span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">generate_docstring</span><span class="p">(</span><span class="s1">&#39;ifthenelse&#39;</span><span class="p">))</span>
     <span class="k">def</span> <span class="nf">ifthenelse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">th</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">match_image</span> <span class="ow">in</span> <span class="p">[</span><span class="n">th</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="bp">self</span><span class="p">]:</span>
@@ -1314,9 +1328,9 @@
                 <span class="k">break</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">th</span><span class="p">,</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="p">):</span>
-            <span class="n">th</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">imageize</span><span class="p">(</span><span class="n">match_image</span><span class="p">,</span> <span class="n">th</span><span class="p">)</span>
+            <span class="n">th</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">_imageize</span><span class="p">(</span><span class="n">match_image</span><span class="p">,</span> <span class="n">th</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">el</span><span class="p">,</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="p">):</span>
-            <span class="n">el</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">imageize</span><span class="p">(</span><span class="n">match_image</span><span class="p">,</span> <span class="n">el</span><span class="p">)</span>
+            <span class="n">el</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">_imageize</span><span class="p">(</span><span class="n">match_image</span><span class="p">,</span> <span class="n">el</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;ifthenelse&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">th</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 

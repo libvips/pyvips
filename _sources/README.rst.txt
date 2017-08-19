@@ -142,3 +142,9 @@ Generate HTML docs in ``doc/build/html``::
 
         $ cd doc; sphinx-build -bhtml . build/html
 
+Regenerate autodocs::
+
+        $ cd doc; \
+          python -c "import pyvips; pyvips.Operation.generate_sphinx_all()" > x 
+
+And copy-paste ``x`` into the obvious place in ``doc/vimage.rst``.

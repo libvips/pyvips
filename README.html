@@ -292,6 +292,12 @@ $ pypy -m nose --logging-level=WARNING
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ cd doc; sphinx-build -bhtml . build/html
 </pre></div>
 </div>
+<p>Regenerate autodocs:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ cd doc; \
+  python -c &quot;import pyvips; pyvips.Operation.generate_sphinx_all()&quot; &gt; x
+</pre></div>
+</div>
+<p>And copy-paste <code class="docutils literal"><span class="pre">x</span></code> into the obvious place in <code class="docutils literal"><span class="pre">doc/vimage.rst</span></code>.</p>
 </div>
 </div>
 

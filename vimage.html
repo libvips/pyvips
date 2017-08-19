@@ -258,26 +258,20 @@
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get_offset</span></code>()</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get_pspec</span></code>(name)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get_scale</span></code>()</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get_scale</span></code>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pyvips.Image.get_typeof" title="pyvips.Image.get_typeof"><code class="xref py py-obj docutils literal"><span class="pre">get_typeof</span></code></a>(name)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pyvips.Image.get_typeof" title="pyvips.Image.get_typeof"><code class="xref py py-obj docutils literal"><span class="pre">get_typeof</span></code></a>(name)</td>
 <td>Get the GType of an item of metadata.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pyvips.Image.get_value" title="pyvips.Image.get_value"><code class="xref py py-obj docutils literal"><span class="pre">get_value</span></code></a>(name)</td>
-<td>Get an item of metadata.</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get_value</span></code>(name)</td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pyvips.Image.ifthenelse" title="pyvips.Image.ifthenelse"><code class="xref py py-obj docutils literal"><span class="pre">ifthenelse</span></code></a>(th,&nbsp;el,&nbsp;**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pyvips.Image.ifthenelse" title="pyvips.Image.ifthenelse"><code class="xref py py-obj docutils literal"><span class="pre">ifthenelse</span></code></a>(th,&nbsp;el,&nbsp;**kwargs)</td>
 <td>Ifthenelse an image.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pyvips.Image.imag" title="pyvips.Image.imag"><code class="xref py py-obj docutils literal"><span class="pre">imag</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pyvips.Image.imag" title="pyvips.Image.imag"><code class="xref py py-obj docutils literal"><span class="pre">imag</span></code></a>()</td>
 <td>Return the imaginary part of a complex image.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">imageize</span></code>(value)</td>
-<td></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#pyvips.Image.log" title="pyvips.Image.log"><code class="xref py py-obj docutils literal"><span class="pre">log</span></code></a>()</td>
 <td>Return the natural log of an image.</td>
@@ -351,8 +345,8 @@
 <tr class="row-odd"><td><a class="reference internal" href="#pyvips.Image.set_type" title="pyvips.Image.set_type"><code class="xref py py-obj docutils literal"><span class="pre">set_type</span></code></a>(gtype,&nbsp;name,&nbsp;value)</td>
 <td>Set the type and value of an item of metadata.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pyvips.Image.set_value" title="pyvips.Image.set_value"><code class="xref py py-obj docutils literal"><span class="pre">set_value</span></code></a>(name,&nbsp;value)</td>
-<td>Set the value of an item of metadata.</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">set_value</span></code>(name,&nbsp;value)</td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pyvips.Image.sin" title="pyvips.Image.sin"><code class="xref py py-obj docutils literal"><span class="pre">sin</span></code></a>()</td>
 <td>Return the sine of an image in degrees.</td>
@@ -901,56 +895,6 @@ same way.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Mixed.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="error.html#pyvips.error.Error" title="pyvips.error.Error"><code class="xref py py-class docutils literal"><span class="pre">Error</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyvips.Image.get_value">
-<code class="descname">get_value</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.get_value" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get an item of metadata.</p>
-<p>Fetches an item of metadata as a Python value. For example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">orientation</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;orientation&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>would fetch the image orientation.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) – The name of the piece of metadata to get.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The metadata item as a Python value.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="error.html#pyvips.error.Error" title="pyvips.error.Error"><code class="xref py py-class docutils literal"><span class="pre">Error</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyvips.Image.set_value">
-<code class="descname">set_value</code><span class="sig-paren">(</span><em>name</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.set_value" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the value of an item of metadata.</p>
-<p>Sets the value of an item of metadata. The metadata item must already
-exist.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<em>str</em>) – The name of the piece of metadata to set the value of.</li>
-<li><strong>value</strong> (<em>mixed</em>) – The value to set as a Python value. It is
-converted to the type of the metadata item, if possible.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">None</span></code></p>
-</td>
 </tr>
 </tbody>
 </table>

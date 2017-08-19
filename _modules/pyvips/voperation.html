@@ -169,7 +169,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyvips.voperation</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
 
@@ -256,17 +256,17 @@
         <span class="k">return</span> <span class="n">Operation</span><span class="p">(</span><span class="n">vop</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">match_image</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="c1"># if the object wants an image and we have a constant, imageize it</span>
+        <span class="c1"># if the object wants an image and we have a constant, _imageize it</span>
         <span class="c1">#</span>
-        <span class="c1"># if the object wants an image array, imageize any constants in the</span>
+        <span class="c1"># if the object wants an image array, _imageize any constants in the</span>
         <span class="c1"># array</span>
         <span class="k">if</span> <span class="n">match_image</span><span class="p">:</span>
             <span class="n">gtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">GValue</span><span class="o">.</span><span class="n">image_type</span><span class="p">:</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">imageize</span><span class="p">(</span><span class="n">match_image</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">_imageize</span><span class="p">(</span><span class="n">match_image</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">GValue</span><span class="o">.</span><span class="n">array_image_type</span><span class="p">:</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">imageize</span><span class="p">(</span><span class="n">match_image</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">_imageize</span><span class="p">(</span><span class="n">match_image</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
                          <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">value</span><span class="p">]</span>
 
         <span class="c1"># MODIFY args need to be copied before they are set</span>
@@ -623,7 +623,7 @@
 <span class="sd">        place.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
- 
+
         <span class="c1"># generate list of all nicknames which we can generate docstrings for</span>
 
         <span class="n">all_nicknames</span> <span class="o">=</span> <span class="p">[]</span>
@@ -631,7 +631,7 @@
         <span class="k">def</span> <span class="nf">add_nickname</span><span class="p">(</span><span class="n">gtype</span><span class="p">):</span>
             <span class="n">nickname</span> <span class="o">=</span> <span class="n">nickname_find</span><span class="p">(</span><span class="n">gtype</span><span class="p">)</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">docstr</span> <span class="o">=</span> <span class="n">Operation</span><span class="o">.</span><span class="n">generate_sphinx</span><span class="p">(</span><span class="n">nickname</span><span class="p">)</span>
+                <span class="n">Operation</span><span class="o">.</span><span class="n">generate_sphinx</span><span class="p">(</span><span class="n">nickname</span><span class="p">)</span>
                 <span class="n">all_nicknames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nickname</span><span class="p">)</span>
             <span class="k">except</span> <span class="n">Error</span><span class="p">:</span>
                 <span class="k">pass</span>
@@ -648,15 +648,15 @@
 
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;.. autosummary::&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;   :nosignatures:&#39;</span><span class="p">)</span>
-        <span class="nb">print</span>
+        <span class="nb">print</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">nickname</span> <span class="ow">in</span> <span class="n">all_nicknames</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;   ~pyvips.Image.</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nickname</span><span class="p">))</span>
-        <span class="nb">print</span>
+        <span class="nb">print</span><span class="p">()</span>
 
         <span class="c1"># Output docs</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;.. class:: pyvips.Image</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-        <span class="nb">print</span>
+        <span class="nb">print</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">nickname</span> <span class="ow">in</span> <span class="n">all_nicknames</span><span class="p">:</span>
             <span class="n">docstr</span> <span class="o">=</span> <span class="n">Operation</span><span class="o">.</span><span class="n">generate_sphinx</span><span class="p">(</span><span class="n">nickname</span><span class="p">)</span>
             <span class="n">docstr</span> <span class="o">=</span> <span class="n">docstr</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">      &#39;</span><span class="p">)</span>
