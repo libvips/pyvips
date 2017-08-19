@@ -594,11 +594,15 @@
                               <span class="n">op</span><span class="o">.</span><span class="n">get_blurb</span><span class="p">(</span><span class="n">name</span><span class="p">)))</span>
 
         <span class="n">output_types</span> <span class="o">=</span> <span class="p">[</span><span class="n">GValue</span><span class="o">.</span><span class="n">gtype_to_python</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
-                        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">required_output</span> <span class="o">+</span> <span class="n">optional_output</span><span class="p">]</span>
+                        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">required_output</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">output_types</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">output_type</span> <span class="o">=</span> <span class="n">output_types</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">output_type</span> <span class="o">=</span> <span class="s1">&#39;list[&#39;</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_types</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">optional_output</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">output_types</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;Dict[str, mixed]&#39;</span><span class="p">]</span>
+            <span class="n">output_type</span> <span class="o">+=</span> <span class="s1">&#39; or list[&#39;</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_types</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span>
 
         <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;:rtype: &#39;</span> <span class="o">+</span> <span class="n">output_type</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;:raises Error:</span><span class="se">\n</span><span class="s1">&#39;</span>
