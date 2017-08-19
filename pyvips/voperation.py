@@ -282,8 +282,11 @@ class Operation(pyvips.VipsObject):
                              (flags & _REQUIRED) == 0]
 
         required_output = [name for name, flags in args
-                           if (flags & _OUTPUT) != 0 and
-                              (flags & _REQUIRED) != 0]
+                           if ((flags & _OUTPUT) != 0 and
+                               (flags & _REQUIRED) != 0) or
+                              ((flags & _INPUT) != 0 and
+                               (flags & _REQUIRED) != 0 and
+                               (flags & _MODIFY) != 0)]
 
         optional_output = [name for name, flags in args
                            if (flags & _OUTPUT) != 0 and
@@ -379,8 +382,11 @@ class Operation(pyvips.VipsObject):
                              (flags & _REQUIRED) == 0]
 
         required_output = [name for name, flags in args
-                           if (flags & _OUTPUT) != 0 and
-                              (flags & _REQUIRED) != 0]
+                           if ((flags & _OUTPUT) != 0 and
+                               (flags & _REQUIRED) != 0) or
+                              ((flags & _INPUT) != 0 and
+                               (flags & _REQUIRED) != 0 and
+                               (flags & _MODIFY) != 0)]
 
         optional_output = [name for name, flags in args
                            if (flags & _OUTPUT) != 0 and
@@ -472,6 +478,11 @@ class Operation(pyvips.VipsObject):
         type_map(type_from_name('VipsOperation'), add_nickname)
 
         all_nicknames.sort()
+
+        # remove operations we have to wrap by hand
+
+        exclude = ['scale', 'ifthenelse', 'bandjoin', 'bandrank']
+        all_nicknames = [x for x in all_nicknames if x not in exclude]
 
         # Output summary table
 

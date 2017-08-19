@@ -3,9 +3,6 @@
 Introduction
 ============
 
-This module wraps the libvips image processing library. It needs the libvips
-shared library on your library search path, version 8.2 or later. 
-
 See the main libvips site for an introduction to the underlying library. These
 notes introduce the Python binding.
 

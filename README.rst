@@ -5,10 +5,20 @@ README
     :alt: Build Status
     :target: https://travis-ci.org/jcupitt/pyvips
 
-This module provides a Python binding for the vips image processing
-library:
+This module wraps the libvips image processing library. It needs the libvips
+shared library on your library search path, version 8.2 or later. 
 
 https://jcupitt.github.io/libvips
+
+This binding passes the vips test suite cleanly and with no leaks under
+python2.7 - python3.6, pypy and pypy3 on Windows, macOS and Linux. 
+
+We have formatted docs online here:
+
+https://jcupitt.github.io/pyvips/
+
+How it works
+------------
 
 Programs that use ``pyvips`` don't manipulate images directly, instead
 they create pipelines of image processing operations building on a source
@@ -23,23 +33,13 @@ speed and memory use benchmark:
 https://github.com/jcupitt/libvips/wiki/Speed-and-memory-use
 
 Loads a large tiff image, shrinks by 10%, sharpens, and saves again. On this
-test, ``pyvips`` is typically 5x faster than Pillow-SIMD and needs 4x less
+test ``pyvips`` is typically 5x faster than Pillow-SIMD and needs 4x less
 memory. 
 
 There's a handy blog post explaining how libvips opens files, which gives
 some more background.
 
 http://libvips.blogspot.co.uk/2012/06/how-libvips-opens-file.html
-
-Status
-------
-
-This binding passes the vips test suite cleanly and with no leaks under
-python2.7 - python3.6, pypy and pypy3 on Windows, macOS and Linux. 
-
-We have formatted docs online here:
-
-https://jcupitt.github.io/pyvips/
 
 Install
 -------
@@ -52,7 +52,7 @@ https://jcupitt.github.io/libvips/
 
 Then just install this package, perhaps::
 
-	$ pip install --user -e .
+	$ pip install pyvips
 
 Example
 -------

@@ -133,9 +133,14 @@ def _with_metaclass(mcls):
 
 
 # decorator to set docstring
-def _add_doc(value):
+def _add_doc(name):
+    try:
+        docstring = pyvips.Operation.generate_docstring(name)
+    except Error:
+        docstring = None
+
     def _doc(func):
-        func.__doc__ = value
+        func.__doc__ = docstring
         return func
 
     return _doc
@@ -155,7 +160,7 @@ class ImageType(type):
     def __getattr__(cls, name):
         # logger.debug('ImageType.__getattr__ %s', name)
 
-        @_add_doc(pyvips.Operation.generate_docstring(name))
+        @_add_doc(name)
         def call_function(*args, **kwargs):
             return pyvips.Operation.call(name, *args, **kwargs)
 
@@ -218,7 +223,7 @@ class Image(pyvips.VipsObject):
 
         Keyword args:
             memory (bool): If set True, load the image via memory rather than
-                via a temporary disc file. See :meth:`temp_image_file` for
+                via a temporary disc file. See :meth:`.new_temp_file` for
                 notes on where temporary files are created. Small images are
                 loaded via memory by default, use ``VIPS_DISC_THRESHOLD`` to
                 set the definition of small.
@@ -771,7 +776,7 @@ class Image(pyvips.VipsObject):
         if super(Image, self).get_typeof(name) != 0:
             return super(Image, self).get(name)
 
-        @_add_doc(pyvips.Operation.generate_docstring(name))
+        @_add_doc(name)
         def call_function(*args, **kwargs):
             return pyvips.Operation.call(name, self, *args, **kwargs)
 
@@ -1150,7 +1155,7 @@ class Image(pyvips.VipsObject):
 
     # we need different _imageize rules for this operator ... we need to
     # _imageize th and el to match each other first
-    @_add_doc(pyvips.Operation.generate_docstring('ifthenelse'))
+    @_add_doc('ifthenelse')
     def ifthenelse(self, th, el, **kwargs):
         for match_image in [th, el, self]:
             if isinstance(match_image, pyvips.Image):
