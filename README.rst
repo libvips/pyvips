@@ -49,14 +49,14 @@ Install
 -------
 
 You need the libvips shared library on your library search path, version 8.2 or
-later. On linux, you can install via your package manager; on Windows you
-can download a pre-compiled binary from the libvips website:
+later. On linux and macOS, you can install via your package manager; on 
+Windows you can download a pre-compiled binary from the libvips website:
 
 https://jcupitt.github.io/libvips/
 
 Then just install this package, perhaps::
 
-	$ pip install pyvips
+	$ pip install --user pyvips
 
 Example
 -------
