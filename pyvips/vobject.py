@@ -94,7 +94,7 @@ class VipsObject(pyvips.GObject):
         logger.debug()
 
     # slow! eeeeew
-    def get_pspec(self, name):
+    def _get_pspec(self, name):
         # logger.debug('VipsObject.get_typeof: self = %s, name = %s',
         #              self, name)
 
@@ -123,7 +123,7 @@ class VipsObject(pyvips.GObject):
         # logger.debug('VipsObject.get_typeof: self = %s, name = %s',
         #              self, name)
 
-        pspec = self.get_pspec(name)
+        pspec = self._get_pspec(name)
         if pspec is not None:
             return pspec.value_type
         else:
@@ -132,7 +132,7 @@ class VipsObject(pyvips.GObject):
     def get_blurb(self, name):
         """Get the blurb for a GObject property."""
 
-        c_str = gobject_lib.g_param_spec_get_blurb(self.get_pspec(name))
+        c_str = gobject_lib.g_param_spec_get_blurb(self._get_pspec(name))
         return _to_string(ffi.string(c_str))
 
     def get(self, name):

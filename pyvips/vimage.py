@@ -141,6 +141,15 @@ def _add_doc(value):
     return _doc
 
 
+# decorator to set deprecated
+def _deprecated(note):
+    def _dep(func):
+        func.__deprecated__ = note
+        return func
+
+    return _dep
+
+
 # metaclass for Image ... getattr on this implements the class methods
 class ImageType(type):
     def __getattr__(cls, name):
@@ -162,7 +171,7 @@ class Image(pyvips.VipsObject):
     # private static
 
     @staticmethod
-    def imageize(self, value):
+    def _imageize(self, value):
         # careful! self can be None if value is a 2D array
         if isinstance(value, Image):
             return value
@@ -768,16 +777,21 @@ class Image(pyvips.VipsObject):
 
         return call_function
 
-    # compatibility: these used to be called get_value / set_value
+    # compatibility methods
 
-    get_value = get
-    set_value = set
+    @_deprecated('use Image.get() instead')
+    def get_value(self, name):
+        return self.get(name)
 
-    # we used to have longer names for these
+    @_deprecated('use Image.set() instead')
+    def set_value(self, name, value):
+        self.set(name, value)
 
+    @_deprecated('use Image.scale instead')
     def get_scale(self):
         return self.scale
 
+    @_deprecated('use Image.offset instead')
     def get_offset(self):
         return self.offset
 
@@ -1134,8 +1148,8 @@ class Image(pyvips.VipsObject):
         """Rotate 270 degrees clockwise."""
         return self.rot('d270')
 
-    # we need different imageize rules for this operator ... we need to
-    # imageize th and el to match each other first
+    # we need different _imageize rules for this operator ... we need to
+    # _imageize th and el to match each other first
     @_add_doc(pyvips.Operation.generate_docstring('ifthenelse'))
     def ifthenelse(self, th, el, **kwargs):
         for match_image in [th, el, self]:
@@ -1143,9 +1157,9 @@ class Image(pyvips.VipsObject):
                 break
 
         if not isinstance(th, pyvips.Image):
-            th = Image.imageize(match_image, th)
+            th = Image._imageize(match_image, th)
         if not isinstance(el, pyvips.Image):
-            el = Image.imageize(match_image, el)
+            el = Image._imageize(match_image, el)
 
         return pyvips.Operation.call('ifthenelse', self, th, el, **kwargs)
 

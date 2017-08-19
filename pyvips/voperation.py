@@ -85,17 +85,17 @@ class Operation(pyvips.VipsObject):
         return Operation(vop)
 
     def set(self, name, flags, match_image, value):
-        # if the object wants an image and we have a constant, imageize it
+        # if the object wants an image and we have a constant, _imageize it
         #
-        # if the object wants an image array, imageize any constants in the
+        # if the object wants an image array, _imageize any constants in the
         # array
         if match_image:
             gtype = self.get_typeof(name)
 
             if gtype == pyvips.GValue.image_type:
-                value = pyvips.Image.imageize(match_image, value)
+                value = pyvips.Image._imageize(match_image, value)
             elif gtype == pyvips.GValue.array_image_type:
-                value = [pyvips.Image.imageize(match_image, x)
+                value = [pyvips.Image._imageize(match_image, x)
                          for x in value]
 
         # MODIFY args need to be copied before they are set
@@ -452,7 +452,7 @@ class Operation(pyvips.VipsObject):
         place.
 
         """
- 
+
         # generate list of all nicknames which we can generate docstrings for
 
         all_nicknames = []
@@ -460,7 +460,7 @@ class Operation(pyvips.VipsObject):
         def add_nickname(gtype):
             nickname = nickname_find(gtype)
             try:
-                docstr = Operation.generate_sphinx(nickname)
+                Operation.generate_sphinx(nickname)
                 all_nicknames.append(nickname)
             except Error:
                 pass
