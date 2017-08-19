@@ -448,21 +448,44 @@ class Operation(pyvips.VipsObject):
         place.
 
         """
+ 
+        # generate list of all nicknames which we can generate docstrings for
 
-        print('.. class:: pyvips.Image\n')
+        all_nicknames = []
 
-        def generate_sphinx_type(gtype):
+        def add_nickname(gtype):
             nickname = nickname_find(gtype)
             try:
                 docstr = Operation.generate_sphinx(nickname)
-                docstr = docstr.replace('\n', '\n      ')
-                print('   ' + docstr)
+                all_nicknames.append(nickname)
             except Error:
                 pass
-            type_map(gtype, generate_sphinx_type)
+
+            type_map(gtype, add_nickname)
+
             return ffi.NULL
 
-        type_map(type_from_name('VipsOperation'), generate_sphinx_type)
+        type_map(type_from_name('VipsOperation'), add_nickname)
+
+        all_nicknames.sort()
+
+        # Output summary table
+
+        print('.. autosummary::')
+        print('   :nosignatures:')
+        print
+        for nickname in all_nicknames:
+            print('   ~pyvips.Image.{0}'.format(nickname))
+        print
+
+        # Output docs
+
+        print('.. class:: pyvips.Image\n')
+        print
+        for nickname in all_nicknames:
+            docstr = Operation.generate_sphinx(nickname)
+            docstr = docstr.replace('\n', '\n      ')
+            print('   ' + docstr)
 
 
 __all__ = ['Operation']
