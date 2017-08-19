@@ -1,4 +1,4 @@
-from __future__ import division
+from __future__ import division, print_function
 
 import logging
 
@@ -423,11 +423,15 @@ class Operation(pyvips.VipsObject):
                               op.get_blurb(name)))
 
         output_types = [GValue.gtype_to_python(op.get_typeof(name))
-                        for name in required_output + optional_output]
+                        for name in required_output]
         if len(output_types) == 1:
             output_type = output_types[0]
         else:
             output_type = 'list[' + ', '.join(output_types) + ']'
+
+        if len(optional_output) > 0:
+            output_types += ['Dict[str, mixed]']
+            output_type += ' or list[' + ', '.join(output_types) + ']'
 
         result += ':rtype: ' + output_type + '\n'
         result += ':raises Error:\n'
@@ -473,15 +477,15 @@ class Operation(pyvips.VipsObject):
 
         print('.. autosummary::')
         print('   :nosignatures:')
-        print
+        print()
         for nickname in all_nicknames:
             print('   ~pyvips.Image.{0}'.format(nickname))
-        print
+        print()
 
         # Output docs
 
         print('.. class:: pyvips.Image\n')
-        print
+        print()
         for nickname in all_nicknames:
             docstr = Operation.generate_sphinx(nickname)
             docstr = docstr.replace('\n', '\n      ')
