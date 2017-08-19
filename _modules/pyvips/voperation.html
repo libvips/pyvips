@@ -619,21 +619,44 @@
 <span class="sd">        place.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+ 
+        <span class="c1"># generate list of all nicknames which we can generate docstrings for</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;.. class:: pyvips.Image</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">all_nicknames</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="k">def</span> <span class="nf">generate_sphinx_type</span><span class="p">(</span><span class="n">gtype</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">add_nickname</span><span class="p">(</span><span class="n">gtype</span><span class="p">):</span>
             <span class="n">nickname</span> <span class="o">=</span> <span class="n">nickname_find</span><span class="p">(</span><span class="n">gtype</span><span class="p">)</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">docstr</span> <span class="o">=</span> <span class="n">Operation</span><span class="o">.</span><span class="n">generate_sphinx</span><span class="p">(</span><span class="n">nickname</span><span class="p">)</span>
-                <span class="n">docstr</span> <span class="o">=</span> <span class="n">docstr</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">      &#39;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;   &#39;</span> <span class="o">+</span> <span class="n">docstr</span><span class="p">)</span>
+                <span class="n">all_nicknames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nickname</span><span class="p">)</span>
             <span class="k">except</span> <span class="n">Error</span><span class="p">:</span>
                 <span class="k">pass</span>
-            <span class="n">type_map</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">generate_sphinx_type</span><span class="p">)</span>
+
+            <span class="n">type_map</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">add_nickname</span><span class="p">)</span>
+
             <span class="k">return</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span>
 
-        <span class="n">type_map</span><span class="p">(</span><span class="n">type_from_name</span><span class="p">(</span><span class="s1">&#39;VipsOperation&#39;</span><span class="p">),</span> <span class="n">generate_sphinx_type</span><span class="p">)</span></div></div>
+        <span class="n">type_map</span><span class="p">(</span><span class="n">type_from_name</span><span class="p">(</span><span class="s1">&#39;VipsOperation&#39;</span><span class="p">),</span> <span class="n">add_nickname</span><span class="p">)</span>
+
+        <span class="n">all_nicknames</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+        <span class="c1"># Output summary table</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;.. autosummary::&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;   :nosignatures:&#39;</span><span class="p">)</span>
+        <span class="nb">print</span>
+        <span class="k">for</span> <span class="n">nickname</span> <span class="ow">in</span> <span class="n">all_nicknames</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;   ~pyvips.Image.</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nickname</span><span class="p">))</span>
+        <span class="nb">print</span>
+
+        <span class="c1"># Output docs</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;.. class:: pyvips.Image</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span>
+        <span class="k">for</span> <span class="n">nickname</span> <span class="ow">in</span> <span class="n">all_nicknames</span><span class="p">:</span>
+            <span class="n">docstr</span> <span class="o">=</span> <span class="n">Operation</span><span class="o">.</span><span class="n">generate_sphinx</span><span class="p">(</span><span class="n">nickname</span><span class="p">)</span>
+            <span class="n">docstr</span> <span class="o">=</span> <span class="n">docstr</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">      &#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;   &#39;</span> <span class="o">+</span> <span class="n">docstr</span><span class="p">)</span></div></div>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Operation&#39;</span><span class="p">]</span>
