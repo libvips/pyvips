@@ -4,3 +4,4 @@
 *.egg
 dist
 doc/build
+build
