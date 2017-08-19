@@ -5,6 +5,10 @@ README
     :alt: Build Status
     :target: https://travis-ci.org/jcupitt/pyvips
 
+PyPI package:
+
+https://pypi.python.org/pypi/pyvips
+
 This module wraps the libvips image processing library. It needs the libvips
 shared library on your library search path, version 8.2 or later. 
 
@@ -45,14 +49,14 @@ Install
 -------
 
 You need the libvips shared library on your library search path, version 8.2 or
-later. On linux, you can install via your package manager; on Windows you
-can download a pre-compiled binary from the libvips website:
+later. On linux and macOS, you can install via your package manager; on 
+Windows you can download a pre-compiled binary from the libvips website:
 
 https://jcupitt.github.io/libvips/
 
 Then just install this package, perhaps::
 
-	$ pip install pyvips
+	$ pip install --user pyvips
 
 Example
 -------
@@ -93,24 +97,20 @@ Instead of the ``pyvips = Vips``, you can of course also swap all ``Vips`` for
 Background
 ----------
 
-This is supposed to be an experiment with making a libvips binding using cffi.
-
-http://cffi.readthedocs.io/en/latest/ref.html
-
 The Python binding included in libvips works, but porting and installation
 are more difficult than they should be. 
 
-The hope is that a new Python binding on top of cffi would be:
+This new binding is:
 
-* compatible with the current Python binding (it should run the same test suite,
+* compatible with the current Python binding (it runs the same test suite,
   unmodified)
 
-* easier to install, since the stack would be much smaller, and there would be
+* easier to install, since the stack is much smaller, and there are 
   no issues with the overrides directory
 
-* faster, since we could implement Buffer and save some copies
+* faster, since we implement Buffer and save some copies
 
-* faster, since we could make it "thinner". The ffi Ruby binding is about twice
+* faster, since it is "thinner". The ffi Ruby binding is about twice
   as fast as the gobject-introspection one, when running the test suite
 
 * portable across CPython, PyPy and others
@@ -148,3 +148,10 @@ Regenerate autodocs::
           python -c "import pyvips; pyvips.Operation.generate_sphinx_all()" > x 
 
 And copy-paste ``x`` into the obvious place in ``doc/vimage.rst``.
+
+Update pypi package::
+
+        $ python setup.py bdist_wheel
+        $ twine upload dist/*
+
+

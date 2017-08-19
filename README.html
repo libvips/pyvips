@@ -178,6 +178,8 @@
   <div class="section" id="readme">
 <h1>README<a class="headerlink" href="#readme" title="Permalink to this headline">¶</a></h1>
 <a class="reference external image-reference" href="https://travis-ci.org/jcupitt/pyvips"><img alt="Build Status" src="https://travis-ci.org/jcupitt/pyvips.svg?branch=master" /></a>
+<p>PyPI package:</p>
+<p><a class="reference external" href="https://pypi.python.org/pypi/pyvips">https://pypi.python.org/pypi/pyvips</a></p>
 <p>This module wraps the libvips image processing library. It needs the libvips
 shared library on your library search path, version 8.2 or later.</p>
 <p><a class="reference external" href="https://jcupitt.github.io/libvips">https://jcupitt.github.io/libvips</a></p>
@@ -206,11 +208,11 @@ some more background.</p>
 <div class="section" id="install">
 <h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
 <p>You need the libvips shared library on your library search path, version 8.2 or
-later. On linux, you can install via your package manager; on Windows you
-can download a pre-compiled binary from the libvips website:</p>
+later. On linux and macOS, you can install via your package manager; on
+Windows you can download a pre-compiled binary from the libvips website:</p>
 <p><a class="reference external" href="https://jcupitt.github.io/libvips/">https://jcupitt.github.io/libvips/</a></p>
 <p>Then just install this package, perhaps:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ pip install pyvips
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ pip install --user pyvips
 </pre></div>
 </div>
 </div>
@@ -252,18 +254,16 @@ sharpens, and then writes the image back to the filesystem again:</p>
 </div>
 <div class="section" id="background">
 <h2>Background<a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h2>
-<p>This is supposed to be an experiment with making a libvips binding using cffi.</p>
-<p><a class="reference external" href="http://cffi.readthedocs.io/en/latest/ref.html">http://cffi.readthedocs.io/en/latest/ref.html</a></p>
 <p>The Python binding included in libvips works, but porting and installation
 are more difficult than they should be.</p>
-<p>The hope is that a new Python binding on top of cffi would be:</p>
+<p>This new binding is:</p>
 <ul class="simple">
-<li>compatible with the current Python binding (it should run the same test suite,
+<li>compatible with the current Python binding (it runs the same test suite,
 unmodified)</li>
-<li>easier to install, since the stack would be much smaller, and there would be
+<li>easier to install, since the stack is much smaller, and there are
 no issues with the overrides directory</li>
-<li>faster, since we could implement Buffer and save some copies</li>
-<li>faster, since we could make it “thinner”. The ffi Ruby binding is about twice
+<li>faster, since we implement Buffer and save some copies</li>
+<li>faster, since it is “thinner”. The ffi Ruby binding is about twice
 as fast as the gobject-introspection one, when running the test suite</li>
 <li>portable across CPython, PyPy and others</li>
 <li>more simply portable to Windows</li>
@@ -298,6 +298,11 @@ $ pypy -m nose --logging-level=WARNING
 </pre></div>
 </div>
 <p>And copy-paste <code class="docutils literal"><span class="pre">x</span></code> into the obvious place in <code class="docutils literal"><span class="pre">doc/vimage.rst</span></code>.</p>
+<p>Update pypi package:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ python setup.py bdist_wheel
+$ twine upload dist/*
+</pre></div>
+</div>
 </div>
 </div>
 
