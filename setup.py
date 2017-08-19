@@ -26,7 +26,7 @@ extras = {
 
 setup(
     name='pyvips',
-    version='2.0.0',
+    version='2.0.1',
     description='binding for the libvips image processing library',
     long_description=long_description,
     url='https://github.com/jcupitt/pyvips',
