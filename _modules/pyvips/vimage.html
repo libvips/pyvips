@@ -304,9 +304,14 @@
 
 
 <span class="c1"># decorator to set docstring</span>
-<span class="k">def</span> <span class="nf">_add_doc</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_add_doc</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">docstring</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">generate_docstring</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">Error</span><span class="p">:</span>
+        <span class="n">docstring</span> <span class="o">=</span> <span class="kc">None</span>
+
     <span class="k">def</span> <span class="nf">_doc</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-        <span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">docstring</span>
         <span class="k">return</span> <span class="n">func</span>
 
     <span class="k">return</span> <span class="n">_doc</span>
@@ -326,7 +331,7 @@
     <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="c1"># logger.debug(&#39;ImageType.__getattr__ %s&#39;, name)</span>
 
-        <span class="nd">@_add_doc</span><span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">generate_docstring</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="nd">@_add_doc</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">def</span> <span class="nf">call_function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -389,7 +394,7 @@
 
 <span class="sd">        Keyword args:</span>
 <span class="sd">            memory (bool): If set True, load the image via memory rather than</span>
-<span class="sd">                via a temporary disc file. See :meth:`temp_image_file` for</span>
+<span class="sd">                via a temporary disc file. See :meth:`.new_temp_file` for</span>
 <span class="sd">                notes on where temporary files are created. Small images are</span>
 <span class="sd">                loaded via memory by default, use ``VIPS_DISC_THRESHOLD`` to</span>
 <span class="sd">                set the definition of small.</span>
@@ -942,7 +947,7 @@
         <span class="k">if</span> <span class="nb">super</span><span class="p">(</span><span class="n">Image</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">Image</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
-        <span class="nd">@_add_doc</span><span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">generate_docstring</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="nd">@_add_doc</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">def</span> <span class="nf">call_function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -1321,7 +1326,7 @@
 
     <span class="c1"># we need different _imageize rules for this operator ... we need to</span>
     <span class="c1"># _imageize th and el to match each other first</span>
-<div class="viewcode-block" id="Image.ifthenelse"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.ifthenelse">[docs]</a>    <span class="nd">@_add_doc</span><span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">generate_docstring</span><span class="p">(</span><span class="s1">&#39;ifthenelse&#39;</span><span class="p">))</span>
+<div class="viewcode-block" id="Image.ifthenelse"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.ifthenelse">[docs]</a>    <span class="nd">@_add_doc</span><span class="p">(</span><span class="s1">&#39;ifthenelse&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">ifthenelse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">th</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">match_image</span> <span class="ow">in</span> <span class="p">[</span><span class="n">th</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="bp">self</span><span class="p">]:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">match_image</span><span class="p">,</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="p">):</span>

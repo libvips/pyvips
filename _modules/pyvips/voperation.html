@@ -453,8 +453,11 @@
                              <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
 
         <span class="n">required_output</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">flags</span> <span class="ow">in</span> <span class="n">args</span>
-                           <span class="k">if</span> <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_OUTPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                              <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
+                           <span class="k">if</span> <span class="p">((</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_OUTPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
+                               <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span>
+                              <span class="p">((</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_INPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
+                               <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
+                               <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_MODIFY</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)]</span>
 
         <span class="n">optional_output</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">flags</span> <span class="ow">in</span> <span class="n">args</span>
                            <span class="k">if</span> <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_OUTPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
@@ -550,8 +553,11 @@
                              <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
 
         <span class="n">required_output</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">flags</span> <span class="ow">in</span> <span class="n">args</span>
-                           <span class="k">if</span> <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_OUTPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                              <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
+                           <span class="k">if</span> <span class="p">((</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_OUTPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
+                               <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span>
+                              <span class="p">((</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_INPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
+                               <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
+                               <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_MODIFY</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)]</span>
 
         <span class="n">optional_output</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">flags</span> <span class="ow">in</span> <span class="n">args</span>
                            <span class="k">if</span> <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_OUTPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
@@ -643,6 +649,11 @@
         <span class="n">type_map</span><span class="p">(</span><span class="n">type_from_name</span><span class="p">(</span><span class="s1">&#39;VipsOperation&#39;</span><span class="p">),</span> <span class="n">add_nickname</span><span class="p">)</span>
 
         <span class="n">all_nicknames</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+        <span class="c1"># remove operations we have to wrap by hand</span>
+
+        <span class="n">exclude</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="s1">&#39;ifthenelse&#39;</span><span class="p">,</span> <span class="s1">&#39;bandjoin&#39;</span><span class="p">,</span> <span class="s1">&#39;bandrank&#39;</span><span class="p">]</span>
+        <span class="n">all_nicknames</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">all_nicknames</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude</span><span class="p">]</span>
 
         <span class="c1"># Output summary table</span>
 
