@@ -26,7 +26,7 @@ extras = {
 
 setup(
     name='pyvips',
-    version='2.0.0.dev1',
+    version='2.0.0',
     description='binding for the libvips image processing library',
     long_description=long_description,
     url='https://github.com/jcupitt/pyvips',
@@ -48,6 +48,9 @@ setup(
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: Implementation :: PyPy',
+        'Programming Language :: Python :: Implementation :: CPython',
     ],
 
     keywords='image processing',
