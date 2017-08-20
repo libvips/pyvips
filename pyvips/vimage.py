@@ -1189,10 +1189,5 @@ class Image(pyvips.VipsObject):
 
         return pyvips.Operation.call('scale', self, **kwargs)
 
-    def shack(self):
-        return self + 0.2 * Image.text(codecs.encode('V YBIR GUR PBPX ', \
-            'rot_13'), font='sans 120').replicate(1000, 1000).crop(0, 0, \
-            self.width, self.height)
-
 
 __all__ = ['Image']
