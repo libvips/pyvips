@@ -279,8 +279,8 @@ class Operation(pyvips.VipsObject):
 
         required_input = [name for name, flags in args
                           if (flags & _INPUT) != 0 and
-                             (flags & _REQUIRED) != 0 and
-                             name != member_x]
+                          (flags & _REQUIRED) != 0 and
+                          name != member_x]
 
         optional_input = [name for name, flags in args
                           if (flags & _INPUT) != 0 and
@@ -379,8 +379,8 @@ class Operation(pyvips.VipsObject):
 
         required_input = [name for name, flags in args
                           if (flags & _INPUT) != 0 and
-                             (flags & _REQUIRED) != 0 and
-                             name != member_x]
+                          (flags & _REQUIRED) != 0 and
+                          name != member_x]
 
         optional_input = [name for name, flags in args
                           if (flags & _INPUT) != 0 and
@@ -490,19 +490,15 @@ class Operation(pyvips.VipsObject):
         all_nicknames = [x for x in all_nicknames if x not in exclude]
 
         # Output summary table
-        print('.. class:: pyvips.Image')
-        print('')
-        print('   .. rubric:: Methods')
-        print('')
+        print('.. class:: pyvips.Image\n')
+        print('   .. rubric:: Methods\n')
         print('   .. autosummary::')
-        print('      :nosignatures:')
-        print('')
-
+        print('      :nosignatures:\n')
         for nickname in all_nicknames:
             print('      ~{0}'.format(nickname))
+        print()
 
         # Output docs
-
         print()
         for nickname in all_nicknames:
             docstr = Operation.generate_sphinx(nickname)
