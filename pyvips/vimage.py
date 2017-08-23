@@ -3,7 +3,6 @@
 from __future__ import division
 
 import numbers
-import codecs
 
 import pyvips
 from pyvips import ffi, glib_lib, vips_lib, Error, _to_bytes, \
