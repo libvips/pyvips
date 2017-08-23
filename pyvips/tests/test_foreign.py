@@ -660,8 +660,6 @@ class TestForeign(PyvipsTester):
         # 10 should be the final layer
         self.assertFalse(os.path.isdir(filename + "_files/11"))
 
-        shutil.rmtree(filename + "_files", ignore_errors=True)
-
         # default google layout
         filename = temp_filename(self.tempdir, '')
         self.colour.dzsave(filename, layout="google")
@@ -675,8 +673,6 @@ class TestForeign(PyvipsTester):
         x = pyvips.Image.new_from_file(filename + "/blank.png")
         self.assertEqual(x.width, 256)
         self.assertEqual(x.height, 256)
-
-        shutil.rmtree(filename, ignore_errors=True)
 
         # google layout with overlap ... verify that we clip correctly
         # with overlap 192 tile size 256, we should step by 64 pixels each time
@@ -701,8 +697,6 @@ class TestForeign(PyvipsTester):
         self.assertEqual(x.height, 256)
         self.assertFalse(os.path.exists(filename + "/0/4/4.jpg"))
 
-        shutil.rmtree(filename, ignore_errors=True)
-
         # default zoomify layout
         filename = temp_filename(self.tempdir, '')
         self.colour.dzsave(filename, layout="zoomify")
@@ -712,8 +706,6 @@ class TestForeign(PyvipsTester):
         x = pyvips.Image.new_from_file(filename + "/TileGroup0/2-3-2.jpg")
         self.assertEqual(x.width, 256)
         self.assertEqual(x.height, 256)
-
-        shutil.rmtree(filename, ignore_errors=True)
 
         # test zip output
         filename = temp_filename(self.tempdir, '.zip')
@@ -742,16 +734,12 @@ class TestForeign(PyvipsTester):
         x = pyvips.Image.new_from_file(filename + "_files/10/0_0.png")
         self.assertEqual(x.width, 255)
 
-        shutil.rmtree(filename + "_files", ignore_errors=True)
-
         # test overlap
         filename = temp_filename(self.tempdir, '')
         self.colour.dzsave(filename, overlap=200)
 
         y = pyvips.Image.new_from_file(filename + "_files/10/1_1.jpeg")
         self.assertEqual(y.width, 654)
-
-        shutil.rmtree(filename + "_files", ignore_errors=True)
 
         # test tile-size
         filename = temp_filename(self.tempdir, '')
@@ -760,8 +748,6 @@ class TestForeign(PyvipsTester):
         y = pyvips.Image.new_from_file(filename + "_files/10/0_0.jpeg")
         self.assertEqual(y.width, 513)
         self.assertEqual(y.height, 513)
-
-        shutil.rmtree(filename + "_files", ignore_errors=True)
 
         # test save to memory buffer
         filename = temp_filename(self.tempdir, '.zip')
