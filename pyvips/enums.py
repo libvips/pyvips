@@ -1,9 +1,5 @@
 from __future__ import division
 
-import logging
-
-logger = logging.getLogger(__name__)
-
 
 class BandFormat(object):
     """The format of image bands.

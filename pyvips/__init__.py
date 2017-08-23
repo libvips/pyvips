@@ -1,12 +1,16 @@
 import logging
 import os
 import sys
+import atexit
 
 # flake8: noqa
 
 from cffi import FFI
 
 logger = logging.getLogger(__name__)
+
+# user code can override this null handler
+logger.addHandler(logging.NullHandler())
 
 ffi = FFI()
 
@@ -49,6 +53,53 @@ else:
     ffi.cdef('''
         typedef uint32_t GType;
     ''')
+
+# redirect all vips warnings to logging
+
+ffi.cdef('''
+    typedef void (*GLogFunc) (const char* log_domain,
+        int log_level,
+        const char* message, void* user_data);
+    int g_log_set_handler (const char* log_domain,
+        int log_levels,
+        GLogFunc log_func, void* user_data);
+
+    void g_log_remove_handler (const char* log_domain, int handler_id);
+
+''')
+
+class GLogLevelFlags(object):
+    # log flags 
+    FLAG_RECURSION          = 1 << 0
+    FLAG_FATAL              = 1 << 1
+
+    # GLib log levels 
+    LEVEL_ERROR             = 1 << 2       # always fatal 
+    LEVEL_CRITICAL          = 1 << 3
+    LEVEL_WARNING           = 1 << 4
+    LEVEL_MESSAGE           = 1 << 5
+    LEVEL_INFO              = 1 << 6
+    LEVEL_DEBUG             = 1 << 7
+
+def _log_handler(domain, level, message, user_data):
+    if level == GLogLevelFlags.LEVEL_WARNING: 
+        logger.warning('{0}: {1}'.format(_to_string(ffi.string(domain)), 
+                                         _to_string(ffi.string(message))))
+
+# keep a ref to the cb to stop it being GCd
+_log_handler_cb = ffi.callback('GLogFunc', _log_handler)
+_log_handler_id = glib_lib.g_log_set_handler('VIPS', 
+                           GLogLevelFlags.LEVEL_WARNING | 
+                           GLogLevelFlags.FLAG_FATAL | 
+                           GLogLevelFlags.FLAG_RECURSION,
+                           _log_handler_cb, ffi.NULL)
+
+# we must remove the handler on exit or libvips may try to run the callback
+# during shutdown
+def _remove_log_handler():
+    glib_lib.g_log_remove_handler("VIPS", _log_handler_id)
+
+atexit.register(_remove_log_handler)
 
 from .error import *
 
