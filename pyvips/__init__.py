@@ -88,7 +88,7 @@ def _log_handler(domain, level, message, user_data):
 
 # keep a ref to the cb to stop it being GCd
 _log_handler_cb = ffi.callback('GLogFunc', _log_handler)
-_log_handler_id = glib_lib.g_log_set_handler('VIPS', 
+_log_handler_id = glib_lib.g_log_set_handler(to_bytes('VIPS'), 
                            GLogLevelFlags.LEVEL_WARNING | 
                            GLogLevelFlags.FLAG_FATAL | 
                            GLogLevelFlags.FLAG_RECURSION,
