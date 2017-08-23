@@ -99,7 +99,7 @@ _log_handler_id = glib_lib.g_log_set_handler(_to_bytes('VIPS'),
 # we must remove the handler on exit or libvips may try to run the callback
 # during shutdown
 def _remove_log_handler():
-    glib_lib.g_log_remove_handler("VIPS", _log_handler_id)
+    glib_lib.g_log_remove_handler(_to_bytes('VIPS'), _log_handler_id)
 
 atexit.register(_remove_log_handler)
 
