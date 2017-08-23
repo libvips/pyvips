@@ -96,7 +96,7 @@ class VipsObject(pyvips.GObject):
     # slow! eeeeew
     def _get_pspec(self, name):
         # logger.debug('VipsObject.get_typeof: self = %s, name = %s',
-        #              self, name)
+        #              str(self), name)
 
         pspec = ffi.new('GParamSpec **')
         argument_class = ffi.new('VipsArgumentClass **')
@@ -121,7 +121,7 @@ class VipsObject(pyvips.GObject):
         """
 
         # logger.debug('VipsObject.get_typeof: self = %s, name = %s',
-        #              self, name)
+        #              str(self), name)
 
         pspec = self._get_pspec(name)
         if pspec is not None:
@@ -142,7 +142,7 @@ class VipsObject(pyvips.GObject):
 
         """
 
-        logger.debug('VipsObject.get: self = %s, name = %s', self, name)
+        logger.debug('VipsObject.get: name = %s', name)
 
         gtype = self.get_typeof(name)
 
@@ -160,8 +160,7 @@ class VipsObject(pyvips.GObject):
 
         """
 
-        logger.debug('VipsObject.set: self = %s, name = %s, value = %s',
-                     self, name, value)
+        logger.debug('VipsObject.set: name = %s, value = %s', name, value)
 
         gtype = self.get_typeof(name)
 
