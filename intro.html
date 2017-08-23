@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Introduction &mdash; pyvips 2.0 documentation</title>
+  <title>Introduction &mdash; pyvips 2.0.1 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pyvips 2.0 documentation" href="index.html"/>
+    <link rel="top" title="pyvips 2.0.1 documentation" href="index.html"/>
         <link rel="next" title="Image" href="vimage.html"/>
         <link rel="prev" title="README" href="README.html"/> 
 
@@ -96,6 +96,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#numpy-and-pil">NumPy and PIL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#automatic-wrapping">Automatic wrapping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#logging-and-warnings">Logging and warnings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#automatic-documentation">Automatic documentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#exceptions">Exceptions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#enums">Enums</a></li>
@@ -387,6 +388,17 @@ course you can also write:</p>
 </div>
 <p>and so on.</p>
 </div>
+<div class="section" id="logging-and-warnings">
+<h2>Logging and warnings<a class="headerlink" href="#logging-and-warnings" title="Permalink to this headline">¶</a></h2>
+<p>The module uses <code class="docutils literal"><span class="pre">logging</span></code> to log warnings from libvips, and debug messages
+from the module itself. Some warnings are important, for example truncated
+files, and you might want to see them.</p>
+<p>Add these lines somewhere near the start of your program:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="automatic-documentation">
 <h2>Automatic documentation<a class="headerlink" href="#automatic-documentation" title="Permalink to this headline">¶</a></h2>
 <p>The bulk of these API docs are generated automatically by
@@ -495,7 +507,7 @@ named after the enum value. So you can also write:</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'2.0',
+            VERSION:'2.0.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

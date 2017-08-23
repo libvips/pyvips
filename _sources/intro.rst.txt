@@ -231,6 +231,19 @@ course you can also write::
 
 and so on.
 
+Logging and warnings
+--------------------
+
+The module uses ``logging`` to log warnings from libvips, and debug messages
+from the module itself. Some warnings are important, for example truncated
+files, and you might want to see them.
+
+Add these lines somewhere near the start of your program::
+
+        import logging
+        logging.basicConfig(level=logging.WARNING)
+
+
 Automatic documentation
 -----------------------
 
