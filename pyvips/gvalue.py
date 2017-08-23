@@ -187,7 +187,7 @@ class GValue(object):
 
         """
 
-        # logger.debug('GValue.set: self = %s, value = %s', self, value)
+        # logger.debug('GValue.set: value = %s', value)
 
         gtype = self.gvalue.gtype
         fundamental = gobject_lib.g_type_fundamental(gtype)
