@@ -54,6 +54,8 @@ else:
         typedef uint32_t GType;
     ''')
 
+from .error import *
+
 # redirect all vips warnings to logging
 
 ffi.cdef('''
@@ -88,7 +90,7 @@ def _log_handler(domain, level, message, user_data):
 
 # keep a ref to the cb to stop it being GCd
 _log_handler_cb = ffi.callback('GLogFunc', _log_handler)
-_log_handler_id = glib_lib.g_log_set_handler(to_bytes('VIPS'), 
+_log_handler_id = glib_lib.g_log_set_handler(_to_bytes('VIPS'), 
                            GLogLevelFlags.LEVEL_WARNING | 
                            GLogLevelFlags.FLAG_FATAL | 
                            GLogLevelFlags.FLAG_RECURSION,
@@ -100,8 +102,6 @@ def _remove_log_handler():
     glib_lib.g_log_remove_handler("VIPS", _log_handler_id)
 
 atexit.register(_remove_log_handler)
-
-from .error import *
 
 ffi.cdef('''
     int vips_init (const char* argv0);
