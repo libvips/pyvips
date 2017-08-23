@@ -1,6 +1,8 @@
 # basic defs and link to ffi
 
-from pyvips import ffi, vips_lib, gobject_lib, _to_string, _to_bytes
+import logging
+
+from pyvips import ffi, glib_lib, vips_lib, gobject_lib, _to_string, _to_bytes
 
 ffi.cdef('''
     typedef struct _VipsImage VipsImage;
@@ -23,7 +25,45 @@ ffi.cdef('''
     typedef void* (*VipsTypeMap2Fn) (GType type);
     void* vips_type_map (GType base, VipsTypeMap2Fn fn);
 
+    typedef void (*GLogFunc) (const char* log_domain,
+        int log_level,
+        const char* message, void* user_data);
+    int g_log_set_handler (const char* log_domain,
+        int log_levels,
+        GLogFunc log_func, void* user_data);
+
 ''')
+
+
+class GLogLevelFlags(object):
+    # log flags 
+    FLAG_RECURSION          = 1 << 0
+    FLAG_FATAL              = 1 << 1
+
+    # GLib log levels 
+    LEVEL_ERROR             = 1 << 2       # always fatal 
+    LEVEL_CRITICAL          = 1 << 3
+    LEVEL_WARNING           = 1 << 4
+    LEVEL_MESSAGE           = 1 << 5
+    LEVEL_INFO              = 1 << 6
+    LEVEL_DEBUG             = 1 << 7
+
+
+logger = logging.getLogger(__name__)
+
+
+def _log_handler(domain, level, message, user_data):
+    print "_log_handler: seen message", message
+    if level == GLogLevelFlags.LEVEL_WARNING: 
+        logger.warning('{0}: {1]'.format(domain, message))
+
+
+# redirect all vips warnings to logging
+glib_lib.g_log_set_handler('VIPS', 
+                           GLogLevelFlags.LEVEL_WARNING | 
+                           GLogLevelFlags.FLAG_FATAL | 
+                           GLogLevelFlags.FLAG_RECURSION,
+                           ffi.callback('GLogFunc', _log_handler), ffi.NULL)
 
 
 def leak_set(leak):

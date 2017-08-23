@@ -1,0 +1,25 @@
+- segvs:
+
+	$ python
+	Python 2.7.13 (default, Jan 19 2017, 14:48:08) 
+	[GCC 6.3.0 20170118] on linux2
+	Type "help", "copyright", "credits" or "license" for more information.
+	>>> import logging
+	>>> logging.basicConfig(level = logging.WARNING)
+	>>> import pyvips
+	>>> x = pyvips.Image.new_from_file("k2_broken.jpg")
+	>>> x.avg()
+	125.51117816091954
+	>>> ^D
+	Illegal instruction (core dumped)
+
+- should have vips warnings enabled by default? 
+
+- docs
+
+- does "--logging-level=WARNING" as a cli arg work?
+
+- move setup to __init__? seems a more natural place
+
+- same for ruby-vips
+
