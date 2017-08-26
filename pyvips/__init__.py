@@ -1,9 +1,9 @@
+# flake8: noqa
+
 import logging
 import os
 import sys
 import atexit
-
-# flake8: noqa
 
 from cffi import FFI
 
@@ -11,6 +11,9 @@ logger = logging.getLogger(__name__)
 
 # user code can override this null handler
 logger.addHandler(logging.NullHandler())
+
+# this is read out into setup.py
+__version__ = '2.0.2'
 
 ffi = FFI()
 

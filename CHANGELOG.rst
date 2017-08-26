@@ -1,5 +1,9 @@
 # master 
 
+## Version 2.0.2 (23 August 2017)
+
+* support `pyvips.__version__`
+
 ## Version 2.0.1 (23 August 2017)
 
 * doc revisions

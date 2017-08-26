@@ -1,4 +1,5 @@
 # vim: set fileencoding=utf-8 :
+
 import gc
 import os
 import shutil
@@ -11,7 +12,6 @@ from .helpers import PyvipsTester, JPEG_FILE, SRGB_FILE, \
     GIF_FILE, WEBP_FILE, EXR_FILE, FITS_FILE, OPENSLIDE_FILE, \
     PDF_FILE, SVG_FILE, SVGZ_FILE, SVG_GZ_FILE, GIF_ANIM_FILE, \
     DICOM_FILE, temp_filename
-
 
 class TestForeign(PyvipsTester):
     tempdir = None
@@ -240,8 +240,6 @@ class TestForeign(PyvipsTester):
         self.save_load_file(".tif",
                             "[tile,tile-width=256]", self.colour, 10)
 
-        # we need a copy of the image to set the new metadata on
-        # otherwise we get caching problems
         filename = temp_filename(self.tempdir, '.tif')
         x = pyvips.Image.new_from_file(TIF_FILE)
         x = x.copy()
@@ -251,14 +249,11 @@ class TestForeign(PyvipsTester):
         y = x.get_value("orientation")
         self.assertEqual(y, 2)
 
-        # we need a copy of the image to set the new metadata on
-        # otherwise we get caching problems
         filename = temp_filename(self.tempdir, '.tif')
         x = pyvips.Image.new_from_file(TIF_FILE)
         x = x.copy()
         x.set_value("orientation", 2)
         x.write_to_file(filename)
-
         x = pyvips.Image.new_from_file(filename)
         y = x.get_value("orientation")
         self.assertEqual(y, 2)
@@ -275,7 +270,6 @@ class TestForeign(PyvipsTester):
         x = x.copy()
         x.set_value("orientation", 6)
         x.write_to_file(filename)
-
         x1 = pyvips.Image.new_from_file(filename)
         x2 = pyvips.Image.new_from_file(filename, autorotate=True)
         self.assertEqual(x1.width, x2.height)

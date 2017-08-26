@@ -7,6 +7,8 @@ https://github.com/jcupitt/pyvips
 from codecs import open
 from os import path
 
+from pyvips import __version__
+
 from setuptools import setup, find_packages
 
 here = path.abspath(path.dirname(__file__))
@@ -26,7 +28,7 @@ extras = {
 
 setup(
     name='pyvips',
-    version='2.0.1',
+    version=__version__,
     description='binding for the libvips image processing library',
     long_description=long_description,
     url='https://github.com/jcupitt/pyvips',

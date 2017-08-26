@@ -149,6 +149,11 @@ Regenerate autodocs::
 
 And copy-paste ``x`` into the obvious place in ``doc/vimage.rst``.
 
+Update version number::
+
+        $ vi pyvips/__init__.py
+        and update __version__
+
 Update pypi package::
 
         $ python setup.py bdist_wheel
