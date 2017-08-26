@@ -13,6 +13,7 @@ from .helpers import PyvipsTester, JPEG_FILE, SRGB_FILE, \
     PDF_FILE, SVG_FILE, SVGZ_FILE, SVG_GZ_FILE, GIF_ANIM_FILE, \
     DICOM_FILE, temp_filename
 
+
 class TestForeign(PyvipsTester):
     tempdir = None
 

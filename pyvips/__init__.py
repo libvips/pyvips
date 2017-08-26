@@ -127,5 +127,5 @@ from .vimage import Image
 
 __all__ = [
     'Error', 'Image', 'Operation', 'GValue', 'Interpolate', 'GObject',
-    'VipsObject', 'type_find', 'type_name'
+    'VipsObject', 'type_find', 'type_name', 'version'
 ]

@@ -1,7 +1,7 @@
 # basic defs and link to ffi
 
 
-from pyvips import ffi, vips_lib, gobject_lib, _to_string, _to_bytes
+from pyvips import ffi, vips_lib, gobject_lib, _to_string, _to_bytes, Error
 
 ffi.cdef('''
     typedef struct _VipsImage VipsImage;
@@ -24,6 +24,8 @@ ffi.cdef('''
     typedef void* (*VipsTypeMap2Fn) (GType type);
     void* vips_type_map (GType base, VipsTypeMap2Fn fn);
 
+    int vips_version( int flag );
+
 ''')
 
 
@@ -34,6 +36,28 @@ def leak_set(leak):
     Enabling this option will make libvips run slightly more slowly.
     """
     return vips_lib.vips_leak_set(leak)
+
+
+def version(flag):
+    """Get the major, minor or micro version number of the libvips library.
+
+    Args:
+        flag (int): Pass flag 0 to get the major version number, flag 1 to
+            get minor, flag 2 to get micro.
+
+    Returns:
+        The version number,
+
+    Raises:
+        :class:`.Error`
+
+    """
+
+    value = vips_lib.vips_version(flag)
+    if value < 0:
+        raise Error('unable to get library version')
+
+    return value
 
 
 def path_filename7(filename):
@@ -81,6 +105,7 @@ def type_map(gtype, fn):
 
 __all__ = [
     'leak_set',
+    'version',
     'path_filename7',
     'path_mode7',
     'type_find',
