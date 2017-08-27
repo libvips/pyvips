@@ -8,7 +8,7 @@ import atexit
 from cffi import FFI
 
 # pull in our module version number, see also setup.py
-from version import __version__
+from .version import __version__
 
 logger = logging.getLogger(__name__)
 
