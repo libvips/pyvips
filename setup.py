@@ -7,16 +7,16 @@ https://github.com/jcupitt/pyvips
 from codecs import open
 from os import path
 
-# pull in __version__ -- we can't import it, since that would execute
-# __init__.py, which won't run because we haven't installed cffi yet
-execfile(path.join(here, 'pyvips', 'version.py'))
-
 from setuptools import setup, find_packages
 
 here = path.abspath(path.dirname(__file__))
 
 with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
+
+# pull in __version__ -- we can't import it, since that would execute
+# __init__.py, which won't run because we haven't installed cffi yet
+execfile(path.join(here, 'pyvips', 'version.py'))
 
 test_deps = [
     'nose',
