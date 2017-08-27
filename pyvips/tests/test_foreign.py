@@ -308,6 +308,22 @@ class TestForeign(PyvipsTester):
         self.assertEqual(x(0, 167)[0], 0)
         self.assertEqual(x(0, 168)[0], 1)
 
+        # pyr save to buffer added in 8.6
+        if pyvips.version(0) > 8 or pyvips.version(1) >= 6:
+            x = pyvips.Image.new_from_file(TIF_FILE)
+            buf = x.tiffsave_buffer(tile=True, pyramid=True)
+            filename = temp_filename(self.tempdir, '.tif')
+            x.tiffsave(filename, tile=True, pyramid=True)
+            with open(filename, 'rb') as f:
+                buf2 = f.read()
+            self.assertEqual(len(buf), len(buf2))
+
+            a = pyvips.Image.new_from_buffer(buf, "", page=2)
+            b = pyvips.Image.new_from_buffer(buf2, "", page=2)
+            self.assertEqual(a.width, b.width)
+            self.assertEqual(a.height, b.height)
+            self.assertEqual(a.avg(), b.avg())
+
     def test_magickload(self):
         if pyvips.type_find("VipsForeign", "magickload") == 0 or \
                 not os.path.isfile(GIF_FILE):
