@@ -126,7 +126,7 @@ Local user install::
 
 	$ pip install --user -e .
 	$ pip3 install --user -e .
-	$ pypy -m pip --user -e . 
+	$ pypy -m pip --user -e .
 
 Run test suite::
 
