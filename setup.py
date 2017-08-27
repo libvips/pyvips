@@ -14,6 +14,7 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
+
 # py3 does not have execfile()
 # see https://stackoverflow.com/a/41658338/894763
 def _my_execfile(filepath, globals=None, locals=None):
@@ -25,6 +26,7 @@ def _my_execfile(filepath, globals=None, locals=None):
     })
     with open(filepath, 'rb') as file:
         exec(compile(file.read(), filepath, 'exec'), globals, locals)
+
 
 # pull in __version__ -- we can't import it, since that would execute
 # __init__.py, which won't run because we haven't installed cffi yet
