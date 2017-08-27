@@ -7,7 +7,9 @@ https://github.com/jcupitt/pyvips
 from codecs import open
 from os import path
 
-from pyvips import __version__
+# pull in __version__ -- we can't import it, since that would execute
+# __init__.py, which won't run because we haven't installed cffi yet
+execfile(path.join(here, 'pyvips', 'version.py'))
 
 from setuptools import setup, find_packages
 

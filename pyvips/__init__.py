@@ -7,13 +7,13 @@ import atexit
 
 from cffi import FFI
 
+# pull in our module version number, see also setup.py
+from version import __version__
+
 logger = logging.getLogger(__name__)
 
 # user code can override this null handler
 logger.addHandler(logging.NullHandler())
-
-# this is read out into setup.py
-__version__ = '2.0.2'
 
 ffi = FFI()
 
@@ -127,5 +127,5 @@ from .vimage import Image
 
 __all__ = [
     'Error', 'Image', 'Operation', 'GValue', 'Interpolate', 'GObject',
-    'VipsObject', 'type_find', 'type_name', 'version'
+    'VipsObject', 'type_find', 'type_name', 'version', '__version__'
 ]
