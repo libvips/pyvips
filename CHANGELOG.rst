@@ -3,7 +3,9 @@
 ## Version 2.0.2 (26 August 2017)
 
 * support `pyvips.__version__`
-* add `pyvips.version()` to get libvips version number
+* add `version()` to get libvips version number
+* add `cache_set_max()`, `cache_set_max_mem()`, `cache_set_max_files()`, 
+  `cache_set_trace()`
 
 ## Version 2.0.1 (23 August 2017)
 

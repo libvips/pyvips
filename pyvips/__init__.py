@@ -118,14 +118,15 @@ logger.debug('')
 
 from .enums import *
 from .base import *
-from .gobject import GObject
-from .gvalue import GValue
-from .vobject import VipsObject
-from .vinterpolate import Interpolate
-from .voperation import Operation
-from .vimage import Image
+from .gobject import *
+from .gvalue import *
+from .vobject import *
+from .vinterpolate import *
+from .voperation import *
+from .vimage import *
 
 __all__ = [
     'Error', 'Image', 'Operation', 'GValue', 'Interpolate', 'GObject',
-    'VipsObject', 'type_find', 'type_name', 'version', '__version__'
+    'VipsObject', 'type_find', 'type_name', 'version', '__version__',
+    'cache_set_max', 'cache_set_max_mem', 'cache_set_max_files'
 ]

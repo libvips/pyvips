@@ -31,6 +31,11 @@ ffi.cdef('''
 
     int vips_operation_get_flags (VipsOperation* operation);
 
+    void vips_cache_set_max (int max);
+    void vips_cache_set_max_mem (size_t max_mem);
+    void vips_cache_set_max_files (int max_files);
+    void vips_cache_set_trace (int trace);
+
 ''')
 
 # values for VipsArgumentFlags
@@ -503,4 +508,28 @@ class Operation(pyvips.VipsObject):
             print('   ' + docstr)
 
 
-__all__ = ['Operation']
+def cache_set_max(mx):
+    """Set the maximum number of operations libvips will cache."""
+    vips_lib.vips_cache_set_max(mx)
+
+
+def cache_set_max_mem(mx):
+    """Limit the operation cache by memory use."""
+    vips_lib.vips_cache_set_max_mem(mx)
+
+
+def cache_set_max_files(mx):
+    """Limit the operation cache by number of open files."""
+    vips_lib.vips_cache_set_max_files(mx)
+
+
+def cache_set_trace(trace):
+    """Turn on libvips cache tracing."""
+    vips_lib.vips_cache_set_trace(trace)
+
+
+__all__ = [
+    'Operation', 
+    'cache_set_max', 'cache_set_max_mem', 'cache_set_max_files', 
+    'cache_set_trace'
+]
