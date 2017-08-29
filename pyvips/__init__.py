@@ -86,15 +86,30 @@ class GLogLevelFlags(object):
     LEVEL_INFO              = 1 << 6
     LEVEL_DEBUG             = 1 << 7
 
+    LEVEL_TO_LOGGER = {
+        LEVEL_DEBUG : 10,
+        LEVEL_INFO : 20,
+        LEVEL_MESSAGE : 20,
+        LEVEL_WARNING : 30,
+        LEVEL_ERROR : 40,
+        LEVEL_CRITICAL : 50,
+    }
+
 def _log_handler(domain, level, message, user_data):
     if level == GLogLevelFlags.LEVEL_WARNING: 
-        logger.warning('{0}: {1}'.format(_to_string(ffi.string(domain)), 
-                                         _to_string(ffi.string(message))))
+        logger.log(LEVEL_TO_LOGGER[level], 
+                   '{0}: {1}'.format(_to_string(ffi.string(domain)), 
+                                     _to_string(ffi.string(message))))
 
 # keep a ref to the cb to stop it being GCd
 _log_handler_cb = ffi.callback('GLogFunc', _log_handler)
 _log_handler_id = glib_lib.g_log_set_handler(_to_bytes('VIPS'), 
+                           GLogLevelFlags.LEVEL_DEBUG | 
+                           GLogLevelFlags.LEVEL_INFO | 
+                           GLogLevelFlags.LEVEL_MESSAGE | 
                            GLogLevelFlags.LEVEL_WARNING | 
+                           GLogLevelFlags.LEVEL_CRITICAL | 
+                           GLogLevelFlags.LEVEL_ERROR | 
                            GLogLevelFlags.FLAG_FATAL | 
                            GLogLevelFlags.FLAG_RECURSION,
                            _log_handler_cb, ffi.NULL)
