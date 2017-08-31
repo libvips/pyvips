@@ -36,7 +36,9 @@
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
     <link rel="top" title="pyvips 2.0.1 documentation" href="../../index.html"/>
-        <link rel="up" title="Module code" href="../index.html"/> 
+        <link rel="up" title="Module code" href="../index.html"/>
+    <link href="../../_static/style.css" rel="stylesheet" type="text/css">
+
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -201,6 +203,11 @@
 <span class="s1">    void vips_object_unref_outputs (VipsOperation* operation);</span>
 
 <span class="s1">    int vips_operation_get_flags (VipsOperation* operation);</span>
+
+<span class="s1">    void vips_cache_set_max (int max);</span>
+<span class="s1">    void vips_cache_set_max_mem (size_t max_mem);</span>
+<span class="s1">    void vips_cache_set_max_files (int max_files);</span>
+<span class="s1">    void vips_cache_set_trace (int trace);</span>
 
 <span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
 
@@ -630,7 +637,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c1"># generate list of all nicknames which we can generate docstrings for</span>
+        <span class="c1"># generate list of all nicknames we can generate docstrings for</span>
 
         <span class="n">all_nicknames</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -656,17 +663,19 @@
         <span class="n">all_nicknames</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">all_nicknames</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude</span><span class="p">]</span>
 
         <span class="c1"># Output summary table</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;.. class:: pyvips.Image&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;   .. rubric:: Methods&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;   .. autosummary::&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;      :nosignatures:&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;.. autosummary::&#39;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;   :nosignatures:&#39;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">nickname</span> <span class="ow">in</span> <span class="n">all_nicknames</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;   ~pyvips.Image.</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nickname</span><span class="p">))</span>
-        <span class="nb">print</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;      ~</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nickname</span><span class="p">))</span>
 
         <span class="c1"># Output docs</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;.. class:: pyvips.Image</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">nickname</span> <span class="ow">in</span> <span class="n">all_nicknames</span><span class="p">:</span>
             <span class="n">docstr</span> <span class="o">=</span> <span class="n">Operation</span><span class="o">.</span><span class="n">generate_sphinx</span><span class="p">(</span><span class="n">nickname</span><span class="p">)</span>
@@ -674,7 +683,31 @@
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;   &#39;</span> <span class="o">+</span> <span class="n">docstr</span><span class="p">)</span></div></div>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Operation&#39;</span><span class="p">]</span>
+<div class="viewcode-block" id="cache_set_max"><a class="viewcode-back" href="../../voperation.html#pyvips.voperation.cache_set_max">[docs]</a><span class="k">def</span> <span class="nf">cache_set_max</span><span class="p">(</span><span class="n">mx</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Set the maximum number of operations libvips will cache.&quot;&quot;&quot;</span>
+    <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_cache_set_max</span><span class="p">(</span><span class="n">mx</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="cache_set_max_mem"><a class="viewcode-back" href="../../voperation.html#pyvips.voperation.cache_set_max_mem">[docs]</a><span class="k">def</span> <span class="nf">cache_set_max_mem</span><span class="p">(</span><span class="n">mx</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Limit the operation cache by memory use.&quot;&quot;&quot;</span>
+    <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_cache_set_max_mem</span><span class="p">(</span><span class="n">mx</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="cache_set_max_files"><a class="viewcode-back" href="../../voperation.html#pyvips.voperation.cache_set_max_files">[docs]</a><span class="k">def</span> <span class="nf">cache_set_max_files</span><span class="p">(</span><span class="n">mx</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Limit the operation cache by number of open files.&quot;&quot;&quot;</span>
+    <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_cache_set_max_files</span><span class="p">(</span><span class="n">mx</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="cache_set_trace"><a class="viewcode-back" href="../../voperation.html#pyvips.voperation.cache_set_trace">[docs]</a><span class="k">def</span> <span class="nf">cache_set_trace</span><span class="p">(</span><span class="n">trace</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Turn on libvips cache tracing.&quot;&quot;&quot;</span>
+    <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_cache_set_trace</span><span class="p">(</span><span class="n">trace</span><span class="p">)</span></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;Operation&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;cache_set_max&#39;</span><span class="p">,</span> <span class="s1">&#39;cache_set_max_mem&#39;</span><span class="p">,</span> <span class="s1">&#39;cache_set_max_files&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;cache_set_trace&#39;</span>
+<span class="p">]</span>
 </pre></div>
 
            </div>
@@ -722,6 +755,7 @@
       <script type="text/javascript" src="../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../_static/doctools.js"></script>
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="../../../../_static/collapse.js"></script>
 
   
 

@@ -126,7 +126,7 @@ Local user install::
 
 	$ pip install --user -e .
 	$ pip3 install --user -e .
-	$ pypy -m pip --user -e . 
+	$ pypy -m pip --user -e .
 
 Run test suite::
 
@@ -148,6 +148,10 @@ Regenerate autodocs::
           python -c "import pyvips; pyvips.Operation.generate_sphinx_all()" > x 
 
 And copy-paste ``x`` into the obvious place in ``doc/vimage.rst``.
+
+Update version number::
+
+        $ vi pyvips/version.py
 
 Update pypi package::
 

@@ -36,7 +36,9 @@
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
     <link rel="top" title="pyvips 2.0.1 documentation" href="../../index.html"/>
-        <link rel="up" title="Module code" href="../index.html"/> 
+        <link rel="up" title="Module code" href="../index.html"/>
+    <link href="../../_static/style.css" rel="stylesheet" type="text/css">
+
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -172,7 +174,7 @@
 <span></span><span class="c1"># basic defs and link to ffi</span>
 
 
-<span class="kn">from</span> <span class="nn">pyvips</span> <span class="k">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="p">,</span> <span class="n">_to_string</span><span class="p">,</span> <span class="n">_to_bytes</span>
+<span class="kn">from</span> <span class="nn">pyvips</span> <span class="k">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="p">,</span> <span class="n">_to_string</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">,</span> <span class="n">Error</span>
 
 <span class="n">ffi</span><span class="o">.</span><span class="n">cdef</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">    typedef struct _VipsImage VipsImage;</span>
@@ -195,6 +197,8 @@
 <span class="s1">    typedef void* (*VipsTypeMap2Fn) (GType type);</span>
 <span class="s1">    void* vips_type_map (GType base, VipsTypeMap2Fn fn);</span>
 
+<span class="s1">    int vips_version( int flag );</span>
+
 <span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
 
 
@@ -205,6 +209,28 @@
 <span class="sd">    Enabling this option will make libvips run slightly more slowly.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_leak_set</span><span class="p">(</span><span class="n">leak</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="version"><a class="viewcode-back" href="../../base.html#pyvips.base.version">[docs]</a><span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="n">flag</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the major, minor or micro version number of the libvips library.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        flag (int): Pass flag 0 to get the major version number, flag 1 to</span>
+<span class="sd">            get minor, flag 2 to get micro.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The version number,</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        :class:`.Error`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">value</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_version</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to get library version&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">value</span></div>
 
 
 <span class="k">def</span> <span class="nf">path_filename7</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
@@ -252,6 +278,7 @@
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;leak_set&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;version&#39;</span><span class="p">,</span>
     <span class="s1">&#39;path_filename7&#39;</span><span class="p">,</span>
     <span class="s1">&#39;path_mode7&#39;</span><span class="p">,</span>
     <span class="s1">&#39;type_find&#39;</span><span class="p">,</span>
@@ -307,6 +334,7 @@
       <script type="text/javascript" src="../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../_static/doctools.js"></script>
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="../../../../_static/collapse.js"></script>
 
   
 

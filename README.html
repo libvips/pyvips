@@ -37,7 +37,9 @@
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="pyvips 2.0.1 documentation" href="index.html"/>
         <link rel="next" title="Introduction" href="intro.html"/>
-        <link rel="prev" title="pyvips – Image processing with libvips" href="index.html"/> 
+        <link rel="prev" title="pyvips – Image processing with libvips" href="index.html"/>
+    <link href="_static/style.css" rel="stylesheet" type="text/css">
+
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -298,6 +300,10 @@ $ pypy -m nose --logging-level=WARNING
 </pre></div>
 </div>
 <p>And copy-paste <code class="docutils literal"><span class="pre">x</span></code> into the obvious place in <code class="docutils literal"><span class="pre">doc/vimage.rst</span></code>.</p>
+<p>Update version number:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ vi pyvips/version.py
+</pre></div>
+</div>
 <p>Update pypi package:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ python setup.py bdist_wheel
 $ twine upload dist/*
@@ -361,6 +367,7 @@ $ twine upload dist/*
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="_static/collapse.js"></script>
 
   
 

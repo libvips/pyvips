@@ -37,7 +37,9 @@
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="pyvips 2.0.1 documentation" href="index.html"/>
         <link rel="next" title="Error" href="error.html"/>
-        <link rel="prev" title="Image" href="vimage.html"/> 
+        <link rel="prev" title="Image" href="vimage.html"/>
+    <link href="_static/style.css" rel="stylesheet" type="text/css">
+
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -179,6 +181,25 @@ Enabling this option will make libvips run slightly more slowly.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="pyvips.base.version">
+<code class="descclassname">pyvips.base.</code><code class="descname">version</code><span class="sig-paren">(</span><em>flag</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.base.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the major, minor or micro version number of the libvips library.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>flag</strong> (<em>int</em>) – Pass flag 0 to get the major version number, flag 1 to
+get minor, flag 2 to get micro.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The version number,</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="error.html#pyvips.error.Error" title="pyvips.error.Error"><code class="xref py py-class docutils literal"><span class="pre">Error</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="pyvips.base.type_find">
 <code class="descclassname">pyvips.base.</code><code class="descname">type_find</code><span class="sig-paren">(</span><em>basename</em>, <em>nickname</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#type_find"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.base.type_find" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the GType for a name.</p>
@@ -267,6 +288,7 @@ hierarchy are searched.</p>
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="_static/collapse.js"></script>
 
   
 
