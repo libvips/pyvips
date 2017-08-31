@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Introduction &mdash; pyvips 2.0.1 documentation</title>
+  <title>Introduction &mdash; pyvips 2.0.2 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pyvips 2.0.1 documentation" href="index.html"/>
+    <link rel="top" title="pyvips 2.0.2 documentation" href="index.html"/>
         <link rel="next" title="Image" href="vimage.html"/>
         <link rel="prev" title="README" href="README.html"/>
     <link href="_static/style.css" rel="stylesheet" type="text/css">
@@ -211,7 +211,7 @@ and saves it back to disc again:</p>
 this example, we will be accessing pixels top-to-bottom as we sweep through
 the image reading and writing, so <cite>sequential</cite> access mode is best for us.</p>
 <p>The default mode is <code class="docutils literal"><span class="pre">random</span></code> which allows for full random access to image
-pixels, but is slower and needs more memory. See <a class="reference internal" href="enums.html#pyvips.enums.Access" title="pyvips.enums.Access"><code class="xref py py-class docutils literal"><span class="pre">pyvips.enums.Access</span></code></a>
+pixels, but is slower and needs more memory. See <a class="reference internal" href="enums.html#pyvips.enums.Access" title="pyvips.enums.Access"><code class="xref py py-class docutils literal"><span class="pre">enums.Access</span></code></a>
 for full details on the various modes available.</p>
 <p>You can also load formatted images from memory, create images that
 wrap C-style memory arrays held as Python buffers, or make images from
@@ -235,7 +235,7 @@ double the middle band. For RGB images, that’s doubling green.</p>
 <p><a class="reference internal" href="vimage.html#pyvips.Image.new_from_array" title="pyvips.Image.new_from_array"><code class="xref py py-meth docutils literal"><span class="pre">new_from_array()</span></code></a> creates an image from an array constant. The
 scale is the amount to divide the image by after integer convolution.</p>
 <p>See the libvips API docs for <code class="docutils literal"><span class="pre">vips_conv()</span></code> (the operation
-invoked by <code class="xref py py-meth docutils literal"><span class="pre">conv()</span></code>) for details on the convolution operator. By
+invoked by <a class="reference internal" href="vimage.html#pyvips.Image.conv" title="pyvips.Image.conv"><code class="xref py py-meth docutils literal"><span class="pre">Image.conv()</span></code></a>) for details on the convolution operator. By
 default, it computes with a float mask, but <code class="docutils literal"><span class="pre">integer</span></code> is fine for this case,
 and is much faster.</p>
 <p>Finally:</p>
@@ -302,19 +302,19 @@ image formats.</p>
 <p><code class="docutils literal"><span class="pre">pyvips</span></code> adds a <a class="reference internal" href="vimage.html#pyvips.Image.__getattr__" title="pyvips.Image.__getattr__"><code class="xref py py-meth docutils literal"><span class="pre">__getattr__()</span></code></a> handler to <a class="reference internal" href="vimage.html#pyvips.Image" title="pyvips.Image"><code class="xref py py-class docutils literal"><span class="pre">Image</span></code></a>
 and to the Image metaclass, then uses it to look up vips operations. For
 example, the libvips operation <code class="docutils literal"><span class="pre">add</span></code>, which appears in C as <code class="docutils literal"><span class="pre">vips_add()</span></code>,
-appears in Python as <code class="xref py py-meth docutils literal"><span class="pre">add()</span></code>.</p>
+appears in Python as <a class="reference internal" href="vimage.html#pyvips.Image.add" title="pyvips.Image.add"><code class="xref py py-meth docutils literal"><span class="pre">Image.add()</span></code></a>.</p>
 <p>The operation’s list of required arguments is searched and the first input
 image is set to the value of <code class="docutils literal"><span class="pre">self</span></code>. Operations which do not take an input
-image, such as <code class="xref py py-meth docutils literal"><span class="pre">black()</span></code>, appear as class methods. The remainder of
-the arguments you supply in the function call are used to set the other
-required input arguments. Any trailing keyword arguments are used to set
-options on the operation.</p>
+image, such as <a class="reference internal" href="vimage.html#pyvips.Image.black" title="pyvips.Image.black"><code class="xref py py-meth docutils literal"><span class="pre">Image.black()</span></code></a>, appear as class methods. The
+remainder of the arguments you supply in the function call are used to set
+the other required input arguments. Any trailing keyword arguments are used
+to set options on the operation.</p>
 <p>The result is the required output argument if there is only one result,
 or an array of values if the operation produces several results. If the
 operation has optional output objects, they are returned as a final hash.</p>
-<p>For example, <code class="xref py py-meth docutils literal"><span class="pre">min()</span></code>, the vips operation that searches an image for
-the minimum value, has a large number of optional arguments. You can use it to
-find the minimum value like this:</p>
+<p>For example, <a class="reference internal" href="vimage.html#pyvips.Image.min" title="pyvips.Image.min"><code class="xref py py-meth docutils literal"><span class="pre">Image.min()</span></code></a>, the vips operation that searches an
+image for the minimum value, has a large number of optional arguments. You
+can use it to find the minimum value like this:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">min_value</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -342,17 +342,18 @@ chain them. For example, you can write:</p>
 also a full set of arithmetic operator overloads, see below.</p>
 <p>libvips types are automatically wrapped. The binding looks at the type
 of argument required by the operation and converts the value you supply,
-when it can. For example, <code class="xref py py-meth docutils literal"><span class="pre">linear()</span></code> takes a <code class="docutils literal"><span class="pre">VipsArrayDouble</span></code> as an
-argument for the set of constants to use for multiplication. You can supply
-this value as an integer, a float, or some kind of compound object and it
-will be converted for you. You can write:</p>
+when it can. For example, <a class="reference internal" href="vimage.html#pyvips.Image.linear" title="pyvips.Image.linear"><code class="xref py py-meth docutils literal"><span class="pre">Image.linear()</span></code></a> takes a
+<code class="docutils literal"><span class="pre">VipsArrayDouble</span></code> as an argument for the set of constants to use for
+multiplication. You can supply this value as an integer, a float, or some
+kind of compound object and it will be converted for you. You can write:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">result_image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 <span class="n">result_image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="mf">12.4</span><span class="p">,</span> <span class="mf">13.9</span><span class="p">)</span>
 <span class="n">result_image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">linear</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
 <span class="n">result_image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>And so on. A set of overloads are defined for <code class="xref py py-meth docutils literal"><span class="pre">linear()</span></code>, see below.</p>
+<p>And so on. A set of overloads are defined for <a class="reference internal" href="vimage.html#pyvips.Image.linear" title="pyvips.Image.linear"><code class="xref py py-meth docutils literal"><span class="pre">Image.linear()</span></code></a>,
+see below.</p>
 <p>It also does a couple of more ambitious conversions. It will automatically
 convert to and from the various vips types, like <code class="docutils literal"><span class="pre">VipsBlob</span></code> and
 <code class="docutils literal"><span class="pre">VipsArrayImage</span></code>. For example, you can read the ICC profile out of an
@@ -423,10 +424,10 @@ like <code class="docutils literal"><span class="pre">'uchar'</span></code>. The
 </div>
 <div class="section" id="draw-operations">
 <h2>Draw operations<a class="headerlink" href="#draw-operations" title="Permalink to this headline">¶</a></h2>
-<p>Paint operations like <code class="xref py py-meth docutils literal"><span class="pre">draw_circle()</span></code> and <code class="xref py py-meth docutils literal"><span class="pre">draw_line()</span></code>
-modify their input image. This makes them hard to use with the rest of
-libvips: you need to be very careful about the order in which operations
-execute or you can get nasty crashes.</p>
+<p>Paint operations like <a class="reference internal" href="vimage.html#pyvips.Image.draw_circle" title="pyvips.Image.draw_circle"><code class="xref py py-meth docutils literal"><span class="pre">Image.draw_circle()</span></code></a> and
+<a class="reference internal" href="vimage.html#pyvips.Image.draw_line" title="pyvips.Image.draw_line"><code class="xref py py-meth docutils literal"><span class="pre">Image.draw_line()</span></code></a> modify their input image. This makes them
+hard to use with the rest of libvips: you need to be very careful about
+the order in which operations execute or you can get nasty crashes.</p>
 <p>The wrapper spots operations of this type and makes a private copy of the
 image in memory before calling the operation. This stops crashes, but it does
 make it inefficient. If you draw 100 lines on an image, for example, you’ll
@@ -447,7 +448,8 @@ freely. For example, you can write:</p>
 <div class="section" id="expansions">
 <h2>Expansions<a class="headerlink" href="#expansions" title="Permalink to this headline">¶</a></h2>
 <p>Some vips operators take an enum to select an action, for example
-<code class="xref py py-meth docutils literal"><span class="pre">math()</span></code> can be used to calculate sine of every pixel like this:</p>
+<a class="reference internal" href="vimage.html#pyvips.Image.math" title="pyvips.Image.math"><code class="xref py py-meth docutils literal"><span class="pre">Image.math()</span></code></a> can be used to calculate sine of every pixel
+like this:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">result_image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">math</span><span class="p">(</span><span class="s1">&#39;sin&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -509,7 +511,7 @@ named after the enum value. So you can also write:</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'2.0.1',
+            VERSION:'2.0.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
