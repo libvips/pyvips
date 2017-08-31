@@ -1,0 +1,17 @@
+dl.staticmethod:before,
+dl.method:before {
+	position: absolute;
+	font-family: "FontAwesome";
+	content: '';
+	display: inline-block;
+	font-style: normal;
+	font-weight: normal;
+	line-height: 1;
+	text-decoration: inherit;
+	margin-left: -20px;
+}
+
+dl.staticmethod.collapsed:before,
+dl.method.collapsed:before {
+	content: '';
+} 

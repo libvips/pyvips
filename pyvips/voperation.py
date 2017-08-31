@@ -464,7 +464,7 @@ class Operation(pyvips.VipsObject):
 
         """
 
-        # generate list of all nicknames which we can generate docstrings for
+        # generate list of all nicknames we can generate docstrings for
 
         all_nicknames = []
 
@@ -490,17 +490,19 @@ class Operation(pyvips.VipsObject):
         all_nicknames = [x for x in all_nicknames if x not in exclude]
 
         # Output summary table
+        print('.. class:: pyvips.Image')
+        print('')
+        print('   .. rubric:: Methods')
+        print('')
+        print('   .. autosummary::')
+        print('      :nosignatures:')
+        print('')
 
-        print('.. autosummary::')
-        print('   :nosignatures:')
-        print()
         for nickname in all_nicknames:
-            print('   ~pyvips.Image.{0}'.format(nickname))
-        print()
+            print('      ~{0}'.format(nickname))
 
         # Output docs
 
-        print('.. class:: pyvips.Image\n')
         print()
         for nickname in all_nicknames:
             docstr = Operation.generate_sphinx(nickname)

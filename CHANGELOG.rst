@@ -7,6 +7,7 @@
 * add `cache_set_max()`, `cache_set_max_mem()`, `cache_set_max_files()`, 
   `cache_set_trace()`
 * all glib log levels sent to py logger
+* docs are collapsed for less scrolling [kleisauke]
 
 ## Version 2.0.1 (23 August 2017)
 
