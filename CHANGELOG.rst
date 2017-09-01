@@ -1,5 +1,9 @@
 # master 
 
+## Version 2.0.3 (1 September 2017)
+
+* better collapse for docs [kleisauke]
+
 ## Version 2.0.2 (26 August 2017)
 
 * support `pyvips.__version__`
