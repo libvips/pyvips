@@ -96,8 +96,9 @@
 <li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#metadata-and-attributes">Metadata and attributes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#numpy-and-pil">NumPy and PIL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#automatic-wrapping">Automatic wrapping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calling-libvips-operations">Calling libvips operations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#logging-and-warnings">Logging and warnings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#automatic-documentation">Automatic documentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#exceptions">Exceptions</a></li>
@@ -247,6 +248,41 @@ write any format supported by vips: the file type is set from the filename
 suffix. You can also write formatted images to memory, or dump
 image data to a C-style array in a Python buffer.</p>
 </div>
+<div class="section" id="metadata-and-attributes">
+<h2>Metadata and attributes<a class="headerlink" href="#metadata-and-attributes" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">pyvips</span></code> adds a <a class="reference internal" href="vimage.html#pyvips.Image.__getattr__" title="pyvips.Image.__getattr__"><code class="xref py py-meth docutils literal"><span class="pre">__getattr__()</span></code></a> handler to <a class="reference internal" href="vimage.html#pyvips.Image" title="pyvips.Image"><code class="xref py py-class docutils literal"><span class="pre">Image</span></code></a> and to
+the Image metaclass, then uses it to look up unknown names in libvips.</p>
+<p>Names are first checked against the set of properties that libvips
+keeps for images, see <a class="reference internal" href="vimage.html#pyvips.Image.width" title="pyvips.Image.width"><code class="xref py py-attr docutils literal"><span class="pre">width</span></code></a> and friends. If the name is not
+found there, <code class="docutils literal"><span class="pre">pyvips</span></code> searches the set of libvips operations, see the next
+section.</p>
+<p>As well as the core properties, you can read and write the metadata
+that libvips keeps for images with <a class="reference internal" href="vimage.html#pyvips.Image.get" title="pyvips.Image.get"><code class="xref py py-meth docutils literal"><span class="pre">Image.get()</span></code></a> and
+friends. For example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_file</span><span class="p">(</span><span class="s1">&#39;some-image.jpg&#39;</span><span class="p">)</span>
+<span class="n">ipct_string</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ipct-data&#39;</span><span class="p">)</span>
+<span class="n">exif_date_string</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;exif-ifd0-DateTime&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Use <code class="docutils literal"><span class="pre">vipsheader</span> <span class="pre">-a</span> <span class="pre">filename</span></code> at the command-line to see a summary of all the
+metadata libvips has for an image.</p>
+<p>libvips caches and shares images behind your back, so you can’t change an image
+unless you are certain you have the only reference to it.</p>
+<p>Set image properties, like <a class="reference internal" href="vimage.html#pyvips.Image.xres" title="pyvips.Image.xres"><code class="xref py py-attr docutils literal"><span class="pre">xres</span></code></a> with <a class="reference internal" href="vimage.html#pyvips.Image.copy" title="pyvips.Image.copy"><code class="xref py py-meth docutils literal"><span class="pre">Image.copy()</span></code></a>. For
+example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">new_image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">xres</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">yres</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now <code class="docutils literal"><span class="pre">new_image</span></code> is a private clone of <code class="docutils literal"><span class="pre">image</span></code> with <code class="docutils literal"><span class="pre">xres</span></code> and <code class="docutils literal"><span class="pre">yres</span></code>
+changed.</p>
+<p>Set image metadata with <a class="reference internal" href="vimage.html#pyvips.Image.set" title="pyvips.Image.set"><code class="xref py py-meth docutils literal"><span class="pre">Image.set()</span></code></a>. Use <a class="reference internal" href="vimage.html#pyvips.Image.copy" title="pyvips.Image.copy"><code class="xref py py-meth docutils literal"><span class="pre">Image.copy()</span></code></a> to make
+a private copy of the image first, for example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">new_image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;icc-profile-data&#39;</span><span class="p">,</span> <span class="n">new_profile</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now <code class="docutils literal"><span class="pre">new_image</span></code> is a clone of <code class="docutils literal"><span class="pre">image</span></code> with a new ICC profile attached to
+it.</p>
+</div>
 <div class="section" id="numpy-and-pil">
 <h2>NumPy and PIL<a class="headerlink" href="#numpy-and-pil" title="Permalink to this headline">¶</a></h2>
 <p>You can use <a class="reference internal" href="vimage.html#pyvips.Image.write_to_memory" title="pyvips.Image.write_to_memory"><code class="xref py py-meth docutils literal"><span class="pre">write_to_memory()</span></code></a> and <a class="reference internal" href="vimage.html#pyvips.Image.new_from_memory" title="pyvips.Image.new_from_memory"><code class="xref py py-meth docutils literal"><span class="pre">new_from_memory()</span></code></a> to pass
@@ -297,12 +333,11 @@ image formats.</p>
 </div>
 <p>To make a vips image that represents a numpy array.</p>
 </div>
-<div class="section" id="automatic-wrapping">
-<h2>Automatic wrapping<a class="headerlink" href="#automatic-wrapping" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal"><span class="pre">pyvips</span></code> adds a <a class="reference internal" href="vimage.html#pyvips.Image.__getattr__" title="pyvips.Image.__getattr__"><code class="xref py py-meth docutils literal"><span class="pre">__getattr__()</span></code></a> handler to <a class="reference internal" href="vimage.html#pyvips.Image" title="pyvips.Image"><code class="xref py py-class docutils literal"><span class="pre">Image</span></code></a>
-and to the Image metaclass, then uses it to look up vips operations. For
-example, the libvips operation <code class="docutils literal"><span class="pre">add</span></code>, which appears in C as <code class="docutils literal"><span class="pre">vips_add()</span></code>,
-appears in Python as <a class="reference internal" href="vimage.html#pyvips.Image.add" title="pyvips.Image.add"><code class="xref py py-meth docutils literal"><span class="pre">Image.add()</span></code></a>.</p>
+<div class="section" id="calling-libvips-operations">
+<h2>Calling libvips operations<a class="headerlink" href="#calling-libvips-operations" title="Permalink to this headline">¶</a></h2>
+<p>Unknown names which are not image properties are looked up as libvips
+operations. For example, the libvips operation <code class="docutils literal"><span class="pre">add</span></code>, which appears in C as
+<code class="docutils literal"><span class="pre">vips_add()</span></code>, appears in Python as <a class="reference internal" href="vimage.html#pyvips.Image.add" title="pyvips.Image.add"><code class="xref py py-meth docutils literal"><span class="pre">Image.add()</span></code></a>.</p>
 <p>The operation’s list of required arguments is searched and the first input
 image is set to the value of <code class="docutils literal"><span class="pre">self</span></code>. Operations which do not take an input
 image, such as <a class="reference internal" href="vimage.html#pyvips.Image.black" title="pyvips.Image.black"><code class="xref py py-meth docutils literal"><span class="pre">Image.black()</span></code></a>, appear as class methods. The
@@ -354,14 +389,6 @@ kind of compound object and it will be converted for you. You can write:</p>
 </div>
 <p>And so on. A set of overloads are defined for <a class="reference internal" href="vimage.html#pyvips.Image.linear" title="pyvips.Image.linear"><code class="xref py py-meth docutils literal"><span class="pre">Image.linear()</span></code></a>,
 see below.</p>
-<p>It also does a couple of more ambitious conversions. It will automatically
-convert to and from the various vips types, like <code class="docutils literal"><span class="pre">VipsBlob</span></code> and
-<code class="docutils literal"><span class="pre">VipsArrayImage</span></code>. For example, you can read the ICC profile out of an
-image like this:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">profile</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;icc-profile-data&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>and profile will be a byte string.</p>
 <p>If an operation takes several input images, you can use a constant for all but
 one of them and the wrapper will expand the constant to an image for you. For
 example, <a class="reference internal" href="vimage.html#pyvips.Image.ifthenelse" title="pyvips.Image.ifthenelse"><code class="xref py py-meth docutils literal"><span class="pre">ifthenelse()</span></code></a> uses a condition image to pick pixels
