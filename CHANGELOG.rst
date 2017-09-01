@@ -3,6 +3,7 @@
 ## Version 2.0.3 (1 September 2017)
 
 * better collapse for docs [kleisauke]
+* add `get_fields()`
 
 ## Version 2.0.2 (26 August 2017)
 

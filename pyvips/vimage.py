@@ -33,6 +33,7 @@ ffi.cdef('''
         const char* name, GValue* value_copy);
     void vips_image_set (VipsImage* image, const char* name, GValue* value);
     int vips_image_remove (VipsImage* image, const char* name);
+    char** vips_image_get_fields (VipsImage* image);
 
     char* vips_filename_get_filename (const char* vips_filename);
     char* vips_filename_get_options (const char* vips_filename);
@@ -658,6 +659,26 @@ class Image(pyvips.VipsObject):
             raise Error('unable to get {0}'.format(name))
 
         return gv.get()
+
+    def get_fields(self):
+        """Get a list of all the metadata fields on an image.
+
+        Returns:
+            [string]
+
+        """
+
+        array = vips_lib.vips_image_get_fields(self.pointer)
+        names = []
+        i = 0
+        while array[i] != ffi.NULL:
+            name = _to_string(ffi.string(array[i]))
+            names.append(name)
+            glib_lib.g_free(array[i])
+            i += 1
+        glib_lib.g_free(array)
+
+        return names
 
     def set_type(self, gtype, name, value):
         """Set the type and value of an item of metadata.
