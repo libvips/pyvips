@@ -188,6 +188,7 @@ class TestForeign(PyvipsTester):
         if pyvips.type_find("VipsForeign", "pngload") == 0 or \
                 not os.path.isfile(PNG_FILE):
             print("no png support, skipping test")
+            return
 
         def png_valid(self, im):
             a = im(10, 10)

@@ -6,7 +6,7 @@ import numbers
 
 import pyvips
 from pyvips import ffi, glib_lib, vips_lib, Error, _to_bytes, \
-    _to_string, GValue
+    _to_string, GValue, version
 
 ffi.cdef('''
     typedef struct _VipsImage {
@@ -629,6 +629,13 @@ class Image(pyvips.VipsObject):
 
         """
 
+        # on libvips before 8.5, property types must be fetched separately,
+        # since built-in enums were reported as ints
+        if pyvips.version(0) == 8 and pyvips.version(1) < 5:
+            gtype = super(Image, self).get_typeof(name)
+            if gtype != 0:
+                return gtype
+
         return vips_lib.vips_image_get_typeof(self.pointer, _to_bytes(name))
 
     def get(self, name):
@@ -650,6 +657,13 @@ class Image(pyvips.VipsObject):
             :class:`.Error`
 
         """
+
+        # with old libvips, we must fetch properties (as opposed to
+        # metadata) via VipsObject
+        if pyvips.version(0) == 8 and pyvips.version(1) < 5:
+            gtype = super(Image, self).get_typeof(name)
+            if gtype != 0:
+                return super(Image, self).get(name)
 
         gv = GValue()
         result = vips_lib.vips_image_get(self.pointer, _to_bytes(name),

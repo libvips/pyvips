@@ -416,6 +416,10 @@ class TestCreate(PyvipsTester):
         self.assertEqual(im.format, pyvips.BandFormat.FLOAT)
 
     def test_worley(self):
+        if pyvips.type_find("VipsOperation", "worley") == 0:
+            print("no worley, skipping test")
+            return
+
         im = pyvips.Image.worley(512, 512)
         self.assertEqual(im.width, 512)
         self.assertEqual(im.height, 512)
@@ -423,6 +427,10 @@ class TestCreate(PyvipsTester):
         self.assertEqual(im.format, pyvips.BandFormat.FLOAT)
 
     def test_perlin(self):
+        if pyvips.type_find("VipsOperation", "perlin") == 0:
+            print("no perlin, skipping test")
+            return
+
         im = pyvips.Image.perlin(512, 512)
         self.assertEqual(im.width, 512)
         self.assertEqual(im.height, 512)

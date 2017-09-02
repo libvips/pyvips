@@ -268,6 +268,10 @@ class TestConversion(PyvipsTester):
             self.assertAlmostEqualObjects(pixel, [2, 3, 4])
 
     def test_smartcrop(self):
+        if pyvips.type_find("VipsOperation", "smartcrop") == 0:
+            print("no smartcrop, skipping test")
+            return
+
         test = self.image.smartcrop(100, 100)
         self.assertEqual(test.width, 100)
         self.assertEqual(test.height, 100)
