@@ -6,7 +6,7 @@ import numbers
 
 import pyvips
 from pyvips import ffi, glib_lib, vips_lib, Error, _to_bytes, \
-    _to_string, GValue, version
+    _to_string, GValue
 
 ffi.cdef('''
     typedef struct _VipsImage {

@@ -96,7 +96,7 @@ friends. For example::
     exif_date_string = image.get('exif-ifd0-DateTime')
 
 Use :meth:`.get_fields` to get a list of all the field names you can use with
-:meth:`.get`.
+:meth:`.Image.get`.
 
 libvips caches and shares images behind your back, so you can't change an image
 unless you are certain you have the only reference to it. 
