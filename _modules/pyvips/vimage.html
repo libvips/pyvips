@@ -206,6 +206,7 @@
 <span class="s1">        const char* name, GValue* value_copy);</span>
 <span class="s1">    void vips_image_set (VipsImage* image, const char* name, GValue* value);</span>
 <span class="s1">    int vips_image_remove (VipsImage* image, const char* name);</span>
+<span class="s1">    char** vips_image_get_fields (VipsImage* image);</span>
 
 <span class="s1">    char* vips_filename_get_filename (const char* vips_filename);</span>
 <span class="s1">    char* vips_filename_get_options (const char* vips_filename);</span>
@@ -802,6 +803,13 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="c1"># on libvips before 8.5, property types must be fetched separately,</span>
+        <span class="c1"># since built-in enums were reported as ints</span>
+        <span class="k">if</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">version</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">8</span> <span class="ow">and</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">version</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">gtype</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Image</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">gtype</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">gtype</span>
+
         <span class="k">return</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_get_typeof</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="Image.get"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
@@ -824,6 +832,13 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="c1"># with old libvips, we must fetch properties (as opposed to</span>
+        <span class="c1"># metadata) via VipsObject</span>
+        <span class="k">if</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">version</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">8</span> <span class="ow">and</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">version</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">gtype</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Image</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">gtype</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">Image</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
         <span class="n">gv</span> <span class="o">=</span> <span class="n">GValue</span><span class="p">()</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
                                          <span class="n">gv</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span>
@@ -831,6 +846,26 @@
             <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to get </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">gv</span><span class="o">.</span><span class="n">get</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Image.get_fields"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.get_fields">[docs]</a>    <span class="k">def</span> <span class="nf">get_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get a list of all the metadata fields on an image.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            [string]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">array</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_get_fields</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+            <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">glib_lib</span><span class="o">.</span><span class="n">g_free</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">glib_lib</span><span class="o">.</span><span class="n">g_free</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">names</span></div>
 
 <div class="viewcode-block" id="Image.set_type"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.set_type">[docs]</a>    <span class="k">def</span> <span class="nf">set_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gtype</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set the type and value of an item of metadata.</span>

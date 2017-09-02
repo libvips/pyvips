@@ -264,8 +264,8 @@ friends. For example:</p>
 <span class="n">exif_date_string</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;exif-ifd0-DateTime&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Use <code class="docutils literal"><span class="pre">vipsheader</span> <span class="pre">-a</span> <span class="pre">filename</span></code> at the command-line to see a summary of all the
-metadata libvips has for an image.</p>
+<p>Use <a class="reference internal" href="vimage.html#pyvips.Image.get_fields" title="pyvips.Image.get_fields"><code class="xref py py-meth docutils literal"><span class="pre">get_fields()</span></code></a> to get a list of all the field names you can use with
+<a class="reference internal" href="vimage.html#pyvips.Image.get" title="pyvips.Image.get"><code class="xref py py-meth docutils literal"><span class="pre">Image.get()</span></code></a>.</p>
 <p>libvips caches and shares images behind your back, so you can’t change an image
 unless you are certain you have the only reference to it.</p>
 <p>Set image properties, like <a class="reference internal" href="vimage.html#pyvips.Image.xres" title="pyvips.Image.xres"><code class="xref py py-attr docutils literal"><span class="pre">xres</span></code></a> with <a class="reference internal" href="vimage.html#pyvips.Image.copy" title="pyvips.Image.copy"><code class="xref py py-meth docutils literal"><span class="pre">Image.copy()</span></code></a>. For
