@@ -1,35 +1,20 @@
-function collapse_dd() {
-    if ($(this).hasClass('collapsed')) {
-        $(this).removeClass('collapsed');
-        $(this).children('dd').show('fast');
-    } else {
-        $(this).addClass('collapsed');
-        $(this).children('dd').hide('fast');
-    }
-    return false;
-}
 $(document).ready(function() {
-    $('dl.staticmethod > dd').hide();
-    $('dl.staticmethod').addClass('collapsed').click(collapse_dd);
-    $('dl.method > dd').hide();
-    $('dl.method').addClass('collapsed').click(collapse_dd);
+    // Default to collapsed
+    $('dl.staticmethod, dl.method').addClass('collapsed')
 
-    $('a').click(function(e) {
-        e.stopPropagation();
+    $('dl.staticmethod > dd > p:first-child, dl.method > dd > p:first-child').click(function(e) {
+        $(this).parents().eq(1).toggleClass('collapsed');
     });
-	
+
     // Attaching the hashchange event listener
-    $(window).on('hashchange', function () {
+    $(window).on('hashchange', function() {
         base = window.location.hash.replace(/\./g, '\\.');
         base = $(base);
-        base.removeClass('collapsed');
-        base.parents('dd').show();
-        base.parents('dl').removeClass('collapsed');
-        base.siblings('dd').show();
+        base.parent().removeClass('collapsed');
     });
 
-    // Manually tiggering it if we have hash part in URL
+    // Manually triggering it if we have hash part in URL
     if (window.location.hash) {
         $(window).trigger('hashchange')
     }
-}); 
+});

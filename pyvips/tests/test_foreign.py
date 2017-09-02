@@ -424,16 +424,19 @@ class TestForeign(PyvipsTester):
             p2 = im.get_value("icc-profile-data")
             self.assertEqual(p1, p2)
 
-            # add tests for exif, xmp, exif
+            # add tests for exif, xmp, ipct
             # the exif test will need us to be able to walk the header,
             # we can't just check exif-data
 
             # we can test that exif changes change the output of webpsave
-            x = self.colour.copy()
-            x.set_value("orientation", 6)
-            buf = x.webpsave_buffer()
-            y = pyvips.Image.new_from_buffer(buf, "")
-            self.assertEqual(y.get_value("orientation"), 6)
+            # first make sure we have exif support
+            z = pyvips.Image.new_from_file(JPEG_FILE)
+            if z.get_typeof("exif-ifd0-Orientation") != 0:
+                x = self.colour.copy()
+                x.set_value("orientation", 6)
+                buf = x.webpsave_buffer()
+                y = pyvips.Image.new_from_buffer(buf, "")
+                self.assertEqual(y.get_value("orientation"), 6)
 
     def test_analyzeload(self):
         if pyvips.type_find("VipsForeign", "analyzeload") == 0 or \

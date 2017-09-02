@@ -1,17 +1,42 @@
-dl.staticmethod:before,
-dl.method:before {
-	position: absolute;
-	font-family: "FontAwesome";
-	content: '';
-	display: inline-block;
-	font-style: normal;
-	font-weight: normal;
-	line-height: 1;
-	text-decoration: inherit;
-	margin-left: -20px;
+dl.staticmethod.collapsed > dd > p:not(:first-child),
+dl.staticmethod.collapsed > dd > div,
+dl.staticmethod.collapsed > dd > dl,
+dl.staticmethod.collapsed > dd > table,
+dl.method.collapsed > dd > p:not(:first-child),
+dl.method.collapsed > dd > div,
+dl.method.collapsed > dd > dl,
+dl.method.collapsed > dd > table {
+    display: none;
 }
 
-dl.staticmethod.collapsed:before,
-dl.method.collapsed:before {
-	content: '';
-} 
+dl.staticmethod > dd > p:not(:first-child),
+dl.staticmethod > dd > div,
+dl.staticmethod > dd > dl,
+dl.staticmethod > dd > table,
+dl.method > dd > p:not(:first-child),
+dl.method > dd > div,
+dl.method > dd > dl,
+dl.method > dd > table {
+    display: block;
+}
+
+dl.staticmethod > dd > p:not(:only-child):first-child:before,
+dl.method > dd > p:not(:only-child):first-child:before {
+    position: absolute;
+    font-family: "FontAwesome";
+    content: '';
+    display: inline-block;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    text-decoration: inherit;
+    margin-top: 5px;
+    margin-left: -20px;
+    white-space: pre;
+    cursor: pointer;
+}
+
+dl.staticmethod.collapsed > dd > p:not(:only-child):first-child:before,
+dl.method.collapsed > dd > p:not(:only-child):first-child:before {
+    content: '';
+}

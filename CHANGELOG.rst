@@ -3,6 +3,8 @@
 ## Version 2.0.3 (2 September 2017)
 
 * fix get() with old libvips
+* better collapse for docs [kleisauke]
+* add `get_fields()`
 
 ## Version 2.0.2 (26 August 2017)
 

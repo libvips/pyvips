@@ -76,6 +76,47 @@ write any format supported by vips: the file type is set from the filename
 suffix. You can also write formatted images to memory, or dump
 image data to a C-style array in a Python buffer.
 
+Metadata and attributes
+-----------------------
+
+``pyvips`` adds a :meth:`.__getattr__` handler to :class:`.Image` and to
+the Image metaclass, then uses it to look up unknown names in libvips.
+
+Names are first checked against the set of properties that libvips
+keeps for images, see :attr:`.width` and friends. If the name is not 
+found there, ``pyvips`` searches the set of libvips operations, see the next 
+section.
+
+As well as the core properties, you can read and write the metadata
+that libvips keeps for images with :meth:`.Image.get` and
+friends. For example::
+
+    image = pyvips.Image.new_from_file('some-image.jpg')
+    ipct_string = image.get('ipct-data')
+    exif_date_string = image.get('exif-ifd0-DateTime')
+
+Use :meth:`.get_fields` to get a list of all the field names you can use with
+:meth:`.get`.
+
+libvips caches and shares images behind your back, so you can't change an image
+unless you are certain you have the only reference to it. 
+
+Set image properties, like :attr:`.xres` with :meth:`.Image.copy`. For
+example::
+
+        new_image = image.copy(xres=12, yres=13)
+
+Now ``new_image`` is a private clone of ``image`` with ``xres`` and ``yres``
+changed.
+
+Set image metadata with :meth:`.Image.set`. Use :meth:`.Image.copy` to make
+a private copy of the image first, for example::
+
+        new_image = image.copy().set('icc-profile-data', new_profile)
+
+Now ``new_image`` is a clone of ``image`` with a new ICC profile attached to
+it. 
+
 NumPy and PIL
 -------------
 
@@ -128,13 +169,12 @@ Going in the other direction, you can write::
 
 To make a vips image that represents a numpy array.
 
-Automatic wrapping
-------------------
+Calling libvips operations
+--------------------------
 
-``pyvips`` adds a :meth:`.__getattr__` handler to :class:`.Image`
-and to the Image metaclass, then uses it to look up vips operations. For
-example, the libvips operation ``add``, which appears in C as ``vips_add()``,
-appears in Python as :meth:`.Image.add`.
+Unknown names which are not image properties are looked up as libvips
+operations. For example, the libvips operation ``add``, which appears in C as
+``vips_add()``, appears in Python as :meth:`.Image.add`.
 
 The operation's list of required arguments is searched and the first input
 image is set to the value of ``self``. Operations which do not take an input
@@ -192,15 +232,6 @@ kind of compound object and it will be converted for you. You can write::
 
 And so on. A set of overloads are defined for :meth:`.Image.linear`,
 see below.
-
-It also does a couple of more ambitious conversions. It will automatically
-convert to and from the various vips types, like ``VipsBlob`` and
-``VipsArrayImage``. For example, you can read the ICC profile out of an
-image like this::
-
-    profile = im.get('icc-profile-data')
-
-and profile will be a byte string.
 
 If an operation takes several input images, you can use a constant for all but
 one of them and the wrapper will expand the constant to an image for you. For
