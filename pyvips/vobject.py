@@ -107,8 +107,6 @@ class VipsObject(pyvips.GObject):
                                                    argument_instance)
 
         if result != 0:
-            # need to clear any error, this is horrible
-            Error('')
             return None
 
         return pspec[0]
@@ -124,10 +122,12 @@ class VipsObject(pyvips.GObject):
         #              str(self), name)
 
         pspec = self._get_pspec(name)
-        if pspec is not None:
-            return pspec.value_type
-        else:
+        if pspec is None:
+            # need to clear any error, this is horrible
+            Error('')
             return 0
+
+        return pspec.value_type
 
     def get_blurb(self, name):
         """Get the blurb for a GObject property."""
@@ -144,7 +144,10 @@ class VipsObject(pyvips.GObject):
 
         logger.debug('VipsObject.get: name = %s', name)
 
-        gtype = self.get_typeof(name)
+        pspec = self._get_pspec(name)
+        if pspec is None:
+            raise Error('Property not found.')
+        gtype = pspec.value_type
 
         gv = pyvips.GValue()
         gv.set_type(gtype)

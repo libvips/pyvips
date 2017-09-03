@@ -152,6 +152,7 @@ And copy-paste ``x`` into the obvious place in ``doc/vimage.rst``.
 Update version number::
 
         $ vi pyvips/version.py
+        $ vi doc/conf.py
 
 Update pypi package::
 

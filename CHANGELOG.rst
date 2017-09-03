@@ -1,5 +1,10 @@
 # master 
 
+## Version 2.0.4 (3 September 2017)
+
+* clear error log after failed get_typeof in get() workaround
+* more tests pass with older libvips
+
 ## Version 2.0.3 (2 September 2017)
 
 * fix get() with old libvips

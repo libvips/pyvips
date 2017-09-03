@@ -149,6 +149,9 @@ class TestResample(PyvipsTester):
         self.assertLess(abs(im.avg() - im2.avg()), 1)
 
     def test_thumbnail(self):
+        if not pyvips.at_least_libvips(8, 5):
+            return
+
         im = pyvips.Image.thumbnail(JPEG_FILE, 100)
 
         self.assertEqual(im.width, 100)

@@ -143,5 +143,6 @@ from .vimage import *
 __all__ = [
     'Error', 'Image', 'Operation', 'GValue', 'Interpolate', 'GObject',
     'VipsObject', 'type_find', 'type_name', 'version', '__version__',
+    'at_least_libvips',
     'cache_set_max', 'cache_set_max_mem', 'cache_set_max_files'
 ]

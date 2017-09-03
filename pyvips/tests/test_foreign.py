@@ -218,9 +218,10 @@ class TestForeign(PyvipsTester):
 
         self.file_loader("tiffload", TIF_FILE, tiff_valid)
         self.buffer_loader("tiffload_buffer", TIF_FILE, tiff_valid)
-        self.save_load_buffer("tiffsave_buffer",
-                              "tiffload_buffer",
-                              self.colour)
+        if pyvips.at_least_libvips(8, 5):
+            self.save_load_buffer("tiffsave_buffer",
+                                  "tiffload_buffer",
+                                  self.colour)
         self.save_load("%s.tif", self.mono)
         self.save_load("%s.tif", self.colour)
         self.save_load("%s.tif", self.cmyk)
@@ -277,40 +278,42 @@ class TestForeign(PyvipsTester):
         self.assertEqual(x1.width, x2.height)
         self.assertEqual(x1.height, x2.width)
 
-        x = pyvips.Image.new_from_file(OME_FILE)
-        self.assertEqual(x.width, 439)
-        self.assertEqual(x.height, 167)
-        page_height = x.height
+        # OME support in 8.5
+        if pyvips.at_least_libvips(8, 5):
+            x = pyvips.Image.new_from_file(OME_FILE)
+            self.assertEqual(x.width, 439)
+            self.assertEqual(x.height, 167)
+            page_height = x.height
 
-        x = pyvips.Image.new_from_file(OME_FILE, n=-1)
-        self.assertEqual(x.width, 439)
-        self.assertEqual(x.height, page_height * 15)
+            x = pyvips.Image.new_from_file(OME_FILE, n=-1)
+            self.assertEqual(x.width, 439)
+            self.assertEqual(x.height, page_height * 15)
 
-        x = pyvips.Image.new_from_file(OME_FILE, page=1, n=-1)
-        self.assertEqual(x.width, 439)
-        self.assertEqual(x.height, page_height * 14)
+            x = pyvips.Image.new_from_file(OME_FILE, page=1, n=-1)
+            self.assertEqual(x.width, 439)
+            self.assertEqual(x.height, page_height * 14)
 
-        x = pyvips.Image.new_from_file(OME_FILE, page=1, n=2)
-        self.assertEqual(x.width, 439)
-        self.assertEqual(x.height, page_height * 2)
+            x = pyvips.Image.new_from_file(OME_FILE, page=1, n=2)
+            self.assertEqual(x.width, 439)
+            self.assertEqual(x.height, page_height * 2)
 
-        x = pyvips.Image.new_from_file(OME_FILE, n=-1)
-        self.assertEqual(x(0, 166)[0], 96)
-        self.assertEqual(x(0, 167)[0], 0)
-        self.assertEqual(x(0, 168)[0], 1)
+            x = pyvips.Image.new_from_file(OME_FILE, n=-1)
+            self.assertEqual(x(0, 166)[0], 96)
+            self.assertEqual(x(0, 167)[0], 0)
+            self.assertEqual(x(0, 168)[0], 1)
 
-        filename = temp_filename(self.tempdir, '.tif')
-        x.write_to_file(filename)
+            filename = temp_filename(self.tempdir, '.tif')
+            x.write_to_file(filename)
 
-        x = pyvips.Image.new_from_file(filename, n=-1)
-        self.assertEqual(x.width, 439)
-        self.assertEqual(x.height, page_height * 15)
-        self.assertEqual(x(0, 166)[0], 96)
-        self.assertEqual(x(0, 167)[0], 0)
-        self.assertEqual(x(0, 168)[0], 1)
+            x = pyvips.Image.new_from_file(filename, n=-1)
+            self.assertEqual(x.width, 439)
+            self.assertEqual(x.height, page_height * 15)
+            self.assertEqual(x(0, 166)[0], 96)
+            self.assertEqual(x(0, 167)[0], 0)
+            self.assertEqual(x(0, 168)[0], 1)
 
         # pyr save to buffer added in 8.6
-        if pyvips.version(0) > 8 or pyvips.version(1) >= 6:
+        if pyvips.at_least_libvips(8, 6):
             x = pyvips.Image.new_from_file(TIF_FILE)
             buf = x.tiffsave_buffer(tile=True, pyramid=True)
             filename = temp_filename(self.tempdir, '.tif')
@@ -368,14 +371,16 @@ class TestForeign(PyvipsTester):
         self.assertEqual(im.height, height * 5)
 
         # page/n let you pick a range of pages
-        im = pyvips.Image.magickload(GIF_ANIM_FILE)
-        width = im.width
-        height = im.height
-        im = pyvips.Image.magickload(GIF_ANIM_FILE, page=1, n=2)
-        self.assertEqual(im.width, width)
-        self.assertEqual(im.height, height * 2)
-        page_height = im.get_value("page-height")
-        self.assertEqual(page_height, height)
+        # 'n' param added in 8.5
+        if pyvips.at_least_libvips(8, 5):
+            im = pyvips.Image.magickload(GIF_ANIM_FILE)
+            width = im.width
+            height = im.height
+            im = pyvips.Image.magickload(GIF_ANIM_FILE, page=1, n=2)
+            self.assertEqual(im.width, width)
+            self.assertEqual(im.height, height * 2)
+            page_height = im.get_value("page-height")
+            self.assertEqual(page_height, height)
 
         # should work for dicom
         im = pyvips.Image.magickload(DICOM_FILE)
@@ -560,17 +565,19 @@ class TestForeign(PyvipsTester):
         self.file_loader("gifload", GIF_FILE, gif_valid)
         self.buffer_loader("gifload_buffer", GIF_FILE, gif_valid)
 
-        x1 = pyvips.Image.new_from_file(GIF_ANIM_FILE)
-        x2 = pyvips.Image.new_from_file(GIF_ANIM_FILE, n=2)
-        self.assertEqual(x2.height, 2 * x1.height)
-        page_height = x2.get_value("page-height")
-        self.assertEqual(page_height, x1.height)
+        # 'n' param added in 8.5
+        if pyvips.at_least_libvips(8, 5):
+            x1 = pyvips.Image.new_from_file(GIF_ANIM_FILE)
+            x2 = pyvips.Image.new_from_file(GIF_ANIM_FILE, n=2)
+            self.assertEqual(x2.height, 2 * x1.height)
+            page_height = x2.get_value("page-height")
+            self.assertEqual(page_height, x1.height)
 
-        x2 = pyvips.Image.new_from_file(GIF_ANIM_FILE, n=-1)
-        self.assertEqual(x2.height, 5 * x1.height)
+            x2 = pyvips.Image.new_from_file(GIF_ANIM_FILE, n=-1)
+            self.assertEqual(x2.height, 5 * x1.height)
 
-        x2 = pyvips.Image.new_from_file(GIF_ANIM_FILE, page=1, n=-1)
-        self.assertEqual(x2.height, 4 * x1.height)
+            x2 = pyvips.Image.new_from_file(GIF_ANIM_FILE, page=1, n=-1)
+            self.assertEqual(x2.height, 4 * x1.height)
 
     def test_svgload(self):
         if pyvips.type_find("VipsForeign", "svgload") == 0 or \
@@ -765,21 +772,22 @@ class TestForeign(PyvipsTester):
         self.assertEqual(y.height, 513)
 
         # test save to memory buffer
-        filename = temp_filename(self.tempdir, '.zip')
-        base = os.path.basename(filename)
-        root, ext = os.path.splitext(base)
+        if pyvips.type_find("VipsForeign", "dzsave_buffer") != 0:
+            filename = temp_filename(self.tempdir, '.zip')
+            base = os.path.basename(filename)
+            root, ext = os.path.splitext(base)
 
-        self.colour.dzsave(filename)
-        # before 8.5.8, you needed a gc on pypy to flush small zip output to
-        # disc
-        gc.collect()
-        with open(filename, 'rb') as f:
-            buf1 = f.read()
-        buf2 = self.colour.dzsave_buffer(basename=root)
-        self.assertEqual(len(buf1), len(buf2))
+            self.colour.dzsave(filename)
+            # before 8.5.8, you needed a gc on pypy to flush small zip output to
+            # disc
+            gc.collect()
+            with open(filename, 'rb') as f:
+                buf1 = f.read()
+            buf2 = self.colour.dzsave_buffer(basename=root)
+            self.assertEqual(len(buf1), len(buf2))
 
-        # we can't test the bytes are exactly equal, the timestamps will be
-        # different
+            # we can't test the bytes are exactly equal, the timestamps will be
+            # different
 
 
 if __name__ == '__main__':

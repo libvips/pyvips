@@ -73,12 +73,12 @@ class TestIofuncs(PyvipsTester):
         self.assertEqual(im.avg(), 10)
 
     def test_get_fields(self):
-        im = pyvips.Image.mask_ideal(100, 100, 0.5,
-                                     reject=True, optical=True)
-        fields = im.get_fields()
-        # we might add more fields later
-        self.assertTrue(len(fields) > 10)
-        self.assertEqual(fields[0], 'width')
+        if pyvips.at_least_libvips(8, 5):
+            im = pyvips.Image.black(10, 10)
+            fields = im.get_fields()
+            # we might add more fields later
+            self.assertTrue(len(fields) > 10)
+            self.assertEqual(fields[0], 'width')
 
     def test_write_to_memory(self):
         s = bytearray(200)
