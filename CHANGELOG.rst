@@ -4,6 +4,7 @@
 
 * clear error log after failed get_typeof in get() workaround
 * more tests pass with older libvips
+* fix typo in logging handler
 
 ## Version 2.0.3 (2 September 2017)
 

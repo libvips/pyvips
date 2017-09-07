@@ -97,7 +97,7 @@ class GLogLevelFlags(object):
 
 def _log_handler(domain, level, message, user_data):
     if level == GLogLevelFlags.LEVEL_WARNING: 
-        logger.log(LEVEL_TO_LOGGER[level], 
+        logger.log(GLogLevelFlags.LEVEL_TO_LOGGER[level], 
                    '{0}: {1}'.format(_to_string(ffi.string(domain)), 
                                      _to_string(ffi.string(message))))
 
