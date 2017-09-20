@@ -565,6 +565,15 @@ class TestArithmetic(PyvipsTester):
                 self.assertEqual(width, 50)
                 self.assertEqual(height, 60)
 
+            test_rgb = test.bandjoin([test, test])
+            left, top, width, height = test_rgb.find_trim(background = [255,
+                                                                        255, 
+                                                                        255])
+            self.assertEqual(left, 10)
+            self.assertEqual(top, 20)
+            self.assertEqual(width, 50)
+            self.assertEqual(height, 60)
+
     def test_profile(self):
         test = pyvips.Image.black(100, 100).draw_rect(100, 40, 50, 1, 1)
 
