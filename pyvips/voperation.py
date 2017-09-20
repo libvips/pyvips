@@ -115,7 +115,7 @@ class Operation(pyvips.VipsObject):
         return vips_lib.vips_operation_get_flags(self.pointer)
 
     # this is slow ... call as little as possible
-    def getargs(self):
+    def get_args(self):
         args = []
 
         def add_construct(self, pspec, argument_class,
@@ -160,7 +160,7 @@ class Operation(pyvips.VipsObject):
 
         op = Operation.new_from_name(operation_name)
 
-        arguments = op.getargs()
+        arguments = op.get_args()
         # logger.debug('arguments = %s', arguments)
 
         # make a thing to quickly get flags from an arg name
@@ -265,7 +265,7 @@ class Operation(pyvips.VipsObject):
                         'operator "{0}" is deprecated'.format(operation_name))
 
         # we are only interested in non-deprecated args
-        args = [[name, flags] for name, flags in op.getargs()
+        args = [[name, flags] for name, flags in op.get_args()
                 if not flags & _DEPRECATED]
 
         # find the first required input image arg, if any ... that will be self
@@ -365,7 +365,7 @@ class Operation(pyvips.VipsObject):
                         'operator "{0}" is deprecated'.format(operation_name))
 
         # we are only interested in non-deprecated args
-        args = [[name, flags] for name, flags in op.getargs()
+        args = [[name, flags] for name, flags in op.get_args()
                 if not flags & _DEPRECATED]
 
         # find the first required input image arg, if any ... that will be self

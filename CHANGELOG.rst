@@ -1,5 +1,9 @@
 # master 
 
+## Version 2.0.5 (8 September 2017)
+
+* minor polish
+
 ## Version 2.0.4 (3 September 2017)
 
 * clear error log after failed get_typeof in get() workaround
