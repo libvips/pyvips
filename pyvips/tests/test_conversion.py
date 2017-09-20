@@ -213,6 +213,30 @@ class TestConversion(PyvipsTester):
             pixel = [int(x) & 0xff for x in pixel]
             self.assertAlmostEqualObjects(pixel, [255, 255, 255])
 
+    def test_gravity(self):
+        if pyvips.type_find("VipsOperation", "gravity") == 0:
+            print("no gravity in this vips, skipping test")
+            return
+
+        im = pyvips.Image.black(1, 1) + 255
+
+        positions = [
+                ['centre', 1, 1],
+                ['north', 1, 0],
+                ['south', 1, 2],
+                ['east', 2, 1],
+                ['west', 0, 1],
+                ['north-east', 2, 0],
+                ['south-east', 2, 2],
+                ['south-west', 0, 2],
+                ['north-west', 0, 0]
+            ]
+
+        for direction, x, y in positions:
+            im2 = im.gravity(direction, 3, 3)
+            self.assertAlmostEqualObjects(im2(x, y), [255])
+            self.assertAlmostEqualObjects(im2.avg(), 255.0 / 9.0)
+
     def test_extract(self):
         for fmt in all_formats:
             test = self.colour.cast(fmt)

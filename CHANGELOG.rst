@@ -3,6 +3,7 @@
 ## Version 2.0.5 (8 September 2017)
 
 * minor polish
+* more tests
 
 ## Version 2.0.4 (3 September 2017)
 
