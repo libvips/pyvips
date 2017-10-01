@@ -14,23 +14,9 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
-
-# py3 does not have execfile()
-# see https://stackoverflow.com/a/41658338/894763
-def _my_execfile(filepath, globals=None, locals=None):
-    if globals is None:
-        globals = {}
-    globals.update({
-        "__file__": filepath,
-        "__name__": "__main__",
-    })
-    with open(filepath, 'rb') as file:
-        exec(compile(file.read(), filepath, 'exec'), globals, locals)
-
-
-# pull in __version__ -- we can't import it, since that would execute
-# __init__.py, which won't run because we haven't installed cffi yet
-_my_execfile(path.join(here, 'pyvips', 'version.py'), globals())
+info = {}
+with open(path.join(here, 'pyvips', 'version.py'), encoding='utf-8') as f:
+    exec(f.read(), info)
 
 test_deps = [
     'nose',
@@ -44,7 +30,7 @@ extras = {
 
 setup(
     name='pyvips',
-    version=__version__,
+    version=info['__version__'],
     description='binding for the libvips image processing library',
     long_description=long_description,
     url='https://github.com/jcupitt/pyvips',

@@ -47,13 +47,14 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
+  - "nightly"
   - "pypy"
   - "pypy3"
 
 install:
-  - pip install .[test]
+  - pip install tox tox-travis
 
-script: "nosetests --logging-level=WARNING"
+script: "tox"
 
 # the vips7 py binding won't work with pypy, make sure it's off
 before_install:
