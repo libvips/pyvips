@@ -34,6 +34,7 @@ addons:
         # - libwebpmux2
       - libfftw3-dev
       - libglib2.0-dev
+      - python-gobject
 
 cache:
   directories:
@@ -50,6 +51,11 @@ python:
   - "nightly"
   - "pypy"
   - "pypy3"
+
+matrix:
+  allow_failures:
+    - python: "3.2"
+    - python: nightly
 
 install:
   - pip install tox tox-travis

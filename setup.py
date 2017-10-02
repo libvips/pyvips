@@ -18,9 +18,14 @@ info = {}
 with open(path.join(here, 'pyvips', 'version.py'), encoding='utf-8') as f:
     exec(f.read(), info)
 
+setup_deps = [
+    'pytest-runner'
+]
+
 test_deps = [
-    'nose',
-    'flake8'
+    'pytest',
+    'pytest-catchlog',
+    'pytest-flake8'
 ]
 
 extras = {
@@ -63,6 +68,7 @@ setup(
 
     install_requires=['cffi'],
 
+    setup_requires=setup_deps,
     tests_require=test_deps,
     extras_require=extras,
 
