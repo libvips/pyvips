@@ -19,6 +19,7 @@ with open(path.join(here, 'pyvips', 'version.py'), encoding='utf-8') as f:
     exec(f.read(), info)
 
 setup_deps = [
+    'setuptools-scm',
     'pytest-runner'
 ]
 
