@@ -34,7 +34,6 @@ addons:
         # - libwebpmux2
       - libfftw3-dev
       - libglib2.0-dev
-      - python-gobject
 
 cache:
   directories:
