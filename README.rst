@@ -130,9 +130,7 @@ Local user install::
 
 Run test suite::
 
-	$ nosetests --logging-level=WARNING
-	$ python3 -m nose --logging-level=WARNING
-	$ pypy -m nose --logging-level=WARNING
+	$ pytest
 
 Stylecheck::
 

@@ -23,6 +23,8 @@ setup_deps = [
 ]
 
 test_deps = [
+    # without this, pytest fails on some pythons
+    'setuptools-scm',
     'pytest',
     'pytest-catchlog',
     'pytest-flake8'
