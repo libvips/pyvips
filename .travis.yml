@@ -55,9 +55,10 @@ matrix:
     - python: nightly
 
 install:
-  - pip install tox tox-travis
+  - pip install .[test]
 
-script: "tox"
+script:
+  - python setup.py test
 
 # the vips7 py binding won't work with pypy, make sure it's off
 before_install:
