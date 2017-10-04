@@ -13,7 +13,7 @@ JPEG_FILE = os.path.join(IMAGES, "йцук.jpg")
 SRGB_FILE = os.path.join(IMAGES, "sRGB.icm")
 
 TEST_IMAGES = os.path.join(os.path.dirname(__file__),
-                           '..', '..', 'test_images')
+                           os.pardir, 'test_images')
 MATLAB_FILE = os.path.join(TEST_IMAGES, "sample.mat")
 PNG_FILE = os.path.join(TEST_IMAGES, "sample.png")
 TIF_FILE = os.path.join(TEST_IMAGES, "sample.tif")
