@@ -42,7 +42,6 @@ cache:
 language: python
 python:
   - "2.7"
-  - "3.2"
   - "3.3"
   - "3.4"
   - "3.5"
@@ -50,6 +49,10 @@ python:
   - "nightly"
   - "pypy"
   - "pypy3"
+
+matrix:
+  allow_failures:
+    - python: nightly
 
 install:
   - pip install tox tox-travis
