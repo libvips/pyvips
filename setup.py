@@ -63,8 +63,7 @@ setup(
     ],
 
     keywords='image processing',
-    packages=find_packages(exclude=['contrib', 'docs', 'tests', 'examples',
-                                    'test_images']),
+    packages=find_packages(exclude=['docs', 'tests', 'examples']),
 
     install_requires=['cffi'],
 

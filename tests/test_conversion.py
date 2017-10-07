@@ -363,6 +363,22 @@ class TestConversion(PyvipsTester):
                 # differs ... don't require huge accuracy
                 self.assertLess(abs(x - y), 2)
 
+    def test_composite(self):
+        if pyvips.type_find("VipsConversion", "composite") == 0:
+            print("no composite support, skipping test")
+            return
+
+        # 50% transparent image
+        overlay = self.colour.bandjoin(128)
+        base = self.colour + 100
+        comp = overlay.composite(base, "over")
+
+        overlay.write_to_file("overlay.png")
+        base.write_to_file("base.png")
+
+        self.assertAlmostEqualObjects(comp(0, 0), [51.8, 52.8, 53.8, 255], 
+                                      places=1)
+
     def test_unpremultiply(self):
         for fmt in unsigned_formats + [pyvips.BandFormat.SHORT,
                                        pyvips.BandFormat.INT] + float_formats:

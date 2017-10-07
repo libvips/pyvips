@@ -4,6 +4,9 @@
 
 * minor polish
 * more tests
+* add `composite` convenience method
+* move tests outside module [greut]
+* switch to tox [greut]
 
 ## Version 2.0.4 (3 September 2017)
 

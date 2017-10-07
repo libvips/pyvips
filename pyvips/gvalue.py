@@ -7,7 +7,8 @@ import sys
 
 import pyvips
 from pyvips import ffi, vips_lib, gobject_lib, \
-    glib_lib, Error, _to_bytes, _to_string, type_name, type_from_name
+    glib_lib, Error, _to_bytes, _to_string, type_name, type_from_name, \
+    at_least_libvips
 
 logger = logging.getLogger(__name__)
 
@@ -63,6 +64,11 @@ ffi.cdef('''
 
 ''')
 
+if at_least_libvips(8, 6):
+    ffi.cdef('''
+        GType vips_blend_mode_get_type (void);
+
+    ''')
 
 class GValue(object):
 
@@ -96,6 +102,10 @@ class GValue(object):
 
     pyvips.vips_lib.vips_band_format_get_type()
     format_type = type_from_name('VipsBandFormat')
+
+    if at_least_libvips(8, 6):
+        pyvips.vips_lib.vips_blend_mode_get_type()
+    blend_mode_type = type_from_name('VipsBlendMode')
 
     # map a gtype to the name of the corresponding Python type
     _gtype_to_python = {

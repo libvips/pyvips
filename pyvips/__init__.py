@@ -114,10 +114,19 @@ _log_handler_id = glib_lib.g_log_set_handler(_to_bytes('VIPS'),
                            GLogLevelFlags.FLAG_RECURSION,
                            _log_handler_cb, ffi.NULL)
 
+# ffi doesn't like us looking up methods during shutdown: make a note of the
+# remove handler here
+_remove_handler = glib_lib.g_log_remove_handler
+
 # we must remove the handler on exit or libvips may try to run the callback
 # during shutdown
 def _remove_log_handler():
-    glib_lib.g_log_remove_handler(_to_bytes('VIPS'), _log_handler_id)
+    global _log_handler_id
+    global _remove_handler
+
+    if _log_handler_id:
+        _remove_handler(_to_bytes('VIPS'), _log_handler_id)
+        _log_handler_id = None
 
 atexit.register(_remove_log_handler)
 

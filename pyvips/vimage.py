@@ -1075,6 +1075,19 @@ class Image(pyvips.VipsObject):
         else:
             return pyvips.Operation.call('bandjoin', [self] + other)
 
+    def composite(self, other, mode, **kwargs):
+        """Composite a set of images with a set of modes."""
+        if not isinstance(other, list):
+            other = [other]
+        if not isinstance(mode, list):
+            mode = [mode]
+
+        # modes are VipsBlendMode enums, but we have to pass as array of int --
+        # we need to map str->int by hand
+        mode = [GValue.to_enum(GValue.blend_mode_type, x) for x in mode]
+
+        return pyvips.Operation.call('composite', [self] + other, mode, **kwargs)
+
     def bandrank(self, other, **kwargs):
         """Band-wise rank filter a set of images."""
         if not isinstance(other, list):

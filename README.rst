@@ -128,15 +128,21 @@ Local user install::
 	$ pip3 install --user -e .
 	$ pypy -m pip --user -e .
 
+Run all tests::
+
+	$ tox 
+
 Run test suite::
 
-	$ nosetests --logging-level=WARNING
-	$ python3 -m nose --logging-level=WARNING
-	$ pypy -m nose --logging-level=WARNING
+	$ tox test
+
+Run a specific test::
+
+	$ tox -e py27 -- pyvips/tests/test_conversion.py:TestConversion.test_composite
 
 Stylecheck::
 
-        $ flake8
+        $ tox qa
 
 Generate HTML docs in ``doc/build/html``::
 
