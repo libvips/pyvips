@@ -371,10 +371,7 @@ class TestConversion(PyvipsTester):
         # 50% transparent image
         overlay = self.colour.bandjoin(128)
         base = self.colour + 100
-        comp = overlay.composite(base, "over")
-
-        overlay.write_to_file("overlay.png")
-        base.write_to_file("base.png")
+        comp = base.composite(overlay, "over")
 
         self.assertAlmostEqualObjects(comp(0, 0), [51.8, 52.8, 53.8, 255], 
                                       places=1)

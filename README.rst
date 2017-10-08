@@ -138,7 +138,7 @@ Run test suite::
 
 Run a specific test::
 
-	$ tox -e py27 -- pyvips/tests/test_conversion.py:TestConversion.test_composite
+	$ pytest tests/test_conversion.py
 
 Stylecheck::
 
