@@ -7,6 +7,7 @@
 * add `composite` convenience method
 * move tests outside module [greut]
 * switch to tox [greut]
+* allow info message logging
 
 ## Version 2.0.4 (3 September 2017)
 
