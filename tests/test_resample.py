@@ -84,30 +84,7 @@ class TestResample(PyvipsTester):
 
         for fac in [1, 1.1, 1.5, 1.999]:
             for fmt in all_formats:
-                x = im.cast(fmt)
-                r = x.reduce(fac, fac, kernel="cubic")
-                a = x.affine([1.0 / fac, 0, 0, 1.0 / fac],
-                             interpolate=bicubic,
-                             oarea=[0, 0,
-                                    int(x.width / fac), int(x.height / fac)])
-                d = (r - a).abs().max()
-                self.assertLess(d, 10)
-
-        for fac in [1, 1.1, 1.5, 1.999]:
-            for fmt in all_formats:
-                x = im.cast(fmt)
-                r = x.reduce(fac, fac, kernel="linear")
-                a = x.affine([1.0 / fac, 0, 0, 1.0 / fac],
-                             interpolate=bilinear,
-                             oarea=[0, 0,
-                                    int(x.width / fac), int(x.height / fac)])
-                d = (r - a).abs().max()
-                self.assertLess(d, 10)
-
-        # for other kernels, just see if avg looks about right
-        for fac in [1, 1.1, 1.5, 1.999]:
-            for fmt in all_formats:
-                for kernel in ["nearest", "lanczos2", "lanczos3"]:
+                for kernel in ["nearest", "linear", "cubic", "lanczos2", "lanczos3"]:
                     x = im.cast(fmt)
                     r = x.reduce(fac, fac, kernel=kernel)
                     d = abs(r.avg() - im.avg())
