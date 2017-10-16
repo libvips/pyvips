@@ -1,6 +1,8 @@
 README
 ======
 
+**This branch is a quick hack to try out cffi API mode**
+
 .. image:: https://travis-ci.org/jcupitt/pyvips.svg?branch=master
     :alt: Build Status
     :target: https://travis-ci.org/jcupitt/pyvips

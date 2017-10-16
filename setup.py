@@ -65,7 +65,7 @@ setup(
     keywords='image processing',
     packages=find_packages(exclude=['docs', 'tests', 'examples']),
 
-    install_requires=['cffi'],
+    install_requires=['cffi', 'pkgconfig'],
 
     setup_requires=setup_deps,
     tests_require=test_deps,
