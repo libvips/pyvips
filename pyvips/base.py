@@ -3,31 +3,6 @@
 
 from pyvips import ffi, vips_lib, gobject_lib, _to_string, _to_bytes, Error
 
-ffi.cdef('''
-    typedef struct _VipsImage VipsImage;
-    typedef struct _GValue GValue;
-
-    void* g_malloc (size_t size);
-    void g_free (void* data);
-
-    int vips_leak_set (int leak);
-
-    char* vips_path_filename7 (const char* path);
-    char* vips_path_mode7 (const char* path);
-
-    GType vips_type_find (const char* basename, const char* nickname);
-    const char* vips_nickname_find (GType type);
-
-    const char* g_type_name (GType gtype);
-    GType g_type_from_name (const char* name);
-
-    typedef void* (*VipsTypeMap2Fn) (GType type);
-    void* vips_type_map (GType base, VipsTypeMap2Fn fn);
-
-    int vips_version( int flag );
-
-''')
-
 
 def leak_set(leak):
     """Enable or disable libvips leak checking.
@@ -58,15 +33,6 @@ def version(flag):
         raise Error('unable to get library version')
 
     return value
-
-
-def at_least_libvips(x, y):
-    """Is this at least libvips x.y?"""
-
-    major = version(0)
-    minor = version(1)
-
-    return major > x or (major == x and minor >= y)
 
 
 def path_filename7(filename):
@@ -115,7 +81,6 @@ def type_map(gtype, fn):
 __all__ = [
     'leak_set',
     'version',
-    'at_least_libvips',
     'path_filename7',
     'path_mode7',
     'type_find',

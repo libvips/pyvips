@@ -10,68 +10,6 @@ from pyvips import ffi, vips_lib, gobject_lib, Error, _to_bytes, _to_string
 
 logger = logging.getLogger(__name__)
 
-ffi.cdef('''
-    typedef struct _VipsObject {
-        GObject parent_object;
-        bool constructed;
-        bool static_object;
-        void *argument_table;
-        char *nickname;
-        char *description;
-        bool preclose;
-        bool close;
-        bool postclose;
-        size_t local_memory;
-    } VipsObject;
-
-    typedef struct _VipsObjectClass VipsObjectClass;
-
-    typedef struct _VipsArgument {
-        GParamSpec *pspec;
-    } VipsArgument;
-
-    typedef struct _VipsArgumentInstance {
-        VipsArgument parent;
-
-        // opaque
-    } VipsArgumentInstance;
-
-    typedef enum _VipsArgumentFlags {
-        VIPS_ARGUMENT_NONE = 0,
-        VIPS_ARGUMENT_REQUIRED = 1,
-        VIPS_ARGUMENT_CONSTRUCT = 2,
-        VIPS_ARGUMENT_SET_ONCE = 4,
-        VIPS_ARGUMENT_SET_ALWAYS = 8,
-        VIPS_ARGUMENT_INPUT = 16,
-        VIPS_ARGUMENT_OUTPUT = 32,
-        VIPS_ARGUMENT_DEPRECATED = 64,
-        VIPS_ARGUMENT_MODIFY = 128
-    } VipsArgumentFlags;
-
-    typedef struct _VipsArgumentClass {
-        VipsArgument parent;
-
-        VipsObjectClass *object_class;
-        VipsArgumentFlags flags;
-        int priority;
-        uint64_t offset;
-    } VipsArgumentClass;
-
-    int vips_object_get_argument (VipsObject* object,
-        const char *name, GParamSpec** pspec,
-        VipsArgumentClass** argument_class,
-        VipsArgumentInstance** argument_instance);
-
-    void vips_object_print_all (void);
-
-    int vips_object_set_from_string (VipsObject* object, const char* options);
-
-    const char* vips_object_get_description (VipsObject* object);
-
-    const char* g_param_spec_get_blurb (GParamSpec* pspec);
-
-''')
-
 
 class VipsObject(pyvips.GObject):
     """Manage a VipsObject."""

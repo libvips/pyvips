@@ -14,62 +14,6 @@ logger = logging.getLogger(__name__)
 
 _is_PY2 = sys.version_info.major == 2
 
-ffi.cdef('''
-    typedef struct _GValue {
-        GType gtype;
-        uint64_t data[2];
-    } GValue;
-
-    void g_value_init (GValue* value, GType gtype);
-    void g_value_unset (GValue* value);
-    GType g_type_fundamental (GType gtype);
-
-    int vips_enum_from_nick (const char* domain,
-        GType gtype, const char* str);
-    const char *vips_enum_nick (GType gtype, int value);
-
-    void g_value_set_boolean (GValue* value, int v_boolean);
-    void g_value_set_int (GValue* value, int i);
-    void g_value_set_double (GValue* value, double d);
-    void g_value_set_enum (GValue* value, int e);
-    void g_value_set_flags (GValue* value, unsigned int f);
-    void g_value_set_string (GValue* value, const char *str);
-    void g_value_set_object (GValue* value, void* object);
-    void vips_value_set_array_double (GValue* value,
-        const double* array, int n );
-    void vips_value_set_array_int (GValue* value,
-        const int* array, int n );
-    void vips_value_set_array_image (GValue *value, int n);
-    void vips_value_set_blob (GValue* value,
-        void (*free_fn)(void* data), void* data, size_t length);
-
-    int g_value_get_boolean (const GValue* value);
-    int g_value_get_int (GValue* value);
-    double g_value_get_double (GValue* value);
-    int g_value_get_enum (GValue* value);
-    unsigned int g_value_get_flags (GValue* value);
-    const char* g_value_get_string (GValue* value);
-    const char* vips_value_get_ref_string (const GValue* value,
-        size_t* length);
-    void* g_value_get_object (GValue* value);
-    double* vips_value_get_array_double (const GValue* value, int* n);
-    int* vips_value_get_array_int (const GValue* value, int* n);
-    VipsImage** vips_value_get_array_image (const GValue* value, int* n);
-    void* vips_value_get_blob (const GValue* value, size_t* length);
-
-    // need to make some of these by hand
-    GType vips_interpretation_get_type (void);
-    GType vips_operation_flags_get_type (void);
-    GType vips_band_format_get_type (void);
-
-''')
-
-if at_least_libvips(8, 6):
-    ffi.cdef('''
-        GType vips_blend_mode_get_type (void);
-
-    ''')
-
 class GValue(object):
 
     """Wrap GValue in a Python class.

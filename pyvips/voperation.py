@@ -8,36 +8,6 @@ from pyvips import ffi, vips_lib, Error, _to_bytes, _to_string, GValue, \
 
 logger = logging.getLogger(__name__)
 
-ffi.cdef('''
-    typedef struct _VipsOperation {
-        VipsObject parent_instance;
-
-        // opaque
-    } VipsOperation;
-
-    VipsOperation* vips_operation_new (const char* name);
-
-    typedef void* (*VipsArgumentMapFn) (VipsOperation* object,
-        GParamSpec* pspec,
-        VipsArgumentClass* argument_class,
-        VipsArgumentInstance* argument_instance,
-        void* a, void* b);
-
-    void* vips_argument_map (VipsOperation* object,
-        VipsArgumentMapFn fn, void* a, void* b);
-
-    VipsOperation* vips_cache_operation_build (VipsOperation* operation);
-    void vips_object_unref_outputs (VipsOperation* operation);
-
-    int vips_operation_get_flags (VipsOperation* operation);
-
-    void vips_cache_set_max (int max);
-    void vips_cache_set_max_mem (size_t max_mem);
-    void vips_cache_set_max_files (int max_files);
-    void vips_cache_set_trace (int trace);
-
-''')
-
 # values for VipsArgumentFlags
 _REQUIRED = 1
 _CONSTRUCT = 2

@@ -14,12 +14,6 @@ if _is_PY3:
 else:
     text_type = unicode
 
-ffi.cdef('''
-    const char* vips_error_buffer (void);
-    void vips_error_clear (void);
-
-''')
-
 
 def _to_bytes(x):
     """Convert to a byte string.

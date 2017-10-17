@@ -53,32 +53,31 @@ else:
 logger.debug('Loaded lib %s', vips_lib)
 logger.debug('Loaded lib %s', gobject_lib)
 
-# GType is an int the size of a pointer ... I don't think we can just use
-# size_t, sadly
-if _is_64bits:
-    ffi.cdef('''
-        typedef uint64_t GType;
-    ''')
-else:
-    ffi.cdef('''
-        typedef uint32_t GType;
-    ''')
+ffi.cdef('''
+    int vips_init (const char* argv0);
+''')
+
+if vips_lib.vips_init(sys.argv[0].encode()) != 0:
+    raise Exception('unable to init libvips')
+
+logger.debug('Inited libvips')
+logger.debug('')
+
+# we need to define this before we import the decls: they need to know which
+# bits of decl to make
+def at_least_libvips(x, y):
+    """Is this at least libvips x.y?"""
+
+    major = vips_lib.vips_version(0)
+    minor = vips_lib.vips_version(1)
+
+    return major > x or (major == x and minor >= y)
+
+import decls
 
 from .error import *
 
 # redirect all vips warnings to logging
-
-ffi.cdef('''
-    typedef void (*GLogFunc) (const char* log_domain,
-        int log_level,
-        const char* message, void* user_data);
-    int g_log_set_handler (const char* log_domain,
-        int log_levels,
-        GLogFunc log_func, void* user_data);
-
-    void g_log_remove_handler (const char* log_domain, int handler_id);
-
-''')
 
 class GLogLevelFlags(object):
     # log flags 
@@ -135,16 +134,6 @@ def _remove_log_handler():
         _log_handler_id = None
 
 atexit.register(_remove_log_handler)
-
-ffi.cdef('''
-    int vips_init (const char* argv0);
-''')
-
-if vips_lib.vips_init(_to_bytes(sys.argv[0])) != 0:
-    raise Error('unable to init libvips')
-
-logger.debug('Inited libvips')
-logger.debug('')
 
 from .enums import *
 from .base import *
