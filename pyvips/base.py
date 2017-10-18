@@ -35,6 +35,17 @@ def version(flag):
     return value
 
 
+# we need to define this before we import the decls: they need to know which
+# bits of decl to make
+def at_least_libvips(x, y):
+    """Is this at least libvips x.y?"""
+
+    major = version(0)
+    minor = version(1)
+
+    return major > x or (major == x and minor >= y)
+
+
 def path_filename7(filename):
     return _to_string(ffi.string(vips_lib.vips_path_filename7(
         _to_bytes(filename))))
@@ -81,6 +92,7 @@ def type_map(gtype, fn):
 __all__ = [
     'leak_set',
     'version',
+    'at_least_libvips',
     'path_filename7',
     'path_mode7',
     'type_find',

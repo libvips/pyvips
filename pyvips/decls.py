@@ -2,263 +2,283 @@
 
 # we keep these together to make switching between ABI and API modes simpler
 
+# we have to pass in the libvips version, since it can come from either
+# pkg-config in compile.py (in API mode) or libvips itself in __init__.py 
+# (in ABI mode)
+
 import sys
 
-from pyvips import ffi, at_least_libvips
 
-_is_64bits = sys.maxsize > 2 ** 32
+def cdefs(mode, major, minor):
+    code = ''
 
-# GType is an int the size of a pointer ... I don't think we can just use
-# size_t, sadly
-if _is_64bits:
-    ffi.cdef('''
-        typedef uint64_t GType;
-    ''')
-else:
-    ffi.cdef('''
-        typedef uint32_t GType;
-    ''')
+    # apparently the safest way to do this
+    is_64bits = sys.maxsize > 2 ** 32
 
-ffi.cdef('''
-    typedef void (*GLogFunc) (const char* log_domain,
-        int log_level,
-        const char* message, void* user_data);
-    int g_log_set_handler (const char* log_domain,
-        int log_levels,
-        GLogFunc log_func, void* user_data);
+    # GType is an int the size of a pointer ... I don't think we can just use
+    # size_t, sadly
+    if is_64bits:
+        code += '''
+            typedef uint64_t GType;
+        '''
+    else:
+        code += '''
+            typedef uint32_t GType;
+        '''
 
-    void g_log_remove_handler (const char* log_domain, int handler_id);
+    code += '''
+        typedef void (*GLogFunc) (const char* log_domain,
+            int log_level,
+            const char* message, void* user_data);
+        int g_log_set_handler (const char* log_domain,
+            int log_levels,
+            GLogFunc log_func, void* user_data);
 
-    typedef struct _VipsImage VipsImage;
-    typedef struct _GValue GValue;
+        void g_log_remove_handler (const char* log_domain, int handler_id);
 
-    void* g_malloc (size_t size);
-    void g_free (void* data);
+        typedef struct _VipsImage VipsImage;
+        typedef struct _GValue GValue;
 
-    int vips_leak_set (int leak);
+        void* g_malloc (size_t size);
+        void g_free (void* data);
 
-    char* vips_path_filename7 (const char* path);
-    char* vips_path_mode7 (const char* path);
+        int vips_leak_set (int leak);
 
-    GType vips_type_find (const char* basename, const char* nickname);
-    const char* vips_nickname_find (GType type);
+        char* vips_path_filename7 (const char* path);
+        char* vips_path_mode7 (const char* path);
 
-    const char* g_type_name (GType gtype);
-    GType g_type_from_name (const char* name);
+        GType vips_type_find (const char* basename, const char* nickname);
+        const char* vips_nickname_find (GType type);
 
-    typedef void* (*VipsTypeMap2Fn) (GType type);
-    void* vips_type_map (GType base, VipsTypeMap2Fn fn);
+        const char* g_type_name (GType gtype);
+        GType g_type_from_name (const char* name);
 
-    int vips_version( int flag );
+        typedef void* (*VipsTypeMap2Fn) (GType type);
+        void* vips_type_map (GType base, VipsTypeMap2Fn fn);
 
-    const char* vips_error_buffer (void);
-    void vips_error_clear (void);
+        const char* vips_error_buffer (void);
+        void vips_error_clear (void);
 
-    typedef struct _GValue {
-        GType gtype;
-        uint64_t data[2];
-    } GValue;
+        typedef struct _GValue {
+            GType gtype;
+            uint64_t data[2];
+        } GValue;
 
-    void g_value_init (GValue* value, GType gtype);
-    void g_value_unset (GValue* value);
-    GType g_type_fundamental (GType gtype);
+        void g_value_init (GValue* value, GType gtype);
+        void g_value_unset (GValue* value);
+        GType g_type_fundamental (GType gtype);
 
-    int vips_enum_from_nick (const char* domain,
-        GType gtype, const char* str);
-    const char *vips_enum_nick (GType gtype, int value);
+        int vips_enum_from_nick (const char* domain,
+            GType gtype, const char* str);
+        const char *vips_enum_nick (GType gtype, int value);
 
-    void g_value_set_boolean (GValue* value, int v_boolean);
-    void g_value_set_int (GValue* value, int i);
-    void g_value_set_double (GValue* value, double d);
-    void g_value_set_enum (GValue* value, int e);
-    void g_value_set_flags (GValue* value, unsigned int f);
-    void g_value_set_string (GValue* value, const char *str);
-    void g_value_set_object (GValue* value, void* object);
-    void vips_value_set_array_double (GValue* value,
-        const double* array, int n );
-    void vips_value_set_array_int (GValue* value,
-        const int* array, int n );
-    void vips_value_set_array_image (GValue *value, int n);
-    void vips_value_set_blob (GValue* value,
-        void (*free_fn)(void* data), void* data, size_t length);
+        void g_value_set_boolean (GValue* value, int v_boolean);
+        void g_value_set_int (GValue* value, int i);
+        void g_value_set_double (GValue* value, double d);
+        void g_value_set_enum (GValue* value, int e);
+        void g_value_set_flags (GValue* value, unsigned int f);
+        void g_value_set_string (GValue* value, const char *str);
+        void g_value_set_object (GValue* value, void* object);
+        void vips_value_set_array_double (GValue* value,
+            const double* array, int n );
+        void vips_value_set_array_int (GValue* value,
+            const int* array, int n );
+        void vips_value_set_array_image (GValue *value, int n);
+        void vips_value_set_blob (GValue* value,
+            void (*free_fn)(void* data), void* data, size_t length);
 
-    int g_value_get_boolean (const GValue* value);
-    int g_value_get_int (GValue* value);
-    double g_value_get_double (GValue* value);
-    int g_value_get_enum (GValue* value);
-    unsigned int g_value_get_flags (GValue* value);
-    const char* g_value_get_string (GValue* value);
-    const char* vips_value_get_ref_string (const GValue* value,
-        size_t* length);
-    void* g_value_get_object (GValue* value);
-    double* vips_value_get_array_double (const GValue* value, int* n);
-    int* vips_value_get_array_int (const GValue* value, int* n);
-    VipsImage** vips_value_get_array_image (const GValue* value, int* n);
-    void* vips_value_get_blob (const GValue* value, size_t* length);
+        int g_value_get_boolean (const GValue* value);
+        int g_value_get_int (GValue* value);
+        double g_value_get_double (GValue* value);
+        int g_value_get_enum (GValue* value);
+        unsigned int g_value_get_flags (GValue* value);
+        const char* g_value_get_string (GValue* value);
+        const char* vips_value_get_ref_string (const GValue* value,
+            size_t* length);
+        void* g_value_get_object (GValue* value);
+        double* vips_value_get_array_double (const GValue* value, int* n);
+        int* vips_value_get_array_int (const GValue* value, int* n);
+        VipsImage** vips_value_get_array_image (const GValue* value, int* n);
+        void* vips_value_get_blob (const GValue* value, size_t* length);
 
-    // need to make some of these by hand
-    GType vips_interpretation_get_type (void);
-    GType vips_operation_flags_get_type (void);
-    GType vips_band_format_get_type (void);
+        // need to make some of these by hand
+        GType vips_interpretation_get_type (void);
+        GType vips_operation_flags_get_type (void);
+        GType vips_band_format_get_type (void);
 
-    typedef struct _GObject {
-        void *g_type_instance;
-        unsigned int ref_count;
-        void *qdata;
-    } GObject;
+        typedef struct _GObject {
+            void *g_type_instance;
+            unsigned int ref_count;
+            void *qdata;
+        } GObject;
 
-    typedef struct _GParamSpec {
-        void* g_type_instance;
+        typedef struct _GParamSpec {
+            void* g_type_instance;
 
-        const char* name;
-        unsigned int flags;
-        GType value_type;
-        GType owner_type;
+            const char* name;
+            unsigned int flags;
+            GType value_type;
+            GType owner_type;
 
-        // rest opaque
-    } GParamSpec;
+            // rest opaque
+        } GParamSpec;
 
-    void g_object_ref (void* object);
-    void g_object_unref (void* object);
+        void g_object_ref (void* object);
+        void g_object_unref (void* object);
 
-    void g_object_set_property (GObject* object,
-        const char *name, GValue* value);
-    void g_object_get_property (GObject* object,
-        const char* name, GValue* value);
+        void g_object_set_property (GObject* object,
+            const char *name, GValue* value);
+        void g_object_get_property (GObject* object,
+            const char* name, GValue* value);
 
-    typedef struct _VipsObject {
-        GObject parent_object;
-        bool constructed;
-        bool static_object;
-        void *argument_table;
-        char *nickname;
-        char *description;
-        bool preclose;
-        bool close;
-        bool postclose;
-        size_t local_memory;
-    } VipsObject;
+        typedef struct _VipsObject {
+            GObject parent_object;
+            bool constructed;
+            bool static_object;
+            void *argument_table;
+            char *nickname;
+            char *description;
+            bool preclose;
+            bool close;
+            bool postclose;
+            size_t local_memory;
+        } VipsObject;
 
-    typedef struct _VipsObjectClass VipsObjectClass;
+        typedef struct _VipsObjectClass VipsObjectClass;
 
-    typedef struct _VipsArgument {
-        GParamSpec *pspec;
-    } VipsArgument;
+        typedef struct _VipsArgument {
+            GParamSpec *pspec;
+        } VipsArgument;
 
-    typedef struct _VipsArgumentInstance {
-        VipsArgument parent;
+        typedef struct _VipsArgumentInstance {
+            VipsArgument parent;
 
-        // opaque
-    } VipsArgumentInstance;
+            // opaque
+        } VipsArgumentInstance;
 
-    typedef enum _VipsArgumentFlags {
-        VIPS_ARGUMENT_NONE = 0,
-        VIPS_ARGUMENT_REQUIRED = 1,
-        VIPS_ARGUMENT_CONSTRUCT = 2,
-        VIPS_ARGUMENT_SET_ONCE = 4,
-        VIPS_ARGUMENT_SET_ALWAYS = 8,
-        VIPS_ARGUMENT_INPUT = 16,
-        VIPS_ARGUMENT_OUTPUT = 32,
-        VIPS_ARGUMENT_DEPRECATED = 64,
-        VIPS_ARGUMENT_MODIFY = 128
-    } VipsArgumentFlags;
+        typedef enum _VipsArgumentFlags {
+            VIPS_ARGUMENT_NONE = 0,
+            VIPS_ARGUMENT_REQUIRED = 1,
+            VIPS_ARGUMENT_CONSTRUCT = 2,
+            VIPS_ARGUMENT_SET_ONCE = 4,
+            VIPS_ARGUMENT_SET_ALWAYS = 8,
+            VIPS_ARGUMENT_INPUT = 16,
+            VIPS_ARGUMENT_OUTPUT = 32,
+            VIPS_ARGUMENT_DEPRECATED = 64,
+            VIPS_ARGUMENT_MODIFY = 128
+        } VipsArgumentFlags;
 
-    typedef struct _VipsArgumentClass {
-        VipsArgument parent;
+        typedef struct _VipsArgumentClass {
+            VipsArgument parent;
 
-        VipsObjectClass *object_class;
-        VipsArgumentFlags flags;
-        int priority;
-        uint64_t offset;
-    } VipsArgumentClass;
+            VipsObjectClass *object_class;
+            VipsArgumentFlags flags;
+            int priority;
+            uint64_t offset;
+        } VipsArgumentClass;
 
-    int vips_object_get_argument (VipsObject* object,
-        const char *name, GParamSpec** pspec,
-        VipsArgumentClass** argument_class,
-        VipsArgumentInstance** argument_instance);
+        int vips_object_get_argument (VipsObject* object,
+            const char *name, GParamSpec** pspec,
+            VipsArgumentClass** argument_class,
+            VipsArgumentInstance** argument_instance);
 
-    void vips_object_print_all (void);
+        void vips_object_print_all (void);
 
-    int vips_object_set_from_string (VipsObject* object, const char* options);
+        int vips_object_set_from_string (VipsObject* object, const char* options);
 
-    const char* vips_object_get_description (VipsObject* object);
+        const char* vips_object_get_description (VipsObject* object);
 
-    const char* g_param_spec_get_blurb (GParamSpec* pspec);
+        const char* g_param_spec_get_blurb (GParamSpec* pspec);
 
-    typedef struct _VipsImage {
-        VipsObject parent_instance;
+        typedef struct _VipsImage {
+            VipsObject parent_instance;
 
-        // opaque
-    } VipsImage;
+            // opaque
+        } VipsImage;
 
-    const char* vips_foreign_find_load (const char* name);
-    const char* vips_foreign_find_load_buffer (const void* data, size_t size);
-    const char* vips_foreign_find_save (const char* name);
-    const char* vips_foreign_find_save_buffer (const char* suffix);
+        const char* vips_foreign_find_load (const char* name);
+        const char* vips_foreign_find_load_buffer (const void* data, size_t size);
+        const char* vips_foreign_find_save (const char* name);
+        const char* vips_foreign_find_save_buffer (const char* suffix);
 
-    VipsImage* vips_image_new_matrix_from_array (int width, int height,
-            const double* array, int size);
-    VipsImage* vips_image_new_from_memory (const void* data, size_t size,
-            int width, int height, int bands, int format);
+        VipsImage* vips_image_new_matrix_from_array (int width, int height,
+                const double* array, int size);
+        VipsImage* vips_image_new_from_memory (const void* data, size_t size,
+                int width, int height, int bands, int format);
 
-    VipsImage* vips_image_copy_memory (VipsImage* image);
+        VipsImage* vips_image_copy_memory (VipsImage* image);
 
-    GType vips_image_get_typeof (const VipsImage* image,
-        const char* name);
-    int vips_image_get (const VipsImage* image,
-        const char* name, GValue* value_copy);
-    void vips_image_set (VipsImage* image, const char* name, GValue* value);
-    int vips_image_remove (VipsImage* image, const char* name);
-    char** vips_image_get_fields (VipsImage* image);
+        GType vips_image_get_typeof (const VipsImage* image,
+            const char* name);
+        int vips_image_get (const VipsImage* image,
+            const char* name, GValue* value_copy);
+        void vips_image_set (VipsImage* image, const char* name, GValue* value);
+        int vips_image_remove (VipsImage* image, const char* name);
+        char** vips_image_get_fields (VipsImage* image);
 
-    char* vips_filename_get_filename (const char* vips_filename);
-    char* vips_filename_get_options (const char* vips_filename);
+        char* vips_filename_get_filename (const char* vips_filename);
+        char* vips_filename_get_options (const char* vips_filename);
 
-    VipsImage* vips_image_new_temp_file (const char* format);
+        VipsImage* vips_image_new_temp_file (const char* format);
 
-    int vips_image_write (VipsImage* image, VipsImage* out);
-    void* vips_image_write_to_memory (VipsImage* in, size_t* size_out);
+        int vips_image_write (VipsImage* image, VipsImage* out);
+        void* vips_image_write_to_memory (VipsImage* in, size_t* size_out);
 
-    typedef struct _VipsInterpolate {
-        VipsObject parent_instance;
+        typedef struct _VipsInterpolate {
+            VipsObject parent_instance;
 
-        // opaque
-    } VipsInterpolate;
+            // opaque
+        } VipsInterpolate;
 
-    VipsInterpolate* vips_interpolate_new (const char* name);
+        VipsInterpolate* vips_interpolate_new (const char* name);
 
-    typedef struct _VipsOperation {
-        VipsObject parent_instance;
+        typedef struct _VipsOperation {
+            VipsObject parent_instance;
 
-        // opaque
-    } VipsOperation;
+            // opaque
+        } VipsOperation;
 
-    VipsOperation* vips_operation_new (const char* name);
+        VipsOperation* vips_operation_new (const char* name);
 
-    typedef void* (*VipsArgumentMapFn) (VipsOperation* object,
-        GParamSpec* pspec,
-        VipsArgumentClass* argument_class,
-        VipsArgumentInstance* argument_instance,
-        void* a, void* b);
+        typedef void* (*VipsArgumentMapFn) (VipsOperation* object,
+            GParamSpec* pspec,
+            VipsArgumentClass* argument_class,
+            VipsArgumentInstance* argument_instance,
+            void* a, void* b);
 
-    void* vips_argument_map (VipsOperation* object,
-        VipsArgumentMapFn fn, void* a, void* b);
+        void* vips_argument_map (VipsOperation* object,
+            VipsArgumentMapFn fn, void* a, void* b);
 
-    VipsOperation* vips_cache_operation_build (VipsOperation* operation);
-    void vips_object_unref_outputs (VipsOperation* operation);
+        VipsOperation* vips_cache_operation_build (VipsOperation* operation);
+        void vips_object_unref_outputs (VipsOperation* operation);
 
-    int vips_operation_get_flags (VipsOperation* operation);
+        int vips_operation_get_flags (VipsOperation* operation);
 
-    void vips_cache_set_max (int max);
-    void vips_cache_set_max_mem (size_t max_mem);
-    void vips_cache_set_max_files (int max_files);
-    void vips_cache_set_trace (int trace);
+        void vips_cache_set_max (int max);
+        void vips_cache_set_max_mem (size_t max_mem);
+        void vips_cache_set_max_files (int max_files);
+        void vips_cache_set_trace (int trace);
 
-''')
+    '''
 
-if at_least_libvips(8, 6):
-    ffi.cdef('''
-        GType vips_blend_mode_get_type (void);
+    # at_least_libvips(8, 6):
+    if major > 8 or (major == 8 and minor >= 6):
+        code += '''
+            GType vips_blend_mode_get_type (void);
 
-    ''')
+        '''
+
+    # we must only define this in API mode ... in ABI mode we need to call this
+    # earlier, and must define it earlier
+    if mode == 'API':
+        code += '''
+            int vips_version( int flag );
+        '''
+
+    return code
+
+
+__all__ = [
+    'cdefs'
+]
 

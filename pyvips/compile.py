@@ -1,65 +1,28 @@
 # flake8: noqa
 
-import logging
-import os
-import sys
-import atexit
+import pkgconfig
+
+# we must have the vips package to be able to do anything
+if not pkgconfig.exists('vips'): 
+    raise Exception('unable to find pkg-config package "vips"')
+if pkgconfig.installed('vips', '< 8.2'):
+    raise Exception('pkg-config "vips" is too old -- need libvips 8.2 or later')
 
 from cffi import FFI
 
-# pull in our module version number, see also setup.py
-from .version import __version__
-
-logger = logging.getLogger(__name__)
-
-# user code can override this null handler
-logger.addHandler(logging.NullHandler())
-
 ffi = FFI()
 
-_is_windows = os.name == 'nt'
-_is_mac = sys.platform == 'darwin'
+# we need to define this before we import the decls: they need to know which
+# bits of decl to make
+def at_least_libvips(x, y):
+    """Is this at least libvips x.y?"""
 
-# yuk
-if _is_windows:
-    _glib_libname = 'libglib-2.0-0.dll'
-    _gobject_libname = 'libgobject-2.0-0.dll'
-    _vips_libname = 'libvips-42.dll'
-elif _is_mac:
-    _glib_libname = None
-    _vips_libname = 'libvips.42.dylib'
-    _gobject_libname = 'libgobject-2.0.dylib'
-else:
-    _glib_libname = None
-    _vips_libname = 'libvips.so'
-    _gobject_libname = 'libgobject-2.0.so'
+    major = vips_lib.vips_version(0)
+    minor = vips_lib.vips_version(1)
 
-# possibly use ctypes.util.find_library() to locate the lib?
-gobject_lib = ffi.dlopen(_gobject_libname)
-vips_lib = ffi.dlopen(_vips_libname)
-if _glib_libname:
-    glib_lib = ffi.dlopen(_glib_libname)
-else:
-    glib_lib = gobject_lib
-
-logger.debug('Loaded lib %s', vips_lib)
-logger.debug('Loaded lib %s', gobject_lib)
-
-ffi.cdef('''
-    int vips_init (const char* argv0);
-    int vips_version (int flag);
-''')
-
-if vips_lib.vips_init(sys.argv[0].encode()) != 0:
-    raise Exception('unable to init libvips')
-
-logger.debug('Inited libvips')
-logger.debug('')
+    return major > x or (major == x and minor >= y)
 
 import decls
-major = vips_lib.vips_version(0)
-minor = vips_lib.vips_version(1)
-ffi.cdef(decls.cdefs('ABI', major, minor))
 
 from .error import *
 
