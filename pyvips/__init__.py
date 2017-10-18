@@ -59,7 +59,11 @@ logger.debug('')
 import decls
 major = vips_lib.vips_version(0)
 minor = vips_lib.vips_version(1)
-ffi.cdef(decls.cdefs('ABI', major, minor))
+features = {
+    # at_least_libvips(8, 6):
+    'blend_mode': major > 8 or (major == 8 and minor >= 6)
+}
+ffi.cdef(decls.cdefs(features))
 
 from .error import *
 

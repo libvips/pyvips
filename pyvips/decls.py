@@ -9,7 +9,18 @@
 import sys
 
 
-def cdefs(mode, major, minor):
+def _enabled(features, name):
+    return name in features and features[name]
+
+
+def cdefs(features):
+    """Return the C API declarations for libvips.
+
+    features is a dict with the features we want. Some featrures were only added
+    in later libvipsm for example, and some need to be disabled in some FFI
+    modes.
+    """
+
     code = ''
 
     # apparently the safest way to do this
@@ -262,7 +273,7 @@ def cdefs(mode, major, minor):
     '''
 
     # at_least_libvips(8, 6):
-    if major > 8 or (major == 8 and minor >= 6):
+    if _enabled(features, 'blend_mode'):
         code += '''
             GType vips_blend_mode_get_type (void);
 
@@ -270,7 +281,7 @@ def cdefs(mode, major, minor):
 
     # we must only define this in API mode ... in ABI mode we need to call this
     # earlier, and must define it earlier
-    if mode == 'API':
+    if _enabled(features, 'version'):
         code += '''
             int vips_version( int flag );
         '''
