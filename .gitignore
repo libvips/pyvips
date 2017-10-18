@@ -4,6 +4,7 @@
 *.egg
 *.eggs
 *.cache
+pyvips/_libvips.* 
 dist
 doc/build
 build
