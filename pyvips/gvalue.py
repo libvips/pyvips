@@ -143,7 +143,7 @@ class GValue(object):
 
         # logger.debug('GValue.set: value = %s', value)
 
-        gtype = self.gvalue.gtype
+        gtype = self.gvalue.g_type
         fundamental = gobject_lib.g_type_fundamental(gtype)
 
         if gtype == GValue.gbool_type:
@@ -203,7 +203,7 @@ class GValue(object):
 
         # logger.debug('GValue.get: self = %s', self)
 
-        gtype = self.gvalue.gtype
+        gtype = self.gvalue.g_type
         fundamental = gobject_lib.g_type_fundamental(gtype)
 
         result = None
