@@ -1,5 +1,3 @@
-# flake8: noqa
-
 import pkgconfig
 
 # we must have the vips package to be able to do anything
@@ -29,4 +27,5 @@ import decls
 
 ffibuilder.cdef(decls.cdefs(features))
 
-ffibuilder.compile()
+if __name__ == "__main__":
+    ffibuilder.compile(verbose=True)

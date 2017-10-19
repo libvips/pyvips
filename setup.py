@@ -19,7 +19,13 @@ with open(path.join(here, 'pyvips', 'version.py'), encoding='utf-8') as f:
     exec(f.read(), info)
 
 setup_deps = [
+    'cffi>=1.0.0',
     'pytest-runner'
+]
+
+install_deps = [
+    'cffi>=1.0.0',
+    'pkgconfig'
 ]
 
 test_deps = [
@@ -32,6 +38,9 @@ extras = {
     'test': test_deps,
     'doc': ['sphinx', 'sphinx_rtd_theme']
 }
+
+import sys
+sys.path.append(path.join(here, 'pyvips'))
 
 setup(
     name='pyvips',
@@ -65,10 +74,12 @@ setup(
     keywords='image processing',
     packages=find_packages(exclude=['docs', 'tests', 'examples']),
 
-    install_requires=['cffi', 'pkgconfig'],
-
     setup_requires=setup_deps,
+    cffi_modules=['pyvips/pyvips_build.py:ffibuilder'],
+    install_requires=install_deps,
     tests_require=test_deps,
     extras_require=extras,
 
+    # we may try to compile as part of install, so we can't run in a zip
+    zip_safe=False,
 )
