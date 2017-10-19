@@ -37,7 +37,7 @@ speed and memory use benchmark:
 https://github.com/jcupitt/libvips/wiki/Speed-and-memory-use
 
 Loads a large tiff image, shrinks by 10%, sharpens, and saves again. On this
-test ``pyvips`` is typically 5x faster than Pillow-SIMD and needs 4x less
+test ``pyvips`` is typically 2x faster than ImageMagick and needs 5x less
 memory. 
 
 There's a handy blog post explaining how libvips opens files, which gives
