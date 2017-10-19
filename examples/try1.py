@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+import logging
+logging.basicConfig(level = logging.DEBUG)
+
 import pyvips
 
 print('test Image')

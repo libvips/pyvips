@@ -19,7 +19,8 @@ ffibuilder.set_source("_libvips",
     **pkgconfig.parse('vips'))
 
 features = {
-    'version': True,
+    # in API mode
+    'api': True,
     # at_least_libvips(8, 6):
     'blend_mode': pkgconfig.installed('vips', '>= 8.6')
 }
@@ -28,4 +29,4 @@ import decls
 
 ffibuilder.cdef(decls.cdefs(features))
 
-ffibuilder.compile(verbose=True)
+ffibuilder.compile()

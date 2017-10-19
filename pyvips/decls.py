@@ -141,7 +141,13 @@ def cdefs(features):
             GType value_type;
             GType owner_type;
 
-            // more
+            // private, but cffi in API mode needs these to be able to get the
+            // offset of any member
+            char* _nick;
+            char* _blurb;
+            GData* qdata;
+            unsigned int ref_count;
+            unsigned int param_id;      
         } GParamSpec;
 
         void g_object_ref (void* object);
@@ -196,7 +202,7 @@ def cdefs(features):
             VipsObjectClass *object_class;
             VipsArgumentFlags flags;
             int priority;
-            uint64_t offset;
+            unsigned int offset;
         } VipsArgumentClass;
 
         int vips_object_get_argument (VipsObject* object,
@@ -206,7 +212,8 @@ def cdefs(features):
 
         void vips_object_print_all (void);
 
-        int vips_object_set_from_string (VipsObject* object, const char* options);
+        int vips_object_set_from_string (VipsObject* object, 
+            const char* options);
 
         const char* vips_object_get_description (VipsObject* object);
 
@@ -290,10 +297,11 @@ def cdefs(features):
 
         '''
 
-    # we must only define this in API mode ... in ABI mode we need to call this
-    # earlier, and must define it earlier
-    if _enabled(features, 'version'):
+    # we must only define these in API mode ... in ABI mode we need to call 
+    # these things earlier
+    if _enabled(features, 'api'):
         code += '''
+            int vips_init (const char* argv0);
             int vips_version( int flag );
         '''
 

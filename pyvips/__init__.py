@@ -5,50 +5,65 @@ import os
 import sys
 import atexit
 
-from cffi import FFI
-
-# pull in our module version number, see also setup.py
-from .version import __version__
-
 logger = logging.getLogger(__name__)
 
 # user code can override this null handler
 logger.addHandler(logging.NullHandler())
 
-ffi = FFI()
+# pull in our module version number, see also setup.py
+from .version import __version__
 
-_is_windows = os.name == 'nt'
-_is_mac = sys.platform == 'darwin'
+# try to import our binary interface ... is that works, we are in API mode
+_API_mode = False
+try:
+    import _libvips
 
-# yuk
-if _is_windows:
-    _glib_libname = 'libglib-2.0-0.dll'
-    _gobject_libname = 'libgobject-2.0-0.dll'
-    _vips_libname = 'libvips-42.dll'
-elif _is_mac:
-    _glib_libname = None
-    _vips_libname = 'libvips.42.dylib'
-    _gobject_libname = 'libgobject-2.0.dylib'
-else:
-    _glib_libname = None
-    _vips_libname = 'libvips.so'
-    _gobject_libname = 'libgobject-2.0.so'
+    logger.debug('Loaded binary module _libvips')
+    ffi = _libvips.ffi
+    vips_lib = _libvips.lib
+    glib_lib = _libvips.lib
+    gobject_lib = _libvips.lib
+    _API_mode = True
+except Exception as e:
+    logger.debug('Binary module load failed: %s' % e)
+    logger.debug('Falling back to ABI mode')
 
-# possibly use ctypes.util.find_library() to locate the lib?
-gobject_lib = ffi.dlopen(_gobject_libname)
-vips_lib = ffi.dlopen(_vips_libname)
-if _glib_libname:
-    glib_lib = ffi.dlopen(_glib_libname)
-else:
-    glib_lib = gobject_lib
+    from cffi import FFI
 
-logger.debug('Loaded lib %s', vips_lib)
-logger.debug('Loaded lib %s', gobject_lib)
+    ffi = FFI()
 
-ffi.cdef('''
-    int vips_init (const char* argv0);
-    int vips_version (int flag);
-''')
+    _is_windows = os.name == 'nt'
+    _is_mac = sys.platform == 'darwin'
+
+    # yuk
+    if _is_windows:
+        _glib_libname = 'libglib-2.0-0.dll'
+        _gobject_libname = 'libgobject-2.0-0.dll'
+        _vips_libname = 'libvips-42.dll'
+    elif _is_mac:
+        _glib_libname = None
+        _vips_libname = 'libvips.42.dylib'
+        _gobject_libname = 'libgobject-2.0.dylib'
+    else:
+        _glib_libname = None
+        _vips_libname = 'libvips.so'
+        _gobject_libname = 'libgobject-2.0.so'
+
+    # possibly use ctypes.util.find_library() to locate the lib?
+    gobject_lib = ffi.dlopen(_gobject_libname)
+    vips_lib = ffi.dlopen(_vips_libname)
+    if _glib_libname:
+        glib_lib = ffi.dlopen(_glib_libname)
+    else:
+        glib_lib = gobject_lib
+
+    logger.debug('Loaded lib %s', vips_lib)
+    logger.debug('Loaded lib %s', gobject_lib)
+
+    ffi.cdef('''
+        int vips_init (const char* argv0);
+        int vips_version (int flag);
+    ''')
 
 if vips_lib.vips_init(sys.argv[0].encode()) != 0:
     raise Exception('unable to init libvips')
@@ -56,14 +71,15 @@ if vips_lib.vips_init(sys.argv[0].encode()) != 0:
 logger.debug('Inited libvips')
 logger.debug('')
 
-import decls
-major = vips_lib.vips_version(0)
-minor = vips_lib.vips_version(1)
-features = {
-    # at_least_libvips(8, 6):
-    'blend_mode': major > 8 or (major == 8 and minor >= 6)
-}
-ffi.cdef(decls.cdefs(features))
+if not _API_mode:
+    import decls
+    major = vips_lib.vips_version(0)
+    minor = vips_lib.vips_version(1)
+    features = {
+        # at_least_libvips(8, 6):
+        'blend_mode': major > 8 or (major == 8 and minor >= 6)
+    }
+    ffi.cdef(decls.cdefs(features))
 
 from .error import *
 
