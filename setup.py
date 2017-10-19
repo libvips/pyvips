@@ -21,23 +21,24 @@ with open(path.join(here, 'pyvips', 'version.py'), encoding='utf-8') as f:
 setup_deps = [
     'cffi>=1.0.0',
     'pytest-runner',
-    'pkgconfig'
+    'pkgconfig',
 ]
 
 install_deps = [
     'cffi>=1.0.0',
-    'pkgconfig'
+    'pkgconfig',
 ]
 
 test_deps = [
+    'cffi>=1.0.0',
     'pytest',
     'pytest-catchlog',
-    'pytest-flake8'
+    'pytest-flake8',
 ]
 
 extras = {
     'test': test_deps,
-    'doc': ['sphinx', 'sphinx_rtd_theme']
+    'doc': ['sphinx', 'sphinx_rtd_theme'],
 }
 
 import sys
