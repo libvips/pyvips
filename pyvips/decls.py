@@ -141,7 +141,7 @@ def cdefs(features):
             GType value_type;
             GType owner_type;
 
-            ...;
+            // more
         } GParamSpec;
 
         void g_object_ref (void* object);
@@ -175,7 +175,7 @@ def cdefs(features):
         typedef struct _VipsArgumentInstance {
             VipsArgument parent;
 
-            // opaque
+            // more
         } VipsArgumentInstance;
 
         typedef enum _VipsArgumentFlags {
@@ -215,7 +215,7 @@ def cdefs(features):
         typedef struct _VipsImage {
             VipsObject parent_instance;
 
-            ...;
+            // more
         } VipsImage;
 
         const char* vips_foreign_find_load (const char* name);
@@ -249,7 +249,7 @@ def cdefs(features):
         typedef struct _VipsInterpolate {
             VipsObject parent_object;
 
-            ...;
+            // more
         } VipsInterpolate;
 
         VipsInterpolate* vips_interpolate_new (const char* name);
@@ -257,7 +257,7 @@ def cdefs(features):
         typedef struct _VipsOperation {
             VipsObject parent_instance;
 
-            ...;
+            // more
         } VipsOperation;
 
         VipsOperation* vips_operation_new (const char* name);

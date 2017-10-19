@@ -188,9 +188,10 @@ class GValue(object):
             # can own
             memory = glib_lib.g_malloc(len(value))
             ffi.memmove(memory, value, len(value))
+            free_fn = ffi.cast('VipsCallbackFn', glib_lib.g_free)
 
             vips_lib.vips_value_set_blob(self.gvalue,
-                                         glib_lib.g_free, memory, len(value))
+                                         free_fn, memory, len(value))
         else:
             raise Error('unsupported gtype for set {0}, fundamental {1}'.
                         format(type_name(gtype), type_name(fundamental)))

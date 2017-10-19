@@ -51,6 +51,7 @@ class Operation(pyvips.VipsObject):
     def __init__(self, pointer):
         # logger.debug('Operation.__init__: pointer = %s', pointer)
         super(Operation, self).__init__(pointer)
+        self.object = ffi.cast('VipsObject*', pointer)
 
     @staticmethod
     def new_from_name(operation_name):
@@ -103,7 +104,7 @@ class Operation(pyvips.VipsObject):
             return ffi.NULL
 
         cb = ffi.callback('VipsArgumentMapFn', add_construct)
-        vips_lib.vips_argument_map(self.pointer, cb, ffi.NULL, ffi.NULL)
+        vips_lib.vips_argument_map(self.object, cb, ffi.NULL, ffi.NULL)
 
         return args
 
@@ -204,7 +205,7 @@ class Operation(pyvips.VipsObject):
                     (flags & _DEPRECATED) == 0):
                 opts[name] = op.get(name)
 
-        vips_lib.vips_object_unref_outputs(op.pointer)
+        vips_lib.vips_object_unref_outputs(op.object)
 
         if len(opts) > 0:
             result.append(opts)
