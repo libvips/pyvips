@@ -20,7 +20,8 @@ with open(path.join(here, 'pyvips', 'version.py'), encoding='utf-8') as f:
 
 setup_deps = [
     'cffi>=1.0.0',
-    'pytest-runner'
+    'pytest-runner',
+    'pkgconfig'
 ]
 
 install_deps = [
