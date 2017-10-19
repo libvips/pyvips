@@ -14,6 +14,11 @@ logger = logging.getLogger(__name__)
 
 _is_PY2 = sys.version_info.major == 2
 
+# g_free() as something we can use for a VipsCallbackFn
+def _g_free_cb_function(a, b):
+     vips_lib.vips_free(a)
+_g_free_cb = ffi.callback('VipsCallbackFn', _g_free_cb_function)
+
 class GValue(object):
 
     """Wrap GValue in a Python class.
@@ -189,7 +194,7 @@ class GValue(object):
             memory = glib_lib.g_malloc(len(value))
             ffi.memmove(memory, value, len(value))
             vips_lib.vips_value_set_blob(self.gvalue,
-                                         vips_lib.vips_free, memory, len(value))
+                                         _g_free_cb, memory, len(value))
         else:
             raise Error('unsupported gtype for set {0}, fundamental {1}'.
                         format(type_name(gtype), type_name(fundamental)))

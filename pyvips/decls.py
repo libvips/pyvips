@@ -52,9 +52,7 @@ def cdefs(features):
 
         void* g_malloc (size_t size);
         void g_free (void* data);
-
-        // not what's in the headers, but see the comment in pyvips_build.py
-        int vips_free (void* a, void* b);
+        int vips_free (void* a);
 
         void vips_leak_set (int leak);
 
