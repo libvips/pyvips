@@ -55,7 +55,6 @@ matrix:
     - python: nightly
 
 install:
-  - pip install --upgrade setuptools
   - pip install .[test]
 
 script:
