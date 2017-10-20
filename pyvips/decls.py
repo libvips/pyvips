@@ -292,9 +292,11 @@ def cdefs(features):
     '''
 
     # at_least_libvips(8, 6):
-    if _enabled(features, 'blend_mode'):
+    if _enabled(features, '8.6+'):
         code += '''
             GType vips_blend_mode_get_type (void);
+            void vips_value_set_blob_free (GValue* value, 
+                void* data, size_t length);
 
         '''
 

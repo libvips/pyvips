@@ -14,7 +14,7 @@ logger.addHandler(logging.NullHandler())
 from .version import __version__
 
 # try to import our binary interface ... is that works, we are in API mode
-_API_mode = False
+API_mode = False
 try:
     import _libvips
 
@@ -23,7 +23,7 @@ try:
     vips_lib = _libvips.lib
     glib_lib = _libvips.lib
     gobject_lib = _libvips.lib
-    _API_mode = True
+    API_mode = True
 except Exception as e:
     logger.debug('Binary module load failed: %s' % e)
     logger.debug('Falling back to ABI mode')
@@ -71,13 +71,13 @@ if vips_lib.vips_init(sys.argv[0].encode()) != 0:
 logger.debug('Inited libvips')
 logger.debug('')
 
-if not _API_mode:
+if not API_mode:
     import decls
     major = vips_lib.vips_version(0)
     minor = vips_lib.vips_version(1)
     features = {
         # at_least_libvips(8, 6):
-        'blend_mode': major > 8 or (major == 8 and minor >= 6)
+        '8.6+': major > 8 or (major == 8 and minor >= 6)
     }
     ffi.cdef(decls.cdefs(features))
 
@@ -153,6 +153,6 @@ from .vimage import *
 __all__ = [
     'Error', 'Image', 'Operation', 'GValue', 'Interpolate', 'GObject',
     'VipsObject', 'type_find', 'type_name', 'version', '__version__',
-    'at_least_libvips',
-    'cache_set_max', 'cache_set_max_mem', 'cache_set_max_files'
+    'at_least_libvips', 'API_mode',
+    'cache_set_max', 'cache_set_max_mem', 'cache_set_max_files',
 ]

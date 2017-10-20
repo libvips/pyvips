@@ -20,7 +20,7 @@ features = {
     # in API mode
     'api': True,
     # at_least_libvips(8, 6):
-    'blend_mode': pkgconfig.installed('vips', '>= 8.6')
+    '8.6+': pkgconfig.installed('vips', '>= 8.6')
 }
 
 import decls
