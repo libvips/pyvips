@@ -4,84 +4,24 @@ See:
 https://github.com/jcupitt/pyvips
 """
 
-from codecs import open
+from __future__ import print_function
 from os import path
 
-from setuptools import setup, find_packages
+from setuptools import setup
 
-here = path.abspath(path.dirname(__file__))
-
-with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
-    long_description = f.read()
-
-info = {}
-with open(path.join(here, 'pyvips', 'version.py'), encoding='utf-8') as f:
-    exec(f.read(), info)
-
-setup_deps = [
-    'cffi>=1.0.0',
-    'pytest-runner',
-    'pkgconfig',
-]
-
-install_deps = [
-    'cffi>=1.0.0',
-    'pkgconfig',
-]
-
-test_deps = [
-    'cffi>=1.0.0',
-    'pytest',
-    'pytest-catchlog',
-    'pytest-flake8',
-]
-
-extras = {
-    'test': test_deps,
-    'doc': ['sphinx', 'sphinx_rtd_theme'],
-}
-
+# so that pyvips_build.py can find decls.py
 import sys
+here = path.abspath(path.dirname(__file__))
 sys.path.append(path.join(here, 'pyvips'))
 
-setup(
-    name='pyvips',
-    version=info['__version__'],
-    description='binding for the libvips image processing library',
-    long_description=long_description,
-    url='https://github.com/jcupitt/pyvips',
-    author='John Cupitt',
-    author_email='jcupitt@gmail.com',
-    license='MIT',
+try:
+    # first try to setup using ffibuilder ... this can fail if vips.pc is not
+    # found, or if there is no C compiler, for example
+    setup(cffi_modules=['pyvips/pyvips_build.py:ffibuilder'])
+except: 
+    print('unable to build C extension, falling back to ABI mode')
+    pass
 
-    # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
-    classifiers=[
-        'Development Status :: 5 - Production/Stable',
-        'Environment :: Console',
-        'Intended Audience :: Developers',
-        'Intended Audience :: Science/Research',
-        'Topic :: Multimedia :: Graphics',
-        'Topic :: Multimedia :: Graphics :: Graphics Conversion',
-        'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: Implementation :: PyPy',
-        'Programming Language :: Python :: Implementation :: CPython',
-    ],
+# setup without install-time build of the generated code
+setup()
 
-    keywords='image processing',
-    packages=find_packages(exclude=['docs', 'tests', 'examples']),
-
-    setup_requires=setup_deps,
-    cffi_modules=['pyvips/pyvips_build.py:ffibuilder'],
-    install_requires=install_deps,
-    tests_require=test_deps,
-    extras_require=extras,
-
-    # we may try to compile as part of install, so we can't run in a zip
-    zip_safe=False,
-)
