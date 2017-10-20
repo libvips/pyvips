@@ -213,7 +213,7 @@ class GValue(object):
                 vips_lib.vips_value_set_blob_free(self.gvalue, 
                                                   memory, len(value))
             else:
-                if pyvps.API_mode:
+                if pyvips.API_mode:
                     vips_lib.vips_value_set_blob(self.gvalue,
                                                  ffi.NULL, memory, len(value))
                 else:
