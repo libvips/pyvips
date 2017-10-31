@@ -734,10 +734,13 @@ class Image(pyvips.VipsObject):
             None
 
         Raises:
-            None
+            :class:`.Error`
 
         """
         gtype = self.get_typeof(name)
+        if gtype == 0:
+            raise Error('metadata item {0} does not exist - '
+                        'use set_typeof() to create and set'.format(name))
         self.set_type(gtype, name, value)
 
     def remove(self, name):
