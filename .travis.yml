@@ -53,7 +53,7 @@ python:
 matrix:
   allow_failures:
     - python: nightly
-    - python: 3.3
+    - python: "3.3"
 
 install:
   - pip install .[test]
