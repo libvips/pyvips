@@ -1,5 +1,12 @@
 # master 
 
+## Version 2.1.0 (17 November 2017)
+
+* support cffi API mode as well: much faster startup, about 20% faster on the 
+  test suite [jcupitt]
+* on install, it tries to build a binary interface, and if that fails, falls 
+  back to ABI mode [jcupitt]
+
 ## Version 2.0.5 (8 September 2017)
 
 * minor polish

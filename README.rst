@@ -1,8 +1,6 @@
 README
 ======
 
-**This branch is a quick hack to try out cffi API mode**
-
 .. image:: https://travis-ci.org/jcupitt/pyvips.svg?branch=master
     :alt: Build Status
     :target: https://travis-ci.org/jcupitt/pyvips
@@ -11,10 +9,17 @@ PyPI package:
 
 https://pypi.python.org/pypi/pyvips
 
-This module wraps the libvips image processing library. It needs the libvips
-shared library on your library search path, version 8.2 or later. 
+This module wraps the libvips image processing library. 
 
 https://jcupitt.github.io/libvips
+
+If you have the development headers for libvips installed and have a working C
+compiler, this module will use cffi API mode to try to build a libvips 
+binary extension for your Python. 
+
+If it is unable to build a binary extension, it will use cffi ABI mode instead
+and only needs the libvips shared library. This takes longer to start up and is
+typically 20% slower. 
 
 This binding passes the vips test suite cleanly and with no leaks under
 python2.7 - python3.6, pypy and pypy3 on Windows, macOS and Linux. 
@@ -39,7 +44,7 @@ speed and memory use benchmark:
 https://github.com/jcupitt/libvips/wiki/Speed-and-memory-use
 
 Loads a large tiff image, shrinks by 10%, sharpens, and saves again. On this
-test ``pyvips`` is typically 5x faster than Pillow-SIMD and needs 4x less
+test ``pyvips`` is typically 2x faster than Pillow-SIMD and needs 4x less
 memory. 
 
 There's a handy blog post explaining how libvips opens files, which gives
@@ -59,6 +64,33 @@ https://jcupitt.github.io/libvips/
 Then just install this package, perhaps::
 
 	$ pip install --user pyvips
+
+Testing your install
+--------------------
+
+Try this test program:
+
+        import logging
+        logging.basicConfig(level = logging.DEBUG)
+
+        import pyvips
+
+        print('test Image')
+        image = pyvips.Image.new_from_file('/home/john/pics/k2.jpg')
+        print('image =', image)
+        print('image.width =', image.width)
+        print('\n''')
+
+Replacing `/home/john/pics/k2.jpg` with the name of a file on your machine. You
+should see:
+
+        john@mm-jcupitt5 ~/GIT/pyvips/examples (api) $ python try1.py 
+        DEBUG:pyvips:Loaded binary module _libvips
+        ....
+
+This means pyvips was able to build a binary module on your computer. If the
+build failed
+
 
 Example
 -------
