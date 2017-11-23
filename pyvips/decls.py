@@ -3,7 +3,7 @@
 # we keep these together to make switching between ABI and API modes simpler
 
 # we have to pass in the libvips version, since it can come from either
-# pkg-config in compile.py (in API mode) or libvips itself in __init__.py 
+# pkg-config in compile.py (in API mode) or libvips itself in __init__.py
 # (in ABI mode)
 
 import sys
@@ -16,9 +16,9 @@ def _enabled(features, name):
 def cdefs(features):
     """Return the C API declarations for libvips.
 
-    features is a dict with the features we want. Some featrures were only added
-    in later libvipsm for example, and some need to be disabled in some FFI
-    modes.
+    features is a dict with the features we want. Some featrures were only
+    added in later libvipsm for example, and some need to be disabled in
+    some FFI modes.
     """
 
     code = ''
@@ -148,7 +148,7 @@ def cdefs(features):
             char* _blurb;
             GData* qdata;
             unsigned int ref_count;
-            unsigned int param_id;      
+            unsigned int param_id;
         } GParamSpec;
 
         void g_object_ref (void* object);
@@ -213,7 +213,7 @@ def cdefs(features):
 
         void vips_object_print_all (void);
 
-        int vips_object_set_from_string (VipsObject* object, 
+        int vips_object_set_from_string (VipsObject* object,
             const char* options);
 
         const char* vips_object_get_description (VipsObject* object);
@@ -227,7 +227,8 @@ def cdefs(features):
         } VipsImage;
 
         const char* vips_foreign_find_load (const char* name);
-        const char* vips_foreign_find_load_buffer (const void* data, size_t size);
+        const char* vips_foreign_find_load_buffer (const void* data,
+            size_t size);
         const char* vips_foreign_find_save (const char* name);
         const char* vips_foreign_find_save_buffer (const char* suffix);
 
@@ -242,7 +243,8 @@ def cdefs(features):
             const char* name);
         int vips_image_get (const VipsImage* image,
             const char* name, GValue* value_copy);
-        void vips_image_set (VipsImage* image, const char* name, GValue* value);
+        void vips_image_set (VipsImage* image,
+            const char* name, GValue* value);
         int vips_image_remove (VipsImage* image, const char* name);
         char** vips_image_get_fields (VipsImage* image);
 
@@ -295,12 +297,12 @@ def cdefs(features):
     if _enabled(features, '8.6+'):
         code += '''
             GType vips_blend_mode_get_type (void);
-            void vips_value_set_blob_free (GValue* value, 
+            void vips_value_set_blob_free (GValue* value,
                 void* data, size_t length);
 
         '''
 
-    # we must only define these in API mode ... in ABI mode we need to call 
+    # we must only define these in API mode ... in ABI mode we need to call
     # these things earlier
     if _enabled(features, 'api'):
         code += '''
@@ -314,4 +316,3 @@ def cdefs(features):
 __all__ = [
     'cdefs'
 ]
-

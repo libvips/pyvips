@@ -778,8 +778,8 @@ class TestForeign(PyvipsTester):
             root, ext = os.path.splitext(base)
 
             self.colour.dzsave(filename)
-            # before 8.5.8, you needed a gc on pypy to flush small zip output to
-            # disc
+            # before 8.5.8, you needed a gc on pypy to flush small zip
+            # output to disc
             gc.collect()
             with open(filename, 'rb') as f:
                 buf1 = f.read()

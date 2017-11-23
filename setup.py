@@ -4,6 +4,8 @@ See:
 https://github.com/jcupitt/pyvips
 """
 
+# flake8: noqa
+
 from codecs import open
 from os import path
 
