@@ -1,11 +1,10 @@
 .*.swp
-_libvips.so
 *.pyc
 *.egg-info
 *.egg
 *.eggs
 *.cache
-pyvips/_libvips.* 
+_libvips.* 
 dist
 doc/build
 build
