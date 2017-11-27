@@ -166,8 +166,10 @@ class GValue(object):
                                          GValue.to_enum(gtype, value))
         elif fundamental == GValue.gflags_type:
             gobject_lib.g_value_set_flags(self.gvalue, value)
-        elif gtype == GValue.gstr_type or gtype == GValue.refstr_type:
+        elif gtype == GValue.gstr_type:
             gobject_lib.g_value_set_string(self.gvalue, _to_bytes(value))
+        elif gtype == GValue.refstr_type:
+            vips_lib.vips_value_set_ref_string(self.gvalue, _to_bytes(value))
         elif fundamental == GValue.gobject_type:
             gobject_lib.g_value_set_object(self.gvalue, value.pointer)
         elif gtype == GValue.array_int_type:

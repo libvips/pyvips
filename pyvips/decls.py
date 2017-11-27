@@ -89,7 +89,8 @@ def cdefs(features):
         void g_value_set_double (GValue* value, double d);
         void g_value_set_enum (GValue* value, int e);
         void g_value_set_flags (GValue* value, unsigned int f);
-        void g_value_set_string (GValue* value, const char *str);
+        void g_value_set_string (GValue* value, const char* str);
+        void vips_value_set_ref_string (GValue* value, const char* str);
         void g_value_set_object (GValue* value, void* object);
         void vips_value_set_array_double (GValue* value,
             const double* array, int n );
