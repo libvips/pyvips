@@ -147,33 +147,27 @@ class TestForeign(PyvipsTester):
         if x.get_typeof("exif-ifd0-Orientation") != 0:
             # we need a copy of the image to set the new metadata on
             # otherwise we get caching problems
+
+            # can set, save and load new orientation
             x = pyvips.Image.new_from_file(JPEG_FILE)
             x = x.copy()
             x.set_value("orientation", 2)
-
             filename = temp_filename(self.tempdir, '.jpg')
             x.write_to_file(filename)
             x = pyvips.Image.new_from_file(filename)
             y = x.get_value("orientation")
             self.assertEqual(y, 2)
 
-            filename = temp_filename(self.tempdir, '.jpg')
-
-            x = pyvips.Image.new_from_file(JPEG_FILE)
-            x = x.copy()
-            x.set_value("orientation", 2)
-            x.write_to_file(filename)
-            x = pyvips.Image.new_from_file(filename)
-            y = x.get_value("orientation")
-            self.assertEqual(y, 2)
+            # can remove orientation, save, load again, orientation
+            # has reset
             x.remove("orientation")
-
             filename = temp_filename(self.tempdir, '.jpg')
             x.write_to_file(filename)
             x = pyvips.Image.new_from_file(filename)
             y = x.get_value("orientation")
             self.assertEqual(y, 1)
 
+            # autorotate load works
             filename = temp_filename(self.tempdir, '.jpg')
             x = pyvips.Image.new_from_file(JPEG_FILE)
             x = x.copy()
