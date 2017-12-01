@@ -691,27 +691,28 @@ class TestForeign(PyvipsTester):
         self.assertEqual(x.height, 256)
 
         # google layout with overlap ... verify that we clip correctly
-        # with overlap 192 tile size 256, we should step by 64 pixels each time
-        # so 3x3 tiles exactly
-        filename = temp_filename(self.tempdir, '')
-        self.colour.crop(0, 0, 384, 384).dzsave(filename, layout="google",
-                                                overlap=192, depth="one")
 
-        # test bottom-right tile ... default is 256x256 tiles, overlap 0
+        # overlap 1, 510x510 pixels, 256 pixel tiles, should be exactly 2x2 
+        # tiles, though in fact the bottom and right edges will be white
+        filename = temp_filename(self.tempdir, '')
+        self.colour.crop(0, 0, 510, 510).dzsave(filename, layout="google",
+                                                overlap=1, depth="one")
+
+        x = pyvips.Image.new_from_file(filename + "/0/1/1.jpg")
+        self.assertEqual(x.width, 256)
+        self.assertEqual(x.height, 256)
+        self.assertFalse(os.path.exists(filename + "/0/2/2.jpg"))
+
+        # with 511x511, it'll fit exactly into 2x2, we we actually generate 3x3,
+        # since we output the overlaps
+        filename = temp_filename(self.tempdir, '')
+        self.colour.crop(0, 0, 511, 511).dzsave(filename, layout="google",
+                                                overlap=1, depth="one")
+
         x = pyvips.Image.new_from_file(filename + "/0/2/2.jpg")
         self.assertEqual(x.width, 256)
         self.assertEqual(x.height, 256)
         self.assertFalse(os.path.exists(filename + "/0/3/3.jpg"))
-
-        filename = temp_filename(self.tempdir, '')
-        self.colour.crop(0, 0, 385, 385).dzsave(filename, layout="google",
-                                                overlap=192, depth="one")
-
-        # test bottom-right tile ... default is 256x256 tiles, overlap 0
-        x = pyvips.Image.new_from_file(filename + "/0/3/3.jpg")
-        self.assertEqual(x.width, 256)
-        self.assertEqual(x.height, 256)
-        self.assertFalse(os.path.exists(filename + "/0/4/4.jpg"))
 
         # default zoomify layout
         filename = temp_filename(self.tempdir, '')
