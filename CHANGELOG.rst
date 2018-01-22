@@ -6,6 +6,7 @@
   test suite [jcupitt]
 * on install, it tries to build a binary interface, and if that fails, falls 
   back to ABI mode [jcupitt]
+* better error for bad kwarg [geniass]
 
 ## Version 2.0.5 (8 September 2017)
 
