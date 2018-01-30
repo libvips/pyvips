@@ -70,6 +70,7 @@ if at_least_libvips(8, 6):
 
     ''')
 
+
 class GValue(object):
 
     """Wrap GValue in a Python class.

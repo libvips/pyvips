@@ -373,7 +373,7 @@ class TestConversion(PyvipsTester):
         base = self.colour + 100
         comp = base.composite(overlay, "over")
 
-        self.assertAlmostEqualObjects(comp(0, 0), [51.8, 52.8, 53.8, 255], 
+        self.assertAlmostEqualObjects(comp(0, 0), [51.8, 52.8, 53.8, 255],
                                       places=1)
 
     def test_unpremultiply(self):

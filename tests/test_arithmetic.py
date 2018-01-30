@@ -566,9 +566,8 @@ class TestArithmetic(PyvipsTester):
                 self.assertEqual(height, 60)
 
             test_rgb = test.bandjoin([test, test])
-            left, top, width, height = test_rgb.find_trim(background = [255,
-                                                                        255, 
-                                                                        255])
+            left, top, width, height = test_rgb.find_trim(background=[255, 255,
+                                                                      255])
             self.assertEqual(left, 10)
             self.assertEqual(top, 20)
             self.assertEqual(width, 50)

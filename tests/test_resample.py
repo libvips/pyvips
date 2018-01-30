@@ -79,12 +79,11 @@ class TestResample(PyvipsTester):
         # cast down to 0-127, the smallest range, so we aren't messed up by
         # clipping
         im = im.cast(pyvips.BandFormat.CHAR)
-        bicubic = pyvips.Interpolate.new("bicubic")
-        bilinear = pyvips.Interpolate.new("bilinear")
 
         for fac in [1, 1.1, 1.5, 1.999]:
             for fmt in all_formats:
-                for kernel in ["nearest", "linear", "cubic", "lanczos2", "lanczos3"]:
+                for kernel in ["nearest", "linear",
+                               "cubic", "lanczos2", "lanczos3"]:
                     x = im.cast(fmt)
                     r = x.reduce(fac, fac, kernel=kernel)
                     d = abs(r.avg() - im.avg())

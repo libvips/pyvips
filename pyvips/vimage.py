@@ -1089,7 +1089,8 @@ class Image(pyvips.VipsObject):
         # we need to map str->int by hand
         mode = [GValue.to_enum(GValue.blend_mode_type, x) for x in mode]
 
-        return pyvips.Operation.call('composite', [self] + other, mode, **kwargs)
+        return pyvips.Operation.call('composite', [self] + other, mode,
+                                     **kwargs)
 
     def bandrank(self, other, **kwargs):
         """Band-wise rank filter a set of images."""
