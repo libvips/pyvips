@@ -50,10 +50,14 @@ python:
   - "pypy"
   - "pypy3"
 
+# some strange package versioning issue with pypy?
 matrix:
   allow_failures:
     - python: nightly
     - python: "3.3"
+    - python: "3.4"
+    - python: "pypy"
+    - python: "pypy3"
 
 install:
   - pip install .[test]
