@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyvips.vimage &mdash; pyvips 2.0.2 documentation</title>
+  <title>pyvips.vimage &mdash; pyvips 2.0.5 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="pyvips 2.0.2 documentation" href="../../index.html"/>
+    <link rel="top" title="pyvips 2.0.5 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/>
     <link href="../../_static/style.css" rel="stylesheet" type="text/css">
 
@@ -179,7 +179,7 @@
 
 <span class="kn">import</span> <span class="nn">pyvips</span>
 <span class="kn">from</span> <span class="nn">pyvips</span> <span class="k">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">glib_lib</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">Error</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">,</span> \
-    <span class="n">_to_string</span><span class="p">,</span> <span class="n">GValue</span>
+    <span class="n">_to_string</span><span class="p">,</span> <span class="n">GValue</span><span class="p">,</span> <span class="n">at_least_libvips</span>
 
 <span class="n">ffi</span><span class="o">.</span><span class="n">cdef</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">    typedef struct _VipsImage {</span>
@@ -805,7 +805,7 @@
 
         <span class="c1"># on libvips before 8.5, property types must be fetched separately,</span>
         <span class="c1"># since built-in enums were reported as ints</span>
-        <span class="k">if</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">version</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">8</span> <span class="ow">and</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">version</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">at_least_libvips</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
             <span class="n">gtype</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Image</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">gtype</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">gtype</span>
@@ -834,7 +834,7 @@
 
         <span class="c1"># with old libvips, we must fetch properties (as opposed to</span>
         <span class="c1"># metadata) via VipsObject</span>
-        <span class="k">if</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">version</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">8</span> <span class="ow">and</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">version</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">at_least_libvips</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
             <span class="n">gtype</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Image</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">gtype</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">Image</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
@@ -907,10 +907,13 @@
 <span class="sd">            None</span>
 
 <span class="sd">        Raises:</span>
-<span class="sd">            None</span>
+<span class="sd">            :class:`.Error`</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">gtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">gtype</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;metadata item </span><span class="si">{0}</span><span class="s1"> does not exist - &#39;</span>
+                        <span class="s1">&#39;use set_typeof() to create and set&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_type</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Image.remove"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
@@ -1248,6 +1251,20 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;bandjoin&#39;</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="p">]</span> <span class="o">+</span> <span class="n">other</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="Image.composite"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.composite">[docs]</a>    <span class="k">def</span> <span class="nf">composite</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Composite a set of images with a set of modes.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">other</span> <span class="o">=</span> <span class="p">[</span><span class="n">other</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="p">[</span><span class="n">mode</span><span class="p">]</span>
+
+        <span class="c1"># modes are VipsBlendMode enums, but we have to pass as array of int --</span>
+        <span class="c1"># we need to map str-&gt;int by hand</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="p">[</span><span class="n">GValue</span><span class="o">.</span><span class="n">to_enum</span><span class="p">(</span><span class="n">GValue</span><span class="o">.</span><span class="n">blend_mode_type</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mode</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;composite&#39;</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="p">]</span> <span class="o">+</span> <span class="n">other</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span>
+                                     <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Image.bandrank"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.bandrank">[docs]</a>    <span class="k">def</span> <span class="nf">bandrank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Band-wise rank filter a set of images.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -1434,7 +1451,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'2.0.2',
+            VERSION:'2.0.5',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

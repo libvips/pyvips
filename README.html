@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>README &mdash; pyvips 2.0.2 documentation</title>
+  <title>README &mdash; pyvips 2.0.5 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pyvips 2.0.2 documentation" href="index.html"/>
+    <link rel="top" title="pyvips 2.0.5 documentation" href="index.html"/>
         <link rel="next" title="Introduction" href="intro.html"/>
         <link rel="prev" title="pyvips – Image processing with libvips" href="index.html"/>
     <link href="_static/style.css" rel="stylesheet" type="text/css">
@@ -201,7 +201,7 @@ keep entire images in memory, it’s light.  For example, the libvips
 speed and memory use benchmark:</p>
 <p><a class="reference external" href="https://github.com/jcupitt/libvips/wiki/Speed-and-memory-use">https://github.com/jcupitt/libvips/wiki/Speed-and-memory-use</a></p>
 <p>Loads a large tiff image, shrinks by 10%, sharpens, and saves again. On this
-test <code class="docutils literal"><span class="pre">pyvips</span></code> is typically 5x faster than Pillow-SIMD and needs 4x less
+test <code class="docutils literal"><span class="pre">pyvips</span></code> is typically 2x faster than ImageMagick and needs 5x less
 memory.</p>
 <p>There’s a handy blog post explaining how libvips opens files, which gives
 some more background.</p>
@@ -280,14 +280,20 @@ $ pip3 install --user -e .
 $ pypy -m pip --user -e .
 </pre></div>
 </div>
+<p>Run all tests:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ tox
+</pre></div>
+</div>
 <p>Run test suite:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ nosetests --logging-level=WARNING
-$ python3 -m nose --logging-level=WARNING
-$ pypy -m nose --logging-level=WARNING
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ tox test
+</pre></div>
+</div>
+<p>Run a specific test:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ pytest tests/test_conversion.py
 </pre></div>
 </div>
 <p>Stylecheck:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ flake8
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ tox qa
 </pre></div>
 </div>
 <p>Generate HTML docs in <code class="docutils literal"><span class="pre">doc/build/html</span></code>:</p>
@@ -302,6 +308,7 @@ $ pypy -m nose --logging-level=WARNING
 <p>And copy-paste <code class="docutils literal"><span class="pre">x</span></code> into the obvious place in <code class="docutils literal"><span class="pre">doc/vimage.rst</span></code>.</p>
 <p>Update version number:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ vi pyvips/version.py
+$ vi doc/conf.py
 </pre></div>
 </div>
 <p>Update pypi package:</p>
@@ -356,7 +363,7 @@ $ twine upload dist/*
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'2.0.2',
+            VERSION:'2.0.5',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

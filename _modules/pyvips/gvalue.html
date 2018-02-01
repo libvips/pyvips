@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyvips.gvalue &mdash; pyvips 2.0.2 documentation</title>
+  <title>pyvips.gvalue &mdash; pyvips 2.0.5 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="pyvips 2.0.2 documentation" href="../../index.html"/>
+    <link rel="top" title="pyvips 2.0.5 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/>
     <link href="../../_static/style.css" rel="stylesheet" type="text/css">
 
@@ -180,7 +180,8 @@
 
 <span class="kn">import</span> <span class="nn">pyvips</span>
 <span class="kn">from</span> <span class="nn">pyvips</span> <span class="k">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="p">,</span> \
-    <span class="n">glib_lib</span><span class="p">,</span> <span class="n">Error</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">,</span> <span class="n">_to_string</span><span class="p">,</span> <span class="n">type_name</span><span class="p">,</span> <span class="n">type_from_name</span>
+    <span class="n">glib_lib</span><span class="p">,</span> <span class="n">Error</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">,</span> <span class="n">_to_string</span><span class="p">,</span> <span class="n">type_name</span><span class="p">,</span> <span class="n">type_from_name</span><span class="p">,</span> \
+    <span class="n">at_least_libvips</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -236,6 +237,12 @@
 
 <span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
 
+<span class="k">if</span> <span class="n">at_least_libvips</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
+    <span class="n">ffi</span><span class="o">.</span><span class="n">cdef</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">        GType vips_blend_mode_get_type (void);</span>
+
+<span class="s1">    &#39;&#39;&#39;</span><span class="p">)</span>
+
 
 <div class="viewcode-block" id="GValue"><a class="viewcode-back" href="../../gvalue.html#pyvips.gvalue.GValue">[docs]</a><span class="k">class</span> <span class="nc">GValue</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
@@ -269,6 +276,10 @@
 
     <span class="n">pyvips</span><span class="o">.</span><span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_band_format_get_type</span><span class="p">()</span>
     <span class="n">format_type</span> <span class="o">=</span> <span class="n">type_from_name</span><span class="p">(</span><span class="s1">&#39;VipsBandFormat&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">at_least_libvips</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
+        <span class="n">pyvips</span><span class="o">.</span><span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_blend_mode_get_type</span><span class="p">()</span>
+    <span class="n">blend_mode_type</span> <span class="o">=</span> <span class="n">type_from_name</span><span class="p">(</span><span class="s1">&#39;VipsBlendMode&#39;</span><span class="p">)</span>
 
     <span class="c1"># map a gtype to the name of the corresponding Python type</span>
     <span class="n">_gtype_to_python</span> <span class="o">=</span> <span class="p">{</span>
@@ -534,7 +545,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'2.0.2',
+            VERSION:'2.0.5',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

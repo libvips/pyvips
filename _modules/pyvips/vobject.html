@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyvips.vobject &mdash; pyvips 2.0.2 documentation</title>
+  <title>pyvips.vobject &mdash; pyvips 2.0.5 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="pyvips 2.0.2 documentation" href="../../index.html"/>
+    <link rel="top" title="pyvips 2.0.5 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/>
     <link href="../../_static/style.css" rel="stylesheet" type="text/css">
 
@@ -280,8 +280,6 @@
                                                    <span class="n">argument_instance</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="c1"># need to clear any error, this is horrible</span>
-            <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="k">return</span> <span class="n">pspec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -297,10 +295,12 @@
         <span class="c1">#              str(self), name)</span>
 
         <span class="n">pspec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_pspec</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">pspec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">pspec</span><span class="o">.</span><span class="n">value_type</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mi">0</span></div>
+        <span class="k">if</span> <span class="n">pspec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># need to clear any error, this is horrible</span>
+            <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+        <span class="k">return</span> <span class="n">pspec</span><span class="o">.</span><span class="n">value_type</span></div>
 
 <div class="viewcode-block" id="VipsObject.get_blurb"><a class="viewcode-back" href="../../vobject.html#pyvips.vobject.VipsObject.get_blurb">[docs]</a>    <span class="k">def</span> <span class="nf">get_blurb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the blurb for a GObject property.&quot;&quot;&quot;</span>
@@ -317,7 +317,10 @@
 
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;VipsObject.get: name = </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 
-        <span class="n">gtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">pspec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_pspec</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pspec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;Property not found.&#39;</span><span class="p">)</span>
+        <span class="n">gtype</span> <span class="o">=</span> <span class="n">pspec</span><span class="o">.</span><span class="n">value_type</span>
 
         <span class="n">gv</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">GValue</span><span class="p">()</span>
         <span class="n">gv</span><span class="o">.</span><span class="n">set_type</span><span class="p">(</span><span class="n">gtype</span><span class="p">)</span>
@@ -403,7 +406,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'2.0.2',
+            VERSION:'2.0.5',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

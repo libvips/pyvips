@@ -37,7 +37,7 @@ speed and memory use benchmark:
 https://github.com/jcupitt/libvips/wiki/Speed-and-memory-use
 
 Loads a large tiff image, shrinks by 10%, sharpens, and saves again. On this
-test ``pyvips`` is typically 5x faster than Pillow-SIMD and needs 4x less
+test ``pyvips`` is typically 2x faster than ImageMagick and needs 5x less
 memory. 
 
 There's a handy blog post explaining how libvips opens files, which gives
@@ -128,15 +128,21 @@ Local user install::
 	$ pip3 install --user -e .
 	$ pypy -m pip --user -e .
 
+Run all tests::
+
+	$ tox 
+
 Run test suite::
 
-	$ nosetests --logging-level=WARNING
-	$ python3 -m nose --logging-level=WARNING
-	$ pypy -m nose --logging-level=WARNING
+	$ tox test
+
+Run a specific test::
+
+	$ pytest tests/test_conversion.py
 
 Stylecheck::
 
-        $ flake8
+        $ tox qa
 
 Generate HTML docs in ``doc/build/html``::
 
@@ -152,6 +158,7 @@ And copy-paste ``x`` into the obvious place in ``doc/vimage.rst``.
 Update version number::
 
         $ vi pyvips/version.py
+        $ vi doc/conf.py
 
 Update pypi package::
 
