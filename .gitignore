@@ -2,5 +2,9 @@
 *.pyc
 *.egg-info
 *.egg
+.eggs
+.pytest_cache
+_libvips.so
+build
 dist
 doc/build
