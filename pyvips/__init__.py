@@ -32,8 +32,8 @@ elif _is_mac:
     _gobject_libname = 'libgobject-2.0.dylib'
 else:
     _glib_libname = None
-    _vips_libname = 'libvips.so'
-    _gobject_libname = 'libgobject-2.0.so'
+    _vips_libname = 'libvips.so.42'
+    _gobject_libname = 'libgobject-2.0.so.0'
 
 # possibly use ctypes.util.find_library() to locate the lib?
 gobject_lib = ffi.dlopen(_gobject_libname)
