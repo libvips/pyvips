@@ -23,7 +23,6 @@ def _g_free_cb_function(a, b):
 _g_free_cb = ffi.callback('VipsCallbackFn', _g_free_cb_function)
 
 
-
 class GValue(object):
 
     """Wrap GValue in a Python class.

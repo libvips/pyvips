@@ -692,7 +692,7 @@ class TestForeign(PyvipsTester):
 
         # google layout with overlap ... verify that we clip correctly
 
-        # overlap 1, 510x510 pixels, 256 pixel tiles, should be exactly 2x2 
+        # overlap 1, 510x510 pixels, 256 pixel tiles, should be exactly 2x2
         # tiles, though in fact the bottom and right edges will be white
         filename = temp_filename(self.tempdir, '')
         self.colour.crop(0, 0, 510, 510).dzsave(filename, layout="google",
@@ -786,7 +786,7 @@ class TestForeign(PyvipsTester):
             buf2 = self.colour.dzsave_buffer(basename=root)
             self.assertEqual(len(buf1), len(buf2))
 
-            # we can't test the bytes are exactly equal -- the timestamps will 
+            # we can't test the bytes are exactly equal -- the timestamps will
             # be different
 
 

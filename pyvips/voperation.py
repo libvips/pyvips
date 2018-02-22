@@ -176,7 +176,7 @@ class Operation(pyvips.VipsObject):
                 n += 1
 
         for name, value in kwargs.items():
-            if not name in flags_from_name:
+            if name not in flags_from_name:
                 raise Error('{0} does not support argument '
                             '{1}'.format(operation_name, name))
 
