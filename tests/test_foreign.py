@@ -703,16 +703,18 @@ class TestForeign(PyvipsTester):
         self.assertEqual(x.height, 256)
         self.assertFalse(os.path.exists(filename + "/0/2/2.jpg"))
 
-        # with 511x511, it'll fit exactly into 2x2, we we actually generate 3x3,
-        # since we output the overlaps
-        filename = temp_filename(self.tempdir, '')
-        self.colour.crop(0, 0, 511, 511).dzsave(filename, layout="google",
-                                                overlap=1, depth="one")
+        # with 511x511, it'll fit exactly into 2x2 -- we we actually generate
+        # 3x3, since we output the overlaps
+        # 8.6 revised the rules on overlaps, so don't test earlier than that
+        if pyvips.base.at_least_libvips(8, 6):
+            filename = temp_filename(self.tempdir, '')
+            self.colour.crop(0, 0, 511, 511).dzsave(filename, layout="google",
+                                                    overlap=1, depth="one")
 
-        x = pyvips.Image.new_from_file(filename + "/0/2/2.jpg")
-        self.assertEqual(x.width, 256)
-        self.assertEqual(x.height, 256)
-        self.assertFalse(os.path.exists(filename + "/0/3/3.jpg"))
+            x = pyvips.Image.new_from_file(filename + "/0/2/2.jpg")
+            self.assertEqual(x.width, 256)
+            self.assertEqual(x.height, 256)
+            self.assertFalse(os.path.exists(filename + "/0/3/3.jpg"))
 
         # default zoomify layout
         filename = temp_filename(self.tempdir, '')
@@ -729,7 +731,8 @@ class TestForeign(PyvipsTester):
         self.colour.dzsave(filename)
         # before 8.5.8, you needed a gc on pypy to flush small zip output to
         # disc
-        gc.collect()
+        if not pyvips.base.at_least_libvips(8, 6):
+            gc.collect()
         self.assertTrue(os.path.exists(filename))
         self.assertFalse(os.path.exists(filename + "_files"))
         self.assertFalse(os.path.exists(filename + ".dzi"))
@@ -739,7 +742,8 @@ class TestForeign(PyvipsTester):
         self.colour.dzsave(filename2, compression=-1)
         # before 8.5.8, you needed a gc on pypy to flush small zip output to
         # disc
-        gc.collect()
+        if not pyvips.base.at_least_libvips(8, 6):
+            gc.collect()
         self.assertTrue(os.path.exists(filename2))
         self.assertLess(os.path.getsize(filename2),
                         os.path.getsize(filename))
@@ -775,14 +779,15 @@ class TestForeign(PyvipsTester):
             self.colour.dzsave(filename)
             # before 8.5.8, you needed a gc on pypy to flush small zip
             # output to disc
-            gc.collect()
+            if not pyvips.base.at_least_libvips(8, 6):
+                gc.collect()
             with open(filename, 'rb') as f:
                 buf1 = f.read()
             buf2 = self.colour.dzsave_buffer(basename=root)
             self.assertEqual(len(buf1), len(buf2))
 
-            # we can't test the bytes are exactly equal, the timestamps will be
-            # different
+            # we can't test the bytes are exactly equal -- the timestamps will 
+            # be different
 
 
 if __name__ == '__main__':

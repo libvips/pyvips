@@ -19,7 +19,7 @@ binary extension for your Python.
 
 If it is unable to build a binary extension, it will use cffi ABI mode instead
 and only needs the libvips shared library. This takes longer to start up and is
-typically 20% slower. 
+typically ~20% slower in execution.
 
 This binding passes the vips test suite cleanly and with no leaks under
 python2.7 - python3.6, pypy and pypy3 on Windows, macOS and Linux. 
@@ -44,7 +44,7 @@ speed and memory use benchmark:
 https://github.com/jcupitt/libvips/wiki/Speed-and-memory-use
 
 Loads a large tiff image, shrinks by 10%, sharpens, and saves again. On this
-test ``pyvips`` is typically 2x faster than Pillow-SIMD and needs 4x less
+test ``pyvips`` is typically 3x faster than ImageMagick and needs 5x less
 memory. 
 
 There's a handy blog post explaining how libvips opens files, which gives
