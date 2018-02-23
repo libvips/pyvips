@@ -13,22 +13,39 @@ from setuptools import setup, find_packages
 
 here = path.abspath(path.dirname(__file__))
 
-with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
-    long_description = f.read()
-
 info = {}
 with open(path.join(here, 'pyvips', 'version.py'), encoding='utf-8') as f:
     exec(f.read(), info)
 
+with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
+    long_description = f.read()
+
+# See https://pypi.python.org/pypi?%3Aaction=list_classifiers
+pyvips_classifiers = [
+    'Development Status :: 5 - Production/Stable',
+    'Environment :: Console',
+    'Intended Audience :: Developers',
+    'Intended Audience :: Science/Research',
+    'Topic :: Multimedia :: Graphics',
+    'Topic :: Multimedia :: Graphics :: Graphics Conversion',
+    'License :: OSI Approved :: MIT License',
+    'Programming Language :: Python :: 2.7',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.3',
+    'Programming Language :: Python :: 3.4',
+    'Programming Language :: Python :: 3.5',
+    'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: Implementation :: PyPy',
+    'Programming Language :: Python :: Implementation :: CPython',
+],
+
 setup_deps = [
     'cffi>=1.0.0',
     'pytest-runner',
-    'pkgconfig',
 ]
 
 install_deps = [
     'cffi>=1.0.0',
-    'pkgconfig',
 ]
 
 test_deps = [
@@ -43,47 +60,54 @@ extras = {
     'doc': ['sphinx', 'sphinx_rtd_theme'],
 }
 
+pyvips_packages = find_packages(exclude=['docs', 'tests', 'examples'])
+
 import sys
 sys.path.append(path.join(here, 'pyvips'))
 
-setup(
-    name='pyvips',
-    version=info['__version__'],
-    description='binding for the libvips image processing library',
-    long_description=long_description,
-    url='https://github.com/jcupitt/pyvips',
-    author='John Cupitt',
-    author_email='jcupitt@gmail.com',
-    license='MIT',
+# we try to install twice: first, in API mode (which will try to build some C
+# against the libvips headers), then if that fails, in ABI mode, which just
+# needs the shared library
 
-    # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
-    classifiers=[
-        'Development Status :: 5 - Production/Stable',
-        'Environment :: Console',
-        'Intended Audience :: Developers',
-        'Intended Audience :: Science/Research',
-        'Topic :: Multimedia :: Graphics',
-        'Topic :: Multimedia :: Graphics :: Graphics Conversion',
-        'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: Implementation :: PyPy',
-        'Programming Language :: Python :: Implementation :: CPython',
-    ],
+try:
+    setup(
+        name='pyvips',
+        version=info['__version__'],
+        description='binding for the libvips image processing library, API mode',
+        long_description=long_description,
+        url='https://github.com/jcupitt/pyvips',
+        author='John Cupitt',
+        author_email='jcupitt@gmail.com',
+        license='MIT',
+        classifiers=pyvips_classifiers,
+        keywords='image processing',
 
-    keywords='image processing',
-    packages=find_packages(exclude=['docs', 'tests', 'examples']),
+        packages=pyvips_packages,
+        setup_requires=setup_deps + ['pkgconfig'],
+        cffi_modules=['pyvips/pyvips_build.py:ffibuilder'],
+        install_requires=install_deps + ['pkgconfig'],
+        tests_require=test_deps,
+        extras_require=extras,
 
-    setup_requires=setup_deps,
-    cffi_modules=['pyvips/pyvips_build.py:ffibuilder'],
-    install_requires=install_deps,
-    tests_require=test_deps,
-    extras_require=extras,
+        # we will try to compile as part of install, so we can't run in a zip
+        zip_safe=False,
+    )
+except Exception as e:
+    setup(
+        name='pyvips',
+        version=info['__version__'],
+        description='binding for the libvips image processing library, ABI mode',
+        long_description=long_description,
+        url='https://github.com/jcupitt/pyvips',
+        author='John Cupitt',
+        author_email='jcupitt@gmail.com',
+        license='MIT',
+        classifiers=pyvips_classifiers,
+        keywords='image processing',
 
-    # we may try to compile as part of install, so we can't run in a zip
-    zip_safe=False,
-)
+        packages=pyvips_packages,
+        setup_requires=setup_deps,
+        install_requires=install_deps,
+        tests_require=test_deps,
+        extras_require=extras,
+    )

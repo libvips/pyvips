@@ -17,9 +17,10 @@ If you have the development headers for libvips installed and have a working C
 compiler, this module will use cffi API mode to try to build a libvips 
 binary extension for your Python. 
 
-If it is unable to build a binary extension, it will use cffi ABI mode instead
-and only needs the libvips shared library. This takes longer to start up and is
-typically ~20% slower in execution.
+If it is unable to build a binary extension, it will use cffi ABI mode
+instead and only needs the libvips shared library. This takes longer to
+start up and is typically ~20% slower in execution.  You can find out how
+pyvips installed with `pip show pyvips`.
 
 This binding passes the vips test suite cleanly and with no leaks under
 python2.7 - python3.6, pypy and pypy3 on Windows, macOS and Linux. 
