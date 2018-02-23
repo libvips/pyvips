@@ -6,10 +6,19 @@ https://github.com/jcupitt/pyvips
 
 # flake8: noqa
 
+import sys
 from codecs import open
 from os import path
 
 from setuptools import setup, find_packages
+
+# normally we attempt to setup in API mode (with a C extension), but when making
+# a wheel, we want to pretend to be a pure Python wheel ... use --abi to go into
+# pure Python mode
+ABI_mode = False
+if "--abi" in sys.argv:
+    ABI_mode = True
+    sys.argv.remove("--abi")
 
 here = path.abspath(path.dirname(__file__))
 
@@ -37,7 +46,7 @@ pyvips_classifiers = [
     'Programming Language :: Python :: 3.6',
     'Programming Language :: Python :: Implementation :: PyPy',
     'Programming Language :: Python :: Implementation :: CPython',
-],
+]
 
 setup_deps = [
     'cffi>=1.0.0',
@@ -62,14 +71,9 @@ extras = {
 
 pyvips_packages = find_packages(exclude=['docs', 'tests', 'examples'])
 
-import sys
 sys.path.append(path.join(here, 'pyvips'))
 
-# we try to install twice: first, in API mode (which will try to build some C
-# against the libvips headers), then if that fails, in ABI mode, which just
-# needs the shared library
-
-try:
+def API_setup():
     setup(
         name='pyvips',
         version=info['__version__'],
@@ -92,7 +96,8 @@ try:
         # we will try to compile as part of install, so we can't run in a zip
         zip_safe=False,
     )
-except Exception as e:
+
+def ABI_setup():
     setup(
         name='pyvips',
         version=info['__version__'],
@@ -111,3 +116,17 @@ except Exception as e:
         tests_require=test_deps,
         extras_require=extras,
     )
+
+
+# we try to install twice: first, in API mode (which will try to build some C
+# against the libvips headers), then if that fails, in ABI mode, which just
+# needs the shared library
+
+if not ABI_mode:
+    try:
+        API_setup()
+    except Exception:
+        ABI_mode = True
+
+if ABI_mode:
+    ABI_setup()
