@@ -12,14 +12,6 @@ from os import path
 
 from setuptools import setup, find_packages
 
-# normally we attempt to setup in API mode (with a C extension), but when making
-# a wheel, we want to pretend to be a pure Python wheel ... use --abi to go into
-# pure Python mode
-ABI_mode = False
-if "--abi" in sys.argv:
-    ABI_mode = True
-    sys.argv.remove("--abi")
-
 here = path.abspath(path.dirname(__file__))
 
 info = {}
@@ -73,7 +65,7 @@ pyvips_packages = find_packages(exclude=['docs', 'tests', 'examples'])
 
 sys.path.append(path.join(here, 'pyvips'))
 
-def API_setup():
+def setup_API():
     setup(
         name='pyvips',
         version=info['__version__'],
@@ -97,7 +89,7 @@ def API_setup():
         zip_safe=False,
     )
 
-def ABI_setup():
+def setup_ABI():
     setup(
         name='pyvips',
         version=info['__version__'],
@@ -117,16 +109,12 @@ def ABI_setup():
         extras_require=extras,
     )
 
+# try to install in API mode first, then if that fails, fall back to ABI
 
-# we try to install twice: first, in API mode (which will try to build some C
-# against the libvips headers), then if that fails, in ABI mode, which just
-# needs the shared library
+# API mode requires a working C compiler plus all the libvips headers whereas
+# ABI only needs the libvips shared library to be on the system
 
-if not ABI_mode:
-    try:
-        API_setup()
-    except Exception:
-        ABI_mode = True
-
-if ABI_mode:
-    ABI_setup()
+try:
+    setup_API()
+except Exception:
+    setup_ABI()

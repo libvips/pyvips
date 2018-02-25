@@ -1,5 +1,10 @@
 # master 
 
+## Version 2.1.1 (25 February 2018)
+
+* switch to sdist
+* better ABI mode fallback behaviour
+
 ## Version 2.1.0 (17 November 2017)
 
 * support cffi API mode as well: much faster startup, about 20% faster on the 
