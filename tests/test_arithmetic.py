@@ -366,19 +366,22 @@ class TestArithmetic(PyvipsTester):
             self.assertAlmostEqual(r, 40)
 
     def test_hough_line(self):
-        test = pyvips.Image.black(100, 100).draw_line(100, 10, 90, 90, 10)
+        # hough_line changed the way it codes parameter space in 8.7 ... don't
+        # test earlier versions
+        if pyvips.base.at_least_libvips(8, 7):
+            test = pyvips.Image.black(100, 100).draw_line(100, 10, 90, 90, 10)
 
-        for fmt in all_formats:
-            im = test.cast(fmt)
-            hough = im.hough_line()
+            for fmt in all_formats:
+                im = test.cast(fmt)
+                hough = im.hough_line()
 
-            v, x, y = hough.maxpos()
+                v, x, y = hough.maxpos()
 
-            angle = 360.0 * x // hough.width
-            distance = test.height * y // hough.height
+                angle = 180.0 * x // hough.width
+                distance = test.height * y // hough.height
 
-            self.assertAlmostEqual(angle, 45)
-            self.assertAlmostEqual(distance, 70)
+                self.assertAlmostEqual(angle, 45)
+                self.assertAlmostEqual(distance, 70)
 
     def test_sin(self):
         def my_sin(x):

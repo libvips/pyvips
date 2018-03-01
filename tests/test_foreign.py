@@ -786,7 +786,7 @@ class TestForeign(PyvipsTester):
             buf2 = self.colour.dzsave_buffer(basename=root)
             self.assertEqual(len(buf1), len(buf2))
 
-            # we can't test the bytes are exactly equal -- the timestamps will 
+            # we can't test the bytes are exactly equal -- the timestamps will
             # be different
 
 

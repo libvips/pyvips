@@ -5,7 +5,7 @@
 *.egg
 *.eggs
 *.cache
-_libvips*
+_libvips.* 
 dist
 doc/build
 build

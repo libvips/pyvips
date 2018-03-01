@@ -8,36 +8,6 @@ from pyvips import ffi, vips_lib, Error, _to_bytes, _to_string, GValue, \
 
 logger = logging.getLogger(__name__)
 
-ffi.cdef('''
-    typedef struct _VipsOperation {
-        VipsObject parent_instance;
-
-        // opaque
-    } VipsOperation;
-
-    VipsOperation* vips_operation_new (const char* name);
-
-    typedef void* (*VipsArgumentMapFn) (VipsOperation* object,
-        GParamSpec* pspec,
-        VipsArgumentClass* argument_class,
-        VipsArgumentInstance* argument_instance,
-        void* a, void* b);
-
-    void* vips_argument_map (VipsOperation* object,
-        VipsArgumentMapFn fn, void* a, void* b);
-
-    VipsOperation* vips_cache_operation_build (VipsOperation* operation);
-    void vips_object_unref_outputs (VipsOperation* operation);
-
-    int vips_operation_get_flags (VipsOperation* operation);
-
-    void vips_cache_set_max (int max);
-    void vips_cache_set_max_mem (size_t max_mem);
-    void vips_cache_set_max_files (int max_files);
-    void vips_cache_set_trace (int trace);
-
-''')
-
 # values for VipsArgumentFlags
 _REQUIRED = 1
 _CONSTRUCT = 2
@@ -81,6 +51,7 @@ class Operation(pyvips.VipsObject):
     def __init__(self, pointer):
         # logger.debug('Operation.__init__: pointer = %s', pointer)
         super(Operation, self).__init__(pointer)
+        self.object = ffi.cast('VipsObject*', pointer)
 
     @staticmethod
     def new_from_name(operation_name):
@@ -133,7 +104,7 @@ class Operation(pyvips.VipsObject):
             return ffi.NULL
 
         cb = ffi.callback('VipsArgumentMapFn', add_construct)
-        vips_lib.vips_argument_map(self.pointer, cb, ffi.NULL, ffi.NULL)
+        vips_lib.vips_argument_map(self.object, cb, ffi.NULL, ffi.NULL)
 
         return args
 
@@ -205,6 +176,10 @@ class Operation(pyvips.VipsObject):
                 n += 1
 
         for name, value in kwargs.items():
+            if name not in flags_from_name:
+                raise Error('{0} does not support argument '
+                            '{1}'.format(operation_name, name))
+
             op.set(name, flags_from_name[name], match_image, value)
 
         # build operation
@@ -234,7 +209,7 @@ class Operation(pyvips.VipsObject):
                     (flags & _DEPRECATED) == 0):
                 opts[name] = op.get(name)
 
-        vips_lib.vips_object_unref_outputs(op.pointer)
+        vips_lib.vips_object_unref_outputs(op.object)
 
         if len(opts) > 0:
             result.append(opts)

@@ -3,31 +3,6 @@
 
 from pyvips import ffi, vips_lib, gobject_lib, _to_string, _to_bytes, Error
 
-ffi.cdef('''
-    typedef struct _VipsImage VipsImage;
-    typedef struct _GValue GValue;
-
-    void* g_malloc (size_t size);
-    void g_free (void* data);
-
-    int vips_leak_set (int leak);
-
-    char* vips_path_filename7 (const char* path);
-    char* vips_path_mode7 (const char* path);
-
-    GType vips_type_find (const char* basename, const char* nickname);
-    const char* vips_nickname_find (GType type);
-
-    const char* g_type_name (GType gtype);
-    GType g_type_from_name (const char* name);
-
-    typedef void* (*VipsTypeMap2Fn) (GType type);
-    void* vips_type_map (GType base, VipsTypeMap2Fn fn);
-
-    int vips_version( int flag );
-
-''')
-
 
 def leak_set(leak):
     """Enable or disable libvips leak checking.
@@ -60,6 +35,8 @@ def version(flag):
     return value
 
 
+# we need to define this before we import the decls: they need to know which
+# bits of decl to make
 def at_least_libvips(x, y):
     """Is this at least libvips x.y?"""
 

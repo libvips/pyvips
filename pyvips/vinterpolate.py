@@ -7,17 +7,6 @@ from pyvips import ffi, vips_lib, Error, _to_bytes
 
 logger = logging.getLogger(__name__)
 
-ffi.cdef('''
-    typedef struct _VipsInterpolate {
-        VipsObject parent_instance;
-
-        // opaque
-    } VipsInterpolate;
-
-    VipsInterpolate* vips_interpolate_new (const char* name);
-
-''')
-
 
 class Interpolate(pyvips.VipsObject):
     """Make interpolators for operators like :meth:`.affine`.

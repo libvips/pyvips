@@ -1,5 +1,22 @@
 # master 
 
+## Version 2.1.1 (25 February 2018)
+
+* switch to sdist
+* better ABI mode fallback behaviour
+
+## Version 2.1.0 (17 November 2017)
+
+* support cffi API mode as well: much faster startup, about 20% faster on the 
+  test suite [jcupitt]
+* on install, it tries to build a binary interface, and if that fails, falls 
+  back to ABI mode [jcupitt]
+* better error for bad kwarg [geniass]
+
+## Version 2.0.6 (22 February 2017)
+
+* add version numbers to library names on linux
+
 ## Version 2.0.5 (8 September 2017)
 
 * minor polish

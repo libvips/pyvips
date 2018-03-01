@@ -6,34 +6,6 @@ from pyvips import ffi, gobject_lib
 
 logger = logging.getLogger(__name__)
 
-ffi.cdef('''
-    typedef struct _GObject {
-        void *g_type_instance;
-        unsigned int ref_count;
-        void *qdata;
-    } GObject;
-
-    typedef struct _GParamSpec {
-        void* g_type_instance;
-
-        const char* name;
-        unsigned int flags;
-        GType value_type;
-        GType owner_type;
-
-        // rest opaque
-    } GParamSpec;
-
-    void g_object_ref (void* object);
-    void g_object_unref (void* object);
-
-    void g_object_set_property (GObject* object,
-        const char *name, GValue* value);
-    void g_object_get_property (GObject* object,
-        const char* name, GValue* value);
-
-''')
-
 
 class GObject(object):
     """Manage GObject lifetime.

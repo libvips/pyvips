@@ -8,44 +8,6 @@ import pyvips
 from pyvips import ffi, glib_lib, vips_lib, Error, _to_bytes, \
     _to_string, GValue, at_least_libvips
 
-ffi.cdef('''
-    typedef struct _VipsImage {
-        VipsObject parent_instance;
-
-        // opaque
-    } VipsImage;
-
-    const char* vips_foreign_find_load (const char* name);
-    const char* vips_foreign_find_load_buffer (const void* data, size_t size);
-    const char* vips_foreign_find_save (const char* name);
-    const char* vips_foreign_find_save_buffer (const char* suffix);
-
-    VipsImage* vips_image_new_matrix_from_array (int width, int height,
-            const double* array, int size);
-    VipsImage* vips_image_new_from_memory (const void* data, size_t size,
-            int width, int height, int bands, int format);
-
-    VipsImage* vips_image_copy_memory (VipsImage* image);
-
-    GType vips_image_get_typeof (const VipsImage* image,
-        const char* name);
-    int vips_image_get (const VipsImage* image,
-        const char* name, GValue* value_copy);
-    void vips_image_set (VipsImage* image, const char* name, GValue* value);
-    int vips_image_remove (VipsImage* image, const char* name);
-    char** vips_image_get_fields (VipsImage* image);
-
-    char* vips_filename_get_filename (const char* vips_filename);
-    char* vips_filename_get_options (const char* vips_filename);
-
-    VipsImage* vips_image_new_temp_file (const char* format);
-
-    int vips_image_write (VipsImage* image, VipsImage* out);
-    void* vips_image_write_to_memory (VipsImage* in, size_t* size_out);
-
-
-''')
-
 
 # either a single number, or a table of numbers
 def _is_pixel(value):
