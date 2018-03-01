@@ -247,7 +247,6 @@ def cdefs(features):
         void vips_image_set (VipsImage* image,
             const char* name, GValue* value);
         int vips_image_remove (VipsImage* image, const char* name);
-        char** vips_image_get_fields (VipsImage* image);
 
         char* vips_filename_get_filename (const char* vips_filename);
         char* vips_filename_get_options (const char* vips_filename);
@@ -294,6 +293,12 @@ def cdefs(features):
 
     '''
 
+    # at_least_libvips(8, 5):
+    if _enabled(features, '8.5+'):
+        code += '''
+            char** vips_image_get_fields (VipsImage* image);
+        '''
+
     # at_least_libvips(8, 6):
     if _enabled(features, '8.6+'):
         code += '''
@@ -308,7 +313,7 @@ def cdefs(features):
     if _enabled(features, 'api'):
         code += '''
             int vips_init (const char* argv0);
-            int vips_version( int flag );
+            int vips_version (int flag);
         '''
 
     return code

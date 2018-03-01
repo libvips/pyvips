@@ -73,12 +73,16 @@ logger.debug('')
 
 if not API_mode:
     import decls
+
     major = vips_lib.vips_version(0)
     minor = vips_lib.vips_version(1)
     features = {
+        # at_least_libvips(8, 5):
+        '8.5+': major > 8 or (major == 8 and minor >= 5),
         # at_least_libvips(8, 6):
-        '8.6+': major > 8 or (major == 8 and minor >= 6)
+        '8.6+': major > 8 or (major == 8 and minor >= 6),
     }
+
     ffi.cdef(decls.cdefs(features))
 
 from .error import *

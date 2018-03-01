@@ -1,5 +1,9 @@
 # master 
 
+## Version 2.1.2 (1 March 2018)
+
+* only use get_fields on libvips 8.5+ [rebkwok]
+
 ## Version 2.1.1 (25 February 2018)
 
 * switch to sdist

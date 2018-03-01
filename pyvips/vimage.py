@@ -644,15 +644,17 @@ class Image(pyvips.VipsObject):
 
         """
 
-        array = vips_lib.vips_image_get_fields(self.pointer)
         names = []
-        i = 0
-        while array[i] != ffi.NULL:
-            name = _to_string(ffi.string(array[i]))
-            names.append(name)
-            glib_lib.g_free(array[i])
-            i += 1
-        glib_lib.g_free(array)
+
+        if at_least_libvips(8, 5):
+            array = vips_lib.vips_image_get_fields(self.pointer)
+            i = 0
+            while array[i] != ffi.NULL:
+                name = _to_string(ffi.string(array[i]))
+                names.append(name)
+                glib_lib.g_free(array[i])
+                i += 1
+            glib_lib.g_free(array)
 
         return names
 
