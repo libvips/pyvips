@@ -161,8 +161,19 @@ def cdefs(features):
             const char* name, GValue* value);
 
         typedef struct _VipsObject {
-            GObject parent_instance;
+    '''
 
+    # this field changed name in libvips 8.4
+    if _enabled(features, '8.4+'):
+        code += '''
+            GObject parent_instance;
+        '''
+    else:
+        code += '''
+            GObject parent_object;
+        '''
+
+    code += '''
             bool constructed;
             bool static_object;
             void *argument_table;
@@ -222,8 +233,19 @@ def cdefs(features):
         const char* g_param_spec_get_blurb (GParamSpec* pspec);
 
         typedef struct _VipsImage {
-            VipsObject parent_instance;
+    '''
 
+    # this field changed name in libvips 8.4
+    if _enabled(features, '8.4+'):
+        code += '''
+            VipsObject parent_instance;
+        '''
+    else:
+        code += '''
+            VipsObject parent_object;
+        '''
+
+    code += '''
             // more
         } VipsImage;
 

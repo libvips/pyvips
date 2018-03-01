@@ -20,6 +20,8 @@ ffibuilder.set_source("_libvips",
 features = {
     # in API mode
     'api': True,
+    # at_least_libvips(8, 4):
+    '8.4+': pkgconfig.installed('vips', '>= 8.4'),
     # at_least_libvips(8, 5):
     '8.5+': pkgconfig.installed('vips', '>= 8.5'),
     # at_least_libvips(8, 6):

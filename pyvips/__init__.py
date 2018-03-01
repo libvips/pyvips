@@ -77,6 +77,8 @@ if not API_mode:
     major = vips_lib.vips_version(0)
     minor = vips_lib.vips_version(1)
     features = {
+        # at_least_libvips(8, 4):
+        '8.4+': major > 8 or (major == 8 and minor >= 4),
         # at_least_libvips(8, 5):
         '8.5+': major > 8 or (major == 8 and minor >= 5),
         # at_least_libvips(8, 6):

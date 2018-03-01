@@ -3,6 +3,7 @@
 ## Version 2.1.2 (1 March 2018)
 
 * only use get_fields on libvips 8.5+ [rebkwok]
+* only use parent_instance on libvips 8.4+ [rebkwok]
 
 ## Version 2.1.1 (25 February 2018)
 
