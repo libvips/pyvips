@@ -28,7 +28,7 @@ features = {
     '8.6+': pkgconfig.installed('vips', '>= 8.6'),
 }
 
-import decls
+import .decls
 
 ffibuilder.cdef(decls.cdefs(features))
 

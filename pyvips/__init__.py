@@ -72,7 +72,7 @@ logger.debug('Inited libvips')
 logger.debug('')
 
 if not API_mode:
-    import decls
+    import .decls
 
     major = vips_lib.vips_version(0)
     minor = vips_lib.vips_version(1)

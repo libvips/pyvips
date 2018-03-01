@@ -4,6 +4,7 @@
 
 * only use get_fields on libvips 8.5+ [rebkwok]
 * only use parent_instance on libvips 8.4+ [rebkwok]
+* relative import for decl 
 
 ## Version 2.1.1 (25 February 2018)
 
