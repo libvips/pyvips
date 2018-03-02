@@ -57,14 +57,14 @@ Install
 -------
 
 You need the libvips shared library on your library search path, version 8.2 or
-later. On linux and macOS, you can install via your package manager; on 
+later. On Linux and macOS, you can install via your package manager; on 
 Windows you can download a pre-compiled binary from the libvips website:
 
 https://jcupitt.github.io/libvips/
 
 Then just install this package, perhaps::
 
-	$ pip install --user pyvips
+    $ pip install --user pyvips
 
 Testing your install
 --------------------
@@ -80,23 +80,22 @@ Try this test program::
     image = pyvips.Image.new_from_file('/home/john/pics/k2.jpg')
     print('image =', image)
     print('image.width =', image.width)
-    print('\n''')
 
 Replacing `/home/john/pics/k2.jpg` with the name of a file on your machine. 
 
 If pyvips was able to build a binary module on your computer (API mode) you 
 should see::
 
-        $ python try1.py 
-        DEBUG:pyvips:Loaded binary module _libvips
-        ....
+    $ python try1.py 
+    DEBUG:pyvips:Loaded binary module _libvips
+    ....
 
 Otherwise, if the build failed (fallback to ABI mode), you should see::
 
-        $ python try1.py 
-        DEBUG:pyvips:Binary module load failed: No module named '_libvips'
-        DEBUG:pyvips:Falling back to ABI mode
-        ....
+    $ python try1.py 
+    DEBUG:pyvips:Binary module load failed: No module named '_libvips'
+    DEBUG:pyvips:Falling back to ABI mode
+    ....
 
 Important: if you end up installing libvips development headers *after* 
 installing pyvips, you should reinstall pyvips. You should make sure pip is 
@@ -133,19 +132,19 @@ Converting old code
 
 To convert old code, replace the lines::
 
-	import gi
-	gi.require_version('Vips', '8.0')
-	from gi.repository import Vips 
+    import gi
+    gi.require_version('Vips', '8.0')
+    from gi.repository import Vips 
 
 with::
 
-	import pyvips
-	Vips = pyvips
+    import pyvips
+    Vips = pyvips
 
 Instead of the ``pyvips = Vips``, you can of course also swap all ``Vips`` for
 ``pyvips`` with eg.::
 
-        %s/Vips/pyvips/g
+    %s/Vips/pyvips/g
 
 Background
 ----------
@@ -177,45 +176,45 @@ Notes
 
 Local user install::
 
-	$ pip install --user -e .
-	$ pip3 install --user -e .
-	$ pypy -m pip --user -e .
+    $ pip install --user -e .
+    $ pip3 install --user -e .
+    $ pypy -m pip --user -e .
 
 Run all tests::
 
-	$ tox 
+    $ tox 
 
 Run test suite::
 
-	$ tox test
+    $ tox test
 
 Run a specific test::
 
-	$ pytest tests/test_conversion.py
+    $ pytest tests/test_conversion.py
 
 Stylecheck::
 
-        $ tox qa
+    $ tox qa
 
 Generate HTML docs in ``doc/build/html``::
 
-        $ cd doc; sphinx-build -bhtml . build/html
+    $ cd doc; sphinx-build -bhtml . build/html
 
 Regenerate autodocs::
 
-        $ cd doc; \
-          python -c "import pyvips; pyvips.Operation.generate_sphinx_all()" > x 
+    $ cd doc; \
+      python -c "import pyvips; pyvips.Operation.generate_sphinx_all()" > x 
 
 And copy-paste ``x`` into the obvious place in ``doc/vimage.rst``.
 
 Update version number::
 
-        $ vi pyvips/version.py
-        $ vi doc/conf.py
+    $ vi pyvips/version.py
+    $ vi doc/conf.py
 
 Update pypi package::
 
-        $ python setup.py sdist
-        $ twine upload dist/*
+    $ python setup.py sdist
+    $ twine upload dist/*
 
 
