@@ -20,7 +20,7 @@ binary extension for your Python.
 If it is unable to build a binary extension, it will use cffi ABI mode
 instead and only needs the libvips shared library. This takes longer to
 start up and is typically ~20% slower in execution.  You can find out how
-pyvips installed with `pip show pyvips`.
+pyvips installed with ``pip show pyvips``.
 
 This binding passes the vips test suite cleanly and with no leaks under
 python2.7 - python3.6, pypy and pypy3 on Windows, macOS and Linux. 
@@ -69,29 +69,47 @@ Then just install this package, perhaps::
 Testing your install
 --------------------
 
-Try this test program:
+Try this test program::
 
-        import logging
-        logging.basicConfig(level = logging.DEBUG)
+    import logging
+    logging.basicConfig(level = logging.DEBUG)
+    
+    import pyvips
+    
+    print('test Image')
+    image = pyvips.Image.new_from_file('/home/john/pics/k2.jpg')
+    print('image =', image)
+    print('image.width =', image.width)
+    print('\n''')
 
-        import pyvips
+Replacing `/home/john/pics/k2.jpg` with the name of a file on your machine. 
 
-        print('test Image')
-        image = pyvips.Image.new_from_file('/home/john/pics/k2.jpg')
-        print('image =', image)
-        print('image.width =', image.width)
-        print('\n''')
+If pyvips was able to build a binary module on your computer (API mode) you 
+should see::
 
-Replacing `/home/john/pics/k2.jpg` with the name of a file on your machine. You
-should see:
-
-        john@mm-jcupitt5 ~/GIT/pyvips/examples (api) $ python try1.py 
+        $ python try1.py 
         DEBUG:pyvips:Loaded binary module _libvips
         ....
 
-This means pyvips was able to build a binary module on your computer. If the
-build failed
+Otherwise, if the build failed (fallback to ABI mode), you should see::
 
+        $ python try1.py 
+        DEBUG:pyvips:Binary module load failed: No module named '_libvips'
+        DEBUG:pyvips:Falling back to ABI mode
+        ....
+
+Important: if you end up installing libvips development headers *after* 
+installing pyvips, you should reinstall pyvips. You should make sure pip is 
+not reusing a cached wheel, e.g. by using ``pip install --no-cache-dir pyvips``.
+
+Check the output of ``pip show pyvips`` at the end to confirm you got the 
+version you expected::
+
+        $ pip show pyvips
+        Name: pyvips
+        Version: 2.1.2
+        Summary: binding for the libvips image processing library, API mode
+        ...
 
 Example
 -------
