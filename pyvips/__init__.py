@@ -23,7 +23,22 @@ try:
     vips_lib = _libvips.lib
     glib_lib = _libvips.lib
     gobject_lib = _libvips.lib
+
+    # now check that the binary wrapper is for the same version of libvips that
+    # we find ourseleves linking to at runtime ... if it isn't, we must fall 
+    # back to ABI mode
+    lib_major = vips_lib.vips_version(0)
+    lib_minor = vips_lib.vips_version(1)
+    wrap_major = vips_lib.VIPS_MAJOR_VERSION
+    wrap_minor = vips_lib.VIPS_MINOR_VERSION
+    if wrap_major != lib_major or wrap_minor != lib_minor:
+        logger.debug('Binary module was generated for libvips %s.%s ' + 
+                     'but you are running against libvips %s.%s' % 
+                     (lib_major, lib_minor, wrap_major, wrap_minor))
+        raise Exception('bad wrapper version')
+
     API_mode = True
+
 except Exception as e:
     logger.debug('Binary module load failed: %s' % e)
     logger.debug('Falling back to ABI mode')
@@ -69,20 +84,18 @@ if vips_lib.vips_init(sys.argv[0].encode()) != 0:
     raise Exception('unable to init libvips')
 
 logger.debug('Inited libvips')
-logger.debug('')
 
 if not API_mode:
     from pyvips import decls
 
     major = vips_lib.vips_version(0)
     minor = vips_lib.vips_version(1)
+    micro = vips_lib.vips_version(2)
     features = {
-        # at_least_libvips(8, 4):
-        '8.4+': major > 8 or (major == 8 and minor >= 4),
-        # at_least_libvips(8, 5):
-        '8.5+': major > 8 or (major == 8 and minor >= 5),
-        # at_least_libvips(8, 6):
-        '8.6+': major > 8 or (major == 8 and minor >= 6),
+        'major': major,
+        'minor': minor,
+        'micro': micro,
+        'api': False,
     }
 
     ffi.cdef(decls.cdefs(features))

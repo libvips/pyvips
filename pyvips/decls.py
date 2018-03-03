@@ -9,8 +9,9 @@
 import sys
 
 
-def _enabled(features, name):
-    return name in features and features[name]
+def _at_least(features, x, y):
+    return features['major'] > x or (features['major'] == x and 
+                                     features['minor'] >= y)
 
 
 def cdefs(features):
@@ -164,7 +165,7 @@ def cdefs(features):
     '''
 
     # this field changed name in libvips 8.4
-    if _enabled(features, '8.4+'):
+    if _at_least(features, 8, 4):
         code += '''
             GObject parent_instance;
         '''
@@ -236,7 +237,7 @@ def cdefs(features):
     '''
 
     # this field changed name in libvips 8.4
-    if _enabled(features, '8.4+'):
+    if _at_least(features, 8, 4):
         code += '''
             VipsObject parent_instance;
         '''
@@ -315,14 +316,12 @@ def cdefs(features):
 
     '''
 
-    # at_least_libvips(8, 5):
-    if _enabled(features, '8.5+'):
+    if _at_least(features, 8, 5):
         code += '''
             char** vips_image_get_fields (VipsImage* image);
         '''
 
-    # at_least_libvips(8, 6):
-    if _enabled(features, '8.6+'):
+    if _at_least(features, 8, 6):
         code += '''
             GType vips_blend_mode_get_type (void);
             void vips_value_set_blob_free (GValue* value,
@@ -332,11 +331,20 @@ def cdefs(features):
 
     # we must only define these in API mode ... in ABI mode we need to call
     # these things earlier
-    if _enabled(features, 'api'):
+    if features['api']:
         code += '''
             int vips_init (const char* argv0);
             int vips_version (int flag);
         '''
+
+    # ... means inherit from C defines
+    code += '#define VIPS_MAJOR_VERSION ...\n'
+    code += '#define VIPS_MINOR_VERSION ...\n'
+    code += '#define VIPS_MICRO_VERSION ...\n'
+
+    # add contents of features as a comment ... handy for debugging
+    for key, value in features.items():
+        code += '//%s = %s\n' % (key, value)
 
     return code
 

@@ -17,18 +17,30 @@ ffibuilder.set_source("_libvips",
     """, 
     **pkgconfig.parse('vips'))
 
+# this is awful, why doesn't pkgconfig let us get the modversion?
+major = 8
+minor = 2
+micro = 0
+if pkgconfig.installed('vips', '>= 8.6'):
+    minor = 6
+elif pkgconfig.installed('vips', '>= 8.5'):
+    minor = 5
+elif pkgconfig.installed('vips', '>= 8.4'):
+    minor = 4
+
 features = {
-    # in API mode
+    'major': major,
+    'minor': minor,
+    'micro': micro,
     'api': True,
-    # at_least_libvips(8, 4):
-    '8.4+': pkgconfig.installed('vips', '>= 8.4'),
-    # at_least_libvips(8, 5):
-    '8.5+': pkgconfig.installed('vips', '>= 8.5'),
-    # at_least_libvips(8, 6):
-    '8.6+': pkgconfig.installed('vips', '>= 8.6'),
 }
 
 from pyvips import decls
+
+# handy for debugging
+#with open('vips-source.txt','w') as f:
+#    c = decls.cdefs(features)
+#    f.write(c)
 
 ffibuilder.cdef(decls.cdefs(features))
 

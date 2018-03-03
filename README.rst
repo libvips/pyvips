@@ -66,49 +66,35 @@ Then just install this package, perhaps::
 
     $ pip install --user pyvips
 
-Testing your install
---------------------
-
-Try this test program::
+To test your install, try this test program::
 
     import logging
     logging.basicConfig(level = logging.DEBUG)
-    
     import pyvips
-    
-    print('test Image')
-    image = pyvips.Image.new_from_file('/home/john/pics/k2.jpg')
-    print('image =', image)
-    print('image.width =', image.width)
 
-Replacing `/home/john/pics/k2.jpg` with the name of a file on your machine. 
+If pyvips was able to build and use a binary module on your computer (API
+mode) you should see::
 
-If pyvips was able to build a binary module on your computer (API mode) you 
-should see::
-
-    $ python try1.py 
+    $ ./pyv.py 
     DEBUG:pyvips:Loaded binary module _libvips
-    ....
+    DEBUG:pyvips:Inited libvips
 
-Otherwise, if the build failed (fallback to ABI mode), you should see::
+If the build failed (fallback to ABI mode), or there was a header or version
+mismatch, you might see::
 
-    $ python try1.py 
-    DEBUG:pyvips:Binary module load failed: No module named '_libvips'
+    $ ./pyv.py 
+    DEBUG:pyvips:Loaded binary module _libvips
+    DEBUG:pyvips:Binary module load failed: not all arguments converted during string formatting
     DEBUG:pyvips:Falling back to ABI mode
-    ....
+    DEBUG:pyvips:Loaded lib <cffi.api.FFILibrary_libvips.so.42 object at 0x7f29fa015190>
+    DEBUG:pyvips:Loaded lib <cffi.api.FFILibrary_libgobject-2.0.so.0 object at 0x7f29fa015110>
+    DEBUG:pyvips:Inited libvips
 
-Important: if you end up installing libvips development headers *after* 
-installing pyvips, you should reinstall pyvips. You should make sure pip is 
-not reusing a cached wheel, e.g. by using ``pip install --no-cache-dir pyvips``.
+pyvips will work fine in this fallback mode, it's just a bit slower. 
 
-Check the output of ``pip show pyvips`` at the end to confirm you got the 
-version you expected::
-
-        $ pip show pyvips
-        Name: pyvips
-        Version: 2.1.2
-        Summary: binding for the libvips image processing library, API mode
-        ...
+If API mode stops working, you can fix it by reinstalling pyvips. You should
+make sure pip is not reusing a cached wheel, e.g. by using ``pip install
+--no-cache-dir pyvips``.
 
 Example
 -------

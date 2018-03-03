@@ -1,5 +1,10 @@
 # master 
 
+## Version 2.1.3 (3 March 2018)
+
+* record header version number in binary module and check compatibility with
+  the library during startup
+
 ## Version 2.1.2 (1 March 2018)
 
 * only use get_fields on libvips 8.5+ [rebkwok]
