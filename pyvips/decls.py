@@ -10,7 +10,7 @@ import sys
 
 
 def _at_least(features, x, y):
-    return features['major'] > x or (features['major'] == x and 
+    return features['major'] > x or (features['major'] == x and
                                      features['minor'] >= y)
 
 
