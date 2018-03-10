@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyvips.vimage &mdash; pyvips 2.0.5 documentation</title>
+  <title>pyvips.vimage &mdash; pyvips 2.1.3 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="pyvips 2.0.5 documentation" href="../../index.html"/>
+    <link rel="top" title="pyvips 2.1.3 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/>
     <link href="../../_static/style.css" rel="stylesheet" type="text/css">
 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                2.0
+                2.1
               </div>
             
           
@@ -180,44 +180,6 @@
 <span class="kn">import</span> <span class="nn">pyvips</span>
 <span class="kn">from</span> <span class="nn">pyvips</span> <span class="k">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">glib_lib</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">Error</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">,</span> \
     <span class="n">_to_string</span><span class="p">,</span> <span class="n">GValue</span><span class="p">,</span> <span class="n">at_least_libvips</span>
-
-<span class="n">ffi</span><span class="o">.</span><span class="n">cdef</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
-<span class="s1">    typedef struct _VipsImage {</span>
-<span class="s1">        VipsObject parent_instance;</span>
-
-<span class="s1">        // opaque</span>
-<span class="s1">    } VipsImage;</span>
-
-<span class="s1">    const char* vips_foreign_find_load (const char* name);</span>
-<span class="s1">    const char* vips_foreign_find_load_buffer (const void* data, size_t size);</span>
-<span class="s1">    const char* vips_foreign_find_save (const char* name);</span>
-<span class="s1">    const char* vips_foreign_find_save_buffer (const char* suffix);</span>
-
-<span class="s1">    VipsImage* vips_image_new_matrix_from_array (int width, int height,</span>
-<span class="s1">            const double* array, int size);</span>
-<span class="s1">    VipsImage* vips_image_new_from_memory (const void* data, size_t size,</span>
-<span class="s1">            int width, int height, int bands, int format);</span>
-
-<span class="s1">    VipsImage* vips_image_copy_memory (VipsImage* image);</span>
-
-<span class="s1">    GType vips_image_get_typeof (const VipsImage* image,</span>
-<span class="s1">        const char* name);</span>
-<span class="s1">    int vips_image_get (const VipsImage* image,</span>
-<span class="s1">        const char* name, GValue* value_copy);</span>
-<span class="s1">    void vips_image_set (VipsImage* image, const char* name, GValue* value);</span>
-<span class="s1">    int vips_image_remove (VipsImage* image, const char* name);</span>
-<span class="s1">    char** vips_image_get_fields (VipsImage* image);</span>
-
-<span class="s1">    char* vips_filename_get_filename (const char* vips_filename);</span>
-<span class="s1">    char* vips_filename_get_options (const char* vips_filename);</span>
-
-<span class="s1">    VipsImage* vips_image_new_temp_file (const char* format);</span>
-
-<span class="s1">    int vips_image_write (VipsImage* image, VipsImage* out);</span>
-<span class="s1">    void* vips_image_write_to_memory (VipsImage* in, size_t* size_out);</span>
-
-
-<span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
 
 
 <span class="c1"># either a single number, or a table of numbers</span>
@@ -855,15 +817,17 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">array</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_get_fields</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span>
         <span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">while</span> <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
-            <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-            <span class="n">glib_lib</span><span class="o">.</span><span class="n">g_free</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">glib_lib</span><span class="o">.</span><span class="n">g_free</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">at_least_libvips</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
+            <span class="n">array</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_get_fields</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+                <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">glib_lib</span><span class="o">.</span><span class="n">g_free</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">glib_lib</span><span class="o">.</span><span class="n">g_free</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">names</span></div>
 
@@ -1429,7 +1393,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, John Cupitt.
+        &copy; Copyright 2018, John Cupitt.
 
     </p>
   </div>
@@ -1451,7 +1415,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'2.0.5',
+            VERSION:'2.1.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

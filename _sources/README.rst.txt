@@ -9,10 +9,18 @@ PyPI package:
 
 https://pypi.python.org/pypi/pyvips
 
-This module wraps the libvips image processing library. It needs the libvips
-shared library on your library search path, version 8.2 or later. 
+This module wraps the libvips image processing library. 
 
 https://jcupitt.github.io/libvips
+
+If you have the development headers for libvips installed and have a working C
+compiler, this module will use cffi API mode to try to build a libvips 
+binary extension for your Python. 
+
+If it is unable to build a binary extension, it will use cffi ABI mode
+instead and only needs the libvips shared library. This takes longer to
+start up and is typically ~20% slower in execution.  You can find out how
+pyvips installed with ``pip show pyvips``.
 
 This binding passes the vips test suite cleanly and with no leaks under
 python2.7 - python3.6, pypy and pypy3 on Windows, macOS and Linux. 
@@ -37,7 +45,7 @@ speed and memory use benchmark:
 https://github.com/jcupitt/libvips/wiki/Speed-and-memory-use
 
 Loads a large tiff image, shrinks by 10%, sharpens, and saves again. On this
-test ``pyvips`` is typically 2x faster than ImageMagick and needs 5x less
+test ``pyvips`` is typically 3x faster than ImageMagick and needs 5x less
 memory. 
 
 There's a handy blog post explaining how libvips opens files, which gives
@@ -49,14 +57,44 @@ Install
 -------
 
 You need the libvips shared library on your library search path, version 8.2 or
-later. On linux and macOS, you can install via your package manager; on 
+later. On Linux and macOS, you can install via your package manager; on 
 Windows you can download a pre-compiled binary from the libvips website:
 
 https://jcupitt.github.io/libvips/
 
 Then just install this package, perhaps::
 
-	$ pip install --user pyvips
+    $ pip install --user pyvips
+
+To test your install, try this test program::
+
+    import logging
+    logging.basicConfig(level = logging.DEBUG)
+    import pyvips
+
+If pyvips was able to build and use a binary module on your computer (API
+mode) you should see::
+
+    $ ./pyv.py 
+    DEBUG:pyvips:Loaded binary module _libvips
+    DEBUG:pyvips:Inited libvips
+
+If the build failed (fallback to ABI mode), or there was a header or version
+mismatch, you might see::
+
+    $ ./pyv.py 
+    DEBUG:pyvips:Loaded binary module _libvips
+    DEBUG:pyvips:Binary module load failed: not all arguments converted during string formatting
+    DEBUG:pyvips:Falling back to ABI mode
+    DEBUG:pyvips:Loaded lib <cffi.api.FFILibrary_libvips.so.42 object at 0x7f29fa015190>
+    DEBUG:pyvips:Loaded lib <cffi.api.FFILibrary_libgobject-2.0.so.0 object at 0x7f29fa015110>
+    DEBUG:pyvips:Inited libvips
+
+pyvips will work fine in this fallback mode, it's just a bit slower. 
+
+If API mode stops working, you can fix it by reinstalling pyvips. You should
+make sure pip is not reusing a cached wheel, e.g. by using ``pip install
+--no-cache-dir pyvips``.
 
 Example
 -------
@@ -80,19 +118,19 @@ Converting old code
 
 To convert old code, replace the lines::
 
-	import gi
-	gi.require_version('Vips', '8.0')
-	from gi.repository import Vips 
+    import gi
+    gi.require_version('Vips', '8.0')
+    from gi.repository import Vips 
 
 with::
 
-	import pyvips
-	Vips = pyvips
+    import pyvips
+    Vips = pyvips
 
 Instead of the ``pyvips = Vips``, you can of course also swap all ``Vips`` for
 ``pyvips`` with eg.::
 
-        %s/Vips/pyvips/g
+    %s/Vips/pyvips/g
 
 Background
 ----------
@@ -124,45 +162,44 @@ Notes
 
 Local user install::
 
-	$ pip install --user -e .
-	$ pip3 install --user -e .
-	$ pypy -m pip --user -e .
+    $ pip install --user -e .
+    $ pip3 install --user -e .
+    $ pypy -m pip --user -e .
 
 Run all tests::
 
-	$ tox 
+    $ tox 
 
 Run test suite::
 
-	$ tox test
+    $ tox test
 
 Run a specific test::
 
-	$ pytest tests/test_conversion.py
+    $ pytest tests/test_conversion.py
 
 Stylecheck::
 
-        $ tox qa
+    $ tox qa
 
 Generate HTML docs in ``doc/build/html``::
 
-        $ cd doc; sphinx-build -bhtml . build/html
+    $ cd doc; sphinx-build -bhtml . build/html
 
 Regenerate autodocs::
 
-        $ cd doc; \
-          python -c "import pyvips; pyvips.Operation.generate_sphinx_all()" > x 
+    $ cd doc; \
+      python -c "import pyvips; pyvips.Operation.generate_sphinx_all()" > x 
 
 And copy-paste ``x`` into the obvious place in ``doc/vimage.rst``.
 
 Update version number::
 
-        $ vi pyvips/version.py
-        $ vi doc/conf.py
+    $ vi pyvips/version.py
+    $ vi doc/conf.py
 
 Update pypi package::
 
-        $ python setup.py bdist_wheel
-        $ twine upload dist/*
-
+    $ python setup.py sdist
+    $ twine upload dist/*
 

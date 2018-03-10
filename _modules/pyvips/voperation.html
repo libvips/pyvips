@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyvips.voperation &mdash; pyvips 2.0.5 documentation</title>
+  <title>pyvips.voperation &mdash; pyvips 2.1.3 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="pyvips 2.0.5 documentation" href="../../index.html"/>
+    <link rel="top" title="pyvips 2.1.3 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/>
     <link href="../../_static/style.css" rel="stylesheet" type="text/css">
 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                2.0
+                2.1
               </div>
             
           
@@ -181,36 +181,6 @@
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
-<span class="n">ffi</span><span class="o">.</span><span class="n">cdef</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
-<span class="s1">    typedef struct _VipsOperation {</span>
-<span class="s1">        VipsObject parent_instance;</span>
-
-<span class="s1">        // opaque</span>
-<span class="s1">    } VipsOperation;</span>
-
-<span class="s1">    VipsOperation* vips_operation_new (const char* name);</span>
-
-<span class="s1">    typedef void* (*VipsArgumentMapFn) (VipsOperation* object,</span>
-<span class="s1">        GParamSpec* pspec,</span>
-<span class="s1">        VipsArgumentClass* argument_class,</span>
-<span class="s1">        VipsArgumentInstance* argument_instance,</span>
-<span class="s1">        void* a, void* b);</span>
-
-<span class="s1">    void* vips_argument_map (VipsOperation* object,</span>
-<span class="s1">        VipsArgumentMapFn fn, void* a, void* b);</span>
-
-<span class="s1">    VipsOperation* vips_cache_operation_build (VipsOperation* operation);</span>
-<span class="s1">    void vips_object_unref_outputs (VipsOperation* operation);</span>
-
-<span class="s1">    int vips_operation_get_flags (VipsOperation* operation);</span>
-
-<span class="s1">    void vips_cache_set_max (int max);</span>
-<span class="s1">    void vips_cache_set_max_mem (size_t max_mem);</span>
-<span class="s1">    void vips_cache_set_max_files (int max_files);</span>
-<span class="s1">    void vips_cache_set_trace (int trace);</span>
-
-<span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
-
 <span class="c1"># values for VipsArgumentFlags</span>
 <span class="n">_REQUIRED</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">_CONSTRUCT</span> <span class="o">=</span> <span class="mi">2</span>
@@ -254,6 +224,7 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointer</span><span class="p">):</span>
         <span class="c1"># logger.debug(&#39;Operation.__init__: pointer = %s&#39;, pointer)</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Operation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;VipsObject*&#39;</span><span class="p">,</span> <span class="n">pointer</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">new_from_name</span><span class="p">(</span><span class="n">operation_name</span><span class="p">):</span>
@@ -306,7 +277,7 @@
             <span class="k">return</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span>
 
         <span class="n">cb</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="s1">&#39;VipsArgumentMapFn&#39;</span><span class="p">,</span> <span class="n">add_construct</span><span class="p">)</span>
-        <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_argument_map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span> <span class="n">cb</span><span class="p">,</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">,</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">)</span>
+        <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_argument_map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="n">cb</span><span class="p">,</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">,</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">args</span>
 
@@ -378,6 +349,10 @@
                 <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">flags_from_name</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0}</span><span class="s1"> does not support argument &#39;</span>
+                            <span class="s1">&#39;</span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">operation_name</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+
             <span class="n">op</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">flags_from_name</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">match_image</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
         <span class="c1"># build operation</span>
@@ -407,7 +382,7 @@
                     <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_DEPRECATED</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
                 <span class="n">opts</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
-        <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_object_unref_outputs</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span>
+        <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_object_unref_outputs</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">object</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span>
@@ -526,7 +501,7 @@
 
 <div class="viewcode-block" id="Operation.generate_sphinx"><a class="viewcode-back" href="../../voperation.html#pyvips.voperation.Operation.generate_sphinx">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">generate_sphinx</span><span class="p">(</span><span class="n">operation_name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Make a sphinx-style doctsring.</span>
+        <span class="sd">&quot;&quot;&quot;Make a sphinx-style docstring.</span>
 
 <span class="sd">        This is used to generate the off-line docs.</span>
 
@@ -574,14 +549,13 @@
             <span class="n">result</span> <span class="o">=</span> <span class="s1">&#39;.. method:: &#39;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">result</span> <span class="o">=</span> <span class="s1">&#39;.. staticmethod:: &#39;</span>
-        <span class="n">result</span> <span class="o">+=</span> <span class="n">operation_name</span> <span class="o">+</span> <span class="s2">&quot;(&quot;</span>
-        <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">required_input</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">optional_input</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">required_input</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;, &#39;</span>
-        <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">x</span> <span class="o">+</span> <span class="s1">&#39; = &#39;</span> <span class="o">+</span>
-                             <span class="n">GValue</span><span class="o">.</span><span class="n">gtype_to_python</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-                             <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">optional_input</span><span class="p">])</span>
-        <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;)</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">args</span> <span class="o">+=</span> <span class="n">required_input</span>
+        <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="s1">&#39; = &#39;</span> <span class="o">+</span> <span class="n">GValue</span><span class="o">.</span><span class="n">gtype_to_python</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+                 <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">optional_input</span><span class="p">]</span>
+        <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="s1">&#39; = bool&#39;</span>
+                 <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">optional_output</span><span class="p">]</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="n">operation_name</span> <span class="o">+</span> <span class="s1">&#39;(&#39;</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;)</span><span class="se">\n\n</span><span class="s1">&#39;</span>
 
         <span class="n">description</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">get_description</span><span class="p">()</span>
         <span class="n">result</span> <span class="o">+=</span> <span class="n">description</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="n">description</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="s1">&#39;.</span><span class="se">\n\n</span><span class="s1">&#39;</span>
@@ -604,6 +578,10 @@
             <span class="n">result</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;:param </span><span class="si">{0}</span><span class="s1"> </span><span class="si">{1}</span><span class="s1">: </span><span class="si">{2}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span>
                        <span class="nb">format</span><span class="p">(</span><span class="n">GValue</span><span class="o">.</span><span class="n">gtype_to_python</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">name</span><span class="p">)),</span>
                               <span class="n">name</span><span class="p">,</span>
+                              <span class="n">op</span><span class="o">.</span><span class="n">get_blurb</span><span class="p">(</span><span class="n">name</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">optional_output</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;:param bool </span><span class="si">{0}</span><span class="s1">: enable output: </span><span class="si">{1}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span>
+                       <span class="nb">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span>
                               <span class="n">op</span><span class="o">.</span><span class="n">get_blurb</span><span class="p">(</span><span class="n">name</span><span class="p">)))</span>
 
         <span class="n">output_types</span> <span class="o">=</span> <span class="p">[</span><span class="n">GValue</span><span class="o">.</span><span class="n">gtype_to_python</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
@@ -641,7 +619,7 @@
 
         <span class="n">all_nicknames</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="k">def</span> <span class="nf">add_nickname</span><span class="p">(</span><span class="n">gtype</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">add_nickname</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
             <span class="n">nickname</span> <span class="o">=</span> <span class="n">nickname_find</span><span class="p">(</span><span class="n">gtype</span><span class="p">)</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">Operation</span><span class="o">.</span><span class="n">generate_sphinx</span><span class="p">(</span><span class="n">nickname</span><span class="p">)</span>
@@ -718,7 +696,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, John Cupitt.
+        &copy; Copyright 2018, John Cupitt.
 
     </p>
   </div>
@@ -740,7 +718,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'2.0.5',
+            VERSION:'2.1.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

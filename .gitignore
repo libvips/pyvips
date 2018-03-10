@@ -8,3 +8,5 @@ _libvips.so
 build
 dist
 doc/build
+.cache
+.tox

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyvips.base &mdash; pyvips 2.0.5 documentation</title>
+  <title>pyvips.base &mdash; pyvips 2.1.3 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="pyvips 2.0.5 documentation" href="../../index.html"/>
+    <link rel="top" title="pyvips 2.1.3 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/>
     <link href="../../_static/style.css" rel="stylesheet" type="text/css">
 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                2.0
+                2.1
               </div>
             
           
@@ -176,31 +176,6 @@
 
 <span class="kn">from</span> <span class="nn">pyvips</span> <span class="k">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="p">,</span> <span class="n">_to_string</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">,</span> <span class="n">Error</span>
 
-<span class="n">ffi</span><span class="o">.</span><span class="n">cdef</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
-<span class="s1">    typedef struct _VipsImage VipsImage;</span>
-<span class="s1">    typedef struct _GValue GValue;</span>
-
-<span class="s1">    void* g_malloc (size_t size);</span>
-<span class="s1">    void g_free (void* data);</span>
-
-<span class="s1">    int vips_leak_set (int leak);</span>
-
-<span class="s1">    char* vips_path_filename7 (const char* path);</span>
-<span class="s1">    char* vips_path_mode7 (const char* path);</span>
-
-<span class="s1">    GType vips_type_find (const char* basename, const char* nickname);</span>
-<span class="s1">    const char* vips_nickname_find (GType type);</span>
-
-<span class="s1">    const char* g_type_name (GType gtype);</span>
-<span class="s1">    GType g_type_from_name (const char* name);</span>
-
-<span class="s1">    typedef void* (*VipsTypeMap2Fn) (GType type);</span>
-<span class="s1">    void* vips_type_map (GType base, VipsTypeMap2Fn fn);</span>
-
-<span class="s1">    int vips_version( int flag );</span>
-
-<span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
-
 
 <div class="viewcode-block" id="leak_set"><a class="viewcode-back" href="../../base.html#pyvips.base.leak_set">[docs]</a><span class="k">def</span> <span class="nf">leak_set</span><span class="p">(</span><span class="n">leak</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Enable or disable libvips leak checking.</span>
@@ -233,6 +208,8 @@
     <span class="k">return</span> <span class="n">value</span></div>
 
 
+<span class="c1"># we need to define this before we import the decls: they need to know which</span>
+<span class="c1"># bits of decl to make</span>
 <div class="viewcode-block" id="at_least_libvips"><a class="viewcode-back" href="../../base.html#pyvips.base.at_least_libvips">[docs]</a><span class="k">def</span> <span class="nf">at_least_libvips</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Is this at least libvips x.y?&quot;&quot;&quot;</span>
 
@@ -282,7 +259,7 @@
 <div class="viewcode-block" id="type_map"><a class="viewcode-back" href="../../base.html#pyvips.base.type_map">[docs]</a><span class="k">def</span> <span class="nf">type_map</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Map fn over all child types of gtype.&quot;&quot;&quot;</span>
     <span class="n">cb</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="s1">&#39;VipsTypeMap2Fn&#39;</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_type_map</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">cb</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_type_map</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">cb</span><span class="p">,</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">,</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">)</span></div>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
@@ -311,7 +288,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, John Cupitt.
+        &copy; Copyright 2018, John Cupitt.
 
     </p>
   </div>
@@ -333,7 +310,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'2.0.5',
+            VERSION:'2.1.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

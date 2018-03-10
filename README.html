@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>README &mdash; pyvips 2.0.5 documentation</title>
+  <title>README &mdash; pyvips 2.1.3 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pyvips 2.0.5 documentation" href="index.html"/>
+    <link rel="top" title="pyvips 2.1.3 documentation" href="index.html"/>
         <link rel="next" title="Introduction" href="intro.html"/>
         <link rel="prev" title="pyvips – Image processing with libvips" href="index.html"/>
     <link href="_static/style.css" rel="stylesheet" type="text/css">
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                2.0
+                2.1
               </div>
             
           
@@ -182,9 +182,15 @@
 <a class="reference external image-reference" href="https://travis-ci.org/jcupitt/pyvips"><img alt="Build Status" src="https://travis-ci.org/jcupitt/pyvips.svg?branch=master" /></a>
 <p>PyPI package:</p>
 <p><a class="reference external" href="https://pypi.python.org/pypi/pyvips">https://pypi.python.org/pypi/pyvips</a></p>
-<p>This module wraps the libvips image processing library. It needs the libvips
-shared library on your library search path, version 8.2 or later.</p>
+<p>This module wraps the libvips image processing library.</p>
 <p><a class="reference external" href="https://jcupitt.github.io/libvips">https://jcupitt.github.io/libvips</a></p>
+<p>If you have the development headers for libvips installed and have a working C
+compiler, this module will use cffi API mode to try to build a libvips
+binary extension for your Python.</p>
+<p>If it is unable to build a binary extension, it will use cffi ABI mode
+instead and only needs the libvips shared library. This takes longer to
+start up and is typically ~20% slower in execution.  You can find out how
+pyvips installed with <code class="docutils literal"><span class="pre">pip</span> <span class="pre">show</span> <span class="pre">pyvips</span></code>.</p>
 <p>This binding passes the vips test suite cleanly and with no leaks under
 python2.7 - python3.6, pypy and pypy3 on Windows, macOS and Linux.</p>
 <p>We have formatted docs online here:</p>
@@ -201,7 +207,7 @@ keep entire images in memory, it’s light.  For example, the libvips
 speed and memory use benchmark:</p>
 <p><a class="reference external" href="https://github.com/jcupitt/libvips/wiki/Speed-and-memory-use">https://github.com/jcupitt/libvips/wiki/Speed-and-memory-use</a></p>
 <p>Loads a large tiff image, shrinks by 10%, sharpens, and saves again. On this
-test <code class="docutils literal"><span class="pre">pyvips</span></code> is typically 2x faster than ImageMagick and needs 5x less
+test <code class="docutils literal"><span class="pre">pyvips</span></code> is typically 3x faster than ImageMagick and needs 5x less
 memory.</p>
 <p>There’s a handy blog post explaining how libvips opens files, which gives
 some more background.</p>
@@ -210,13 +216,41 @@ some more background.</p>
 <div class="section" id="install">
 <h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
 <p>You need the libvips shared library on your library search path, version 8.2 or
-later. On linux and macOS, you can install via your package manager; on
+later. On Linux and macOS, you can install via your package manager; on
 Windows you can download a pre-compiled binary from the libvips website:</p>
 <p><a class="reference external" href="https://jcupitt.github.io/libvips/">https://jcupitt.github.io/libvips/</a></p>
 <p>Then just install this package, perhaps:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ pip install --user pyvips
 </pre></div>
 </div>
+<p>To test your install, try this test program:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">pyvips</span>
+</pre></div>
+</div>
+<p>If pyvips was able to build and use a binary module on your computer (API
+mode) you should see:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ ./pyv.py
+DEBUG:pyvips:Loaded binary module _libvips
+DEBUG:pyvips:Inited libvips
+</pre></div>
+</div>
+<p>If the build failed (fallback to ABI mode), or there was a header or version
+mismatch, you might see:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ ./pyv.py
+DEBUG:pyvips:Loaded binary module _libvips
+DEBUG:pyvips:Binary module load failed: not all arguments converted during string formatting
+DEBUG:pyvips:Falling back to ABI mode
+DEBUG:pyvips:Loaded lib &lt;cffi.api.FFILibrary_libvips.so.42 object at 0x7f29fa015190&gt;
+DEBUG:pyvips:Loaded lib &lt;cffi.api.FFILibrary_libgobject-2.0.so.0 object at 0x7f29fa015110&gt;
+DEBUG:pyvips:Inited libvips
+</pre></div>
+</div>
+<p>pyvips will work fine in this fallback mode, it’s just a bit slower.</p>
+<p>If API mode stops working, you can fix it by reinstalling pyvips. You should
+make sure pip is not reusing a cached wheel, e.g. by using <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span>
+<span class="pre">--no-cache-dir</span> <span class="pre">pyvips</span></code>.</p>
 </div>
 <div class="section" id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
@@ -312,7 +346,7 @@ $ vi doc/conf.py
 </pre></div>
 </div>
 <p>Update pypi package:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ python setup.py bdist_wheel
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ python setup.py sdist
 $ twine upload dist/*
 </pre></div>
 </div>
@@ -341,7 +375,7 @@ $ twine upload dist/*
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, John Cupitt.
+        &copy; Copyright 2018, John Cupitt.
 
     </p>
   </div>
@@ -363,7 +397,7 @@ $ twine upload dist/*
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'2.0.5',
+            VERSION:'2.1.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
