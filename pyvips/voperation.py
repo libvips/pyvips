@@ -328,7 +328,7 @@ class Operation(pyvips.VipsObject):
 
     @staticmethod
     def generate_sphinx(operation_name):
-        """Make a sphinx-style doctsring.
+        """Make a sphinx-style docstring.
 
         This is used to generate the off-line docs.
 
@@ -376,14 +376,13 @@ class Operation(pyvips.VipsObject):
             result = '.. method:: '
         else:
             result = '.. staticmethod:: '
-        result += operation_name + "("
-        result += ", ".join(required_input)
-        if len(optional_input) > 0 and len(required_input) > 0:
-            result += ', '
-        result += ', '.join([x + ' = ' +
-                             GValue.gtype_to_python(op.get_typeof(x))
-                             for x in optional_input])
-        result += ')\n\n'
+        args = []
+        args += required_input
+        args += [x + ' = ' + GValue.gtype_to_python(op.get_typeof(x))
+                 for x in optional_input]
+        args += [x + ' = bool'
+                 for x in optional_output]
+        result += operation_name + '(' + ", ".join(args) + ')\n\n'
 
         description = op.get_description()
         result += description[0].upper() + description[1:] + '.\n\n'
@@ -406,6 +405,10 @@ class Operation(pyvips.VipsObject):
             result += (':param {0} {1}: {2}\n'.
                        format(GValue.gtype_to_python(op.get_typeof(name)),
                               name,
+                              op.get_blurb(name)))
+        for name in optional_output:
+            result += (':param bool {0}: enable output: {1}\n'.
+                       format(name,
                               op.get_blurb(name)))
 
         output_types = [GValue.gtype_to_python(op.get_typeof(name))
@@ -443,7 +446,7 @@ class Operation(pyvips.VipsObject):
 
         all_nicknames = []
 
-        def add_nickname(gtype):
+        def add_nickname(gtype, a, b):
             nickname = nickname_find(gtype)
             try:
                 Operation.generate_sphinx(nickname)

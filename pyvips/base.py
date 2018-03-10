@@ -86,7 +86,7 @@ def type_from_name(name):
 def type_map(gtype, fn):
     """Map fn over all child types of gtype."""
     cb = ffi.callback('VipsTypeMap2Fn', fn)
-    return vips_lib.vips_type_map(gtype, cb)
+    return vips_lib.vips_type_map(gtype, cb, ffi.NULL, ffi.NULL)
 
 
 __all__ = [
