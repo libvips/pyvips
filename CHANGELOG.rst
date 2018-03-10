@@ -5,6 +5,7 @@
 * record header version number in binary module and check compatibility with
   the library during startup
 * add optional output params to docs [kleis]
+* update docs
 
 ## Version 2.1.2 (1 March 2018)
 
