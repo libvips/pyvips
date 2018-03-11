@@ -28,6 +28,7 @@ SVGZ_FILE = os.path.join(IMAGES, "vips-profile.svgz")
 SVG_GZ_FILE = os.path.join(IMAGES, "vips-profile.svg.gz")
 GIF_ANIM_FILE = os.path.join(IMAGES, "cogs.gif")
 DICOM_FILE = os.path.join(IMAGES, "dicom_test_image.dcm")
+BMP_FILE = os.path.join(IMAGES, "MARBLES.BMP")
 
 unsigned_formats = [pyvips.BandFormat.UCHAR,
                     pyvips.BandFormat.USHORT,
@@ -145,6 +146,11 @@ def temp_filename(directory, suffix):
     filename = os.path.join(directory, temp_name + suffix)
 
     return filename
+
+
+# test for an operator exists
+def have(name):
+    return pyvips.type_find("VipsOperation", name) != 0 
 
 
 # run a 2-ary function on two things -- loop over elements pairwise if the

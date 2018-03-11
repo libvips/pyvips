@@ -2,7 +2,7 @@
 import unittest
 
 import pyvips
-from .helpers import PyvipsTester, JPEG_FILE, all_formats
+from .helpers import PyvipsTester, JPEG_FILE, all_formats, have
 
 
 # Run a function expecting a complex image on a two-band image
@@ -176,6 +176,16 @@ class TestResample(PyvipsTester):
         im2 = im.similarity(scale=2)
         im3 = im.affine([2, 0, 0, 2])
         self.assertEqual((im2 - im3).abs().max(), 0)
+
+    # added in 8.7
+    def test_rotate(self):
+        if have("rotate"):
+            im = pyvips.Image.new_from_file(JPEG_FILE)
+            im2 = im.rotate(90)
+            im3 = im.affine([0, -1, 1, 0])
+            # rounding in calculating the affine transform from the angle stops
+            # this being exactly true
+            self.assertLess((im2 - im3).abs().max(), 50)
 
     def test_mapim(self):
         im = pyvips.Image.new_from_file(JPEG_FILE)

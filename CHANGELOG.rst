@@ -6,6 +6,7 @@
   the library during startup
 * add optional output params to docs [kleis]
 * update docs
+* add some libvips 8.7 tests
 
 ## Version 2.1.2 (1 March 2018)
 
