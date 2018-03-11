@@ -1,10 +1,11 @@
 # vim: set fileencoding=utf-8 :
 import operator
-import unittest
+import pytest
 from functools import reduce
 
 import pyvips
-from .helpers import PyvipsTester, noncomplex_formats, run_fn2, run_fn
+from helpers import noncomplex_formats, run_fn2, run_fn, \
+    assert_almost_equal_objects, assert_less_threshold
 
 
 # point convolution
@@ -31,28 +32,28 @@ def compass(image, mask, x_position, y_position, n_rot, fn):
     return reduce(lambda a, b: run_fn2(fn, a, b), acc)
 
 
-class TestConvolution(PyvipsTester):
-    def setUp(self):
+class TestConvolution:
+    @classmethod
+    def setup_class(cls):
         im = pyvips.Image.mask_ideal(100, 100, 0.5, reject=True, optical=True)
-        self.colour = im * [1, 2, 3] + [2, 3, 4]
-        self.colour = self.colour.copy(
-            interpretation=pyvips.Interpretation.SRGB)
-        self.mono = self.colour.extract_band(1)
-        self.mono = self.mono.copy(interpretation=pyvips.Interpretation.B_W)
-        self.all_images = [self.mono, self.colour]
-        self.sharp = pyvips.Image.new_from_array([[-1, -1, -1],
-                                                  [-1, 16, -1],
-                                                  [-1, -1, -1]], scale=8)
-        self.blur = pyvips.Image.new_from_array([[1, 1, 1],
-                                                 [1, 1, 1],
-                                                 [1, 1, 1]], scale=9)
-        self.line = pyvips.Image.new_from_array([[1, 1, 1],
-                                                 [-2, -2, -2],
-                                                 [1, 1, 1]])
-        self.sobel = pyvips.Image.new_from_array([[1, 2, 1],
-                                                  [0, 0, 0],
-                                                  [-1, -2, -1]])
-        self.all_masks = [self.sharp, self.blur, self.line, self.sobel]
+        cls.colour = im * [1, 2, 3] + [2, 3, 4]
+        cls.colour = cls.colour.copy(interpretation=pyvips.Interpretation.SRGB)
+        cls.mono = cls.colour.extract_band(1)
+        cls.mono = cls.mono.copy(interpretation=pyvips.Interpretation.B_W)
+        cls.all_images = [cls.mono, cls.colour]
+        cls.sharp = pyvips.Image.new_from_array([[-1, -1, -1],
+                                                 [-1, 16, -1],
+                                                 [-1, -1, -1]], scale=8)
+        cls.blur = pyvips.Image.new_from_array([[1, 1, 1],
+                                                [1, 1, 1],
+                                                [1, 1, 1]], scale=9)
+        cls.line = pyvips.Image.new_from_array([[1, 1, 1],
+                                                [-2, -2, -2],
+                                                [1, 1, 1]])
+        cls.sobel = pyvips.Image.new_from_array([[1, 2, 1],
+                                                 [0, 0, 0],
+                                                 [-1, -2, -1]])
+        cls.all_masks = [cls.sharp, cls.blur, cls.line, cls.sobel]
 
     def test_conv(self):
         for im in self.all_images:
@@ -62,11 +63,11 @@ class TestConvolution(PyvipsTester):
 
                     result = convolved(25, 50)
                     true = conv(im, msk, 24, 49)
-                    self.assertAlmostEqualObjects(result, true)
+                    assert_almost_equal_objects(result, true)
 
                     result = convolved(50, 50)
                     true = conv(im, msk, 49, 49)
-                    self.assertAlmostEqualObjects(result, true)
+                    assert_almost_equal_objects(result, true)
 
     # don't test conva, it's still not done
     def dont_est_conva(self):
@@ -82,12 +83,12 @@ class TestConvolution(PyvipsTester):
                 result = convolved(25, 50)
                 true = conv(im, msk, 24, 49)
                 print("result = %s, true = %s" % (result, true))
-                self.assertLessThreshold(result, true, 5)
+                assert_less_threshold(result, true, 5)
 
                 result = convolved(50, 50)
                 true = conv(im, msk, 49, 49)
                 print("result = %s, true = %s" % (result, true))
-                self.assertLessThreshold(result, true, 5)
+                assert_less_threshold(result, true, 5)
 
     def test_compass(self):
         for im in self.all_images:
@@ -102,7 +103,7 @@ class TestConvolution(PyvipsTester):
 
                         result = convolved(25, 50)
                         true = compass(im, msk, 24, 49, times, max)
-                        self.assertAlmostEqualObjects(result, true)
+                        assert_almost_equal_objects(result, true)
 
         for im in self.all_images:
             for msk in self.all_masks:
@@ -116,7 +117,7 @@ class TestConvolution(PyvipsTester):
 
                         result = convolved(25, 50)
                         true = compass(im, msk, 24, 49, times, operator.add)
-                        self.assertAlmostEqualObjects(result, true)
+                        assert_almost_equal_objects(result, true)
 
     def test_convsep(self):
         for im in self.all_images:
@@ -127,9 +128,9 @@ class TestConvolution(PyvipsTester):
                                                   separable=True,
                                                   precision=prec)
 
-                self.assertEqual(gmask.width, gmask.height)
-                self.assertEqual(gmask_sep.width, gmask.width)
-                self.assertEqual(gmask_sep.height, 1)
+                assert gmask.width == gmask.height
+                assert gmask_sep.width == gmask.width
+                assert gmask_sep.height == 1
 
                 a = im.conv(gmask, precision=prec)
                 b = im.convsep(gmask_sep, precision=prec)
@@ -137,7 +138,7 @@ class TestConvolution(PyvipsTester):
                 a_point = a(25, 50)
                 b_point = b(25, 50)
 
-                self.assertAlmostEqualObjects(a_point, b_point, places=1)
+                assert_almost_equal_objects(a_point, b_point, threshold=0.1)
 
     def test_fastcor(self):
         for im in self.all_images:
@@ -146,9 +147,9 @@ class TestConvolution(PyvipsTester):
                 cor = im.fastcor(small)
                 v, x, y = cor.minpos()
 
-                self.assertEqual(v, 0)
-                self.assertEqual(x, 25)
-                self.assertEqual(y, 50)
+                assert v == 0
+                assert x == 25
+                assert y == 50
 
     def test_spcor(self):
         for im in self.all_images:
@@ -157,9 +158,9 @@ class TestConvolution(PyvipsTester):
                 cor = im.spcor(small)
                 v, x, y = cor.maxpos()
 
-                self.assertEqual(v, 1.0)
-                self.assertEqual(x, 25)
-                self.assertEqual(y, 50)
+                assert v == 1.0
+                assert x == 25
+                assert y == 50
 
     def test_gaussblur(self):
         for im in self.all_images:
@@ -175,7 +176,8 @@ class TestConvolution(PyvipsTester):
                     a_point = a(25, 50)
                     b_point = b(25, 50)
 
-                    self.assertAlmostEqualObjects(a_point, b_point, places=1)
+                    assert_almost_equal_objects(a_point, b_point,
+                                                threshold=0.1)
 
     def test_sharpen(self):
         for im in self.all_images:
@@ -188,8 +190,8 @@ class TestConvolution(PyvipsTester):
                     sharp = im.sharpen(sigma=sigma)
 
                     # hard to test much more than this
-                    self.assertEqual(im.width, sharp.width)
-                    self.assertEqual(im.height, sharp.height)
+                    assert im.width == sharp.width
+                    assert im.height == sharp.height
 
                     # if m1 and m2 are zero, sharpen should do nothing
                     sharp = im.sharpen(sigma=sigma, m1=0, m2=0)
@@ -197,8 +199,8 @@ class TestConvolution(PyvipsTester):
                     # print("testing sig = %g" % sigma)
                     # print("testing fmt = %s" % fmt)
                     # print("max diff = %g" % (im - sharp).abs().max())
-                    self.assertEqual((im - sharp).abs().max(), 0)
+                    assert (im - sharp).abs().max() == 0
 
 
 if __name__ == '__main__':
-    unittest.main()
+    pytest.main()
