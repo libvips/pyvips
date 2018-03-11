@@ -1,40 +1,42 @@
 # vim: set fileencoding=utf-8 :
 import math
-import unittest
+import pytest
 
 import pyvips
-from .helpers import PyvipsTester, unsigned_formats, \
-    float_formats, noncomplex_formats, all_formats, run_fn
+from helpers import unsigned_formats, float_formats, noncomplex_formats, \
+    all_formats, run_fn, run_image2, run_const, run_cmp, \
+    assert_almost_equal_objects
 
 
-class TestArithmetic(PyvipsTester):
+class TestArithmetic:
     def run_arith(self, fn, fmt=all_formats):
-        [self.run_image2(fn.__name__ + ' image', x.cast(y), x.cast(z), fn)
+        [run_image2(fn.__name__ + ' image', x.cast(y), x.cast(z), fn)
          for x in self.all_images for y in fmt for z in fmt]
 
     def run_arith_const(self, fn, fmt=all_formats):
-        [self.run_const(fn.__name__ + ' scalar', fn, x.cast(y), 2)
+        [run_const(fn.__name__ + ' scalar', fn, x.cast(y), 2)
          for x in self.all_images for y in fmt]
-        [self.run_const(fn.__name__ + ' vector', fn, self.colour.cast(y),
-                        [1, 2, 3])
+        [run_const(fn.__name__ + ' vector', fn, self.colour.cast(y),
+                   [1, 2, 3])
          for y in fmt]
 
     # run a function on an image,
     # 50,50 and 10,10 should have different values on the test image
     def run_imageunary(self, message, im, fn):
-        self.run_cmp(message, im, 50, 50, lambda x: run_fn(fn, x))
-        self.run_cmp(message, im, 10, 10, lambda x: run_fn(fn, x))
+        run_cmp(message, im, 50, 50, lambda x: run_fn(fn, x))
+        run_cmp(message, im, 10, 10, lambda x: run_fn(fn, x))
 
     def run_unary(self, images, fn, fmt=all_formats):
         [self.run_imageunary(fn.__name__ + ' image', x.cast(y), fn)
          for x in images for y in fmt]
 
-    def setUp(self):
+    @classmethod
+    def setup_class(cls):
         im = pyvips.Image.mask_ideal(100, 100, 0.5,
                                      reject=True, optical=True)
-        self.colour = im * [1, 2, 3] + [2, 3, 4]
-        self.mono = self.colour.extract_band(1)
-        self.all_images = [self.mono, self.colour]
+        cls.colour = im * [1, 2, 3] + [2, 3, 4]
+        cls.mono = cls.colour.extract_band(1)
+        cls.all_images = [cls.mono, cls.colour]
 
     # test all operator overloads we define
 
@@ -261,14 +263,14 @@ class TestArithmetic(PyvipsTester):
         test = im.insert(im + 100, 50, 0, expand=True)
 
         for fmt in all_formats:
-            self.assertAlmostEqual(test.cast(fmt).avg(), 50)
+            assert pytest.approx(test.cast(fmt).avg()) == 50
 
     def test_deviate(self):
         im = pyvips.Image.black(50, 100)
         test = im.insert(im + 100, 50, 0, expand=True)
 
         for fmt in noncomplex_formats:
-            self.assertAlmostEqual(test.cast(fmt).deviate(), 50, places=2)
+            assert pytest.approx(test.cast(fmt).deviate(), abs=0.01) == 50
 
     def test_polar(self):
         im = pyvips.Image.black(100, 100) + 100
@@ -276,8 +278,8 @@ class TestArithmetic(PyvipsTester):
 
         im = im.polar()
 
-        self.assertAlmostEqual(im.real().avg(), 100 * 2 ** 0.5)
-        self.assertAlmostEqual(im.imag().avg(), 45)
+        assert pytest.approx(im.real().avg()) == 100 * 2 ** 0.5
+        assert pytest.approx(im.imag().avg()) == 45
 
     def test_rect(self):
         im = pyvips.Image.black(100, 100)
@@ -285,8 +287,8 @@ class TestArithmetic(PyvipsTester):
 
         im = im.rect()
 
-        self.assertAlmostEqual(im.real().avg(), 100)
-        self.assertAlmostEqual(im.imag().avg(), 100)
+        assert pytest.approx(im.real().avg()) == 100
+        assert pytest.approx(im.imag().avg()) == 100
 
     def test_conjugate(self):
         im = pyvips.Image.black(100, 100) + 100
@@ -294,8 +296,8 @@ class TestArithmetic(PyvipsTester):
 
         im = im.conj()
 
-        self.assertAlmostEqual(im.real().avg(), 100)
-        self.assertAlmostEqual(im.imag().avg(), -100)
+        assert pytest.approx(im.real().avg()) == 100
+        assert pytest.approx(im.imag().avg()) == -100
 
     def test_histfind(self):
         im = pyvips.Image.black(50, 100)
@@ -303,22 +305,22 @@ class TestArithmetic(PyvipsTester):
 
         for fmt in all_formats:
             hist = test.cast(fmt).hist_find()
-            self.assertAlmostEqualObjects(hist(0, 0), [5000])
-            self.assertAlmostEqualObjects(hist(10, 0), [5000])
-            self.assertAlmostEqualObjects(hist(5, 0), [0])
+            assert_almost_equal_objects(hist(0, 0), [5000])
+            assert_almost_equal_objects(hist(10, 0), [5000])
+            assert_almost_equal_objects(hist(5, 0), [0])
 
         test = test * [1, 2, 3]
 
         for fmt in all_formats:
             hist = test.cast(fmt).hist_find(band=0)
-            self.assertAlmostEqualObjects(hist(0, 0), [5000])
-            self.assertAlmostEqualObjects(hist(10, 0), [5000])
-            self.assertAlmostEqualObjects(hist(5, 0), [0])
+            assert_almost_equal_objects(hist(0, 0), [5000])
+            assert_almost_equal_objects(hist(10, 0), [5000])
+            assert_almost_equal_objects(hist(5, 0), [0])
 
             hist = test.cast(fmt).hist_find(band=1)
-            self.assertAlmostEqualObjects(hist(0, 0), [5000])
-            self.assertAlmostEqualObjects(hist(20, 0), [5000])
-            self.assertAlmostEqualObjects(hist(5, 0), [0])
+            assert_almost_equal_objects(hist(0, 0), [5000])
+            assert_almost_equal_objects(hist(20, 0), [5000])
+            assert_almost_equal_objects(hist(5, 0), [0])
 
     def test_histfind_indexed(self):
         im = pyvips.Image.black(50, 100)
@@ -331,8 +333,8 @@ class TestArithmetic(PyvipsTester):
                 b = index.cast(y)
                 hist = a.hist_find_indexed(b)
 
-                self.assertAlmostEqualObjects(hist(0, 0), [0])
-                self.assertAlmostEqualObjects(hist(1, 0), [50000])
+                assert_almost_equal_objects(hist(0, 0), [0])
+                assert_almost_equal_objects(hist(1, 0), [50000])
 
     def test_histfind_ndim(self):
         im = pyvips.Image.black(100, 100) + [1, 2, 3]
@@ -340,15 +342,15 @@ class TestArithmetic(PyvipsTester):
         for fmt in noncomplex_formats:
             hist = im.cast(fmt).hist_find_ndim()
 
-            self.assertAlmostEqualObjects(hist(0, 0)[0], 10000)
-            self.assertAlmostEqualObjects(hist(5, 5)[5], 0)
+            assert_almost_equal_objects(hist(0, 0)[0], 10000)
+            assert_almost_equal_objects(hist(5, 5)[5], 0)
 
             hist = im.cast(fmt).hist_find_ndim(bins=1)
 
-            self.assertAlmostEqualObjects(hist(0, 0)[0], 10000)
-            self.assertEqual(hist.width, 1)
-            self.assertEqual(hist.height, 1)
-            self.assertEqual(hist.bands, 1)
+            assert_almost_equal_objects(hist(0, 0)[0], 10000)
+            assert hist.width == 1
+            assert hist.height == 1
+            assert hist.bands == 1
 
     def test_hough_circle(self):
         test = pyvips.Image.black(100, 100).draw_circle(100, 50, 50, 40)
@@ -361,27 +363,28 @@ class TestArithmetic(PyvipsTester):
             vec = hough(x, y)
             r = vec.index(v) + 35
 
-            self.assertAlmostEqual(x, 50)
-            self.assertAlmostEqual(y, 50)
-            self.assertAlmostEqual(r, 40)
+            assert pytest.approx(x) == 50
+            assert pytest.approx(y) == 50
+            assert pytest.approx(r) == 40
 
+    @pytest.mark.skipif(not pyvips.base.at_least_libvips(8, 7),
+                        reason="requires libvips >= 8.7")
     def test_hough_line(self):
         # hough_line changed the way it codes parameter space in 8.7 ... don't
         # test earlier versions
-        if pyvips.base.at_least_libvips(8, 7):
-            test = pyvips.Image.black(100, 100).draw_line(100, 10, 90, 90, 10)
+        test = pyvips.Image.black(100, 100).draw_line(100, 10, 90, 90, 10)
 
-            for fmt in all_formats:
-                im = test.cast(fmt)
-                hough = im.hough_line()
+        for fmt in all_formats:
+            im = test.cast(fmt)
+            hough = im.hough_line()
 
-                v, x, y = hough.maxpos()
+            v, x, y = hough.maxpos()
 
-                angle = 180.0 * x // hough.width
-                distance = test.height * y // hough.height
+            angle = 180.0 * x // hough.width
+            distance = test.height * y // hough.height
 
-                self.assertAlmostEqual(angle, 45)
-                self.assertAlmostEqual(distance, 70)
+            assert pytest.approx(angle) == 45
+            assert pytest.approx(distance) == 70
 
     def test_sin(self):
         def my_sin(x):
@@ -523,11 +526,11 @@ class TestArithmetic(PyvipsTester):
         for fmt in all_formats:
             v = test.cast(fmt).max()
 
-            self.assertAlmostEqual(v, 100)
+            assert pytest.approx(v) == 100
             v, x, y = test.cast(fmt).maxpos()
-            self.assertAlmostEqual(v, 100)
-            self.assertAlmostEqual(x, 40)
-            self.assertAlmostEqual(y, 50)
+            assert pytest.approx(v) == 100
+            assert pytest.approx(x) == 40
+            assert pytest.approx(y) == 50
 
     def test_min(self):
         test = (pyvips.Image.black(100, 100) + 100).draw_rect(0, 40, 50, 1, 1)
@@ -535,11 +538,11 @@ class TestArithmetic(PyvipsTester):
         for fmt in all_formats:
             v = test.cast(fmt).min()
 
-            self.assertAlmostEqual(v, 0)
+            assert pytest.approx(v) == 0
             v, x, y = test.cast(fmt).minpos()
-            self.assertAlmostEqual(v, 0)
-            self.assertAlmostEqual(x, 40)
-            self.assertAlmostEqual(y, 50)
+            assert pytest.approx(v) == 0
+            assert pytest.approx(x) == 40
+            assert pytest.approx(y) == 50
 
     def test_measure(self):
         im = pyvips.Image.black(50, 50)
@@ -551,8 +554,8 @@ class TestArithmetic(PyvipsTester):
             [p1] = matrix(0, 0)
             [p2] = matrix(0, 1)
 
-            self.assertAlmostEqual(p1, 0)
-            self.assertAlmostEqual(p2, 10)
+            assert pytest.approx(p1) == 0
+            assert pytest.approx(p2) == 10
 
     def test_find_trim(self):
         if pyvips.type_find("VipsOperation", "find_trim") != 0:
@@ -563,18 +566,18 @@ class TestArithmetic(PyvipsTester):
                 a = test.cast(x)
                 left, top, width, height = a.find_trim()
 
-                self.assertEqual(left, 10)
-                self.assertEqual(top, 20)
-                self.assertEqual(width, 50)
-                self.assertEqual(height, 60)
+                assert left == 10
+                assert top == 20
+                assert width == 50
+                assert height == 60
 
             test_rgb = test.bandjoin([test, test])
             left, top, width, height = test_rgb.find_trim(background=[255, 255,
                                                                       255])
-            self.assertEqual(left, 10)
-            self.assertEqual(top, 20)
-            self.assertEqual(width, 50)
-            self.assertEqual(height, 60)
+            assert left == 10
+            assert top == 20
+            assert width == 50
+            assert height == 60
 
     def test_profile(self):
         test = pyvips.Image.black(100, 100).draw_rect(100, 40, 50, 1, 1)
@@ -583,14 +586,14 @@ class TestArithmetic(PyvipsTester):
             columns, rows = test.cast(fmt).profile()
 
             v, x, y = columns.minpos()
-            self.assertAlmostEqual(v, 50)
-            self.assertAlmostEqual(x, 40)
-            self.assertAlmostEqual(y, 0)
+            assert pytest.approx(v) == 50
+            assert pytest.approx(x) == 40
+            assert pytest.approx(y) == 0
 
             v, x, y = rows.minpos()
-            self.assertAlmostEqual(v, 40)
-            self.assertAlmostEqual(x, 0)
-            self.assertAlmostEqual(y, 50)
+            assert pytest.approx(v) == 40
+            assert pytest.approx(x) == 0
+            assert pytest.approx(y) == 50
 
     def test_project(self):
         im = pyvips.Image.black(50, 50)
@@ -599,10 +602,10 @@ class TestArithmetic(PyvipsTester):
         for fmt in noncomplex_formats:
             columns, rows = test.cast(fmt).project()
 
-            self.assertAlmostEqualObjects(columns(10, 0), [0])
-            self.assertAlmostEqualObjects(columns(70, 0), [50 * 10])
+            assert_almost_equal_objects(columns(10, 0), [0])
+            assert_almost_equal_objects(columns(70, 0), [50 * 10])
 
-            self.assertAlmostEqualObjects(rows(0, 10), [50 * 10])
+            assert_almost_equal_objects(rows(0, 10), [50 * 10])
 
     def test_stats(self):
         im = pyvips.Image.black(50, 50)
@@ -612,27 +615,27 @@ class TestArithmetic(PyvipsTester):
             a = test.cast(x)
             matrix = a.stats()
 
-            self.assertAlmostEqualObjects(matrix(0, 0), [a.min()])
-            self.assertAlmostEqualObjects(matrix(1, 0), [a.max()])
-            self.assertAlmostEqualObjects(matrix(2, 0), [50 * 50 * 10])
-            self.assertAlmostEqualObjects(matrix(3, 0), [50 * 50 * 100])
-            self.assertAlmostEqualObjects(matrix(4, 0), [a.avg()])
-            self.assertAlmostEqualObjects(matrix(5, 0), [a.deviate()])
+            assert_almost_equal_objects(matrix(0, 0), [a.min()])
+            assert_almost_equal_objects(matrix(1, 0), [a.max()])
+            assert_almost_equal_objects(matrix(2, 0), [50 * 50 * 10])
+            assert_almost_equal_objects(matrix(3, 0), [50 * 50 * 100])
+            assert_almost_equal_objects(matrix(4, 0), [a.avg()])
+            assert_almost_equal_objects(matrix(5, 0), [a.deviate()])
 
-            self.assertAlmostEqualObjects(matrix(0, 1), [a.min()])
-            self.assertAlmostEqualObjects(matrix(1, 1), [a.max()])
-            self.assertAlmostEqualObjects(matrix(2, 1), [50 * 50 * 10])
-            self.assertAlmostEqualObjects(matrix(3, 1), [50 * 50 * 100])
-            self.assertAlmostEqualObjects(matrix(4, 1), [a.avg()])
-            self.assertAlmostEqualObjects(matrix(5, 1), [a.deviate()])
+            assert_almost_equal_objects(matrix(0, 1), [a.min()])
+            assert_almost_equal_objects(matrix(1, 1), [a.max()])
+            assert_almost_equal_objects(matrix(2, 1), [50 * 50 * 10])
+            assert_almost_equal_objects(matrix(3, 1), [50 * 50 * 100])
+            assert_almost_equal_objects(matrix(4, 1), [a.avg()])
+            assert_almost_equal_objects(matrix(5, 1), [a.deviate()])
 
     def test_sum(self):
         for fmt in all_formats:
             im = pyvips.Image.black(50, 50)
             im2 = [(im + x).cast(fmt) for x in range(0, 100, 10)]
             im3 = pyvips.Image.sum(im2)
-            self.assertAlmostEqual(im3.max(), sum(range(0, 100, 10)))
+            assert pytest.approx(im3.max()) == sum(range(0, 100, 10))
 
 
 if __name__ == '__main__':
-    unittest.main()
+    pytest.main()

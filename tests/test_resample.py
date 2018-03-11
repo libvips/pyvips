@@ -1,8 +1,8 @@
 # vim: set fileencoding=utf-8 :
-import unittest
+import pytest
 
 import pyvips
-from .helpers import PyvipsTester, JPEG_FILE, all_formats
+from helpers import JPEG_FILE, all_formats
 
 
 # Run a function expecting a complex image on a two-band image
@@ -61,7 +61,7 @@ def to_rectangular(image):
     return image.mapim(index)
 
 
-class TestResample(PyvipsTester):
+class TestResample:
     def test_affine(self):
         im = pyvips.Image.new_from_file(JPEG_FILE)
 
@@ -72,7 +72,7 @@ class TestResample(PyvipsTester):
             for i in range(4):
                 x = x.affine([0, 1, 1, 0], interpolate=interpolate)
 
-            self.assertEqual((x - im).abs().max(), 0)
+            assert (x - im).abs().max() == 0
 
     def test_reduce(self):
         im = pyvips.Image.new_from_file(JPEG_FILE)
@@ -87,7 +87,7 @@ class TestResample(PyvipsTester):
                     x = im.cast(fmt)
                     r = x.reduce(fac, fac, kernel=kernel)
                     d = abs(r.avg() - im.avg())
-                    self.assertLess(d, 2)
+                    assert d < 2
 
         # try constant images ... should not change the constant
         for const in [0, 1, 2, 254, 255]:
@@ -98,70 +98,69 @@ class TestResample(PyvipsTester):
                 # print "testing const =", const
                 shr = im.reduce(2, 2, kernel=kernel)
                 d = abs(shr.avg() - im.avg())
-                self.assertEqual(d, 0)
+                assert d == 0
 
     def test_resize(self):
         im = pyvips.Image.new_from_file(JPEG_FILE)
         im2 = im.resize(0.25)
-        self.assertEqual(im2.width, round(im.width / 4.0))
-        self.assertEqual(im2.height, round(im.height / 4.0))
+        assert im2.width == round(im.width / 4.0)
+        assert im2.height == round(im.height / 4.0)
 
         # test geometry rounding corner case
         im = pyvips.Image.black(100, 1)
         x = im.resize(0.5)
-        self.assertEqual(x.width, 50)
-        self.assertEqual(x.height, 1)
+        assert x.width == 50
+        assert x.height == 1
 
     def test_shrink(self):
         im = pyvips.Image.new_from_file(JPEG_FILE)
         im2 = im.shrink(4, 4)
-        self.assertEqual(im2.width, round(im.width / 4.0))
-        self.assertEqual(im2.height, round(im.height / 4.0))
-        self.assertTrue(abs(im.avg() - im2.avg()) < 1)
+        assert im2.width == round(im.width / 4.0)
+        assert im2.height == round(im.height / 4.0)
+        assert abs(im.avg() - im2.avg()) < 1
 
         im2 = im.shrink(2.5, 2.5)
-        self.assertEqual(im2.width, round(im.width / 2.5))
-        self.assertEqual(im2.height, round(im.height / 2.5))
-        self.assertLess(abs(im.avg() - im2.avg()), 1)
+        assert im2.width == round(im.width / 2.5)
+        assert im2.height == round(im.height / 2.5)
+        assert abs(im.avg() - im2.avg()) < 1
 
+    @pytest.mark.skipif(not pyvips.at_least_libvips(8, 5),
+                        reason="requires libvips >= 8.5")
     def test_thumbnail(self):
-        if not pyvips.at_least_libvips(8, 5):
-            return
-
         im = pyvips.Image.thumbnail(JPEG_FILE, 100)
 
-        self.assertEqual(im.width, 100)
-        self.assertEqual(im.bands, 3)
-        self.assertEqual(im.bands, 3)
+        assert im.width == 100
+        assert im.bands == 3
+        assert im.bands == 3
 
         # the average shouldn't move too much
         im_orig = pyvips.Image.new_from_file(JPEG_FILE)
-        self.assertLess(abs(im_orig.avg() - im.avg()), 1)
+        assert abs(im_orig.avg() - im.avg()) < 1
 
         # make sure we always get the right width
         for width in range(1000, 1, -13):
             im = pyvips.Image.thumbnail(JPEG_FILE, width)
-            self.assertEqual(im.width, width)
+            assert im.width == width
 
         # should fit one of width or height
         im = pyvips.Image.thumbnail(JPEG_FILE, 100, height=300)
-        self.assertEqual(im.width, 100)
-        self.assertNotEqual(im.height, 300)
+        assert im.width == 100
+        assert im.height != 300
         im = pyvips.Image.thumbnail(JPEG_FILE, 300, height=100)
-        self.assertNotEqual(im.width, 300)
-        self.assertEqual(im.height, 100)
+        assert im.width != 300
+        assert im.height == 100
 
         # with @crop, should fit both width and height
         im = pyvips.Image.thumbnail(JPEG_FILE, 100,
                                     height=300, crop=True)
-        self.assertEqual(im.width, 100)
-        self.assertEqual(im.height, 300)
+        assert im.width == 100
+        assert im.height == 300
 
         im1 = pyvips.Image.thumbnail(JPEG_FILE, 100)
         with open(JPEG_FILE, 'rb') as f:
             buf = f.read()
         im2 = pyvips.Image.thumbnail_buffer(buf, 100)
-        self.assertLess(abs(im1.avg() - im2.avg()), 1)
+        assert abs(im1.avg() - im2.avg()) < 1
 
     def test_similarity(self):
         im = pyvips.Image.new_from_file(JPEG_FILE)
@@ -169,13 +168,13 @@ class TestResample(PyvipsTester):
         im3 = im.affine([0, -1, 1, 0])
         # rounding in calculating the affine transform from the angle stops
         # this being exactly true
-        self.assertLess((im2 - im3).abs().max(), 50)
+        assert (im2 - im3).abs().max() < 50
 
     def test_similarity_scale(self):
         im = pyvips.Image.new_from_file(JPEG_FILE)
         im2 = im.similarity(scale=2)
         im3 = im.affine([2, 0, 0, 2])
-        self.assertEqual((im2 - im3).abs().max(), 0)
+        assert (im2 - im3).abs().max() == 0
 
     def test_mapim(self):
         im = pyvips.Image.new_from_file(JPEG_FILE)
@@ -187,8 +186,8 @@ class TestResample(PyvipsTester):
         # distorted, but the rest should not be too bad
         a = r.crop(50, 0, im.width - 50, im.height).gaussblur(2)
         b = im.crop(50, 0, im.width - 50, im.height).gaussblur(2)
-        self.assertLess((a - b).abs().max(), 20)
+        assert (a - b).abs().max() < 20
 
 
 if __name__ == '__main__':
-    unittest.main()
+    pytest.main()

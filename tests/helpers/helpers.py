@@ -1,14 +1,12 @@
 # vim: set fileencoding=utf-8 :
 # test helpers
-from __future__ import division
-
 import os
 import tempfile
-import unittest
+import pytest
 
 import pyvips
 
-IMAGES = os.path.join(os.path.dirname(__file__), 'images')
+IMAGES = os.path.join(os.path.dirname(__file__), os.pardir, 'images')
 JPEG_FILE = os.path.join(IMAGES, "йцук.jpg")
 SRGB_FILE = os.path.join(IMAGES, "sRGB.icm")
 MATLAB_FILE = os.path.join(IMAGES, "sample.mat")
@@ -158,62 +156,66 @@ def run_fn2(fn, x, y):
         return fn(x, y)
 
 
-class PyvipsTester(unittest.TestCase):
-    # test a pair of things which can be lists for approx. equality
-    def assertAlmostEqualObjects(self, a, b, places=4, msg=''):
-        # print 'assertAlmostEqualObjects %s = %s' % (a, b)
-        for x, y in zip_expand(a, b):
-            self.assertAlmostEqual(x, y, places=places, msg=msg)
+# test a pair of things which can be lists for approx. equality
+def assert_almost_equal_objects(a, b, threshold=0.0001, msg=''):
+    # print 'assertAlmostEqualObjects %s = %s' % (a, b)
+    assert all([pytest.approx(a, abs=threshold) == b
+                for a, b in zip_expand(a, b)]), msg
 
-    # test a pair of things which can be lists for equality
-    def assertEqualObjects(self, a, b, places=4, msg=''):
-        # print 'assertEqualObjects %s = %s' % (a, b)
-        for x, y in zip_expand(a, b):
-            self.assertEqual(x, y, msg=msg)
 
-    # test a pair of things which can be lists for difference less than a
-    # threshold
-    def assertLessThreshold(self, a, b, diff):
-        for x, y in zip_expand(a, b):
-            self.assertLess(abs(x - y), diff)
+# test a pair of things which can be lists for equality
+def assert_equal_objects(a, b, msg=''):
+    # print 'assertEqualObjects %s = %s' % (a, b)
+    assert all([a == b for a, b in zip_expand(a, b)]), msg
 
-    # run a function on an image and on a single pixel, the results
-    # should match
-    def run_cmp(self, message, im, x, y, fn):
-        a = im(x, y)
-        v1 = fn(a)
-        im2 = fn(im)
-        v2 = im2(x, y)
-        self.assertAlmostEqualObjects(v1, v2, msg=message)
 
-    # run a function on an image,
-    # 50,50 and 10,10 should have different values on the test image
-    def run_image(self, message, im, fn):
-        self.run_cmp(message, im, 50, 50, fn)
-        self.run_cmp(message, im, 10, 10, fn)
+# test a pair of things which can be lists for difference less than a
+# threshold
+def assert_less_threshold(a, b, diff):
+    assert all([abs(a - b) < diff for a, b in zip_expand(a, b)])
 
-    # run a function on (image, constant), and on (constant, image).
-    # 50,50 and 10,10 should have different values on the test image
-    def run_const(self, message, fn, im, c):
-        self.run_cmp(message, im, 50, 50, lambda x: run_fn2(fn, x, c))
-        self.run_cmp(message, im, 50, 50, lambda x: run_fn2(fn, c, x))
-        self.run_cmp(message, im, 10, 10, lambda x: run_fn2(fn, x, c))
-        self.run_cmp(message, im, 10, 10, lambda x: run_fn2(fn, c, x))
 
-    # run a function on a pair of images and on a pair of pixels, the results
-    # should match
-    def run_cmp2(self, message, left, right, x, y, fn):
-        a = left(x, y)
-        b = right(x, y)
-        v1 = fn(a, b)
-        after = fn(left, right)
-        v2 = after(x, y)
-        self.assertAlmostEqualObjects(v1, v2, msg=message)
+# run a function on an image and on a single pixel, the results
+# should match
+def run_cmp(message, im, x, y, fn):
+    a = im(x, y)
+    v1 = fn(a)
+    im2 = fn(im)
+    v2 = im2(x, y)
+    assert_almost_equal_objects(v1, v2, msg=message)
 
-    # run a function on a pair of images
-    # 50,50 and 10,10 should have different values on the test image
-    def run_image2(self, message, left, right, fn):
-        self.run_cmp2(message, left, right, 50, 50,
-                      lambda x, y: run_fn2(fn, x, y))
-        self.run_cmp2(message, left, right, 10, 10,
-                      lambda x, y: run_fn2(fn, x, y))
+
+# run a function on an image,
+# 50,50 and 10,10 should have different values on the test image
+def run_image(message, im, fn):
+    run_cmp(message, im, 50, 50, fn)
+    run_cmp(message, im, 10, 10, fn)
+
+
+# run a function on (image, constant), and on (constant, image).
+# 50,50 and 10,10 should have different values on the test image
+def run_const(message, fn, im, c):
+    run_cmp(message, im, 50, 50, lambda x: run_fn2(fn, x, c))
+    run_cmp(message, im, 50, 50, lambda x: run_fn2(fn, c, x))
+    run_cmp(message, im, 10, 10, lambda x: run_fn2(fn, x, c))
+    run_cmp(message, im, 10, 10, lambda x: run_fn2(fn, c, x))
+
+
+# run a function on a pair of images and on a pair of pixels, the results
+# should match
+def run_cmp2(message, left, right, x, y, fn):
+    a = left(x, y)
+    b = right(x, y)
+    v1 = fn(a, b)
+    after = fn(left, right)
+    v2 = after(x, y)
+    assert_almost_equal_objects(v1, v2, msg=message)
+
+
+# run a function on a pair of images
+# 50,50 and 10,10 should have different values on the test image
+def run_image2(message, left, right, fn):
+    run_cmp2(message, left, right, 50, 50,
+             lambda x, y: run_fn2(fn, x, y))
+    run_cmp2(message, left, right, 10, 10,
+             lambda x, y: run_fn2(fn, x, y))
