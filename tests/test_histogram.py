@@ -45,8 +45,8 @@ class TestHistogram(PyvipsTester):
         if pyvips.at_least_libvips(8, 5):
             im3 = im.hist_local(10, 10, max_slope=3)
 
-            self.assertEqual(im.width, im2.width)
-            self.assertEqual(im.height, im2.height)
+            self.assertEqual(im.width, im3.width)
+            self.assertEqual(im.height, im3.height)
 
             self.assertTrue(im3.deviate() < im2.deviate())
 
