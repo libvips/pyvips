@@ -136,12 +136,13 @@ class Operation(pyvips.VipsObject):
 
         # make a thing to quickly get flags from an arg name
         flags_from_name = {}
-        for name, flags in arguments:
-            flags_from_name[name] = flags
 
         # count required input args
         n_required = 0
+
         for name, flags in arguments:
+            flags_from_name[name] = flags
+
             if ((flags & _INPUT) != 0 and
                     (flags & _REQUIRED) != 0 and
                     (flags & _DEPRECATED) == 0):
