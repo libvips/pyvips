@@ -17,7 +17,7 @@ def conv(image, mask, x_position, y_position):
             p = run_fn2(operator.mul, m, i)
             s = run_fn2(operator.add, s, p)
 
-    return run_fn2(operator.truediv, s, mask.get_scale())
+    return run_fn2(operator.truediv, s, mask.scale)
 
 
 def compass(image, mask, x_position, y_position, n_rot, fn):

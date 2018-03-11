@@ -140,9 +140,9 @@ class TestColour(PyvipsTester):
         im3 = im.colourspace(pyvips.Interpretation.SRGB)
         self.assertLess(im2.dE76(im3).max(), 6)
 
-        before_profile = test.get_value("icc-profile-data")
+        before_profile = test.get("icc-profile-data")
         im = test.icc_transform(SRGB_FILE)
-        after_profile = im.get_value("icc-profile-data")
+        after_profile = im.get("icc-profile-data")
         im2 = test.icc_import()
         im3 = im2.colourspace(pyvips.Interpretation.SRGB)
         self.assertLess(im.dE76(im3).max(), 6)

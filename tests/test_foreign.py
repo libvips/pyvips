@@ -111,8 +111,8 @@ class TestForeign(PyvipsTester):
         filename = temp_filename(self.tempdir, ".v")
         self.colour.write_to_file(filename)
         x = pyvips.Image.new_from_file(filename)
-        before_exif = self.colour.get_value("exif-data")
-        after_exif = x.get_value("exif-data")
+        before_exif = self.colour.get("exif-data")
+        after_exif = x.get("exif-data")
 
         self.assertEqual(len(before_exif), len(after_exif))
         for i in range(len(before_exif)):
@@ -128,7 +128,7 @@ class TestForeign(PyvipsTester):
         def jpeg_valid(self, im):
             a = im(10, 10)
             self.assertAlmostEqualObjects(a, [6, 5, 3])
-            profile = im.get_value("icc-profile-data")
+            profile = im.get("icc-profile-data")
             self.assertEqual(len(profile), 1352)
             self.assertEqual(im.width, 1024)
             self.assertEqual(im.height, 768)
@@ -151,11 +151,11 @@ class TestForeign(PyvipsTester):
             # can set, save and load new orientation
             x = pyvips.Image.new_from_file(JPEG_FILE)
             x = x.copy()
-            x.set_value("orientation", 2)
+            x.set("orientation", 2)
             filename = temp_filename(self.tempdir, '.jpg')
             x.write_to_file(filename)
             x = pyvips.Image.new_from_file(filename)
-            y = x.get_value("orientation")
+            y = x.get("orientation")
             self.assertEqual(y, 2)
 
             # can remove orientation, save, load again, orientation
@@ -164,14 +164,14 @@ class TestForeign(PyvipsTester):
             filename = temp_filename(self.tempdir, '.jpg')
             x.write_to_file(filename)
             x = pyvips.Image.new_from_file(filename)
-            y = x.get_value("orientation")
+            y = x.get("orientation")
             self.assertEqual(y, 1)
 
             # autorotate load works
             filename = temp_filename(self.tempdir, '.jpg')
             x = pyvips.Image.new_from_file(JPEG_FILE)
             x = x.copy()
-            x.set_value("orientation", 6)
+            x.set("orientation", 6)
             x.write_to_file(filename)
             x1 = pyvips.Image.new_from_file(filename)
             x2 = pyvips.Image.new_from_file(filename, autorotate=True)
@@ -240,32 +240,32 @@ class TestForeign(PyvipsTester):
         filename = temp_filename(self.tempdir, '.tif')
         x = pyvips.Image.new_from_file(TIF_FILE)
         x = x.copy()
-        x.set_value("orientation", 2)
+        x.set("orientation", 2)
         x.write_to_file(filename)
         x = pyvips.Image.new_from_file(filename)
-        y = x.get_value("orientation")
+        y = x.get("orientation")
         self.assertEqual(y, 2)
 
         filename = temp_filename(self.tempdir, '.tif')
         x = pyvips.Image.new_from_file(TIF_FILE)
         x = x.copy()
-        x.set_value("orientation", 2)
+        x.set("orientation", 2)
         x.write_to_file(filename)
         x = pyvips.Image.new_from_file(filename)
-        y = x.get_value("orientation")
+        y = x.get("orientation")
         self.assertEqual(y, 2)
         x.remove("orientation")
 
         filename = temp_filename(self.tempdir, '.tif')
         x.write_to_file(filename)
         x = pyvips.Image.new_from_file(filename)
-        y = x.get_value("orientation")
+        y = x.get("orientation")
         self.assertEqual(y, 1)
 
         filename = temp_filename(self.tempdir, '.tif')
         x = pyvips.Image.new_from_file(TIF_FILE)
         x = x.copy()
-        x.set_value("orientation", 6)
+        x.set("orientation", 6)
         x.write_to_file(filename)
         x1 = pyvips.Image.new_from_file(filename)
         x2 = pyvips.Image.new_from_file(filename, autorotate=True)
@@ -373,7 +373,7 @@ class TestForeign(PyvipsTester):
             im = pyvips.Image.magickload(GIF_ANIM_FILE, page=1, n=2)
             self.assertEqual(im.width, width)
             self.assertEqual(im.height, height * 2)
-            page_height = im.get_value("page-height")
+            page_height = im.get("page-height")
             self.assertEqual(page_height, height)
 
         # should work for dicom
@@ -419,8 +419,8 @@ class TestForeign(PyvipsTester):
         im = pyvips.Image.new_from_buffer(buf, "")
         if im.get_typeof("icc-profile-data") != 0:
             # verify that the profile comes back unharmed
-            p1 = self.colour.get_value("icc-profile-data")
-            p2 = im.get_value("icc-profile-data")
+            p1 = self.colour.get("icc-profile-data")
+            p2 = im.get("icc-profile-data")
             self.assertEqual(p1, p2)
 
             # add tests for exif, xmp, ipct
@@ -432,10 +432,10 @@ class TestForeign(PyvipsTester):
             z = pyvips.Image.new_from_file(JPEG_FILE)
             if z.get_typeof("exif-ifd0-Orientation") != 0:
                 x = self.colour.copy()
-                x.set_value("orientation", 6)
+                x.set("orientation", 6)
                 buf = x.webpsave_buffer()
                 y = pyvips.Image.new_from_buffer(buf, "")
-                self.assertEqual(y.get_value("orientation"), 6)
+                self.assertEqual(y.get("orientation"), 6)
 
     def test_analyzeload(self):
         if pyvips.type_find("VipsForeign", "analyzeload") == 0 or \
@@ -564,7 +564,7 @@ class TestForeign(PyvipsTester):
             x1 = pyvips.Image.new_from_file(GIF_ANIM_FILE)
             x2 = pyvips.Image.new_from_file(GIF_ANIM_FILE, n=2)
             self.assertEqual(x2.height, 2 * x1.height)
-            page_height = x2.get_value("page-height")
+            page_height = x2.get("page-height")
             self.assertEqual(page_height, x1.height)
 
             x2 = pyvips.Image.new_from_file(GIF_ANIM_FILE, n=-1)
