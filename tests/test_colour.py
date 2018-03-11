@@ -7,13 +7,6 @@ from .helpers import PyvipsTester, JPEG_FILE, SRGB_FILE, \
 
 
 class TestColour(PyvipsTester):
-    def setUp(self):
-        im = pyvips.Image.mask_ideal(100, 100, 0.5,
-                                     reject=True, optical=True)
-        self.colour = im * [1, 2, 3] + [2, 3, 4]
-        self.mono = self.colour.extract_band(1)
-        self.all_images = [self.mono, self.colour]
-
     def test_colourspace(self):
         # mid-grey in Lab ... put 42 in the extra band, it should be copied
         # unmodified
