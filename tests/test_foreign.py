@@ -370,10 +370,9 @@ class TestForeign:
         # some IMs are 3 bands, some are 1, can't really test
         # assert im.bands == 1
 
-        self.save_load_file(".tif", "[squash]", self.onebit, 0)
-
         # added in 8.7
         if have("magicksave"):
+            self.save_load_file(".bmp", "", self.colour, 0)
             self.save_load_buffer("magicksave_buffer", "magickload_buffer",
                                   self.colour, 0, format="BMP")
             self.save_load("%s.bmp", self.colour)
