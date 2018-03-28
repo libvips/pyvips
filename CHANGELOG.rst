@@ -8,6 +8,7 @@
 * update docs
 * add some libvips 8.7 tests
 * move to pytest [kleis]
+* better handling of many-byte values in py3 new_from_memory [MatthiasKohl]
 
 ## Version 2.1.2 (1 March 2018)
 

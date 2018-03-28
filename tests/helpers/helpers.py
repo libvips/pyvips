@@ -148,7 +148,7 @@ def temp_filename(directory, suffix):
 
 # test for an operator exists
 def have(name):
-    return pyvips.type_find("VipsOperation", name) != 0 
+    return pyvips.type_find("VipsOperation", name) != 0
 
 
 # run a 2-ary function on two things -- loop over elements pairwise if the
@@ -165,20 +165,20 @@ def run_fn2(fn, x, y):
 # test a pair of things which can be lists for approx. equality
 def assert_almost_equal_objects(a, b, threshold=0.0001, msg=''):
     # print 'assertAlmostEqualObjects %s = %s' % (a, b)
-    assert all([pytest.approx(a, abs=threshold) == b
-                for a, b in zip_expand(a, b)]), msg
+    assert all([pytest.approx(x, abs=threshold) == y
+                for x, y in zip_expand(a, b)]), msg
 
 
 # test a pair of things which can be lists for equality
 def assert_equal_objects(a, b, msg=''):
     # print 'assertEqualObjects %s = %s' % (a, b)
-    assert all([a == b for a, b in zip_expand(a, b)]), msg
+    assert all([x == y for x, y in zip_expand(a, b)]), msg
 
 
 # test a pair of things which can be lists for difference less than a
 # threshold
 def assert_less_threshold(a, b, diff):
-    assert all([abs(a - b) < diff for a, b in zip_expand(a, b)])
+    assert all([abs(x - y) < diff for x, y in zip_expand(a, b)])
 
 
 # run a function on an image and on a single pixel, the results

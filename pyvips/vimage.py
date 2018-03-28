@@ -330,8 +330,16 @@ class Image(pyvips.VipsObject):
         """
 
         format_value = GValue.to_enum(GValue.format_type, format)
-        vi = vips_lib.vips_image_new_from_memory(ffi.from_buffer(data),
-                                                 len(data),
+        pointer = ffi.from_buffer(data)
+        # py3:
+        #   - memoryview has .nbytes for number of bytes in object
+        #   - len() returns number of elements in top array
+        # py2:
+        #   - buffer has no nbytes member
+        #   - but len() gives number of bytes in object
+        nbytes = data.nbytes if hasattr(data, 'nbytes') else len(data)
+        vi = vips_lib.vips_image_new_from_memory(pointer,
+                                                 nbytes,
                                                  width, height, bands,
                                                  format_value)
         if vi == ffi.NULL:
