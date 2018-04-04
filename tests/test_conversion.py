@@ -39,8 +39,8 @@ class TestConversion:
     def setup_class(cls):
         im = pyvips.Image.mask_ideal(100, 100, 0.5,
                                      reject=True, optical=True)
-        cls.colour = im * [1, 2, 3] + [2, 3, 4]
-        cls.mono = cls.colour[1]
+        cls.colour = (im * [1, 2, 3] + [2, 3, 4]).copy(interpretation="srgb")
+        cls.mono = cls.colour[1].copy(interpretation="b-w")
         cls.all_images = [cls.mono, cls.colour]
         cls.image = pyvips.Image.jpegload(JPEG_FILE)
 
