@@ -292,7 +292,7 @@ class Operation(pyvips.VipsObject):
         result += ")\n"
 
         def argstr(name):
-            return ('    {0} ({1}): {2}\n'.
+            return (u'    {0} ({1}): {2}\n'.
                     format(name,
                            GValue.gtype_to_python(op.get_typeof(name)),
                            op.get_blurb(name)))

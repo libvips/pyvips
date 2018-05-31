@@ -22,7 +22,6 @@ def _to_bytes(x):
     call this on strings you pass to libvips.
 
     """
-
     if isinstance(x, text_type):
         x = x.encode()
     return x
@@ -35,8 +34,11 @@ def _to_string(x):
     string. You must call this on text strings you get back from libvips.
 
     """
-    if _is_PY3 and isinstance(x, bytes):
-        x = x.decode('utf-8')
+    if isinstance(x, bytes):
+        if _is_PY3:
+            x = x.decode('utf-8')
+        else:
+            x = unicode(x, 'utf-8')
     return x
 
 
