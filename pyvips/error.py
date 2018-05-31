@@ -37,8 +37,6 @@ def _to_string(x):
     if isinstance(x, bytes):
         if _is_PY3:
             x = x.decode('utf-8')
-        else:
-            x = unicode(x, 'utf-8')
     return x
 
 
