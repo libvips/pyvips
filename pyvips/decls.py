@@ -120,13 +120,15 @@ def cdefs(features):
         GType vips_interpretation_get_type (void);
         GType vips_operation_flags_get_type (void);
         GType vips_band_format_get_type (void);
+        GType vips_token_get_type (void);
+        GType vips_saveable_get_type (void);
+        GType vips_image_type_get_type (void);
 
         typedef struct _GData GData;
 
         typedef struct _GTypeClass GTypeClass;
 
-        typedef struct _GTypeInstance
-        {
+        typedef struct _GTypeInstance {
             GTypeClass *g_class;
         } GTypeInstance;
 
@@ -152,6 +154,24 @@ def cdefs(features):
             unsigned int ref_count;
             unsigned int param_id;
         } GParamSpec;
+
+        typedef struct _GEnumValue {
+            int value;
+
+            const char *value_name;
+            const char *value_nick;
+        } GEnumValue;
+
+        typedef struct _GEnumClass {
+          GTypeClass *g_type_class;
+
+          int minimum;
+          int maximum;
+          unsigned int n_values;
+          GEnumValue *values;
+        } GEnumClass;
+
+        void* g_type_class_ref (GType type);
 
         void g_object_ref (void* object);
         void g_object_unref (void* object);

@@ -1,7 +1,7 @@
 # basic defs and link to ffi
 
 
-from pyvips import ffi, vips_lib, gobject_lib, _to_string, _to_bytes, Error
+from pyvips import ffi, vips_lib, glib_lib, gobject_lib, _to_string, _to_bytes, Error
 
 
 def leak_set(leak):
@@ -89,6 +89,24 @@ def type_map(gtype, fn):
     return vips_lib.vips_type_map(gtype, cb, ffi.NULL, ffi.NULL)
 
 
+def values_for_enum(gtype):
+    """Get all values for a enum (gtype)."""
+
+    g_type_class = gobject_lib.g_type_class_ref(gtype)
+    g_enum_class = ffi.cast('GEnumClass *', g_type_class)
+
+    values = []
+
+    # -1 since we always have a "last" member.
+    for i in range(0, g_enum_class.n_values - 1):
+        value = _to_string(ffi.string(g_enum_class.values[i].value_nick))
+        values.append(value)
+
+    glib_lib.g_free(g_enum_class)
+
+    return values
+
+
 __all__ = [
     'leak_set',
     'version',
@@ -100,4 +118,5 @@ __all__ = [
     'type_name',
     'type_map',
     'type_from_name',
+    'values_for_enum'
 ]
