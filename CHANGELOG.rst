@@ -3,13 +3,14 @@
 ## Version 2.1.3 (3 March 2018)
 
 * record header version number in binary module and check compatibility with
-  the library during startup
-* add optional output params to docs [kleis]
-* update docs
-* add some libvips 8.7 tests
-* move to pytest [kleis]
+  the library during startup [jcupitt]
+* add optional output params to docs [kleisauke]
+* update docs [jcupitt]
+* add some libvips 8.7 tests [jcupitt]
+* move to pytest [kleisauke]
 * better handling of many-byte values in py3 new_from_memory [MatthiasKohl]
 * better handling of utf-8 i18n text [felixbuenemann]
+* add enum introspection [kleisauke]
 
 ## Version 2.1.2 (1 March 2018)
 
