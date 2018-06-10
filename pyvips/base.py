@@ -102,8 +102,6 @@ def values_for_enum(gtype):
         value = _to_string(ffi.string(g_enum_class.values[i].value_nick))
         values.append(value)
 
-    glib_lib.g_free(g_enum_class)
-
     return values
 
 
