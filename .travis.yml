@@ -54,13 +54,9 @@ python:
 matrix:
   allow_failures:
     - python: nightly
-    - python: "3.3"
-    - python: "3.4"
-    - python: "pypy"
-    - python: "pypy3"
 
 install:
-  - pip install .[test]
+  - pip install -U .[test]
 
 script:
   - python setup.py test
@@ -69,3 +65,4 @@ script:
 before_install:
   - uname -a
   - bash install-vips.sh --without-python
+  - pip install -U setuptools
