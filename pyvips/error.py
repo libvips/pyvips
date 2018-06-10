@@ -11,8 +11,10 @@ _is_PY3 = sys.version_info[0] == 3
 
 if _is_PY3:
     text_type = str
+    byte_type = bytes
 else:
     text_type = unicode
+    byte_type = str
 
 
 def _to_bytes(x):
@@ -23,7 +25,7 @@ def _to_bytes(x):
 
     """
     if isinstance(x, text_type):
-        x = x.encode()
+        x = x.encode('utf-8')
     return x
 
 
@@ -34,9 +36,8 @@ def _to_string(x):
     string. You must call this on text strings you get back from libvips.
 
     """
-    if isinstance(x, bytes):
-        if _is_PY3:
-            x = x.decode('utf-8')
+    if isinstance(x, byte_type):
+        x = x.decode('utf-8')
     return x
 
 
