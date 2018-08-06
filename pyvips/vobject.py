@@ -71,7 +71,7 @@ class VipsObject(pyvips.GObject):
         """Get the blurb for a GObject property."""
 
         c_str = gobject_lib.g_param_spec_get_blurb(self._get_pspec(name))
-        return _to_string(ffi.string(c_str))
+        return _to_string(c_str)
 
     def get(self, name):
         """Get a GObject property.
@@ -131,7 +131,7 @@ class VipsObject(pyvips.GObject):
         """Get the description of a GObject."""
 
         vo = ffi.cast('VipsObject *', self.pointer)
-        return _to_string(ffi.string(vips_lib.vips_object_get_description(vo)))
+        return _to_string(vips_lib.vips_object_get_description(vo))
 
 
 __all__ = ['VipsObject']

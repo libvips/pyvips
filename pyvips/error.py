@@ -3,7 +3,7 @@
 import sys
 import logging
 
-from pyvips import ffi, vips_lib
+from pyvips import ffi, vips_lib, glib_lib
 
 logger = logging.getLogger(__name__)
 
@@ -36,9 +36,20 @@ def _to_string(x):
     string. You must call this on text strings you get back from libvips.
 
     """
+    x = ffi.string(x)
     if isinstance(x, byte_type):
         x = x.decode('utf-8')
     return x
+
+
+def _to_string_copy(x):
+    """Convert to a unicode string, and auto-free.
+
+    As _to_string(), but also tag x as a pointer to a memory area that must
+    be freed with g_free().
+
+    """
+    return _to_string(ffi.gc(x, glib_lib.g_free))
 
 
 class Error(Exception):
@@ -53,7 +64,7 @@ class Error(Exception):
     def __init__(self, message, detail=None):
         self.message = message
         if detail is None or detail == "":
-            detail = _to_string(ffi.string(vips_lib.vips_error_buffer()))
+            detail = _to_string(vips_lib.vips_error_buffer())
             vips_lib.vips_error_clear()
         self.detail = detail
 
@@ -64,5 +75,5 @@ class Error(Exception):
 
 
 __all__ = [
-    '_to_bytes', '_to_string', 'Error',
+    '_to_bytes', '_to_string', '_to_string_copy', 'Error',
 ]

@@ -1,7 +1,8 @@
 # basic defs and link to ffi
 
 
-from pyvips import ffi, vips_lib, glib_lib, gobject_lib, _to_string, _to_bytes, Error
+from pyvips import ffi, vips_lib, glib_lib, gobject_lib, \
+    _to_string, _to_bytes, Error
 
 
 def leak_set(leak):
@@ -47,13 +48,11 @@ def at_least_libvips(x, y):
 
 
 def path_filename7(filename):
-    return _to_string(ffi.string(vips_lib.vips_path_filename7(
-        _to_bytes(filename))))
+    return _to_string(vips_lib.vips_path_filename7(_to_bytes(filename)))
 
 
 def path_mode7(filename):
-    return _to_string(ffi.string(vips_lib.vips_path_mode7(
-        _to_bytes(filename))))
+    return _to_string(vips_lib.vips_path_mode7(_to_bytes(filename)))
 
 
 def type_find(basename, nickname):
@@ -68,13 +67,13 @@ def type_find(basename, nickname):
 def type_name(gtype):
     """Return the name for a GType."""
 
-    return _to_string(ffi.string(gobject_lib.g_type_name(gtype)))
+    return _to_string(gobject_lib.g_type_name(gtype))
 
 
 def nickname_find(gtype):
     """Return the nickname for a GType."""
 
-    return _to_string(ffi.string(vips_lib.vips_nickname_find(gtype)))
+    return _to_string(vips_lib.vips_nickname_find(gtype))
 
 
 def type_from_name(name):
@@ -99,7 +98,7 @@ def values_for_enum(gtype):
 
     # -1 since we always have a "last" member.
     for i in range(0, g_enum_class.n_values - 1):
-        value = _to_string(ffi.string(g_enum_class.values[i].value_nick))
+        value = _to_string(g_enum_class.values[i].value_nick)
         values.append(value)
 
     return values

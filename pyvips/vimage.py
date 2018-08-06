@@ -6,7 +6,7 @@ import numbers
 
 import pyvips
 from pyvips import ffi, glib_lib, vips_lib, Error, _to_bytes, \
-    _to_string, GValue, at_least_libvips
+    _to_string, _to_string_copy, GValue, at_least_libvips
 
 
 # either a single number, or a table of numbers
@@ -203,17 +203,19 @@ class Image(pyvips.VipsObject):
 
         """
         vips_filename = _to_bytes(vips_filename)
-        filename = vips_lib.vips_filename_get_filename(vips_filename)
-        options = vips_lib.vips_filename_get_options(vips_filename)
-        name = vips_lib.vips_foreign_find_load(filename)
-        if name == ffi.NULL:
-            raise Error('unable to load from file {0}'.format(vips_filename))
+        pointer = vips_lib.vips_filename_get_filename(vips_filename)
+        filename = _to_string_copy(pointer)
 
-        return pyvips.Operation.call(_to_string(ffi.string(name)),
-                                     _to_string(ffi.string(filename)),
-                                     string_options=_to_string(
-                                         ffi.string(options)
-                                     ), **kwargs)
+        pointer = vips_lib.vips_filename_get_options(vips_filename)
+        options = _to_string_copy(pointer)
+
+        pointer = vips_lib.vips_foreign_find_load(vips_filename)
+        if pointer == ffi.NULL:
+            raise Error('unable to load from file {0}'.format(vips_filename))
+        name = _to_string(pointer)
+
+        return pyvips.Operation.call(name, filename,
+                                     string_options=options, **kwargs)
 
     @staticmethod
     def new_from_buffer(data, options, **kwargs):
@@ -242,11 +244,12 @@ class Image(pyvips.VipsObject):
             :class:`.Error`
 
         """
-        name = vips_lib.vips_foreign_find_load_buffer(data, len(data))
-        if name == ffi.NULL:
+        pointer = vips_lib.vips_foreign_find_load_buffer(data, len(data))
+        if pointer == ffi.NULL:
             raise Error('unable to load from buffer')
+        name = _to_string(pointer)
 
-        return pyvips.Operation.call(_to_string(ffi.string(name)), data,
+        return pyvips.Operation.call(name, data,
                                      string_options=options, **kwargs)
 
     @staticmethod
@@ -477,16 +480,19 @@ class Image(pyvips.VipsObject):
 
         """
         vips_filename = _to_bytes(vips_filename)
-        filename = vips_lib.vips_filename_get_filename(vips_filename)
-        options = vips_lib.vips_filename_get_options(vips_filename)
-        name = vips_lib.vips_foreign_find_save(filename)
-        if name == ffi.NULL:
-            raise Error('unable to write to file {0}'.format(vips_filename))
+        pointer = vips_lib.vips_filename_get_filename(vips_filename)
+        filename = _to_string_copy(pointer)
 
-        return pyvips.Operation.call(_to_string(ffi.string(name)), self,
-                                     filename, string_options=_to_string(
-                                         ffi.string(options)
-                                     ), **kwargs)
+        pointer = vips_lib.vips_filename_get_options(vips_filename)
+        options = _to_string_copy(pointer)
+
+        pointer = vips_lib.vips_foreign_find_save(vips_filename)
+        if pointer == ffi.NULL:
+            raise Error('unable to write to file {0}'.format(vips_filename))
+        name = _to_string(pointer)
+
+        return pyvips.Operation.call(name, self, filename,
+                                     string_options=options, **kwargs)
 
     def write_to_buffer(self, format_string, **kwargs):
         """Write an image to memory.
@@ -524,15 +530,17 @@ class Image(pyvips.VipsObject):
 
         """
         format_string = _to_bytes(format_string)
-        options = vips_lib.vips_filename_get_options(format_string)
-        name = vips_lib.vips_foreign_find_save_buffer(format_string)
-        if name == ffi.NULL:
-            raise Error('unable to write to buffer')
 
-        return pyvips.Operation.call(_to_string(ffi.string(name)), self,
-                                     string_options=_to_string(
-                                         ffi.string(options)
-                                     ), **kwargs)
+        pointer = vips_lib.vips_filename_get_options(format_string)
+        options = _to_string_copy(pointer)
+
+        pointer = vips_lib.vips_foreign_find_save_buffer(format_string)
+        if pointer == ffi.NULL:
+            raise Error('unable to write to buffer')
+        name = _to_string(pointer)
+
+        return pyvips.Operation.call(name, self,
+                                     string_options=options, **kwargs)
 
     def write_to_memory(self):
         """Write the image to a large memory array.
@@ -658,7 +666,7 @@ class Image(pyvips.VipsObject):
             array = vips_lib.vips_image_get_fields(self.pointer)
             i = 0
             while array[i] != ffi.NULL:
-                name = _to_string(ffi.string(array[i]))
+                name = _to_string(array[i])
                 names.append(name)
                 glib_lib.g_free(array[i])
                 i += 1

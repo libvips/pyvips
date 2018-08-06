@@ -19,7 +19,7 @@ class TestSaveLoad:
 
         im = pyvips.Image.black(10, 20)
         im.write_to_file(filename)
-        assert os.path.isfile(filename) 
+        assert os.path.isfile(filename)
 
         os.remove(filename)
 
@@ -52,5 +52,3 @@ class TestSaveLoad:
         assert x.width == 10
         assert x.height == 20
         assert x.bands == 1
-
-

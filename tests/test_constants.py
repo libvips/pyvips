@@ -151,5 +151,3 @@ class TestConstants:
         assert x.height == 16
         assert x.bands == 2
         assert x.avg() == 129
-
-    

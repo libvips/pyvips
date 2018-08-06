@@ -93,7 +93,7 @@ class Operation(pyvips.VipsObject):
                           argument_instance, a, b):
             flags = argument_class.flags
             if (flags & _CONSTRUCT) != 0:
-                name = _to_string(ffi.string(pspec.name))
+                name = _to_string(pspec.name)
 
                 # libvips uses '-' to separate parts of arg names, but we
                 # need '_' for Python

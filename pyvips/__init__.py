@@ -128,8 +128,7 @@ class GLogLevelFlags(object):
 
 def _log_handler(domain, level, message, user_data):
     logger.log(GLogLevelFlags.LEVEL_TO_LOGGER[level], 
-               '{0}: {1}'.format(_to_string(ffi.string(domain)), 
-                                 _to_string(ffi.string(message))))
+               '{0}: {1}'.format(_to_string(domain), _to_string(message)))
 
 # keep a ref to the cb to stop it being GCd
 _log_handler_cb = ffi.callback('GLogFunc', _log_handler)

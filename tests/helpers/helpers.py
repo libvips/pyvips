@@ -9,6 +9,7 @@ import pyvips
 IMAGES = os.path.join(os.path.dirname(__file__), os.pardir, 'images')
 JPEG_FILE = os.path.join(IMAGES, "йцук.jpg")
 
+
 # an expanding zip ... if either of the args is a scalar or a one-element list,
 # duplicate it down the other side
 def zip_expand(x, y):
@@ -132,4 +133,3 @@ def run_image2(message, left, right, fn):
              lambda x, y: run_fn2(fn, x, y))
     run_cmp2(message, left, right, 10, 10,
              lambda x, y: run_fn2(fn, x, y))
-

@@ -114,11 +114,11 @@ class GValue(object):
 
         """
 
-        cstr = vips_lib.vips_enum_nick(gtype, enum_value)
-        if cstr == 0:
+        pointer = vips_lib.vips_enum_nick(gtype, enum_value)
+        if pointer == ffi.NULL:
             raise Error('value not in enum')
 
-        return _to_string(ffi.string(cstr))
+        return _to_string(pointer)
 
     def __init__(self):
         # allocate memory for the gvalue which will be freed on GC
@@ -256,15 +256,17 @@ class GValue(object):
         elif fundamental == GValue.gflags_type:
             result = gobject_lib.g_value_get_flags(self.gvalue)
         elif gtype == GValue.gstr_type:
-            cstr = gobject_lib.g_value_get_string(self.gvalue)
+            pointer = gobject_lib.g_value_get_string(self.gvalue)
 
-            if cstr != ffi.NULL:
-                result = _to_string(ffi.string(cstr))
+            if pointer != ffi.NULL:
+                result = _to_string(pointer)
         elif gtype == GValue.refstr_type:
             psize = ffi.new('size_t *')
-            cstr = vips_lib.vips_value_get_ref_string(self.gvalue, psize)
+            pointer = vips_lib.vips_value_get_ref_string(self.gvalue, psize)
 
-            result = _to_string(ffi.string(cstr, psize[0]))
+            # psize[0] will be number of bytes in string, but just assume it's
+            # NULL-terminated
+            result = _to_string(pointer)
         elif gtype == GValue.image_type:
             # g_value_get_object() will not add a ref ... that is
             # held by the gvalue

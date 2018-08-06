@@ -12,6 +12,7 @@
 * better handling of utf-8 i18n text [felixbuenemann]
 * add enum introspection [kleisauke]
 * move the libvips test suite back to libvips, just test pyvips here [jcupitt]
+* fix five small memleaks [kleisauke]
 
 ## Version 2.1.2 (1 March 2018)
 
