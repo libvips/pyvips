@@ -53,8 +53,8 @@ python:
 # 3.3 is failing with some kind of setuptools issue
 matrix:
   allow_failures:
-    - python: nightly 
-    - python: 3.3
+    - python: "3.3" 
+    - python: "nightly"
 
 install:
   - pip install -U .[test]
