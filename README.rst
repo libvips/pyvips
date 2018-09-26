@@ -1,9 +1,9 @@
 README
 ======
 
-.. image:: https://travis-ci.org/jcupitt/pyvips.svg?branch=master
+.. image:: https://travis-ci.org/libvips/pyvips.svg?branch=master
     :alt: Build Status
-    :target: https://travis-ci.org/jcupitt/pyvips
+    :target: https://travis-ci.org/libvips/pyvips
 
 PyPI package:
 
