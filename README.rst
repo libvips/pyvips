@@ -11,7 +11,7 @@ https://pypi.python.org/pypi/pyvips
 
 This module wraps the libvips image processing library. 
 
-https://jcupitt.github.io/libvips
+https://libvips.github.io/libvips/
 
 If you have the development headers for libvips installed and have a working C
 compiler, this module will use cffi API mode to try to build a libvips 
@@ -27,7 +27,7 @@ python2.7 - python3.6, pypy and pypy3 on Windows, macOS and Linux.
 
 We have formatted docs online here:
 
-https://jcupitt.github.io/pyvips/
+https://libvips.github.io/pyvips/
 
 How it works
 ------------
@@ -60,7 +60,7 @@ You need the libvips shared library on your library search path, version 8.2 or
 later. On Linux and macOS, you can just install via your package manager; on 
 Windows you can download a pre-compiled binary from the libvips website.
 
-https://jcupitt.github.io/libvips/install.html
+https://libvips.github.io/libvips/install.html
 
 On Windows, you will need to add `vips-dev-x.y\bin` to your `PATH`.
 
