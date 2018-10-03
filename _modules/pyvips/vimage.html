@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyvips.vimage &mdash; pyvips 2.1.3 documentation</title>
+  <title>pyvips.vimage &mdash; pyvips 2.1.4 documentation</title>
   
 
   
@@ -24,19 +24,10 @@
 
   
 
-  
-  
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="pyvips 2.1.3 documentation" href="../../index.html"/>
-        <link rel="up" title="Module code" href="../index.html"/>
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
     <link href="../../_static/style.css" rel="stylesheet" type="text/css">
 
 
@@ -45,7 +36,7 @@
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -94,15 +85,15 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../README.html">README</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../vimage.html"><code class="docutils literal"><span class="pre">Image</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vimage.html"><code class="docutils literal notranslate"><span class="pre">Image</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../base.html">Base definitions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../error.html"><code class="docutils literal"><span class="pre">Error</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../error.html"><code class="docutils literal notranslate"><span class="pre">Error</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../enums.html">The libvips enums</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../vinterpolate.html"><code class="docutils literal"><span class="pre">Interpolate</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../gvalue.html"><code class="docutils literal"><span class="pre">GValue</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../gobject.html"><code class="docutils literal"><span class="pre">GObject</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../voperation.html"><code class="docutils literal"><span class="pre">Operation</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../vobject.html"><code class="docutils literal"><span class="pre">VipsObject</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vinterpolate.html"><code class="docutils literal notranslate"><span class="pre">Interpolate</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gvalue.html"><code class="docutils literal notranslate"><span class="pre">GValue</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gobject.html"><code class="docutils literal notranslate"><span class="pre">GObject</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../voperation.html"><code class="docutils literal notranslate"><span class="pre">Operation</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vobject.html"><code class="docutils literal notranslate"><span class="pre">VipsObject</span></code></a></li>
 </ul>
 
             
@@ -114,7 +105,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">pyvips</a>
@@ -122,9 +113,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -154,12 +146,6 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
-            
-              <a href="https://github.com/jcupitt/pyvips/blob/master/doc/_modules/pyvips/vimage" class="fa fa-github"> Edit on GitHub</a>
-            
-          
-        
       </li>
     
   </ul>
@@ -179,7 +165,7 @@
 
 <span class="kn">import</span> <span class="nn">pyvips</span>
 <span class="kn">from</span> <span class="nn">pyvips</span> <span class="k">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">glib_lib</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">Error</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">,</span> \
-    <span class="n">_to_string</span><span class="p">,</span> <span class="n">GValue</span><span class="p">,</span> <span class="n">at_least_libvips</span>
+    <span class="n">_to_string</span><span class="p">,</span> <span class="n">_to_string_copy</span><span class="p">,</span> <span class="n">GValue</span><span class="p">,</span> <span class="n">at_least_libvips</span>
 
 
 <span class="c1"># either a single number, or a table of numbers</span>
@@ -321,9 +307,9 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_from_image</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointer</span><span class="p">):</span>
+<div class="viewcode-block" id="Image.__init__"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointer</span><span class="p">):</span>
         <span class="c1"># logger.debug(&#39;Image.__init__: pointer = %s&#39;, pointer)</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Image</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Image</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span></div>
 
     <span class="c1"># constructors</span>
 
@@ -376,17 +362,19 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">vips_filename</span> <span class="o">=</span> <span class="n">_to_bytes</span><span class="p">(</span><span class="n">vips_filename</span><span class="p">)</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_filename_get_filename</span><span class="p">(</span><span class="n">vips_filename</span><span class="p">)</span>
-        <span class="n">options</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_filename_get_options</span><span class="p">(</span><span class="n">vips_filename</span><span class="p">)</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_foreign_find_load</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to load from file </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vips_filename</span><span class="p">))</span>
+        <span class="n">pointer</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_filename_get_filename</span><span class="p">(</span><span class="n">vips_filename</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">_to_string_copy</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">_to_string</span><span class="p">(</span><span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">name</span><span class="p">)),</span>
-                                     <span class="n">_to_string</span><span class="p">(</span><span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">filename</span><span class="p">)),</span>
-                                     <span class="n">string_options</span><span class="o">=</span><span class="n">_to_string</span><span class="p">(</span>
-                                         <span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
-                                     <span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="n">pointer</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_filename_get_options</span><span class="p">(</span><span class="n">vips_filename</span><span class="p">)</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="n">_to_string_copy</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span>
+
+        <span class="n">pointer</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_foreign_find_load</span><span class="p">(</span><span class="n">vips_filename</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pointer</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to load from file </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vips_filename</span><span class="p">))</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span>
+                                     <span class="n">string_options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Image.new_from_buffer"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.new_from_buffer">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">new_from_buffer</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -415,11 +403,12 @@
 <span class="sd">            :class:`.Error`</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_foreign_find_load_buffer</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+        <span class="n">pointer</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_foreign_find_load_buffer</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">pointer</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to load from buffer&#39;</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">_to_string</span><span class="p">(</span><span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">name</span><span class="p">)),</span> <span class="n">data</span><span class="p">,</span>
+        <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span>
                                      <span class="n">string_options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Image.new_from_array"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.new_from_array">[docs]</a>    <span class="nd">@staticmethod</span>
@@ -503,8 +492,16 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">format_value</span> <span class="o">=</span> <span class="n">GValue</span><span class="o">.</span><span class="n">to_enum</span><span class="p">(</span><span class="n">GValue</span><span class="o">.</span><span class="n">format_type</span><span class="p">,</span> <span class="nb">format</span><span class="p">)</span>
-        <span class="n">vi</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_new_from_memory</span><span class="p">(</span><span class="n">ffi</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
-                                                 <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
+        <span class="n">pointer</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="c1"># py3:</span>
+        <span class="c1">#   - memoryview has .nbytes for number of bytes in object</span>
+        <span class="c1">#   - len() returns number of elements in top array</span>
+        <span class="c1"># py2:</span>
+        <span class="c1">#   - buffer has no nbytes member</span>
+        <span class="c1">#   - but len() gives number of bytes in object</span>
+        <span class="n">nbytes</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">nbytes</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;nbytes&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">vi</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_new_from_memory</span><span class="p">(</span><span class="n">pointer</span><span class="p">,</span>
+                                                 <span class="n">nbytes</span><span class="p">,</span>
                                                  <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">bands</span><span class="p">,</span>
                                                  <span class="n">format_value</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">vi</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
@@ -642,16 +639,19 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">vips_filename</span> <span class="o">=</span> <span class="n">_to_bytes</span><span class="p">(</span><span class="n">vips_filename</span><span class="p">)</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_filename_get_filename</span><span class="p">(</span><span class="n">vips_filename</span><span class="p">)</span>
-        <span class="n">options</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_filename_get_options</span><span class="p">(</span><span class="n">vips_filename</span><span class="p">)</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_foreign_find_save</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to write to file </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vips_filename</span><span class="p">))</span>
+        <span class="n">pointer</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_filename_get_filename</span><span class="p">(</span><span class="n">vips_filename</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">_to_string_copy</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">_to_string</span><span class="p">(</span><span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">name</span><span class="p">)),</span> <span class="bp">self</span><span class="p">,</span>
-                                     <span class="n">filename</span><span class="p">,</span> <span class="n">string_options</span><span class="o">=</span><span class="n">_to_string</span><span class="p">(</span>
-                                         <span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
-                                     <span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="n">pointer</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_filename_get_options</span><span class="p">(</span><span class="n">vips_filename</span><span class="p">)</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="n">_to_string_copy</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span>
+
+        <span class="n">pointer</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_foreign_find_save</span><span class="p">(</span><span class="n">vips_filename</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pointer</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to write to file </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vips_filename</span><span class="p">))</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span>
+                                     <span class="n">string_options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Image.write_to_buffer"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.write_to_buffer">[docs]</a>    <span class="k">def</span> <span class="nf">write_to_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_string</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Write an image to memory.</span>
@@ -689,15 +689,17 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">format_string</span> <span class="o">=</span> <span class="n">_to_bytes</span><span class="p">(</span><span class="n">format_string</span><span class="p">)</span>
-        <span class="n">options</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_filename_get_options</span><span class="p">(</span><span class="n">format_string</span><span class="p">)</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_foreign_find_save_buffer</span><span class="p">(</span><span class="n">format_string</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to write to buffer&#39;</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">_to_string</span><span class="p">(</span><span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">name</span><span class="p">)),</span> <span class="bp">self</span><span class="p">,</span>
-                                     <span class="n">string_options</span><span class="o">=</span><span class="n">_to_string</span><span class="p">(</span>
-                                         <span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
-                                     <span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="n">pointer</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_filename_get_options</span><span class="p">(</span><span class="n">format_string</span><span class="p">)</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="n">_to_string_copy</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span>
+
+        <span class="n">pointer</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_foreign_find_save_buffer</span><span class="p">(</span><span class="n">format_string</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pointer</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to write to buffer&#39;</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span>
+                                     <span class="n">string_options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Image.write_to_memory"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.write_to_memory">[docs]</a>    <span class="k">def</span> <span class="nf">write_to_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Write the image to a large memory array.</span>
@@ -823,7 +825,7 @@
             <span class="n">array</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_get_fields</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span>
             <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">while</span> <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
-                <span class="n">name</span> <span class="o">=</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
                 <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
                 <span class="n">glib_lib</span><span class="o">.</span><span class="n">g_free</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
                 <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -877,7 +879,7 @@
         <span class="n">gtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">gtype</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;metadata item </span><span class="si">{0}</span><span class="s1"> does not exist - &#39;</span>
-                        <span class="s1">&#39;use set_typeof() to create and set&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+                        <span class="s1">&#39;use set_type() to create and set&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_type</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Image.remove"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
@@ -898,10 +900,10 @@
 
         <span class="k">return</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">0</span></div>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Image.__repr__"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;&lt;pyvips.Image </span><span class="si">{0}</span><span class="s1">x</span><span class="si">{1}</span><span class="s1"> </span><span class="si">{2}</span><span class="s1">, </span><span class="si">{3}</span><span class="s1"> bands, </span><span class="si">{4}</span><span class="s1">&gt;&#39;</span><span class="o">.</span>
                 <span class="nb">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bands</span><span class="p">,</span>
-                       <span class="bp">self</span><span class="o">.</span><span class="n">interpretation</span><span class="p">))</span>
+                       <span class="bp">self</span><span class="o">.</span><span class="n">interpretation</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="Image.__getattr__"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.__getattr__">[docs]</a>    <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Divert unknown names to libvips.</span>
@@ -1146,31 +1148,31 @@
     <span class="k">def</span> <span class="nf">__invert__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span> <span class="o">^</span> <span class="o">-</span><span class="mi">1</span>
 
-    <span class="k">def</span> <span class="nf">__gt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">_call_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;relational&#39;</span><span class="p">,</span> <span class="s1">&#39;more&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="Image.__gt__"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.__gt__">[docs]</a>    <span class="k">def</span> <span class="nf">__gt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_call_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;relational&#39;</span><span class="p">,</span> <span class="s1">&#39;more&#39;</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">__ge__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">_call_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;relational&#39;</span><span class="p">,</span> <span class="s1">&#39;moreeq&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="Image.__ge__"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.__ge__">[docs]</a>    <span class="k">def</span> <span class="nf">__ge__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_call_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;relational&#39;</span><span class="p">,</span> <span class="s1">&#39;moreeq&#39;</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">_call_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;relational&#39;</span><span class="p">,</span> <span class="s1">&#39;less&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="Image.__lt__"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.__lt__">[docs]</a>    <span class="k">def</span> <span class="nf">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_call_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;relational&#39;</span><span class="p">,</span> <span class="s1">&#39;less&#39;</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">__le__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">_call_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;relational&#39;</span><span class="p">,</span> <span class="s1">&#39;lesseq&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="Image.__le__"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.__le__">[docs]</a>    <span class="k">def</span> <span class="nf">__le__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_call_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;relational&#39;</span><span class="p">,</span> <span class="s1">&#39;lesseq&#39;</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+<div class="viewcode-block" id="Image.__eq__"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.__eq__">[docs]</a>    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="c1"># _eq version allows comparison to None</span>
         <span class="k">if</span> <span class="n">other</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
 
-        <span class="k">return</span> <span class="n">_call_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;relational&#39;</span><span class="p">,</span> <span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_call_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;relational&#39;</span><span class="p">,</span> <span class="s1">&#39;equal&#39;</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+<div class="viewcode-block" id="Image.__ne__"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.__ne__">[docs]</a>    <span class="k">def</span> <span class="nf">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="c1"># _eq version allows comparison to None</span>
         <span class="k">if</span> <span class="n">other</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">True</span>
 
-        <span class="k">return</span> <span class="n">_call_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;relational&#39;</span><span class="p">,</span> <span class="s1">&#39;noteq&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_call_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;relational&#39;</span><span class="p">,</span> <span class="s1">&#39;noteq&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Image.floor"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.floor">[docs]</a>    <span class="k">def</span> <span class="nf">floor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the largest integral value not greater than the argument.&quot;&quot;&quot;</span>
@@ -1382,9 +1384,7 @@
 </pre></div>
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -1397,7 +1397,7 @@
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -1415,7 +1415,8 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'2.1.3',
+            VERSION:'2.1.4',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -1430,19 +1431,13 @@
 
   
 
-  
-  
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-  
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

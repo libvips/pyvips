@@ -1,9 +1,9 @@
 README
 ======
 
-.. image:: https://travis-ci.org/jcupitt/pyvips.svg?branch=master
+.. image:: https://travis-ci.org/libvips/pyvips.svg?branch=master
     :alt: Build Status
-    :target: https://travis-ci.org/jcupitt/pyvips
+    :target: https://travis-ci.org/libvips/pyvips
 
 PyPI package:
 
@@ -11,7 +11,7 @@ https://pypi.python.org/pypi/pyvips
 
 This module wraps the libvips image processing library. 
 
-https://jcupitt.github.io/libvips
+https://libvips.github.io/libvips/
 
 If you have the development headers for libvips installed and have a working C
 compiler, this module will use cffi API mode to try to build a libvips 
@@ -27,7 +27,7 @@ python2.7 - python3.6, pypy and pypy3 on Windows, macOS and Linux.
 
 We have formatted docs online here:
 
-https://jcupitt.github.io/pyvips/
+https://libvips.github.io/pyvips/
 
 How it works
 ------------
@@ -42,27 +42,29 @@ Because ``pyvips`` is parallel, it's quick, and because it doesn't need to
 keep entire images in memory, it's light.  For example, the libvips 
 speed and memory use benchmark: 
 
-https://github.com/jcupitt/libvips/wiki/Speed-and-memory-use
+https://github.com/libvips/libvips/wiki/Speed-and-memory-use
 
 Loads a large tiff image, shrinks by 10%, sharpens, and saves again. On this
 test ``pyvips`` is typically 3x faster than ImageMagick and needs 5x less
 memory. 
 
-There's a handy blog post explaining how libvips opens files, which gives
-some more background.
+There's a handy chapter in the docs explaining how libvips opens files,
+which gives some more background.
 
-http://libvips.blogspot.co.uk/2012/06/how-libvips-opens-file.html
+http://libvips.github.io/libvips/API/current/How-it-opens-files.md.html
 
 Install
 -------
 
 You need the libvips shared library on your library search path, version 8.2 or
-later. On Linux and macOS, you can install via your package manager; on 
-Windows you can download a pre-compiled binary from the libvips website:
+later. On Linux and macOS, you can just install via your package manager; on 
+Windows you can download a pre-compiled binary from the libvips website.
 
-https://jcupitt.github.io/libvips/
+https://libvips.github.io/libvips/install.html
 
-Then just install this package, perhaps::
+On Windows, you will need to add `vips-dev-x.y\bin` to your `PATH`.
+
+Next, install this package, perhaps::
 
     $ pip install --user pyvips
 

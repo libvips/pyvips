@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Operation &mdash; pyvips 2.1.3 documentation</title>
+  <title>Operation &mdash; pyvips 2.1.4 documentation</title>
   
 
   
@@ -24,20 +24,12 @@
 
   
 
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pyvips 2.1.3 documentation" href="index.html"/>
-        <link rel="next" title="VipsObject" href="vobject.html"/>
-        <link rel="prev" title="GObject" href="gobject.html"/>
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="VipsObject" href="vobject.html" />
+    <link rel="prev" title="GObject" href="gobject.html" />
     <link href="_static/style.css" rel="stylesheet" type="text/css">
 
 
@@ -46,7 +38,7 @@
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -95,15 +87,15 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vimage.html"><code class="docutils literal"><span class="pre">Image</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="vimage.html"><code class="docutils literal notranslate"><span class="pre">Image</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="base.html">Base definitions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="error.html"><code class="docutils literal"><span class="pre">Error</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="error.html"><code class="docutils literal notranslate"><span class="pre">Error</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="enums.html">The libvips enums</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vinterpolate.html"><code class="docutils literal"><span class="pre">Interpolate</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="gvalue.html"><code class="docutils literal"><span class="pre">GValue</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="gobject.html"><code class="docutils literal"><span class="pre">GObject</span></code></a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal"><span class="pre">Operation</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="vobject.html"><code class="docutils literal"><span class="pre">VipsObject</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="vinterpolate.html"><code class="docutils literal notranslate"><span class="pre">Interpolate</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="gvalue.html"><code class="docutils literal notranslate"><span class="pre">GValue</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="gobject.html"><code class="docutils literal notranslate"><span class="pre">GObject</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">Operation</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="vobject.html"><code class="docutils literal notranslate"><span class="pre">VipsObject</span></code></a></li>
 </ul>
 
             
@@ -115,7 +107,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">pyvips</a>
@@ -123,9 +115,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -148,14 +141,14 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li><code class="docutils literal"><span class="pre">Operation</span></code></li>
+      <li><code class="docutils literal notranslate"><span class="pre">Operation</span></code></li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
             
-              <a href="https://github.com/jcupitt/pyvips/blob/master/doc/voperation.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/libvips/pyvips/blob/master/doc/voperation.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -170,18 +163,25 @@
            <div itemprop="articleBody">
             
   <div class="section" id="module-pyvips.voperation">
-<span id="operation"></span><h1><code class="docutils literal"><span class="pre">Operation</span></code><a class="headerlink" href="#module-pyvips.voperation" title="Permalink to this headline">¶</a></h1>
+<span id="operation"></span><h1><code class="docutils literal notranslate"><span class="pre">Operation</span></code><a class="headerlink" href="#module-pyvips.voperation" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pyvips.voperation.Operation">
 <em class="property">class </em><code class="descclassname">pyvips.voperation.</code><code class="descname">Operation</code><span class="sig-paren">(</span><em>pointer</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/voperation.html#Operation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.voperation.Operation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call libvips operations.</p>
 <p>This class wraps the libvips VipsOperation class.</p>
+<dl class="method">
+<dt id="pyvips.voperation.Operation.set">
+<code class="descname">set</code><span class="sig-paren">(</span><em>name</em>, <em>flags</em>, <em>match_image</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/voperation.html#Operation.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.voperation.Operation.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a GObject property.</p>
+<p>The value is converted to the property type, if possible.</p>
+</dd></dl>
+
 <dl class="staticmethod">
 <dt id="pyvips.voperation.Operation.call">
 <em class="property">static </em><code class="descname">call</code><span class="sig-paren">(</span><em>operation_name</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/voperation.html#Operation.call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.voperation.Operation.call" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call a libvips operation.</p>
 <p>Use this method to call any libvips operation. For example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">black_image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">black_image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>See the Introduction for notes on how this works.</p>
@@ -207,7 +207,7 @@
 <dd><p>Generate sphinx documentation.</p>
 <p>This generates a .rst file for all auto-generated image methods. Use it
 to regenerate the docs with something like:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ python -c &quot;import pyvips; pyvips.Operation.generate_sphinx_all()&quot; &gt; x
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python -c &quot;import pyvips; pyvips.Operation.generate_sphinx_all()&quot; &gt; x
 </pre></div>
 </div>
 <p>And copy-paste the file contents into doc/vimage.rst in the appropriate
@@ -244,9 +244,7 @@ place.</p>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -268,7 +266,7 @@ place.</p>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -286,7 +284,8 @@ place.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'2.1.3',
+            VERSION:'2.1.4',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -301,19 +300,13 @@ place.</p>
 
   
 
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
+  <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>
