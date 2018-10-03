@@ -42,16 +42,16 @@ Because ``pyvips`` is parallel, it's quick, and because it doesn't need to
 keep entire images in memory, it's light.  For example, the libvips 
 speed and memory use benchmark: 
 
-https://github.com/jcupitt/libvips/wiki/Speed-and-memory-use
+https://github.com/libvips/libvips/wiki/Speed-and-memory-use
 
 Loads a large tiff image, shrinks by 10%, sharpens, and saves again. On this
 test ``pyvips`` is typically 3x faster than ImageMagick and needs 5x less
 memory. 
 
-There's a handy blog post explaining how libvips opens files, which gives
-some more background.
+There's a handy chapter in the docs explaining how libvips opens files,
+which gives some more background.
 
-http://libvips.blogspot.co.uk/2012/06/how-libvips-opens-file.html
+http://libvips.github.io/libvips/API/current/How-it-opens-files.md.html
 
 Install
 -------

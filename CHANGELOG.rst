@@ -1,5 +1,10 @@
 # master 
 
+## Version 2.1.4 (3 Oct 2018)
+
+* update links for repo move [jcupitt]
+* update autodocs for libvips 8.7 [jcupitt]
+
 ## Version 2.1.3 (3 March 2018)
 
 * record header version number in binary module and check compatibility with
