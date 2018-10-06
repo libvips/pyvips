@@ -6,7 +6,7 @@ Introduction
 See the main libvips site for an introduction to the underlying library. These
 notes introduce the Python binding.
 
-https://jcupitt.github.io/libvips 
+https://libvips.github.io/libvips 
 
 Example
 -------
@@ -286,7 +286,7 @@ expects.
 
 Use the C API docs for more detail:
 
-https://jcupitt.github.io/libvips/API/current
+https://libvips.github.io/libvips/API/current
 
 Exceptions
 ----------

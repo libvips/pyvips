@@ -1,7 +1,7 @@
 """a binding for the libvips image processing library
 
 See:
-https://github.com/jcupitt/pyvips
+https://github.com/libvips/pyvips
 """
 
 # flake8: noqa
@@ -70,7 +70,7 @@ def setup_API():
         version=info['__version__'],
         description='binding for the libvips image processing library, API mode',
         long_description=long_description,
-        url='https://github.com/jcupitt/pyvips',
+        url='https://github.com/libvips/pyvips',
         author='John Cupitt',
         author_email='jcupitt@gmail.com',
         license='MIT',
@@ -94,7 +94,7 @@ def setup_ABI():
         version=info['__version__'],
         description='binding for the libvips image processing library, ABI mode',
         long_description=long_description,
-        url='https://github.com/jcupitt/pyvips',
+        url='https://github.com/libvips/pyvips',
         author='John Cupitt',
         author_email='jcupitt@gmail.com',
         license='MIT',
