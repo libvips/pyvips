@@ -17,8 +17,8 @@ def _at_least(features, x, y):
 def cdefs(features):
     """Return the C API declarations for libvips.
 
-    features is a dict with the features we want. Some featrures were only
-    added in later libvipsm for example, and some need to be disabled in
+    features is a dict with the features we want. Some features were only
+    added in later libvipsm, for example, and some need to be disabled in
     some FFI modes.
     """
 
@@ -49,6 +49,7 @@ def cdefs(features):
         void g_log_remove_handler (const char* log_domain, int handler_id);
 
         typedef struct _VipsImage VipsImage;
+        typedef struct _VipsProgress VipsProgress;
         typedef struct _GValue GValue;
 
         void* g_malloc (size_t size);
@@ -180,6 +181,28 @@ def cdefs(features):
             const char *name, GValue* value);
         void g_object_get_property (GObject* object,
             const char* name, GValue* value);
+
+        typedef void (*GCallback)(void);
+        typedef void (*GClosureNotify)(void* data, struct _GClosure *);
+        long g_signal_connect_data (GObject* object,
+            const char* detailed_signal,
+            GCallback c_handler,
+            void* data,
+            GClosureNotify destroy_data,
+            int connect_flags);
+
+        void vips_image_set_progress (VipsImage* image, gboolean progress);
+
+        typedef struct _VipsProgress {
+            VipsImage* im;
+
+            int run;
+            int eta;
+            int64_t tpels;
+            int64_t npels;
+            int percent;
+            void* start; 
+        } VipsProgress;
 
         typedef struct _VipsObject {
     '''

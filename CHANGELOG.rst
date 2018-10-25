@@ -1,5 +1,9 @@
 # master 
 
+## Version 2.1.5 (21 Oct 2018)
+
+* add signal handling [jcupitt]
+
 ## Version 2.1.4 (3 Oct 2018)
 
 * update links for repo move [jcupitt]

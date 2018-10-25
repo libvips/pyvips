@@ -589,6 +589,16 @@ class Image(pyvips.VipsObject):
         if result != 0:
             raise Error('unable to write to image')
 
+    def set_progress(self, progress):
+        """Enable progress reporting on an image.
+
+        When progress reporting is enabled, evaluation of the most downstream 
+        image from this image will report progress using the ::preeval, ::eval,
+        and ::posteval signals. 
+
+        """
+        vips_lib.vips_image_set_progress(self.pointer, progress)
+
     # get/set metadata
 
     def get_typeof(self, name):
