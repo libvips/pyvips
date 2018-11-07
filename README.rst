@@ -87,7 +87,7 @@ a lot of extra DLLs to your search path and they might conflict with other
 programs, so it's usually safer just to set `PATH` in your program.
 
 To set `PATH` from within Python, you need something like this at the start of
-your program:
+your program::
 
     import os
     vipshome = 'c:\\vips-dev-8.7\\bin'
