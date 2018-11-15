@@ -55,6 +55,7 @@ python:
 matrix:
   allow_failures:
     - python: "3.3" 
+    - python: "3.7" 
     - python: "nightly"
 
 install:
