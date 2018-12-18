@@ -339,6 +339,8 @@ def cdefs(features):
     if _at_least(features, 8, 5):
         code += '''
             char** vips_image_get_fields (VipsImage* image);
+            int vips_image_hasalpha (VipsImage* image);
+
         '''
 
     if _at_least(features, 8, 6):

@@ -149,6 +149,9 @@ class Image(pyvips.VipsObject):
             return self.new_from_image(value)
 
     def __init__(self, pointer):
+        # a list of other objects which this object depends on and which need
+        # to be kept alive
+        self._references = []
         # logger.debug('Image.__init__: pointer = %s', pointer)
         super(Image, self).__init__(pointer)
 
@@ -350,8 +353,10 @@ class Image(pyvips.VipsObject):
 
         image = pyvips.Image(vi)
 
-        # keep a secret ref to the underlying object
-        image._data = data
+        # keep a secret ref to the underlying object .. this reference will be
+        # inherited by things that in turn depend on us, so the memory we are
+        # using will not be freed
+        image._references.append(data)
 
         return image
 
@@ -1184,6 +1189,18 @@ class Image(pyvips.VipsObject):
     def rot270(self):
         """Rotate 270 degrees clockwise."""
         return self.rot('d270')
+
+    def hasalpha(self):
+        """True if the image has an alpha channel."""
+        return vips_lib.vips_image_hasalpha(self.pointer)
+
+    def addalpha(self):
+        """Add an alpha channel."""
+        if self.interpretation == 'grey16' or self.interpretation == 'rgb16':
+            max_alpha = 65535
+        else:
+            max_alpha = 255
+        return self.bandjoin(max_alpha)
 
     # we need different _imageize rules for this operator ... we need to
     # _imageize th and el to match each other first

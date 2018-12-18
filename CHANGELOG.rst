@@ -1,5 +1,10 @@
 # master 
 
+## Version 2.1.5 (18 Dec 2018)
+
+* better behaviour for new_from_memory fixes some segvs [wppd]
+* added addalpha/hasalpha [jcupitt]
+
 ## Version 2.1.4 (3 Oct 2018)
 
 * update links for repo move [jcupitt]

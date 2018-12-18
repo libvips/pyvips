@@ -189,6 +189,21 @@ class Operation(pyvips.VipsObject):
             raise Error('unable to call {0}'.format(operation_name))
         op = Operation(vop)
 
+        # find all input images and gather up all the references they hold
+        references = []
+
+        def add_reference(x):
+            if isinstance(x, pyvips.Image):
+                # += won't work on non-local references
+                for i in x._references:
+                    references.append(i)
+
+            return False
+
+        _find_inside(add_reference, args)
+        for key, value in kwargs.items():
+            _find_inside(add_reference, value)
+
         # fetch required output args, plus modified input images
         result = []
         for name, flags in arguments:
@@ -214,6 +229,15 @@ class Operation(pyvips.VipsObject):
 
         if len(opts) > 0:
             result.append(opts)
+
+        # all output images need all input references
+        def set_reference(x):
+            if isinstance(x, pyvips.Image):
+                x._references += references
+
+            return False
+
+        _find_inside(set_reference, result)
 
         if len(result) == 0:
             result = None

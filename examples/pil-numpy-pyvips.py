@@ -39,6 +39,7 @@ dtype_to_format = {
     'complex128': 'dpcomplex',
 }
 
+
 # numpy array to vips image
 def numpy2vips(a):
     height, width, bands = a.shape
@@ -47,11 +48,13 @@ def numpy2vips(a):
                                       dtype_to_format[str(a.dtype)])
     return vi
 
+
 # vips image to numpy array
 def vips2numpy(vi):
     return np.ndarray(buffer=vi.write_to_memory(),
                       dtype=format_to_dtype[vi.format],
                       shape=[vi.height, vi.width, vi.bands])
+
 
 # load with PIL
 start_pillow = time.time()
