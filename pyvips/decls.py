@@ -46,6 +46,9 @@ def cdefs(features):
             int log_levels,
             GLogFunc log_func, void* user_data);
 
+        extern "Python" void _log_handler_callback (const char*, int,
+            const char*, void*);
+
         void g_log_remove_handler (const char* log_domain, int handler_id);
 
         typedef struct _VipsImage VipsImage;
@@ -324,6 +327,17 @@ def cdefs(features):
         void* vips_argument_map (VipsObject* object,
             VipsArgumentMapFn fn, void* a, void* b);
 
+    '''
+
+    # this field was added in libvips 8.7
+    if _at_least(features, 8, 7):
+        code += '''
+            void vips_object_get_args (VipsObject* object,
+                const char*** names, int** flags, int* n_args);
+
+        '''
+
+    code += '''
         VipsOperation* vips_cache_operation_build (VipsOperation* operation);
         void vips_object_unref_outputs (VipsObject* object);
 

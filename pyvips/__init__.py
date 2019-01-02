@@ -126,12 +126,22 @@ class GLogLevelFlags(object):
         LEVEL_CRITICAL : 50,
     }
 
-def _log_handler(domain, level, message, user_data):
-    logger.log(GLogLevelFlags.LEVEL_TO_LOGGER[level], 
-               '{0}: {1}'.format(_to_string(domain), _to_string(message)))
+if API_mode:
+    @ffi.def_extern()
+    def _log_handler_callback(domain, level, message, user_data):
+        logger.log(GLogLevelFlags.LEVEL_TO_LOGGER[level],
+                   '{0}: {1}'.format(_to_string(domain), _to_string(message)))
 
-# keep a ref to the cb to stop it being GCd
-_log_handler_cb = ffi.callback('GLogFunc', _log_handler)
+    # keep a ref to the cb to stop it being GCd
+    _log_handler_cb = glib_lib._log_handler_callback
+else:
+    def _log_handler_callback(domain, level, message, user_data):
+        logger.log(GLogLevelFlags.LEVEL_TO_LOGGER[level],
+                   '{0}: {1}'.format(_to_string(domain), _to_string(message)))
+
+    # keep a ref to the cb to stop it being GCd
+    _log_handler_cb = ffi.callback('GLogFunc', _log_handler_callback)
+
 _log_handler_id = glib_lib.g_log_set_handler(_to_bytes('VIPS'), 
                            GLogLevelFlags.LEVEL_DEBUG | 
                            GLogLevelFlags.LEVEL_INFO | 

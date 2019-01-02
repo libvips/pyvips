@@ -15,14 +15,6 @@ logger = logging.getLogger(__name__)
 _is_PY2 = sys.version_info.major == 2
 
 
-# g_free() as something we can use for a VipsCallbackFn
-def _g_free_cb_function(a, b):
-    vips_lib.vips_free(a)
-
-
-_g_free_cb = ffi.callback('VipsCallbackFn', _g_free_cb_function)
-
-
 class GValue(object):
 
     """Wrap GValue in a Python class.

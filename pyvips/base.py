@@ -1,7 +1,7 @@
 # basic defs and link to ffi
 
 
-from pyvips import ffi, vips_lib, glib_lib, gobject_lib, \
+from pyvips import ffi, vips_lib, gobject_lib, \
     _to_string, _to_bytes, Error
 
 

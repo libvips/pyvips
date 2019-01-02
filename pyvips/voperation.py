@@ -4,7 +4,7 @@ import logging
 
 import pyvips
 from pyvips import ffi, vips_lib, Error, _to_bytes, _to_string, GValue, \
-    type_map, type_from_name, nickname_find
+    type_map, type_from_name, nickname_find, at_least_libvips
 
 logger = logging.getLogger(__name__)
 
@@ -89,22 +89,44 @@ class Operation(pyvips.VipsObject):
     def get_args(self):
         args = []
 
-        def add_construct(self, pspec, argument_class,
-                          argument_instance, a, b):
-            flags = argument_class.flags
-            if (flags & _CONSTRUCT) != 0:
-                name = _to_string(pspec.name)
+        if at_least_libvips(8, 7):
+            p_names = ffi.new('char**[1]')
+            p_flags = ffi.new('int*[1]')
+            p_n_args = ffi.new('int[1]')
 
-                # libvips uses '-' to separate parts of arg names, but we
-                # need '_' for Python
-                name = name.replace('-', '_')
+            vips_lib.vips_object_get_args(self.object, p_names, p_flags, p_n_args)
 
-                args.append([name, flags])
+            p_names = p_names[0]
+            p_flags = p_flags[0]
+            n_args = p_n_args[0]
 
-            return ffi.NULL
+            for i in range(0, n_args):
+                flags = p_flags[i]
+                if (flags & _CONSTRUCT) != 0:
+                    name = _to_string(p_names[i])
 
-        cb = ffi.callback('VipsArgumentMapFn', add_construct)
-        vips_lib.vips_argument_map(self.object, cb, ffi.NULL, ffi.NULL)
+                    # libvips uses '-' to separate parts of arg names, but we
+                    # need '_' for Python
+                    name = name.replace('-', '_')
+
+                    args.append([name, flags])
+        else:
+            def add_construct(self, pspec, argument_class,
+                              argument_instance, a, b):
+                flags = argument_class.flags
+                if (flags & _CONSTRUCT) != 0:
+                    name = _to_string(pspec.name)
+
+                    # libvips uses '-' to separate parts of arg names, but we
+                    # need '_' for Python
+                    name = name.replace('-', '_')
+
+                    args.append([name, flags])
+
+                return ffi.NULL
+
+            cb = ffi.callback('VipsArgumentMapFn', add_construct)
+            vips_lib.vips_argument_map(self.object, cb, ffi.NULL, ffi.NULL)
 
         return args
 
