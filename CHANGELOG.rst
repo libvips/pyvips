@@ -1,5 +1,9 @@
 # master 
 
+## Version 2.1.6 (7 Jan 2019)
+
+* switch to new-style callbacks [kleisauke]
+
 ## Version 2.1.5 (18 Dec 2018)
 
 * better behaviour for new_from_memory fixes some segvs [wppd]
