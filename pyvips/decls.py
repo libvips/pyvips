@@ -332,7 +332,7 @@ def cdefs(features):
     # this field was added in libvips 8.7
     if _at_least(features, 8, 7):
         code += '''
-            void vips_object_get_args (VipsObject* object,
+            int vips_object_get_args (VipsObject* object,
                 const char*** names, int** flags, int* n_args);
 
         '''
