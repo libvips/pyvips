@@ -2,7 +2,6 @@
 
 import os
 import tempfile
-import pytest
 
 import pyvips
 from helpers import temp_filename, skip_if_no

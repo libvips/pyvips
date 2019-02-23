@@ -21,7 +21,9 @@ ffibuilder.set_source("_libvips",
 major = 8
 minor = 2
 micro = 0
-if pkgconfig.installed('vips', '>= 8.7'):
+if pkgconfig.installed('vips', '>= 8.8'):
+    minor = 8
+elif pkgconfig.installed('vips', '>= 8.7'):
     minor = 7
 elif pkgconfig.installed('vips', '>= 8.6'):
     minor = 6

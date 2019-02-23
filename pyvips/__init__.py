@@ -19,6 +19,7 @@ try:
     import _libvips
 
     logger.debug('Loaded binary module _libvips')
+
     ffi = _libvips.ffi
     vips_lib = _libvips.lib
     glib_lib = _libvips.lib
@@ -182,5 +183,6 @@ __all__ = [
     'Error', 'Image', 'Operation', 'GValue', 'Interpolate', 'GObject',
     'VipsObject', 'type_find', 'type_name', 'version', '__version__',
     'at_least_libvips', 'API_mode',
+    'get_suffixes',
     'cache_set_max', 'cache_set_max_mem', 'cache_set_max_files',
 ]
