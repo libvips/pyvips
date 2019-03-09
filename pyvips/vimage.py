@@ -226,10 +226,10 @@ class Image(pyvips.VipsObject):
 
         This behaves exactly as :meth:`new_from_file`, but the image is
         loaded from the memory object rather than from a file. The memory
-        object can be a string or buffer.
+        object can be anything that supports the Python buffer protocol.
 
         Args:
-            data (str, buffer): The memory object to load the image from.
+            data (array, bytearray, bytes, buffer): The memory object to load the image from.
             options (str): Load options as a string. Use ``""`` for no options.
 
         All loaders support at least the following options:
