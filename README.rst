@@ -100,8 +100,7 @@ Test your install
 
 Try this test program::
 
-    import logging
-    logging.basicConfig(level = logging.DEBUG)
+    import logging; logging.basicConfig(level = logging.DEBUG)
     import pyvips
 
 If pyvips was able to build and use a binary module on your computer (API

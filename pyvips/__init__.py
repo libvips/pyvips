@@ -13,7 +13,7 @@ logger.addHandler(logging.NullHandler())
 # pull in our module version number, see also setup.py
 from .version import __version__
 
-# try to import our binary interface ... is that works, we are in API mode
+# try to import our binary interface ... if that works, we are in API mode
 API_mode = False
 try:
     import _libvips
@@ -31,10 +31,11 @@ try:
     lib_minor = vips_lib.vips_version(1)
     wrap_major = vips_lib.VIPS_MAJOR_VERSION
     wrap_minor = vips_lib.VIPS_MINOR_VERSION
+    logger.debug('Module generated for libvips %s.%s' % 
+                 (wrap_major, wrap_minor)) 
+    logger.debug('Linked to libvips %s.%s' % (lib_major, lib_minor)) 
+
     if wrap_major != lib_major or wrap_minor != lib_minor:
-        logger.debug('Binary module was generated for libvips %s.%s ' + 
-                     'but you are running against libvips %s.%s' % 
-                     (lib_major, lib_minor, wrap_major, wrap_minor))
         raise Exception('bad wrapper version')
 
     API_mode = True
@@ -177,9 +178,10 @@ from .vobject import *
 from .vinterpolate import *
 from .voperation import *
 from .vimage import *
+from .vregion import *
 
 __all__ = [
-    'Error', 'Image', 'Operation', 'GValue', 'Interpolate', 'GObject',
+    'Error', 'Image', 'Region', 'Operation', 'GValue', 'Interpolate', 'GObject',
     'VipsObject', 'type_find', 'type_name', 'version', '__version__',
     'at_least_libvips', 'API_mode',
     'cache_set_max', 'cache_set_max_mem', 'cache_set_max_files',

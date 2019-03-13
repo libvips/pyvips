@@ -327,17 +327,14 @@ def cdefs(features):
         void* vips_argument_map (VipsObject* object,
             VipsArgumentMapFn fn, void* a, void* b);
 
-    '''
+        typedef struct _VipsRegion {
+            GObject parent_object;
 
-    # this field was added in libvips 8.7
-    if _at_least(features, 8, 7):
-        code += '''
-            int vips_object_get_args (VipsObject* object,
-                const char*** names, int** flags, int* n_args);
+            // more
+        } VipsRegion;
 
-        '''
+        VipsRegion* vips_region_new (VipsImage*);
 
-    code += '''
         VipsOperation* vips_cache_operation_build (VipsOperation* operation);
         void vips_object_unref_outputs (VipsObject* object);
 
@@ -362,6 +359,22 @@ def cdefs(features):
             GType vips_blend_mode_get_type (void);
             void vips_value_set_blob_free (GValue* value,
                 void* data, size_t length);
+
+        '''
+
+    if _at_least(features, 8, 7):
+        code += '''
+            int vips_object_get_args (VipsObject* object,
+                const char*** names, int** flags, int* n_args);
+
+        '''
+
+    if _at_least(features, 8, 8):
+        code += '''
+            void* vips_region_fetch (VipsRegion*, int, int, int, int,
+                size_t* length);
+            int vips_region_width (VipsRegion*);
+            int vips_region_height (VipsRegion*);
 
         '''
 

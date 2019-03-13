@@ -94,7 +94,8 @@ class Operation(pyvips.VipsObject):
             p_flags = ffi.new('int*[1]')
             p_n_args = ffi.new('int[1]')
 
-            result = vips_lib.vips_object_get_args(self.object, p_names, p_flags, p_n_args)
+            result = vips_lib.vips_object_get_args(self.object,
+                                                   p_names, p_flags, p_n_args)
 
             if result != 0:
                 raise Error('unable to get arguments from operation')
