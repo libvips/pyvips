@@ -3,6 +3,7 @@
 ## Version 2.1.6 (7 Jan 2019)
 
 * switch to new-style callbacks [kleisauke]
+* add get_suffixes() [jcupitt]
 * add Region [jcupitt]
 
 ## Version 2.1.5 (18 Dec 2018)

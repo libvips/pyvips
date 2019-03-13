@@ -1,8 +1,5 @@
 # vim: set fileencoding=utf-8 :
 
-import os
-import pytest
-
 import pyvips
 
 

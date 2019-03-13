@@ -17,9 +17,10 @@ def _at_least(features, x, y):
 def cdefs(features):
     """Return the C API declarations for libvips.
 
-    features is a dict with the features we want. Some featrures were only
-    added in later libvipsm for example, and some need to be disabled in
+    features is a dict with the features we want. Some features were only
+    added in later libvips, for example, and some need to be disabled in
     some FFI modes.
+
     """
 
     code = ''
@@ -371,6 +372,8 @@ def cdefs(features):
 
     if _at_least(features, 8, 8):
         code += '''
+            char** vips_foreign_get_suffixes (void);
+
             void* vips_region_fetch (VipsRegion*, int, int, int, int,
                 size_t* length);
             int vips_region_width (VipsRegion*);
