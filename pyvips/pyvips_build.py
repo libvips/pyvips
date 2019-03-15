@@ -17,15 +17,19 @@ ffibuilder.set_source("_libvips",
     """, 
     **pkgconfig.parse('vips'))
 
-# this is awful, why doesn't pkgconfig let us get the modversion?
-# will need updating once we hit 8.20 :(
-major = 8
-minor = 2
-micro = 0
-for i in range(20, 3, -1):
-    if pkgconfig.installed('vips', '>= 8.' + str(i)):
-        minor = i
-        break
+# pkgconfig 1.5+ has modversion ... otherwise, use a small shim
+try:
+    from pkgconfig import modversion
+except ImportError:
+    def modversion(package):
+        # will need updating once we hit 8.20 :(
+        for i in range(20, 3, -1):
+            if pkgconfig.installed(package, '>= 8.' + str(i)):
+                # be careful micro version is always set to 0
+                return '8.' + str(i) + '.0'
+        return '8.2.0'
+
+major, minor, micro = [int(s) for s in modversion('vips').split('.')]
 
 features = {
     'major': major,
