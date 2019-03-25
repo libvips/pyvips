@@ -5,6 +5,7 @@
 * switch to new-style callbacks [kleisauke]
 * add get_suffixes() [jcupitt]
 * add Region [jcupitt]
+* better handling of NULL strings from ffi [jcupitt]
 
 ## Version 2.1.5 (18 Dec 2018)
 

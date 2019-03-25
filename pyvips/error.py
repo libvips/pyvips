@@ -26,6 +26,7 @@ def _to_bytes(x):
     """
     if isinstance(x, text_type):
         x = x.encode('utf-8')
+
     return x
 
 
@@ -36,9 +37,13 @@ def _to_string(x):
     string. You must call this on text strings you get back from libvips.
 
     """
-    x = ffi.string(x)
-    if isinstance(x, byte_type):
-        x = x.decode('utf-8')
+    if x == ffi.NULL:
+        x = 'NULL'
+    else:
+        x = ffi.string(x)
+        if isinstance(x, byte_type):
+            x = x.decode('utf-8')
+
     return x
 
 
