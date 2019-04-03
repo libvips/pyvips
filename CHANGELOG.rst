@@ -6,6 +6,7 @@
 * add get_suffixes() [jcupitt]
 * add Region [jcupitt]
 * better handling of NULL strings from ffi [jcupitt]
+* add support for dealing with uint64 types [kleisauke]
 
 ## Version 2.1.5 (18 Dec 2018)
 
