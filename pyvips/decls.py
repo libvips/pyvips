@@ -91,6 +91,7 @@ def cdefs(features):
 
         void g_value_set_boolean (GValue* value, int v_boolean);
         void g_value_set_int (GValue* value, int i);
+        void g_value_set_uint64 (GValue* value, unsigned long ul);
         void g_value_set_double (GValue* value, double d);
         void g_value_set_enum (GValue* value, int e);
         void g_value_set_flags (GValue* value, unsigned int f);
@@ -108,6 +109,7 @@ def cdefs(features):
 
         int g_value_get_boolean (const GValue* value);
         int g_value_get_int (GValue* value);
+        unsigned long g_value_get_uint64 (GValue* value);
         double g_value_get_double (GValue* value);
         int g_value_get_enum (GValue* value);
         unsigned int g_value_get_flags (GValue* value);

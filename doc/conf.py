@@ -56,7 +56,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'pyvips'
-copyright = u'2018, John Cupitt'
+copyright = u'2019, John Cupitt'
 author = u'John Cupitt'
 
 # The version info for the project you're documenting, acts as replacement for
