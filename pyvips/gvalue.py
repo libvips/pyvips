@@ -57,7 +57,7 @@ class GValue(object):
     _gtype_to_python = {
         gbool_type: 'bool',
         gint_type: 'int',
-        guint64_type: 'long',  # Note: int and long have been unified in Python 3
+        guint64_type: 'long',  # Note: int and long are unified in Python 3
         gdouble_type: 'float',
         gstr_type: 'str',
         refstr_type: 'str',
