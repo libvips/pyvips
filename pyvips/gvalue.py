@@ -33,6 +33,7 @@ class GValue(object):
     # look up some common gtypes at init for speed
     gbool_type = type_from_name('gboolean')
     gint_type = type_from_name('gint')
+    guint64_type = type_from_name('guint64')
     gdouble_type = type_from_name('gdouble')
     gstr_type = type_from_name('gchararray')
     genum_type = type_from_name('GEnum')
@@ -56,6 +57,7 @@ class GValue(object):
     _gtype_to_python = {
         gbool_type: 'bool',
         gint_type: 'int',
+        guint64_type: 'long',  # Note: int and long have been unified in Python 3
         gdouble_type: 'float',
         gstr_type: 'str',
         refstr_type: 'str',
@@ -151,6 +153,8 @@ class GValue(object):
             gobject_lib.g_value_set_boolean(self.gvalue, value)
         elif gtype == GValue.gint_type:
             gobject_lib.g_value_set_int(self.gvalue, int(value))
+        elif gtype == GValue.guint64_type:
+            gobject_lib.g_value_set_uint64(self.gvalue, value)
         elif gtype == GValue.gdouble_type:
             gobject_lib.g_value_set_double(self.gvalue, value)
         elif fundamental == GValue.genum_type:
@@ -240,6 +244,8 @@ class GValue(object):
             result = bool(gobject_lib.g_value_get_boolean(self.gvalue))
         elif gtype == GValue.gint_type:
             result = gobject_lib.g_value_get_int(self.gvalue)
+        elif gtype == GValue.guint64_type:
+            result = gobject_lib.g_value_get_uint64(self.gvalue)
         elif gtype == GValue.gdouble_type:
             result = gobject_lib.g_value_get_double(self.gvalue)
         elif fundamental == GValue.genum_type:
