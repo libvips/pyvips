@@ -53,8 +53,8 @@ which gives some more background.
 
 http://libvips.github.io/libvips/API/current/How-it-opens-files.md.html
 
-Install
--------
+Install libvips
+---------------
 
 You need the libvips shared library on your library search path, version 8.2 or
 later. On Linux and macOS, you can just install via your package manager; on 
@@ -62,16 +62,45 @@ Windows you can download a pre-compiled binary from the libvips website.
 
 https://libvips.github.io/libvips/install.html
 
-On Windows, you will need to add `vips-dev-x.y\bin` to your `PATH`.
+Install pyvips
+--------------
 
 Next, install this package, perhaps::
 
     $ pip install --user pyvips
 
-To test your install, try this test program::
+On Windows, you'll need a 64-bit Python. The official one works well. Anaconda
+probably won't work without some effort -- they have their own packaging
+system.
 
-    import logging
-    logging.basicConfig(level = logging.DEBUG)
+Extra notes for Windows
+-----------------------
+
+On Windows, you will need to add `vips-dev-x.y\bin` to your `PATH` so
+that pyvips can find all the DLLs it needs. You can either do this in the
+**Advanced System Settings** control panel, or you can just change
+`PATH` for your pyvips program.
+
+If you set the PATH environment variable in the control panel, you can use
+the `vips` command-line tools, which I find useful. However, this will add
+a lot of extra DLLs to your search path and they might conflict with other
+programs, so it's usually safer just to set `PATH` in your program.
+
+To set `PATH` from within Python, you need something like this at the start of
+your program::
+
+    import os
+    vipshome = 'c:\\vips-dev-8.7\\bin'
+    os.environ['PATH'] = vipshome + ';' + os.environ['PATH']
+
+Now when you import pyvips, it should be able to find the DLLs.
+
+Test your install
+-----------------
+
+Try this test program::
+
+    import logging; logging.basicConfig(level = logging.DEBUG)
     import pyvips
 
 If pyvips was able to build and use a binary module on your computer (API

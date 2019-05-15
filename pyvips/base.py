@@ -1,7 +1,7 @@
 # basic defs and link to ffi
 
 
-from pyvips import ffi, vips_lib, glib_lib, gobject_lib, \
+from pyvips import ffi, glib_lib, vips_lib, gobject_lib, \
     _to_string, _to_bytes, Error
 
 
@@ -11,6 +11,7 @@ def leak_set(leak):
     With this enabled, libvips will check for object and area leaks on exit.
     Enabling this option will make libvips run slightly more slowly.
     """
+
     return vips_lib.vips_leak_set(leak)
 
 
@@ -26,7 +27,6 @@ def version(flag):
 
     Raises:
         :class:`.Error`
-
     """
 
     value = vips_lib.vips_version(flag)
@@ -34,6 +34,30 @@ def version(flag):
         raise Error('unable to get library version')
 
     return value
+
+
+def get_suffixes():
+    """Get a list of all the filename suffixes supported by libvips.
+
+    Returns:
+        [string]
+
+    """
+
+    names = []
+
+    if at_least_libvips(8, 8):
+        array = vips_lib.vips_foreign_get_suffixes()
+        i = 0
+        while array[i] != ffi.NULL:
+            name = _to_string(array[i])
+            if name not in names:
+                names.append(name)
+            glib_lib.g_free(array[i])
+            i += 1
+        glib_lib.g_free(array)
+
+    return names
 
 
 # we need to define this before we import the decls: they need to know which
@@ -61,6 +85,7 @@ def type_find(basename, nickname):
     Looks up the GType for a nickname. Types below basename in the type
     hierarchy are searched.
     """
+
     return vips_lib.vips_type_find(_to_bytes(basename), _to_bytes(nickname))
 
 
@@ -84,6 +109,7 @@ def type_from_name(name):
 
 def type_map(gtype, fn):
     """Map fn over all child types of gtype."""
+
     cb = ffi.callback('VipsTypeMap2Fn', fn)
     return vips_lib.vips_type_map(gtype, cb, ffi.NULL, ffi.NULL)
 
@@ -112,6 +138,7 @@ __all__ = [
     'path_mode7',
     'type_find',
     'nickname_find',
+    'get_suffixes',
     'type_name',
     'type_map',
     'type_from_name',

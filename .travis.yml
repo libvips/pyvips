@@ -3,8 +3,8 @@ sudo: false
 env:
   global:
     - VIPS_VERSION_MAJOR=8
-    - VIPS_VERSION_MINOR=5
-    - VIPS_VERSION_MICRO=7
+    - VIPS_VERSION_MINOR=7
+    - VIPS_VERSION_MICRO=1
     - PATH=$HOME/vips/bin:$PATH
     - LD_LIBRARY_PATH=$HOME/vips/lib:$LD_LIBRARY_PATH
     - PKG_CONFIG_PATH=$HOME/vips/lib/pkgconfig:$PKG_CONFIG_PATH
@@ -46,6 +46,7 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
+  - "3.7"
   - "nightly"
   - "pypy"
   - "pypy3"
@@ -54,6 +55,7 @@ python:
 matrix:
   allow_failures:
     - python: "3.3" 
+    - python: "3.7" 
     - python: "nightly"
 
 install:

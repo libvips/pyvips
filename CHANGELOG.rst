@@ -1,8 +1,18 @@
 # master 
 
-## Version 2.1.5 (21 Oct 2018)
+## Version 2.1.6 (7 Jan 2019)
 
+* switch to new-style callbacks [kleisauke]
+* add get_suffixes() [jcupitt]
+* add Region [jcupitt]
+* better handling of NULL strings from ffi [jcupitt]
+* add support for dealing with uint64 types [kleisauke]
 * add signal handling [jcupitt]
+
+## Version 2.1.5 (18 Dec 2018)
+
+* better behaviour for new_from_memory fixes some segvs [wppd]
+* added addalpha/hasalpha [jcupitt]
 
 ## Version 2.1.4 (3 Oct 2018)
 

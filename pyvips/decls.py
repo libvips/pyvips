@@ -18,8 +18,9 @@ def cdefs(features):
     """Return the C API declarations for libvips.
 
     features is a dict with the features we want. Some features were only
-    added in later libvipsm, for example, and some need to be disabled in
+    added in later libvips, for example, and some need to be disabled in
     some FFI modes.
+
     """
 
     code = ''
@@ -45,6 +46,9 @@ def cdefs(features):
         int g_log_set_handler (const char* log_domain,
             int log_levels,
             GLogFunc log_func, void* user_data);
+
+        extern "Python" void _log_handler_callback (const char*, int,
+            const char*, void*);
 
         void g_log_remove_handler (const char* log_domain, int handler_id);
 
@@ -88,6 +92,7 @@ def cdefs(features):
 
         void g_value_set_boolean (GValue* value, int v_boolean);
         void g_value_set_int (GValue* value, int i);
+        void g_value_set_uint64 (GValue* value, uint64_t ull);
         void g_value_set_double (GValue* value, double d);
         void g_value_set_enum (GValue* value, int e);
         void g_value_set_flags (GValue* value, unsigned int f);
@@ -105,6 +110,7 @@ def cdefs(features):
 
         int g_value_get_boolean (const GValue* value);
         int g_value_get_int (GValue* value);
+        uint64_t g_value_get_uint64 (GValue* value);
         double g_value_get_double (GValue* value);
         int g_value_get_enum (GValue* value);
         unsigned int g_value_get_flags (GValue* value);
@@ -347,6 +353,14 @@ def cdefs(features):
         void* vips_argument_map (VipsObject* object,
             VipsArgumentMapFn fn, void* a, void* b);
 
+        typedef struct _VipsRegion {
+            GObject parent_object;
+
+            // more
+        } VipsRegion;
+
+        VipsRegion* vips_region_new (VipsImage*);
+
         VipsOperation* vips_cache_operation_build (VipsOperation* operation);
         void vips_object_unref_outputs (VipsObject* object);
 
@@ -362,6 +376,8 @@ def cdefs(features):
     if _at_least(features, 8, 5):
         code += '''
             char** vips_image_get_fields (VipsImage* image);
+            int vips_image_hasalpha (VipsImage* image);
+
         '''
 
     if _at_least(features, 8, 6):
@@ -369,6 +385,24 @@ def cdefs(features):
             GType vips_blend_mode_get_type (void);
             void vips_value_set_blob_free (GValue* value,
                 void* data, size_t length);
+
+        '''
+
+    if _at_least(features, 8, 7):
+        code += '''
+            int vips_object_get_args (VipsObject* object,
+                const char*** names, int** flags, int* n_args);
+
+        '''
+
+    if _at_least(features, 8, 8):
+        code += '''
+            char** vips_foreign_get_suffixes (void);
+
+            void* vips_region_fetch (VipsRegion*, int, int, int, int,
+                size_t* length);
+            int vips_region_width (VipsRegion*);
+            int vips_region_height (VipsRegion*);
 
         '''
 

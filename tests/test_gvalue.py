@@ -24,6 +24,13 @@ class TestGValue:
         value = gv.get()
         assert value == 12
 
+    def test_uint64(self):
+        gv = pyvips.GValue()
+        gv.set_type(pyvips.GValue.guint64_type)
+        gv.set(2 ** 64 - 1)  # G_MAXUINT64
+        value = gv.get()
+        assert value == 2 ** 64 - 1
+
     def test_double(self):
         gv = pyvips.GValue()
         gv.set_type(pyvips.GValue.gdouble_type)

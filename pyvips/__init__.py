@@ -13,12 +13,13 @@ logger.addHandler(logging.NullHandler())
 # pull in our module version number, see also setup.py
 from .version import __version__
 
-# try to import our binary interface ... is that works, we are in API mode
+# try to import our binary interface ... if that works, we are in API mode
 API_mode = False
 try:
     import _libvips
 
     logger.debug('Loaded binary module _libvips')
+
     ffi = _libvips.ffi
     vips_lib = _libvips.lib
     glib_lib = _libvips.lib
@@ -31,10 +32,11 @@ try:
     lib_minor = vips_lib.vips_version(1)
     wrap_major = vips_lib.VIPS_MAJOR_VERSION
     wrap_minor = vips_lib.VIPS_MINOR_VERSION
+    logger.debug('Module generated for libvips %s.%s' % 
+                 (wrap_major, wrap_minor)) 
+    logger.debug('Linked to libvips %s.%s' % (lib_major, lib_minor)) 
+
     if wrap_major != lib_major or wrap_minor != lib_minor:
-        logger.debug('Binary module was generated for libvips %s.%s ' + 
-                     'but you are running against libvips %s.%s' % 
-                     (lib_major, lib_minor, wrap_major, wrap_minor))
         raise Exception('bad wrapper version')
 
     API_mode = True
@@ -126,12 +128,22 @@ class GLogLevelFlags(object):
         LEVEL_CRITICAL : 50,
     }
 
-def _log_handler(domain, level, message, user_data):
-    logger.log(GLogLevelFlags.LEVEL_TO_LOGGER[level], 
-               '{0}: {1}'.format(_to_string(domain), _to_string(message)))
+if API_mode:
+    @ffi.def_extern()
+    def _log_handler_callback(domain, level, message, user_data):
+        logger.log(GLogLevelFlags.LEVEL_TO_LOGGER[level],
+                   '{0}: {1}'.format(_to_string(domain), _to_string(message)))
 
-# keep a ref to the cb to stop it being GCd
-_log_handler_cb = ffi.callback('GLogFunc', _log_handler)
+    # keep a ref to the cb to stop it being GCd
+    _log_handler_cb = glib_lib._log_handler_callback
+else:
+    def _log_handler_callback(domain, level, message, user_data):
+        logger.log(GLogLevelFlags.LEVEL_TO_LOGGER[level],
+                   '{0}: {1}'.format(_to_string(domain), _to_string(message)))
+
+    # keep a ref to the cb to stop it being GCd
+    _log_handler_cb = ffi.callback('GLogFunc', _log_handler_callback)
+
 _log_handler_id = glib_lib.g_log_set_handler(_to_bytes('VIPS'), 
                            GLogLevelFlags.LEVEL_DEBUG | 
                            GLogLevelFlags.LEVEL_INFO | 
@@ -167,10 +179,12 @@ from .vobject import *
 from .vinterpolate import *
 from .voperation import *
 from .vimage import *
+from .vregion import *
 
 __all__ = [
-    'Error', 'Image', 'Operation', 'GValue', 'Interpolate', 'GObject',
+    'Error', 'Image', 'Region', 'Operation', 'GValue', 'Interpolate', 'GObject',
     'VipsObject', 'type_find', 'type_name', 'version', '__version__',
     'at_least_libvips', 'API_mode',
+    'get_suffixes',
     'cache_set_max', 'cache_set_max_mem', 'cache_set_max_files',
 ]
