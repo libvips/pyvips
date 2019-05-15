@@ -11,9 +11,10 @@ logger = logging.getLogger(__name__)
 # the python marshallers for gobject signal handling
 
 @ffi.callback("void(VipsImage*, void*, void*)")
-def marshall_image_voidp(vi, progress, handle):
+def marshall_image_progress(vi, pointer, handle):
     image = pyvips.Image(vi)
     callback = ffi.from_handle(handle)
+    progress = ffi.cast('VipsProgress*', pointer)
     callback(image, progress)
 
 
@@ -46,13 +47,17 @@ class GObject(object):
     def signal_connect(self, name, callback):
         """Connect to a signal on this object.
 
-        The closure will be triggered every time this signal is issued on this
-        instance.
+        The callback will be triggered every time this signal is issued on this
+        instance. It will be passed the image ('self' here), and a single
+        `void *` pointer from libvips. 
+        
+        The value of the pointer, if any, depends on the signal -- for
+        example, ::eval passes a pointer to a `VipsProgress` struct.
         """
         go = ffi.cast('GObject *', self.pointer)
         handle = ffi.new_handle(callback)
         self._handles.append(handle)
-        marshall = ffi.cast('void(*)()', marshall_image_voidp)
+        marshall = ffi.cast('void(*)()', marshall_image_progress)
 
         gobject_lib.g_signal_connect_data(go, _to_bytes(name), 
                                           marshall, handle, 
