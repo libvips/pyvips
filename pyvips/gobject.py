@@ -12,6 +12,8 @@ logger = logging.getLogger(__name__)
 
 @ffi.callback("void(VipsImage*, void*, void*)")
 def marshall_image_progress(vi, pointer, handle):
+    # the image we're passed is not reffed for us, so make a ref for us
+    gobject_lib.g_object_ref(vi)
     image = pyvips.Image(vi)
     callback = ffi.from_handle(handle)
     progress = ffi.cast('VipsProgress*', pointer)
@@ -31,7 +33,7 @@ class GObject(object):
 
         """
 
-        # we have t record all of the ffi.new_handle we make for callbacks on
+        # we have to record all of the ffi.new_handle we make for callbacks on
         # this object to prevent them being GC'd
         self._handles = []
 
@@ -43,7 +45,6 @@ class GObject(object):
         self.gobject = ffi.gc(self.pointer, gobject_lib.g_object_unref)
         # logger.debug('GObject.__init__: gobject = %s', str(self.gobject))
 
-
     def signal_connect(self, name, callback):
         """Connect to a signal on this object.
 
@@ -53,7 +54,9 @@ class GObject(object):
         
         The value of the pointer, if any, depends on the signal -- for
         example, ::eval passes a pointer to a `VipsProgress` struct.
+
         """
+
         go = ffi.cast('GObject *', self.pointer)
         handle = ffi.new_handle(callback)
         self._handles.append(handle)
