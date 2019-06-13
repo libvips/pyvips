@@ -274,7 +274,7 @@ class GValue(object):
             # we want a ref that will last with the life of the vimage:
             # this ref is matched by the unref that's attached to finalize
             # by Image()
-            gobject_lib.g_object_ref(go)
+            gobject_lib.g_object_ref(vi)
 
             result = pyvips.Image(vi)
         elif gtype == GValue.array_int_type:

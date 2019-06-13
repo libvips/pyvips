@@ -159,61 +159,8 @@ class Operation(pyvips.VipsObject):
 
         arguments = op.get_args()
         # logger.debug('arguments = %s', arguments)
-
-        # make a thing to quickly get flags from an arg name
-        flags_from_name = {}
-
-        # count required input args
-        n_required = 0
-
-        for name, flags in arguments:
-            flags_from_name[name] = flags
-
-            if ((flags & _INPUT) != 0 and
-                    (flags & _REQUIRED) != 0 and
-                    (flags & _DEPRECATED) == 0):
-                n_required += 1
-
-        if n_required != len(args):
-            raise Error('unable to call {0}: {1} arguments given, '
-                        'but {2} required'.format(operation_name, len(args),
-                                                  n_required))
-
-        # the first image argument is the thing we expand constants to
-        # match ... look inside tables for images, since we may be passing
-        # an array of image as a single param
-        match_image = _find_inside(lambda x:
-                                   isinstance(x, pyvips.Image),
-                                   args)
-
-        logger.debug('VipsOperation.call: match_image = %s', match_image)
-
-        # set any string options before any args so they can't be
-        # overridden
-        if not op.set_string(string_options):
-            raise Error('unable to call {0}'.format(operation_name))
-
-        # set required and optional args
-        n = 0
-        for name, flags in arguments:
-            if ((flags & _INPUT) != 0 and
-                    (flags & _REQUIRED) != 0 and
-                    (flags & _DEPRECATED) == 0):
-                op.set(name, flags, match_image, args[n])
-                n += 1
-
-        for name, value in kwargs.items():
-            if name not in flags_from_name:
-                raise Error('{0} does not support argument '
-                            '{1}'.format(operation_name, name))
-
-            op.set(name, flags_from_name[name], match_image, value)
-
-        # build operation
-        vop = vips_lib.vips_cache_operation_build(op.pointer)
-        if vop == ffi.NULL:
-            raise Error('unable to call {0}'.format(operation_name))
-        op = Operation(vop)
+        required_output = []
+        optional_output = []
 
         # find all input images and gather up all the references they hold
         references = []
@@ -226,36 +173,6 @@ class Operation(pyvips.VipsObject):
 
             return False
 
-        _find_inside(add_reference, args)
-        for key, value in kwargs.items():
-            _find_inside(add_reference, value)
-
-        # fetch required output args, plus modified input images
-        result = []
-        for name, flags in arguments:
-            if ((flags & _OUTPUT) != 0 and
-                    (flags & _REQUIRED) != 0 and
-                    (flags & _DEPRECATED) == 0):
-                result.append(op.get(name))
-
-            if (flags & _INPUT) != 0 and (flags & _MODIFY) != 0:
-                result.append(op.get(name))
-
-        # fetch optional output args
-        opts = {}
-        for name, value in kwargs.items():
-            flags = flags_from_name[name]
-
-            if ((flags & _OUTPUT) != 0 and
-                    (flags & _REQUIRED) == 0 and
-                    (flags & _DEPRECATED) == 0):
-                opts[name] = op.get(name)
-
-        vips_lib.vips_object_unref_outputs(op.object)
-
-        if len(opts) > 0:
-            result.append(opts)
-
         # all output images need all input references
         def set_reference(x):
             if isinstance(x, pyvips.Image):
@@ -263,7 +180,90 @@ class Operation(pyvips.VipsObject):
 
             return False
 
-        _find_inside(set_reference, result)
+        # set any string options before any args so they can't be
+        # overridden
+        if not op.set_string(string_options):
+            raise Error('unable to call {0}'.format(operation_name))
+
+        # the first image argument is the thing we expand constants to
+        # match ... look inside tables for images, since we may be passing
+        # an array of image as a single param
+        match_image = _find_inside(lambda x:
+                                   isinstance(x, pyvips.Image),
+                                   args)
+
+        logger.debug('VipsOperation.call: match_image = %s', match_image)
+
+        n = 0
+        for name, flags in arguments:
+            # fetch required output args, plus modified input images
+            if ((flags & _OUTPUT) != 0 and
+                    (flags & _REQUIRED) != 0 and
+                    (flags & _DEPRECATED) == 0 or
+                    (flags & _INPUT) != 0 and
+                    (flags & _MODIFY) != 0):
+                required_output.append(name)
+
+            # fetch and set optional args
+            if (flags & _REQUIRED) == 0 and name in kwargs:
+                # log when an deprecated argument is used
+                if (flags & _DEPRECATED) != 0:
+                    logger.info('argument {0} for operation {1} '
+                                'is deprecated', name, operation_name)
+
+                value = kwargs.pop(name)
+                _find_inside(add_reference, value)
+                op.set(name, flags, match_image, value)
+
+                if (flags & _OUTPUT) != 0:
+                    optional_output.append(name)
+
+                continue
+
+            # set required input args
+            if ((flags & _INPUT) != 0 and
+                    (flags & _REQUIRED) != 0 and
+                    (flags & _DEPRECATED) == 0):
+                if n > len(args):
+                    break
+
+                value = args[n]
+                _find_inside(add_reference, value)
+                op.set(name, flags, match_image, value)
+                n += 1
+
+        if n != len(args):
+            raise Error('unable to call {0}: {1} arguments given, '
+                        'but {2} required'.format(operation_name, len(args), n))
+
+        if len(kwargs) > 0:
+            raise Error('{0} does not support argument(s): '
+                        '{1}'.format(operation_name, ', '.join(kwargs.keys())))
+
+        # build operation
+        vop = vips_lib.vips_cache_operation_build(op.pointer)
+        if vop == ffi.NULL:
+            raise Error('unable to call {0}'.format(operation_name))
+        op = Operation(vop)
+
+        # fetch required output args, plus modified input images
+        result = []
+        for name in required_output:
+            value = op.get(name)
+            _find_inside(set_reference, value)
+            result.append(value)
+
+        # fetch optional output args
+        if len(optional_output) > 0:
+            opts = {}
+            for name in optional_output:
+                value = op.get(name)
+                _find_inside(set_reference, value)
+                opts[name] = value
+
+            result.append(opts)
+
+        vips_lib.vips_object_unref_outputs(op.object)
 
         if len(result) == 0:
             result = None

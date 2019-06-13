@@ -571,6 +571,8 @@ class Image(pyvips.VipsObject):
 
         psize = ffi.new('size_t *')
         pointer = vips_lib.vips_image_write_to_memory(self.pointer, psize)
+        if pointer == ffi.NULL:
+            raise Error('unable to write to memory')
         pointer = ffi.gc(pointer, glib_lib.g_free)
 
         return ffi.buffer(pointer, psize[0])

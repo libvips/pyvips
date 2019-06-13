@@ -7,17 +7,26 @@ from pyvips import ffi, gobject_lib, _to_bytes
 
 logger = logging.getLogger(__name__)
 
-
 # the python marshallers for gobject signal handling
 
-@ffi.callback("void(VipsImage*, void*, void*)")
-def marshall_image_progress(vi, pointer, handle):
-    # the image we're passed is not reffed for us, so make a ref for us
-    gobject_lib.g_object_ref(vi)
-    image = pyvips.Image(vi)
-    callback = ffi.from_handle(handle)
-    progress = ffi.cast('VipsProgress*', pointer)
-    callback(image, progress)
+if pyvips.API_mode:
+    @ffi.def_extern()
+    def _marshall_image_progress(vi, pointer, handle):
+        # the image we're passed is not reffed for us, so make a ref for us
+        gobject_lib.g_object_ref(vi)
+        image = pyvips.Image(vi)
+        callback = ffi.from_handle(handle)
+        progress = ffi.cast('VipsProgress*', pointer)
+        callback(image, progress)
+else:
+    @ffi.callback("void(VipsImage*, void*, void*)")
+    def _marshall_image_progress(vi, pointer, handle):
+        # the image we're passed is not reffed for us, so make a ref for us
+        gobject_lib.g_object_ref(vi)
+        image = pyvips.Image(vi)
+        callback = ffi.from_handle(handle)
+        progress = ffi.cast('VipsProgress*', pointer)
+        callback(image, progress)
 
 
 class GObject(object):
@@ -60,10 +69,15 @@ class GObject(object):
         go = ffi.cast('GObject *', self.pointer)
         handle = ffi.new_handle(callback)
         self._handles.append(handle)
-        marshall = ffi.cast('void(*)()', marshall_image_progress)
+        if pyvips.API_mode:
+            marshall = gobject_lib._marshall_image_progress
+        else:
+            marshall = _marshall_image_progress
 
-        gobject_lib.g_signal_connect_data(go, _to_bytes(name), 
-                                          marshall, handle, 
+        gobject_lib.g_signal_connect_data(go, _to_bytes(name),
+                                          ffi.cast('GCallback', marshall),
+                                          handle,
                                           ffi.NULL, 0)
+
 
 __all__ = ['GObject']
