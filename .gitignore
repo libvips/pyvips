@@ -10,3 +10,4 @@ dist
 doc/build
 build
 .tox
+tmp
