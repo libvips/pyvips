@@ -196,7 +196,7 @@ class Image(pyvips.VipsObject):
             access (Access): Hint the expected access pattern for the image.
             fail (bool): If set True, the loader will fail with an error on
                 the first serious error in the file. By default, libvips
-                will attempt to read everything it can from a damanged image.
+                will attempt to read everything it can from a damaged image.
 
         Returns:
             A new :class:`.Image`.
@@ -326,6 +326,7 @@ class Image(pyvips.VipsObject):
             data (bytes): A memoryview or buffer object.
             width (int): Image width in pixels.
             height (int): Image height in pixels.
+            bands (int): Number of bands.
             format (BandFormat): Band format.
 
         Returns:

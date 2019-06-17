@@ -197,7 +197,8 @@ def cdefs(features):
             GClosureNotify destroy_data,
             int connect_flags);
 
-        extern "Python" void _marshall_image_progress(VipsImage*, void*, void*);
+        extern "Python" void _marshall_image_progress (VipsImage*,
+            void*, void*);
 
         void vips_image_set_progress (VipsImage* image, bool progress);
 
