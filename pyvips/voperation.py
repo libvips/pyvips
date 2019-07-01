@@ -219,10 +219,12 @@ class Operation(pyvips.VipsObject):
         references = []
 
         def add_reference(x):
+            nonlocal references
+
             if isinstance(x, pyvips.Image):
-                # += won't work on non-local references
                 for i in x._references:
-                    references.append(i)
+                    if i not in references:
+                        references += [i]
 
             return False
 

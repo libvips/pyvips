@@ -1,5 +1,9 @@
 # master 
 
+## Version 2.1.7 (1 Jul 2019)
+
+* prevent exponential growth of reference tables in some cases [NextGuido]
+
 ## Version 2.1.6 (7 Jan 2019)
 
 * switch to new-style callbacks [kleisauke]
