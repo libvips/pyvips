@@ -1,5 +1,9 @@
 # master 
 
+## Version 2.1.8 (1 Jul 2019)
+
+* fix regression with py27 [jcupitt]
+
 ## Version 2.1.7 (1 Jul 2019)
 
 * prevent exponential growth of reference tables in some cases [NextGuido]
