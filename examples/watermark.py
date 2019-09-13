@@ -6,19 +6,15 @@ import pyvips
 im = pyvips.Image.new_from_file(sys.argv[1], access="sequential")
  
 text = pyvips.Image.text(sys.argv[3], width=500, dpi=300, align="centre")
-text = (text * 0.3).cast("uchar")
-text = text.rotate(45)
-text = text.embed(100, 100, text.width + 200, text.width + 200)
-text = text.replicate(1 + im.width / text.width, 1 + im.height / text.height)
-text = text.crop(0, 0, im.width, im.height)
 
-# we want to blend into the visible part of the image and leave any alpha
-# channels untouched ... we need to split im into two parts
+# we make an overlay with a solid colour in the main image bands, and a faded
+# version of the text mask as the overlay
+
+# drop any alpha 
 if im.hasalpha():
-    alpha = im.extract_band(im.bands - 1)
-    im = im.extract_band(0, n=im.bands - 1) 
+    no_alpha = im.extract_band(0, n=im.bands - 1) 
 else:
-    alpha = None
+    no_alpha = im
 
 # colours have four parts in cmyk images
 if im.bands == 4:
@@ -28,10 +24,10 @@ elif im.bands == 3:
 else:
     text_colour = 255
 
-im = text.ifthenelse(text_colour, im, blend=True)
+overlay = no_alpha.new_from_image(text_colour)
+overlay = overlay.bandjoin((text * 0.5).cast("uchar"))
 
-# reattach alpha
-if alpha:
-    im = im.bandjoin(alpha)
- 
+# position overlay at the bottom left, with a margin
+im = im.composite(overlay, "over", x=100, y=im.height - text.height - 100)
+
 im.write_to_file(sys.argv[2])
