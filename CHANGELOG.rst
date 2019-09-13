@@ -1,5 +1,10 @@
 # master 
 
+## Version 2.1.9 (13 Sep 2019)
+
+* revise README [jcupitt]
+* add watermark example [jcupitt]
+
 ## Version 2.1.8 (1 Jul 2019)
 
 * fix regression with py27 [jcupitt]
