@@ -64,9 +64,11 @@ http://libvips.github.io/libvips/API/current/How-it-opens-files.md.html
 conda Install
 -------------
 
-The conda packagc includes a matching libvips binary, so just enter::
+The conda packagc includes a matching libvips binary, so just enter:
 
-    conda install --channel conda-forge pyvips
+.. code-block:: shell
+
+    $ conda install --channel conda-forge pyvips
 
 Non-conda install
 -----------------
@@ -78,7 +80,9 @@ website.
 
 https://libvips.github.io/libvips/install.html
 
-Next, install this package, perhaps::
+Next, install this package, perhaps:
+
+.. code-block:: shell
 
     $ pip install --user pyvips
 
@@ -95,7 +99,9 @@ a lot of extra DLLs to your search path and they might conflict with other
 programs, so it's usually safer just to set ``PATH`` in your program.
 
 To set ``PATH`` from within Python, you need something like this at the start
-of your program::
+of your program:
+
+.. code-block:: python
 
     import os
     vipshome = 'c:\\vips-dev-8.7\\bin'
@@ -107,7 +113,9 @@ Example
 -------
 
 This sample program loads a JPG image, doubles the value of every green pixel,
-sharpens, and then writes the image back to the filesystem again::
+sharpens, and then writes the image back to the filesystem again:
+
+.. code-block:: python
 
     import pyvips
 
@@ -120,48 +128,67 @@ sharpens, and then writes the image back to the filesystem again::
     image = image.conv(mask, precision='integer')
     image.write_to_file('x.jpg')
 
+
 Notes
 -----
 
-Local user install::
+Local user install:
+
+.. code-block:: shell
 
     $ pip install --user -e .
     $ pip3 install --user -e .
     $ pypy -m pip --user -e .
 
-Run all tests::
+Run all tests:
+
+.. code-block:: shell
 
     $ tox 
 
-Run test suite::
+Run test suite:
+
+.. code-block:: shell
 
     $ tox test
 
-Run a specific test::
+Run a specific test:
+
+.. code-block:: shell
 
     $ pytest tests/test_conversion.py
 
-Stylecheck::
+Stylecheck:
+
+.. code-block:: shell
 
     $ tox qa
 
-Generate HTML docs in ``doc/build/html``::
+Generate HTML docs in ``doc/build/html``:
+
+.. code-block:: shell
 
     $ cd doc; sphinx-build -bhtml . build/html
 
-Regenerate autodocs::
+Regenerate autodocs:
+
+.. code-block:: shell
 
     $ cd doc; \
       python -c "import pyvips; pyvips.Operation.generate_sphinx_all()" > x 
 
 And copy-paste ``x`` into the obvious place in ``doc/vimage.rst``.
 
-Update version number::
+Update version number:
+
+.. code-block:: shell
 
     $ vi pyvips/version.py
     $ vi doc/conf.py
 
-Update pypi package::
+Update pypi package:
+
+.. code-block:: shell
 
     $ python setup.py sdist
     $ twine upload dist/*
