@@ -85,7 +85,7 @@ def setup_API():
         extras_require=extras,
 
         # we will try to compile as part of install, so we can't run in a zip
-        zip_safe=False,
+        zip_safe=True,
     )
 
 def setup_ABI():
@@ -113,7 +113,4 @@ def setup_ABI():
 # API mode requires a working C compiler plus all the libvips headers whereas
 # ABI only needs the libvips shared library to be on the system
 
-try:
-    setup_API()
-except Exception:
-    setup_ABI()
+setup_API()
