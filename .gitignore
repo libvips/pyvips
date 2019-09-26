@@ -1,5 +1,6 @@
 .pytest_cache
 .*.swp
+.DS_Store
 *.pyc
 *.egg-info
 *.egg
