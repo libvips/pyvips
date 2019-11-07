@@ -5,23 +5,23 @@ README
     :alt: Build Status
     :target: https://travis-ci.org/libvips/pyvips
 
-PyPI package::
+PyPI package:
 
 https://pypi.python.org/pypi/pyvips
 
-conda package::
+conda package:
 
 https://anaconda.org/conda-forge/pyvips
 
-We have formatted docs online here::
+We have formatted docs online here:
 
 https://libvips.github.io/pyvips/
 
-This module wraps the libvips image processing library:: 
+This module wraps the libvips image processing library: 
 
 https://libvips.github.io/libvips/
 
-The libvips docs are also very useful::
+The libvips docs are also very useful:
 
 https://libvips.github.io/libvips/API/current/
 
@@ -48,7 +48,7 @@ destination a section at a time.
 
 Because ``pyvips`` is parallel, it's quick, and because it doesn't need to
 keep entire images in memory, it's light.  For example, the libvips 
-speed and memory use benchmark::
+speed and memory use benchmark:
 
 https://github.com/libvips/libvips/wiki/Speed-and-memory-use
 

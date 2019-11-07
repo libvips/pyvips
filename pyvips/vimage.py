@@ -366,7 +366,7 @@ class Image(pyvips.VipsObject):
         """Load a formatted image from an input stream.
 
         This behaves exactly as :meth:`new_from_file`, but the image is
-        loaded from the stream rather than from a file. 
+        loaded from the stream rather than from a file.
 
         Args:
             streami (Streami): The stream to load the image from.
@@ -612,7 +612,7 @@ class Image(pyvips.VipsObject):
     def write_to_stream(self, streamo, format_string, **kwargs):
         """Write an image to a stream.
 
-        This method will write the image to the stream in the format 
+        This method will write the image to the stream in the format
         specified in the suffix in the format string. This can include
         embedded save options, see :func:`Image.write_to_file`.
 

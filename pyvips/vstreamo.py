@@ -3,7 +3,7 @@ from __future__ import division
 import logging
 
 import pyvips
-from pyvips import ffi, vips_lib, Error, _to_bytes, _to_string
+from pyvips import ffi, vips_lib, Error, _to_bytes
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +19,7 @@ class Streamo(pyvips.Stream):
 
     @staticmethod
     def new_to_descriptor(descriptor):
-        """Make a new output stream to write to a file descriptor (a small 
+        """Make a new output stream to write to a file descriptor (a small
         integer).
 
         Make a new stream that is attached to the descriptor. For example::
@@ -32,10 +32,10 @@ class Streamo(pyvips.Stream):
 
         """
 
-        # logger.debug('VipsStreamo.new_to_descriptor: descriptor = %d', 
+        # logger.debug('VipsStreamo.new_to_descriptor: descriptor = %d',
         #   descriptor)
 
-        # streams are mutable, so we can't use the cache 
+        # streams are mutable, so we can't use the cache
         pointer = vips_lib.vips_streamo_new_to_descriptor(descriptor)
         if pointer == ffi.NULL:
             raise Error("can't create output stream from descriptor {0}"

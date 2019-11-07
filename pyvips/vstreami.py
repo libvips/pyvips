@@ -3,7 +3,7 @@ from __future__ import division
 import logging
 
 import pyvips
-from pyvips import ffi, vips_lib, Error, _to_bytes, _to_string
+from pyvips import ffi, vips_lib, Error, _to_bytes
 
 logger = logging.getLogger(__name__)
 
@@ -31,10 +31,10 @@ class Streami(pyvips.Stream):
 
         """
 
-        # logger.debug('VipsStreami.new_from_descriptor: descriptor = %d', 
+        # logger.debug('VipsStreami.new_from_descriptor: descriptor = %d',
         #   descriptor)
 
-        # streams are mutable, so we can't use the cache 
+        # streams are mutable, so we can't use the cache
         pointer = vips_lib.vips_streami_new_from_descriptor(descriptor)
         if pointer == ffi.NULL:
             raise Error("can't create input stream from descriptor {0}"
@@ -54,7 +54,8 @@ class Streami(pyvips.Stream):
 
         """
 
-        # logger.debug('VipsStreami.new_from_filename: filename = %s', filename)
+        # logger.debug('VipsStreami.new_from_filename: filename = %s',
+        #              filename)
 
         pointer = vips_lib.vips_streami_new_from_filename(_to_bytes(filename))
         if pointer == ffi.NULL:
@@ -73,7 +74,7 @@ class Streami(pyvips.Stream):
 
         You can pass this stream to (for example) :meth:`new_from_stream`.
 
-        The memory object can be anything that supports the Python buffer or 
+        The memory object can be anything that supports the Python buffer or
         memoryview protocol.
 
         """

@@ -3,13 +3,13 @@ from __future__ import division
 import logging
 
 import pyvips
-from pyvips import ffi, vips_lib, Error, _to_bytes, _to_string
+from pyvips import ffi, vips_lib, _to_string
 
 logger = logging.getLogger(__name__)
 
 
 class Stream(pyvips.VipsObject):
-    """The abstract base Stream class. 
+    """The abstract base Stream class.
 
     """
 

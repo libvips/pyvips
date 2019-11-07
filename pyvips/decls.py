@@ -402,7 +402,7 @@ def cdefs(features):
 
             VipsStreami* vips_streami_new_from_descriptor (int descriptor);
             VipsStreami* vips_streami_new_from_filename (const char* filename);
-            VipsStreami* vips_streami_new_from_memory (const void* data, 
+            VipsStreami* vips_streami_new_from_memory (const void* data,
                 size_t size);
 
             typedef struct _VipsStreamo {
