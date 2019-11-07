@@ -5,6 +5,7 @@
 * revise README [jcupitt]
 * add watermark example [jcupitt]
 * fix syntax highlighting in README [favorable-mutation]
+* add support for Stream [jcupitt]
 
 ## Version 2.1.8 (1 Jul 2019)
 

@@ -362,6 +362,40 @@ class Image(pyvips.VipsObject):
         return image
 
     @staticmethod
+    def new_from_stream(streami, options, **kwargs):
+        """Load a formatted image from an input stream.
+
+        This behaves exactly as :meth:`new_from_file`, but the image is
+        loaded from the stream rather than from a file. 
+
+        Args:
+            streami (Streami): The stream to load the image from.
+            options (str): Load options as a string. Use ``""`` for no options.
+
+        All loaders support at least the following options:
+
+        Keyword args:
+            access (Access): Hint the expected access pattern for the image.
+            fail (bool): If set True, the loader will fail with an error on the
+                first serious error in the image. By default, libvips will
+                attempt to read everything it can from a damaged image.
+
+        Returns:
+            A new :class:`Image`.
+
+        Raises:
+            :class:`.Error`
+
+        """
+        pointer = vips_lib.vips_foreign_find_load_stream(streami.pointer)
+        if pointer == ffi.NULL:
+            raise Error('unable to load from stream')
+        name = _to_string(pointer)
+
+        return pyvips.Operation.call(name, streami,
+                                     string_options=options, **kwargs)
+
+    @staticmethod
     def new_temp_file(format):
         """Make a new temporary image.
 
@@ -505,7 +539,7 @@ class Image(pyvips.VipsObject):
 
         This method can save images in any format supported by vips. The format
         is selected from the suffix in the format string. This can include
-        embedded save options, see :func:`Image.new_from_file`.
+        embedded save options, see :func:`Image.write_to_file`.
 
         For example::
 
@@ -574,6 +608,55 @@ class Image(pyvips.VipsObject):
         pointer = ffi.gc(pointer, glib_lib.g_free)
 
         return ffi.buffer(pointer, psize[0])
+
+    def write_to_stream(self, streamo, format_string, **kwargs):
+        """Write an image to a stream.
+
+        This method will write the image to the stream in the format 
+        specified in the suffix in the format string. This can include
+        embedded save options, see :func:`Image.write_to_file`.
+
+        For example::
+
+            image.write_to_stream(stream, '.jpg[Q=95]')
+
+        You can also supply options as keyword arguments, for example::
+
+            image.write_to_stream(stream, '.jpg', Q=95)
+
+        The full set of options available depend upon the save operation that
+        will be executed. Try something like::
+
+            $ vips jpegsave_stream
+
+        at the command-line to see a summary of the available options for the
+        JPEG saver.
+
+        Args:
+            streamo (Streamo): The stream to write the image to
+            format_string (str): The suffix, plus any string-form arguments.
+
+        Other arguments depend upon the save operation.
+
+        Returns:
+            None
+
+        Raises:
+            :class:`.Error`
+
+        """
+        format_string = _to_bytes(format_string)
+
+        pointer = vips_lib.vips_filename_get_options(format_string)
+        options = _to_string_copy(pointer)
+
+        pointer = vips_lib.vips_foreign_find_save_stream(format_string)
+        if pointer == ffi.NULL:
+            raise Error('unable to write to stream')
+        name = _to_string(pointer)
+
+        return pyvips.Operation.call(name, self, streamo,
+                                     string_options=options, **kwargs)
 
     def write(self, other):
         """Write an image to another image.

@@ -177,6 +177,9 @@ from .gobject import *
 from .gvalue import *
 from .vobject import *
 from .vinterpolate import *
+from .vstream import *
+from .vstreami import *
+from .vstreamo import *
 from .voperation import *
 from .vimage import *
 from .vregion import *

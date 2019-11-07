@@ -32,7 +32,6 @@ class Interpolate(pyvips.VipsObject):
 
         See for example :meth:`.affine`.
 
-
         """
 
         # logger.debug('VipsInterpolate.new: name = %s', name)

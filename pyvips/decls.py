@@ -331,7 +331,7 @@ def cdefs(features):
             VipsArgumentMapFn fn, void* a, void* b);
 
         typedef struct _VipsRegion {
-            GObject parent_object;
+            VipsObject parent_object;
 
             // more
         } VipsRegion;
@@ -380,6 +380,44 @@ def cdefs(features):
                 size_t* length);
             int vips_region_width (VipsRegion*);
             int vips_region_height (VipsRegion*);
+
+        '''
+
+    if _at_least(features, 8, 9):
+        code += '''
+            typedef struct _VipsStream {
+                VipsObject parent_object;
+
+                // more
+            } VipsStream;
+
+            const char* vips_stream_filename (VipsStream* stream);
+            const char* vips_stream_nick (VipsStream* stream);
+
+            typedef struct _VipsStreami {
+                VipsStream parent_object;
+
+                // more
+            } VipsStreami;
+
+            VipsStreami* vips_streami_new_from_descriptor (int descriptor);
+            VipsStreami* vips_streami_new_from_filename (const char* filename);
+            VipsStreami* vips_streami_new_from_memory (const void* data, 
+                size_t size);
+
+            typedef struct _VipsStreamo {
+                VipsStream parent_object;
+
+                // more
+            } VipsStreamo;
+
+            VipsStreamo* vips_streamo_new_to_descriptor (int descriptor);
+            VipsStreamo* vips_streamo_new_to_filename (const char* filename);
+            VipsStreamo* vips_streamo_new_to_memory (void);
+
+            const char* vips_foreign_find_load_stream (VipsStreami *streami);
+            const char* vips_foreign_find_save_stream (const char* suffix);
+
 
         '''
 
