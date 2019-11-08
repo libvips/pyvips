@@ -5,6 +5,7 @@
 * revise README [jcupitt]
 * add watermark example [jcupitt]
 * fix syntax highlighting in README [favorable-mutation]
+* fix logging [h4l]
 
 ## Version 2.1.8 (1 Jul 2019)
 
