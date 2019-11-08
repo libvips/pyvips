@@ -285,3 +285,6 @@ class PCS(object):
 
     LAB = 'lab'
     XYZ = 'xyz'
+
+
+__all__ = ['BandFormat', 'Access', 'Interpretation']
