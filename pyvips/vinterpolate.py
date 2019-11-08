@@ -42,3 +42,6 @@ class Interpolate(pyvips.VipsObject):
             raise Error('no such interpolator {0}'.format(name))
 
         return Interpolate(vi)
+
+
+__all__ = ['Interpolate']
