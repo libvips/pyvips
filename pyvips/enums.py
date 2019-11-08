@@ -273,7 +273,7 @@ class Combine(object):
 
 
 class PCS(object):
-    """Set Perofile Connection Space.
+    """Set Profile Connection Space.
 
     See for example :meth:`.icc_import`.
 
