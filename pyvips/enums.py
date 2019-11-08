@@ -287,4 +287,6 @@ class PCS(object):
     XYZ = 'xyz'
 
 
-__all__ = ['BandFormat', 'Access', 'Interpretation']
+__all__ = ['BandFormat', 'Access', 'Interpretation', 'Angle', 'Angle45',
+           'Intent', 'Extend', 'Precision', 'Coding', 'Direction',
+           'Align', 'Combine', 'PCS']

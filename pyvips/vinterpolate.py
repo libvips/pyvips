@@ -1,11 +1,10 @@
 from __future__ import division
 
-import logging
-
 import pyvips
 from pyvips import ffi, vips_lib, Error, _to_bytes
 
-logger = logging.getLogger(__name__)
+# import logging
+# logger = logging.getLogger(__name__)
 
 
 class Interpolate(pyvips.VipsObject):
