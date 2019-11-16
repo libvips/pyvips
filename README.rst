@@ -158,6 +158,13 @@ Run a specific test:
 
     $ pytest tests/test_conversion.py
 
+Run perf tests:
+
+.. code-block:: shell
+
+   $ cd tests/perf
+   $ ./run.sh
+
 Stylecheck:
 
 .. code-block:: shell
