@@ -20,8 +20,8 @@ if pyvips.API_mode:
         progress = ffi.cast('VipsProgress*', pointer)
         callback(image, progress)
 
-    _marshall_image_progress_cb = ffi.cast('GCallback', \
-        gobject_lib._marshall_image_progress)
+    _marshall_image_progress_cb = \
+        ffi.cast('GCallback', gobject_lib._marshall_image_progress)
 else:
     def _marshall_image_progress(vi, pointer, handle):
         # the image we're passed is not reffed for us, so make a ref for us
@@ -31,9 +31,10 @@ else:
         progress = ffi.cast('VipsProgress*', pointer)
         callback(image, progress)
 
-    _marshall_image_progress_cb = ffi.cast('GCallback', 
-        ffi.callback('void(VipsImage*, void*, void*)', \
-                     _marshall_image_progress))
+    _marshall_image_progress_cb = \
+        ffi.cast('GCallback',
+                 ffi.callback('void(VipsImage*, void*, void*)',
+                              _marshall_image_progress))
 
 
 class GObject(object):

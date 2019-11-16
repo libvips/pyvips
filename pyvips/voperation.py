@@ -169,7 +169,8 @@ class Operation(pyvips.VipsObject):
             if isinstance(x, pyvips.Image):
                 # += won't work on non-local references
                 for i in x._references:
-                    references.append(i)
+                    if i not in references:
+                        references.append(i)
 
             return False
 
