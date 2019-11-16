@@ -8,6 +8,7 @@
 * add signal handling [jcupitt]
 * add perf tests [kleisauke]
 * speed up Operation.call [kleisauke]
+* fix logging [h4l]
 
 ## Version 2.1.8 (1 Jul 2019)
 
