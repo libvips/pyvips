@@ -29,6 +29,7 @@ class GValue(object):
     GValue lifetime is managed automatically.
 
     """
+    __slots__ = 'pointer', 'gvalue'
 
     # look up some common gtypes at init for speed
     gbool_type = type_from_name('gboolean')

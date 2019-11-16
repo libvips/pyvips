@@ -83,16 +83,23 @@ def _run_cmplx(fn, image):
 
 
 # https://stackoverflow.com/a/22409540/1480019
-def _with_metaclass(mcls):
-    def decorator(cls):
-        body = vars(cls).copy()
-        # clean out class body
-        body.pop('__dict__', None)
-        body.pop('__weakref__', None)
-
-        return mcls(cls.__name__, cls.__bases__, body)
-
-    return decorator
+# https://github.com/benjaminp/six/blob/33b584b2c551548021adb92a028ceaf892deb5be/six.py#L846-L861
+def _with_metaclass(metaclass):
+    """Class decorator for creating a class with a metaclass."""
+    def wrapper(cls):
+        orig_vars = cls.__dict__.copy()
+        slots = orig_vars.get('__slots__')
+        if slots is not None:
+            if isinstance(slots, str):
+                slots = [slots]
+            for slots_var in slots:
+                orig_vars.pop(slots_var)
+        orig_vars.pop('__dict__', None)
+        orig_vars.pop('__weakref__', None)
+        if hasattr(cls, '__qualname__'):
+            orig_vars['__qualname__'] = cls.__qualname__
+        return metaclass(cls.__name__, cls.__bases__, orig_vars)
+    return wrapper
 
 
 # decorator to set docstring
@@ -135,6 +142,7 @@ class Image(pyvips.VipsObject):
     """Wrap a VipsImage object.
 
     """
+    __slots__ = '_references',
 
     # private static
 

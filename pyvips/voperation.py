@@ -162,6 +162,7 @@ class Operation(pyvips.VipsObject):
     This class wraps the libvips VipsOperation class.
 
     """
+    __slots__ = 'object',
 
     # cache nickname -> docstring here
     _docstring_cache = {}
