@@ -137,7 +137,7 @@ Local user install:
 .. code-block:: shell
 
     $ pip install --user -e .
-    $ pip3 install --user -e .
+    $ pip3 install -e .
     $ pypy -m pip --user -e .
 
 Run all tests:
