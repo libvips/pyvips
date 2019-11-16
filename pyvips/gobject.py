@@ -8,6 +8,7 @@ from pyvips import ffi, gobject_lib, _to_bytes
 logger = logging.getLogger(__name__)
 
 # the python marshallers for gobject signal handling
+# we keep a ref to each callback to stop them being GCd
 
 if pyvips.API_mode:
     @ffi.def_extern()
@@ -18,8 +19,10 @@ if pyvips.API_mode:
         callback = ffi.from_handle(handle)
         progress = ffi.cast('VipsProgress*', pointer)
         callback(image, progress)
+
+    _marshall_image_progress_cb = ffi.cast('GCallback', \
+        gobject_lib._marshall_image_progress)
 else:
-    @ffi.callback("void(VipsImage*, void*, void*)")
     def _marshall_image_progress(vi, pointer, handle):
         # the image we're passed is not reffed for us, so make a ref for us
         gobject_lib.g_object_ref(vi)
@@ -27,6 +30,10 @@ else:
         callback = ffi.from_handle(handle)
         progress = ffi.cast('VipsProgress*', pointer)
         callback(image, progress)
+
+    _marshall_image_progress_cb = ffi.cast('GCallback', 
+        ffi.callback('void(VipsImage*, void*, void*)', \
+                     _marshall_image_progress))
 
 
 class GObject(object):
@@ -69,15 +76,10 @@ class GObject(object):
         go = ffi.cast('GObject *', self.pointer)
         handle = ffi.new_handle(callback)
         self._handles.append(handle)
-        if pyvips.API_mode:
-            marshall = gobject_lib._marshall_image_progress
-        else:
-            marshall = _marshall_image_progress
 
         gobject_lib.g_signal_connect_data(go, _to_bytes(name),
-                                          ffi.cast('GCallback', marshall),
-                                          handle,
-                                          ffi.NULL, 0)
+                                          _marshall_image_progress_cb,
+                                          handle, ffi.NULL, 0)
 
 
 __all__ = ['GObject']
