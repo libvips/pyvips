@@ -1,15 +1,14 @@
-sudo: false
+language: python
+dist: xenial
 
 env:
   global:
     - VIPS_VERSION_MAJOR=8
-    - VIPS_VERSION_MINOR=7
-    - VIPS_VERSION_MICRO=1
+    - VIPS_VERSION_MINOR=8
+    - VIPS_VERSION_MICRO=0
     - PATH=$HOME/vips/bin:$PATH
     - LD_LIBRARY_PATH=$HOME/vips/lib:$LD_LIBRARY_PATH
     - PKG_CONFIG_PATH=$HOME/vips/lib/pkgconfig:$PKG_CONFIG_PATH
-
-dist: trusty
 
 addons:
   apt:
@@ -20,6 +19,7 @@ addons:
       - libmagickwand-dev
       - libopenexr-dev
       - libcfitsio3-dev
+      - libfftw3-dev
       - libgif-dev
       - libgs-dev
       - libgsf-1-dev
@@ -30,16 +30,15 @@ addons:
       - libpoppler-glib-dev
       - librsvg2-dev
       - libwebp-dev
-        # missing on trusty, unfortunately
-        # - libwebpmux2
-      - libfftw3-dev
+      - libtiff5-dev
+      # missing on xenial, unfortunately
+      # - libwebpmux2
       - libglib2.0-dev
 
 cache:
   directories:
     - $HOME/vips
 
-language: python
 python:
   - "2.7"
   - "3.3"

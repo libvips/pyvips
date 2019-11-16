@@ -53,6 +53,7 @@ test_deps = [
     'cffi>=1.0.0',
     'pytest',
     'pytest-flake8',
+    'pyperf',
 ]
 
 extras = {

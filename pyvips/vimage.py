@@ -196,7 +196,7 @@ class Image(pyvips.VipsObject):
             access (Access): Hint the expected access pattern for the image.
             fail (bool): If set True, the loader will fail with an error on
                 the first serious error in the file. By default, libvips
-                will attempt to read everything it can from a damanged image.
+                will attempt to read everything it can from a damaged image.
 
         Returns:
             A new :class:`.Image`.
@@ -326,6 +326,7 @@ class Image(pyvips.VipsObject):
             data (bytes): A memoryview or buffer object.
             width (int): Image width in pixels.
             height (int): Image height in pixels.
+            bands (int): Number of bands.
             format (BandFormat): Band format.
 
         Returns:
@@ -571,6 +572,8 @@ class Image(pyvips.VipsObject):
 
         psize = ffi.new('size_t *')
         pointer = vips_lib.vips_image_write_to_memory(self.pointer, psize)
+        if pointer == ffi.NULL:
+            raise Error('unable to write to memory')
         pointer = ffi.gc(pointer, glib_lib.g_free)
 
         return ffi.buffer(pointer, psize[0])
@@ -594,6 +597,16 @@ class Image(pyvips.VipsObject):
         result = vips_lib.vips_image_write(self.pointer, other.pointer)
         if result != 0:
             raise Error('unable to write to image')
+
+    def set_progress(self, progress):
+        """Enable progress reporting on an image.
+
+        When progress reporting is enabled, evaluation of the most downstream
+        image from this image will report progress using the ::preeval, ::eval,
+        and ::posteval signals.
+
+        """
+        vips_lib.vips_image_set_progress(self.pointer, progress)
 
     # get/set metadata
 
