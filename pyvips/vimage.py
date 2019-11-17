@@ -149,9 +149,10 @@ class Image(pyvips.VipsObject):
             return self.new_from_image(value)
 
     def __init__(self, pointer):
-        # a set of other objects which this object depends on and which need
-        # to be kept alive
-        self._references = set()
+        # a list of other objects which this object depends on and which need
+        # to be kept alive ... we can't use a set, since bytearrays are
+        # unhashable
+        self._references = []
         # logger.debug('Image.__init__: pointer = %s', pointer)
         super(Image, self).__init__(pointer)
 

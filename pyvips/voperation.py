@@ -225,12 +225,15 @@ class Operation(pyvips.VipsObject):
 
         logger.debug('VipsOperation.call: match_image = %s', match_image)
 
-        # collect the set of all input references here
-        references = {}
+        # collect a list of all input references here ... we can't use a set,
+        # unfortunately, because bytearrays are unhashable
+        references = []
 
         def add_reference(x):
             if isinstance(x, pyvips.Image):
-                references.update(x._references)
+                for i in x._references:
+                    if i not in references:
+                        references.append(i)
             return False
 
         # set required input args
@@ -261,10 +264,10 @@ class Operation(pyvips.VipsObject):
             raise Error('unable to call {0}'.format(operation_name))
         op = Operation(vop)
 
-        # attach all input refs to an output
+        # attach all input refs to output x
         def set_reference(x):
             if isinstance(x, pyvips.Image):
-                x._references.update(references)
+                x._references += references
             return False
 
         # fetch required output args (plus modified input images)
