@@ -22,22 +22,6 @@ _MODIFY = 128
 _OPERATION_DEPRECATED = 8
 
 
-# search an array with a predicate, recursing into subarrays as we see them
-# used to find the match_image for an operation
-def _find_inside(pred, thing):
-    if pred(thing):
-        return thing
-
-    if isinstance(thing, list) or isinstance(thing, tuple):
-        for x in thing:
-            result = _find_inside(pred, x)
-
-            if result is not None:
-                return result
-
-    return None
-
-
 class Introspect(object):
     """Build introspection data for operations.
 
@@ -156,6 +140,22 @@ class Introspect(object):
         return cls._introspect_cache[operation_name]
 
 
+# search an array with a predicate, recursing into subarrays as we see them
+# used to find the match_image for an operation
+def _find_inside(pred, thing):
+    if pred(thing):
+        return thing
+
+    if isinstance(thing, list) or isinstance(thing, tuple):
+        for x in thing:
+            result = _find_inside(pred, x)
+
+            if result is not None:
+                return result
+
+    return None
+
+
 class Operation(pyvips.VipsObject):
     """Call libvips operations.
 
@@ -216,10 +216,6 @@ class Operation(pyvips.VipsObject):
         # logger.debug('VipsOperation.call: args = %s, kwargs =%s',
         #              args, kwargs)
 
-        # pull out the special string_options kwarg
-        string_options = kwargs.pop('string_options', '')
-
-        op = Operation.new_from_name(operation_name)
         intro = Introspect.get(operation_name)
 
         if len(intro.required_input) != len(args):
@@ -228,14 +224,17 @@ class Operation(pyvips.VipsObject):
                                 len(intro.required_input),
                                 len(args)))
 
+        op = Operation.new_from_name(operation_name)
+
         # set any string options before any args so they can't be
         # overridden
+        string_options = kwargs.pop('string_options', '')
         if not op.set_string(string_options):
             raise Error('unable to call {0}'.format(operation_name))
 
         # the first image argument is the thing we expand constants to
         # match ... look inside tables for images, since we may be passing
-        # an array of image as a single param
+        # an array of images as a single param
         match_image = _find_inside(lambda x: isinstance(x, pyvips.Image),
                                    args)
 
@@ -257,7 +256,7 @@ class Operation(pyvips.VipsObject):
             _find_inside(add_reference, value)
             op.set(name, intro.details[name]['flags'], match_image, value)
 
-        # set any kwargs
+        # set any optional args
         for name in kwargs:
             value = kwargs[name]
             details = intro.details[name]
