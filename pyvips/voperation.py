@@ -129,6 +129,22 @@ class Introspect(object):
                     (flags & _REQUIRED) == 0):
                 self.optional_output.append(name)
 
+        # find the first required input image arg, if any ... that will be self
+        self.member_x = None
+        for name in self.required_input:
+            details = self.details[name]
+            if details['type'] == GValue.image_type:
+                self.member_x = name
+                break
+
+        # method args are required args, but without the image they are a
+        # method on
+        if self.member_x is not None:
+            self.method_args = list(self.required_input)
+            self.method_args.remove(self.member_x)
+        else:
+            self.method_args = self.required_input
+
     # a hash mapping operation names to introspection data
     _introspect_cache = {}
 
@@ -307,6 +323,7 @@ class Operation(pyvips.VipsObject):
 
         """
 
+        # we cache these to save regeneration
         if operation_name in Operation._docstring_cache:
             return Operation._docstring_cache[operation_name]
 
@@ -315,30 +332,22 @@ class Operation(pyvips.VipsObject):
             raise Error('No such operator.',
                         'operator "{0}" is deprecated'.format(operation_name))
 
-        # find the first required input image arg, if any ... that will be self
-        member_x = None
-        for name in intro.required_input:
-            details = intro.details[name]
-            if details['type'] == GValue.image_type:
-                member_x = name
-                break
+        result = intro.description[0].upper() + intro.description[1:] + '.\n\n'
+        result += 'Example:\n'
 
-        result = intro.description[0].upper() + intro.description[1:] + ".\n\n"
-        result += "Example:\n"
-
-        result += "   " + ", ".join(intro.required_output) + " = "
-        if member_x is not None:
-            result += member_x + "." + operation_name + "("
+        result += '   ' + ', '.join(intro.required_output) + ' = '
+        if intro.member_x is not None:
+            result += intro.member_x + '.' + operation_name + '('
         else:
-            result += "pyvips.Image." + operation_name + "("
+            result += 'pyvips.Image.' + operation_name + '('
 
-        result += ", ".join(intro.required_input)
-        if len(intro.optional_input) > 0 and len(intro.required_input) > 0:
-            result += ", "
-        result += ", ".join([x + " = " +
-                             GValue.gtype_to_python(intro.details[x]['type'])
-                             for x in intro.optional_input])
-        result += ")\n"
+        args = []
+        args += intro.method_args
+        args += [x + '=' + GValue.gtype_to_python(intro.details[x]['type'])
+                 for x in intro.optional_input]
+        args += [x + '=bool'
+                 for x in intro.optional_output]
+        result += ", ".join(args) + ')\n'
 
         def argstr(name):
             details = intro.details[name]
@@ -347,30 +356,27 @@ class Operation(pyvips.VipsObject):
                            GValue.gtype_to_python(details['type']),
                            details['blurb']))
 
-        result += "\nReturns:\n"
+        result += '\nReturns:\n'
         for name in intro.required_output:
             result += argstr(name)
 
-        names = []
-        if member_x is not None:
-            names += [member_x]
-        names += intro.required_input
-
-        result += "\nArgs:\n"
-        for name in names:
+        result += '\nArgs:\n'
+        if intro.member_x is not None:
+            result += argstr(intro.member_x)
+        for name in intro.method_args:
             result += argstr(name)
 
         if len(intro.optional_input) > 0:
-            result += "\nKeyword args:\n"
+            result += '\nKeyword args:\n'
             for name in intro.optional_input:
                 result += argstr(name)
 
         if len(intro.optional_output) > 0:
-            result += "\nOther Parameters:\n"
+            result += '\nOther Parameters:\n'
             for name in intro.optional_output:
                 result += argstr(name)
 
-        result += "\nRaises:\n    :class:`.Error`\n"
+        result += '\nRaises:\n    :class:`.Error`\n'
 
         # add to cache to save building again
         Operation._docstring_cache[operation_name] = result
@@ -390,22 +396,15 @@ class Operation(pyvips.VipsObject):
             raise Error('No such operator.',
                         'operator "{0}" is deprecated'.format(operation_name))
 
-        # find the first required input image arg, if any ... that will be self
-        member_x = None
-        for name in intro.required_input:
-            if intro.details[name]['type'] == GValue.image_type:
-                member_x = name
-                break
-
-        if member_x is not None:
+        if intro.member_x is not None:
             result = '.. method:: '
         else:
             result = '.. staticmethod:: '
         args = []
-        args += intro.required_input
-        args += [x + ' = ' + GValue.gtype_to_python(intro.details[x]['type'])
+        args += intro.method_args
+        args += [x + '=' + GValue.gtype_to_python(intro.details[x]['type'])
                  for x in intro.optional_input]
-        args += [x + ' = bool'
+        args += [x + '=bool'
                  for x in intro.optional_output]
         result += operation_name + '(' + ", ".join(args) + ')\n\n'
 
@@ -414,19 +413,18 @@ class Operation(pyvips.VipsObject):
 
         result += 'Example:\n'
         result += '    ' + ', '.join(intro.required_output) + ' = '
-        if member_x is not None:
-            result += member_x + "." + operation_name + '('
+        if intro.member_x is not None:
+            result += intro.member_x + "." + operation_name + '('
         else:
             result += 'pyvips.Image.' + operation_name + '('
-        result += ', '.join(intro.required_input)
-        if len(intro.optional_input) > 0 and len(intro.required_input) > 0:
-            result += ', '
-        result += ', '.join([x + ' = ' +
-                             GValue.gtype_to_python(intro.details[x]['type'])
-                             for x in intro.optional_input])
+        args = []
+        args += intro.method_args
+        args += [x + '=' + GValue.gtype_to_python(intro.details[x]['type'])
+                 for x in intro.optional_input]
+        result += ', '.join(args)
         result += ')\n\n'
 
-        for name in intro.required_input + intro.optional_input:
+        for name in intro.method_args + intro.optional_input:
             details = intro.details[name]
             result += (':param {0} {1}: {2}\n'.
                        format(GValue.gtype_to_python(details['type']),

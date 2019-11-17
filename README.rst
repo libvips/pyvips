@@ -156,7 +156,7 @@ Run a specific test:
 
 .. code-block:: shell
 
-    $ pytest tests/test_conversion.py
+    $ pytest tests/test_saveload.py
 
 Run perf tests:
 
