@@ -46,56 +46,6 @@ class Introspect(object):
 
     """
 
-    # this is slow ... call as little as possible
-    @staticmethod
-    def get_args(op):
-        args = []
-
-        if at_least_libvips(8, 7):
-            p_names = ffi.new('char**[1]')
-            p_flags = ffi.new('int*[1]')
-            p_n_args = ffi.new('int[1]')
-
-            result = vips_lib.vips_object_get_args(op.object,
-                                                   p_names, p_flags, p_n_args)
-
-            if result != 0:
-                raise Error('unable to get arguments from operation')
-
-            p_names = p_names[0]
-            p_flags = p_flags[0]
-            n_args = p_n_args[0]
-
-            for i in range(0, n_args):
-                flags = p_flags[i]
-                if (flags & _CONSTRUCT) != 0:
-                    name = _to_string(p_names[i])
-
-                    # libvips uses '-' to separate parts of arg names, but we
-                    # need '_' for Python
-                    name = name.replace('-', '_')
-
-                    args.append([name, flags])
-        else:
-            def add_construct(self, pspec, argument_class,
-                              argument_instance, a, b):
-                flags = argument_class.flags
-                if (flags & _CONSTRUCT) != 0:
-                    name = _to_string(pspec.name)
-
-                    # libvips uses '-' to separate parts of arg names, but we
-                    # need '_' for Python
-                    name = name.replace('-', '_')
-
-                    args.append([name, flags])
-
-                return ffi.NULL
-
-            cb = ffi.callback('VipsArgumentMapFn', add_construct)
-            vips_lib.vips_argument_map(self.object, cb, ffi.NULL, ffi.NULL)
-
-        return args
-
     def __init__(self, operation_name):
         op = Operation.new_from_name(operation_name)
 
@@ -103,11 +53,42 @@ class Introspect(object):
         self.description = op.get_description()
         self.flags = vips_lib.vips_operation_get_flags(op.pointer)
 
-        # array of [name, flags] pairs in arg order
-        self.arguments = Introspect.get_args(op)
+        # build a list of constructor arg [name, flags] pairs in arg order
+        self.arguments = []
+
+        def add_args(name, flags):
+            if (flags & _CONSTRUCT) != 0:
+                # libvips uses '-' to separate parts of arg names, but we
+                # need '_' for Python
+                name = name.replace('-', '_')
+                self.arguments.append([name, flags])
+
+        if at_least_libvips(8, 7):
+            p_names = ffi.new('char**[1]')
+            p_flags = ffi.new('int*[1]')
+            p_n_args = ffi.new('int[1]')
+            result = vips_lib.vips_object_get_args(op.object,
+                                                   p_names, p_flags, p_n_args)
+            if result != 0:
+                raise Error('unable to get arguments from operation')
+            p_names = p_names[0]
+            p_flags = p_flags[0]
+            n_args = p_n_args[0]
+
+            for i in range(0, n_args):
+                add_args(_to_string(p_names[i]), p_flags[i])
+        else:
+            def add_construct(self, pspec, argument_class,
+                              argument_instance, a, b):
+                add_args(_to_string(pspec.name), argument_class.flags)
+                return ffi.NULL
+
+            cb = ffi.callback('VipsArgumentMapFn', add_construct)
+            vips_lib.vips_argument_map(self.object, cb, ffi.NULL, ffi.NULL)
+
         # logger.debug('arguments = %s', self.arguments)
 
-        # hash from arg name to detailed information
+        # build a hash from arg name to detailed arg information
         self.details = {}
         for name, flags in self.arguments:
             self.details[name] = {
@@ -117,7 +98,7 @@ class Introspect(object):
                 "type": op.get_typeof(name)
             }
 
-        # arrays of names by category
+        # lists of arg names by category
         self.required_input = []
         self.optional_input = []
         self.required_output = []
@@ -139,6 +120,7 @@ class Introspect(object):
                 self.required_output.append(name)
 
             # we let deprecated optional args through, but warn about them
+            # if they get used, see below
             if ((flags & _INPUT) != 0 and
                     (flags & _REQUIRED) == 0):
                 self.optional_input.append(name)
@@ -224,24 +206,11 @@ class Operation(pyvips.VipsObject):
         op = Operation.new_from_name(operation_name)
         intro = Introspect.get(operation_name)
 
-        # find all input images and gather up all the references they hold
-        references = []
-
-        def add_reference(x):
-            if isinstance(x, pyvips.Image):
-                # += won't work on non-local references in py27
-                for i in x._references:
-                    if i not in references:
-                        references.append(i)
-
-            return False
-
-        # all output images need all input references
-        def set_reference(x):
-            if isinstance(x, pyvips.Image):
-                x._references += references
-
-            return False
+        if len(intro.required_input) != len(args):
+            raise Error('{0} needs {1} arguments, but {2} given'
+                        .format(operation_name,
+                                len(intro.required_input),
+                                len(args)))
 
         # set any string options before any args so they can't be
         # overridden
@@ -256,34 +225,31 @@ class Operation(pyvips.VipsObject):
 
         logger.debug('VipsOperation.call: match_image = %s', match_image)
 
-        # set required input args
-        n = 0
-        for name in intro.required_input:
-            if n > len(args):
-                break
+        # collect the set of all input references here
+        references = {}
 
-            value = args[n]
+        def add_reference(x):
+            if isinstance(x, pyvips.Image):
+                references.update(x._references)
+            return False
+
+        # set required input args
+        for name, value in zip(intro.required_input, args):
             _find_inside(add_reference, value)
             op.set(name, intro.details[name]['flags'], match_image, value)
-            n += 1
-
-        if n != len(args):
-            raise Error('{0} needs {1} arguments, but {2} given'
-                        .format(operation_name, 
-                                len(intro.required_input), 
-                                len(args)))
 
         # set any kwargs
         for name in kwargs:
             value = kwargs[name]
+            details = intro.details[name]
+
             if (name not in intro.optional_input and
-                name not in intro.optional_output):
+                    name not in intro.optional_output):
                 raise Error('{0} does not support optional argument {1}'
                             .format(operation_name, name))
 
-            details = intro.details[name]
             if (details['flags'] & _DEPRECATED) != 0:
-                logger.info('{0} argument {1} is deprecated', 
+                logger.info('{0} argument {1} is deprecated',
                             operation_name, name)
 
             _find_inside(add_reference, value)
@@ -294,6 +260,12 @@ class Operation(pyvips.VipsObject):
         if vop == ffi.NULL:
             raise Error('unable to call {0}'.format(operation_name))
         op = Operation(vop)
+
+        # attach all input refs to an output
+        def set_reference(x):
+            if isinstance(x, pyvips.Image):
+                x._references.update(references)
+            return False
 
         # fetch required output args (plus modified input images)
         result = []
@@ -344,7 +316,7 @@ class Operation(pyvips.VipsObject):
         member_x = None
         for name in intro.required_input:
             details = intro.details[name]
-            if intro.details[name]['type'] == GValue.image_type:
+            if details['type'] == GValue.image_type:
                 member_x = name
                 break
 
@@ -434,7 +406,8 @@ class Operation(pyvips.VipsObject):
                  for x in intro.optional_output]
         result += operation_name + '(' + ", ".join(args) + ')\n\n'
 
-        result += intro.description[0].upper() + intro.description[1:] + '.\n\n'
+        result += intro.description[0].upper() + \
+            intro.description[1:] + '.\n\n'
 
         result += 'Example:\n'
         result += '    ' + ', '.join(intro.required_output) + ' = '
