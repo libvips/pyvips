@@ -41,7 +41,7 @@ class GObject(object):
     """Manage GObject lifetime.
 
     """
-    __slots__ = ('_handles', 'pointer', 'gobject')
+    __slots__ = ('_handles', 'pointer')
 
     def __init__(self, pointer):
         """Wrap around a pointer.
@@ -56,12 +56,9 @@ class GObject(object):
         self._handles = []
 
         # record the pointer we were given to manage
-        self.pointer = pointer
-        # logger.debug('GObject.__init__: pointer = %s', str(self.pointer))
-
         # on GC, unref
-        self.gobject = ffi.gc(self.pointer, gobject_lib.g_object_unref)
-        # logger.debug('GObject.__init__: gobject = %s', str(self.gobject))
+        self.pointer = ffi.gc(pointer, gobject_lib.g_object_unref)
+        # logger.debug('GObject.__init__: pointer = %s', str(self.pointer))
 
     def signal_connect(self, name, callback):
         """Connect to a signal on this object.
