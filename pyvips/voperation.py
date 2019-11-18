@@ -29,23 +29,26 @@ class Introspect(object):
     everything we know about it.
 
     """
+    __slots__ = ('description', 'flags', 'details',
+                 'required_input', 'optional_input',
+                 'required_output', 'optional_output',
+                 'member_x', 'method_args')
 
     def __init__(self, operation_name):
         op = Operation.new_from_name(operation_name)
 
-        self.name = operation_name
         self.description = op.get_description()
         self.flags = vips_lib.vips_operation_get_flags(op.pointer)
 
         # build a list of constructor arg [name, flags] pairs in arg order
-        self.arguments = []
+        arguments = []
 
         def add_args(name, flags):
             if (flags & _CONSTRUCT) != 0:
                 # libvips uses '-' to separate parts of arg names, but we
                 # need '_' for Python
                 name = name.replace('-', '_')
-                self.arguments.append([name, flags])
+                arguments.append([name, flags])
 
         if at_least_libvips(8, 7):
             p_names = ffi.new('char**[1]')
@@ -74,7 +77,7 @@ class Introspect(object):
 
         # build a hash from arg name to detailed arg information
         self.details = {}
-        for name, flags in self.arguments:
+        for name, flags in arguments:
             self.details[name] = {
                 "name": name,
                 "flags": flags,
@@ -88,7 +91,7 @@ class Introspect(object):
         self.required_output = []
         self.optional_output = []
 
-        for name, flags in self.arguments:
+        for name, flags in arguments:
             if ((flags & _INPUT) != 0 and
                     (flags & _REQUIRED) != 0 and
                     (flags & _DEPRECATED) == 0):
