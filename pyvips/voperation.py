@@ -51,7 +51,7 @@ class Introspect(object):
             p_names = ffi.new('char**[1]')
             p_flags = ffi.new('int*[1]')
             p_n_args = ffi.new('int[1]')
-            result = vips_lib.vips_object_get_args(op.object,
+            result = vips_lib.vips_object_get_args(op.vobject,
                                                    p_names, p_flags, p_n_args)
             if result != 0:
                 raise Error('unable to get arguments from operation')
@@ -68,7 +68,7 @@ class Introspect(object):
                 return ffi.NULL
 
             cb = ffi.callback('VipsArgumentMapFn', add_construct)
-            vips_lib.vips_argument_map(self.object, cb, ffi.NULL, ffi.NULL)
+            vips_lib.vips_argument_map(op.vobject, cb, ffi.NULL, ffi.NULL)
 
         # logger.debug('arguments = %s', self.arguments)
 
@@ -162,7 +162,7 @@ class Operation(pyvips.VipsObject):
     This class wraps the libvips VipsOperation class.
 
     """
-    __slots__ = 'object',
+    __slots__ = ()
 
     # cache nickname -> docstring here
     _docstring_cache = {}
@@ -170,7 +170,6 @@ class Operation(pyvips.VipsObject):
     def __init__(self, pointer):
         # logger.debug('Operation.__init__: pointer = %s', pointer)
         super(Operation, self).__init__(pointer)
-        self.object = ffi.cast('VipsObject*', pointer)
 
     @staticmethod
     def new_from_name(operation_name):
@@ -304,7 +303,7 @@ class Operation(pyvips.VipsObject):
         if len(opts) > 0:
             result.append(opts)
 
-        vips_lib.vips_object_unref_outputs(op.object)
+        vips_lib.vips_object_unref_outputs(op.vobject)
 
         if len(result) == 0:
             result = None

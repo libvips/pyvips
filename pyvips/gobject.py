@@ -41,7 +41,7 @@ class GObject(object):
     """Manage GObject lifetime.
 
     """
-    __slots__ = '_handles', 'pointer', 'gobject'
+    __slots__ = ('_handles', 'pointer', 'gobject')
 
     def __init__(self, pointer):
         """Wrap around a pointer.

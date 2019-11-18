@@ -13,10 +13,12 @@ logger = logging.getLogger(__name__)
 
 class VipsObject(pyvips.GObject):
     """Manage a VipsObject."""
+    __slots__ = ('vobject',)
 
     def __init__(self, pointer):
         # logger.debug('VipsObject.__init__: pointer = %s', pointer)
         super(VipsObject, self).__init__(pointer)
+        self.vobject = ffi.cast('VipsObject*', pointer)
 
     @staticmethod
     def print_all(msg):
@@ -39,8 +41,7 @@ class VipsObject(pyvips.GObject):
         pspec = ffi.new('GParamSpec **')
         argument_class = ffi.new('VipsArgumentClass **')
         argument_instance = ffi.new('VipsArgumentInstance **')
-        vo = ffi.cast('VipsObject *', self.pointer)
-        result = vips_lib.vips_object_get_argument(vo, _to_bytes(name),
+        result = vips_lib.vips_object_get_argument(self.vobject, _to_bytes(name),
                                                    pspec, argument_class,
                                                    argument_instance)
 
@@ -121,17 +122,15 @@ class VipsObject(pyvips.GObject):
 
         """
 
-        vo = ffi.cast('VipsObject *', self.pointer)
         cstr = _to_bytes(string_options)
-        result = vips_lib.vips_object_set_from_string(vo, cstr)
+        result = vips_lib.vips_object_set_from_string(self.vobject, cstr)
 
         return result == 0
 
     def get_description(self):
         """Get the description of a GObject."""
 
-        vo = ffi.cast('VipsObject *', self.pointer)
-        return _to_string(vips_lib.vips_object_get_description(vo))
+        return _to_string(vips_lib.vips_object_get_description(self.vobject))
 
 
 __all__ = ['VipsObject']

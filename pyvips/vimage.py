@@ -142,7 +142,7 @@ class Image(pyvips.VipsObject):
     """Wrap a VipsImage object.
 
     """
-    __slots__ = '_references',
+    __slots__ = ('_references',)
 
     # private static
 
