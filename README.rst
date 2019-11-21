@@ -17,7 +17,7 @@ We have formatted docs online here:
 
 https://libvips.github.io/pyvips/
 
-This module wraps the libvips image processing library: 
+This module wraps the libvips image processing library:
 
 https://libvips.github.io/libvips/
 
@@ -137,7 +137,7 @@ Local user install:
 .. code-block:: shell
 
     $ pip install --user -e .
-    $ pip3 install --user -e .
+    $ pip3 install -e .
     $ pypy -m pip --user -e .
 
 Run all tests:
@@ -156,7 +156,14 @@ Run a specific test:
 
 .. code-block:: shell
 
-    $ pytest tests/test_conversion.py
+    $ pytest tests/test_saveload.py
+
+Run perf tests:
+
+.. code-block:: shell
+
+   $ cd tests/perf
+   $ ./run.sh
 
 Stylecheck:
 

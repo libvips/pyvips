@@ -83,16 +83,23 @@ def _run_cmplx(fn, image):
 
 
 # https://stackoverflow.com/a/22409540/1480019
-def _with_metaclass(mcls):
-    def decorator(cls):
-        body = vars(cls).copy()
-        # clean out class body
-        body.pop('__dict__', None)
-        body.pop('__weakref__', None)
-
-        return mcls(cls.__name__, cls.__bases__, body)
-
-    return decorator
+# https://github.com/benjaminp/six/blob/33b584b2c551548021adb92a028ceaf892deb5be/six.py#L846-L861
+def _with_metaclass(metaclass):
+    """Class decorator for creating a class with a metaclass."""
+    def wrapper(cls):
+        orig_vars = cls.__dict__.copy()
+        slots = orig_vars.get('__slots__')
+        if slots is not None:
+            if isinstance(slots, str):
+                slots = [slots]
+            for slots_var in slots:
+                orig_vars.pop(slots_var)
+        orig_vars.pop('__dict__', None)
+        orig_vars.pop('__weakref__', None)
+        if hasattr(cls, '__qualname__'):
+            orig_vars['__qualname__'] = cls.__qualname__
+        return metaclass(cls.__name__, cls.__bases__, orig_vars)
+    return wrapper
 
 
 # decorator to set docstring
@@ -135,6 +142,7 @@ class Image(pyvips.VipsObject):
     """Wrap a VipsImage object.
 
     """
+    __slots__ = ('_references',)
 
     # private static
 
@@ -150,7 +158,8 @@ class Image(pyvips.VipsObject):
 
     def __init__(self, pointer):
         # a list of other objects which this object depends on and which need
-        # to be kept alive
+        # to be kept alive ... we can't use a set, since bytearrays are
+        # unhashable
         self._references = []
         # logger.debug('Image.__init__: pointer = %s', pointer)
         super(Image, self).__init__(pointer)
@@ -196,7 +205,7 @@ class Image(pyvips.VipsObject):
             access (Access): Hint the expected access pattern for the image.
             fail (bool): If set True, the loader will fail with an error on
                 the first serious error in the file. By default, libvips
-                will attempt to read everything it can from a damanged image.
+                will attempt to read everything it can from a damaged image.
 
         Returns:
             A new :class:`.Image`.
@@ -326,6 +335,7 @@ class Image(pyvips.VipsObject):
             data (bytes): A memoryview or buffer object.
             width (int): Image width in pixels.
             height (int): Image height in pixels.
+            bands (int): Number of bands.
             format (BandFormat): Band format.
 
         Returns:
@@ -605,6 +615,8 @@ class Image(pyvips.VipsObject):
 
         psize = ffi.new('size_t *')
         pointer = vips_lib.vips_image_write_to_memory(self.pointer, psize)
+        if pointer == ffi.NULL:
+            raise Error('unable to write to memory')
         pointer = ffi.gc(pointer, glib_lib.g_free)
 
         return ffi.buffer(pointer, psize[0])
@@ -677,6 +689,16 @@ class Image(pyvips.VipsObject):
         result = vips_lib.vips_image_write(self.pointer, other.pointer)
         if result != 0:
             raise Error('unable to write to image')
+
+    def set_progress(self, progress):
+        """Enable progress reporting on an image.
+
+        When progress reporting is enabled, evaluation of the most downstream
+        image from this image will report progress using the ::preeval, ::eval,
+        and ::posteval signals.
+
+        """
+        vips_lib.vips_image_set_progress(self.pointer, progress)
 
     # get/set metadata
 

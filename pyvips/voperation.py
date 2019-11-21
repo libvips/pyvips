@@ -22,6 +22,127 @@ _MODIFY = 128
 _OPERATION_DEPRECATED = 8
 
 
+class Introspect(object):
+    """Build introspection data for operations.
+
+    Make an operation, introspect it, and build a structure representing
+    everything we know about it.
+
+    """
+    __slots__ = ('description', 'flags', 'details',
+                 'required_input', 'optional_input',
+                 'required_output', 'optional_output',
+                 'member_x', 'method_args')
+
+    def __init__(self, operation_name):
+        op = Operation.new_from_name(operation_name)
+
+        self.description = op.get_description()
+        self.flags = vips_lib.vips_operation_get_flags(op.pointer)
+
+        # build a list of constructor arg [name, flags] pairs in arg order
+        arguments = []
+
+        def add_args(name, flags):
+            if (flags & _CONSTRUCT) != 0:
+                # libvips uses '-' to separate parts of arg names, but we
+                # need '_' for Python
+                name = name.replace('-', '_')
+                arguments.append([name, flags])
+
+        if at_least_libvips(8, 7):
+            p_names = ffi.new('char**[1]')
+            p_flags = ffi.new('int*[1]')
+            p_n_args = ffi.new('int[1]')
+            result = vips_lib.vips_object_get_args(op.vobject,
+                                                   p_names, p_flags, p_n_args)
+            if result != 0:
+                raise Error('unable to get arguments from operation')
+            p_names = p_names[0]
+            p_flags = p_flags[0]
+            n_args = p_n_args[0]
+
+            for i in range(0, n_args):
+                add_args(_to_string(p_names[i]), p_flags[i])
+        else:
+            def add_construct(self, pspec, argument_class,
+                              argument_instance, a, b):
+                add_args(_to_string(pspec.name), argument_class.flags)
+                return ffi.NULL
+
+            cb = ffi.callback('VipsArgumentMapFn', add_construct)
+            vips_lib.vips_argument_map(op.vobject, cb, ffi.NULL, ffi.NULL)
+
+        # logger.debug('arguments = %s', self.arguments)
+
+        # build a hash from arg name to detailed arg information
+        self.details = {}
+        for name, flags in arguments:
+            self.details[name] = {
+                "name": name,
+                "flags": flags,
+                "blurb": op.get_blurb(name),
+                "type": op.get_typeof(name)
+            }
+
+        # lists of arg names by category
+        self.required_input = []
+        self.optional_input = []
+        self.required_output = []
+        self.optional_output = []
+
+        for name, flags in arguments:
+            if ((flags & _INPUT) != 0 and
+                    (flags & _REQUIRED) != 0 and
+                    (flags & _DEPRECATED) == 0):
+                self.required_input.append(name)
+
+                # required inputs which we MODIFY are also required outputs
+                if (flags & _MODIFY) != 0:
+                    self.required_output.append(name)
+
+            if ((flags & _OUTPUT) != 0 and
+                    (flags & _REQUIRED) != 0 and
+                    (flags & _DEPRECATED) == 0):
+                self.required_output.append(name)
+
+            # we let deprecated optional args through, but warn about them
+            # if they get used, see below
+            if ((flags & _INPUT) != 0 and
+                    (flags & _REQUIRED) == 0):
+                self.optional_input.append(name)
+
+            if ((flags & _OUTPUT) != 0 and
+                    (flags & _REQUIRED) == 0):
+                self.optional_output.append(name)
+
+        # find the first required input image arg, if any ... that will be self
+        self.member_x = None
+        for name in self.required_input:
+            details = self.details[name]
+            if details['type'] == GValue.image_type:
+                self.member_x = name
+                break
+
+        # method args are required args, but without the image they are a
+        # method on
+        if self.member_x is not None:
+            self.method_args = list(self.required_input)
+            self.method_args.remove(self.member_x)
+        else:
+            self.method_args = self.required_input
+
+    # a hash mapping operation names to introspection data
+    _introspect_cache = {}
+
+    @classmethod
+    def get(cls, operation_name):
+        if operation_name not in cls._introspect_cache:
+            cls._introspect_cache[operation_name] = Introspect(operation_name)
+
+        return cls._introspect_cache[operation_name]
+
+
 # search an array with a predicate, recursing into subarrays as we see them
 # used to find the match_image for an operation
 def _find_inside(pred, thing):
@@ -44,6 +165,7 @@ class Operation(pyvips.VipsObject):
     This class wraps the libvips VipsOperation class.
 
     """
+    __slots__ = ()
 
     # cache nickname -> docstring here
     _docstring_cache = {}
@@ -51,7 +173,6 @@ class Operation(pyvips.VipsObject):
     def __init__(self, pointer):
         # logger.debug('Operation.__init__: pointer = %s', pointer)
         super(Operation, self).__init__(pointer)
-        self.object = ffi.cast('VipsObject*', pointer)
 
     @staticmethod
     def new_from_name(operation_name):
@@ -82,58 +203,6 @@ class Operation(pyvips.VipsObject):
 
         super(Operation, self).set(name, value)
 
-    def get_flags(self):
-        return vips_lib.vips_operation_get_flags(self.pointer)
-
-    # this is slow ... call as little as possible
-    def get_args(self):
-        args = []
-
-        if at_least_libvips(8, 7):
-            p_names = ffi.new('char**[1]')
-            p_flags = ffi.new('int*[1]')
-            p_n_args = ffi.new('int[1]')
-
-            result = vips_lib.vips_object_get_args(self.object,
-                                                   p_names, p_flags, p_n_args)
-
-            if result != 0:
-                raise Error('unable to get arguments from operation')
-
-            p_names = p_names[0]
-            p_flags = p_flags[0]
-            n_args = p_n_args[0]
-
-            for i in range(0, n_args):
-                flags = p_flags[i]
-                if (flags & _CONSTRUCT) != 0:
-                    name = _to_string(p_names[i])
-
-                    # libvips uses '-' to separate parts of arg names, but we
-                    # need '_' for Python
-                    name = name.replace('-', '_')
-
-                    args.append([name, flags])
-        else:
-            def add_construct(self, pspec, argument_class,
-                              argument_instance, a, b):
-                flags = argument_class.flags
-                if (flags & _CONSTRUCT) != 0:
-                    name = _to_string(pspec.name)
-
-                    # libvips uses '-' to separate parts of arg names, but we
-                    # need '_' for Python
-                    name = name.replace('-', '_')
-
-                    args.append([name, flags])
-
-                return ffi.NULL
-
-            cb = ffi.callback('VipsArgumentMapFn', add_construct)
-            vips_lib.vips_argument_map(self.object, cb, ffi.NULL, ffi.NULL)
-
-        return args
-
     @staticmethod
     def call(operation_name, *args, **kwargs):
         """Call a libvips operation.
@@ -150,64 +219,62 @@ class Operation(pyvips.VipsObject):
         # logger.debug('VipsOperation.call: args = %s, kwargs =%s',
         #              args, kwargs)
 
-        # pull out the special string_options kwarg
-        string_options = kwargs.pop('string_options', '')
+        intro = Introspect.get(operation_name)
 
-        logger.debug('VipsOperation.call: string_options = %s', string_options)
+        if len(intro.required_input) != len(args):
+            raise Error('{0} needs {1} arguments, but {2} given'
+                        .format(operation_name,
+                                len(intro.required_input),
+                                len(args)))
 
         op = Operation.new_from_name(operation_name)
 
-        arguments = op.get_args()
-        # logger.debug('arguments = %s', arguments)
-
-        # make a thing to quickly get flags from an arg name
-        flags_from_name = {}
-
-        # count required input args
-        n_required = 0
-
-        for name, flags in arguments:
-            flags_from_name[name] = flags
-
-            if ((flags & _INPUT) != 0 and
-                    (flags & _REQUIRED) != 0 and
-                    (flags & _DEPRECATED) == 0):
-                n_required += 1
-
-        if n_required != len(args):
-            raise Error('unable to call {0}: {1} arguments given, '
-                        'but {2} required'.format(operation_name, len(args),
-                                                  n_required))
+        # set any string options before any args so they can't be
+        # overridden
+        string_options = kwargs.pop('string_options', '')
+        if not op.set_string(string_options):
+            raise Error('unable to call {0}'.format(operation_name))
 
         # the first image argument is the thing we expand constants to
         # match ... look inside tables for images, since we may be passing
-        # an array of image as a single param
-        match_image = _find_inside(lambda x:
-                                   isinstance(x, pyvips.Image),
+        # an array of images as a single param
+        match_image = _find_inside(lambda x: isinstance(x, pyvips.Image),
                                    args)
 
         logger.debug('VipsOperation.call: match_image = %s', match_image)
 
-        # set any string options before any args so they can't be
-        # overridden
-        if not op.set_string(string_options):
-            raise Error('unable to call {0}'.format(operation_name))
+        # collect a list of all input references here ... we can't use a set,
+        # unfortunately, because bytearrays are unhashable
+        references = []
 
-        # set required and optional args
-        n = 0
-        for name, flags in arguments:
-            if ((flags & _INPUT) != 0 and
-                    (flags & _REQUIRED) != 0 and
-                    (flags & _DEPRECATED) == 0):
-                op.set(name, flags, match_image, args[n])
-                n += 1
+        def add_reference(x):
+            if isinstance(x, pyvips.Image):
+                for i in x._references:
+                    if i not in references:
+                        references.append(i)
+            return False
 
-        for name, value in kwargs.items():
-            if name not in flags_from_name:
-                raise Error('{0} does not support argument '
-                            '{1}'.format(operation_name, name))
+        # set required input args
+        for name, value in zip(intro.required_input, args):
+            _find_inside(add_reference, value)
+            op.set(name, intro.details[name]['flags'], match_image, value)
 
-            op.set(name, flags_from_name[name], match_image, value)
+        # set any optional args
+        for name in kwargs:
+            value = kwargs[name]
+            details = intro.details[name]
+
+            if (name not in intro.optional_input and
+                    name not in intro.optional_output):
+                raise Error('{0} does not support optional argument {1}'
+                            .format(operation_name, name))
+
+            if (details['flags'] & _DEPRECATED) != 0:
+                logger.info('{0} argument {1} is deprecated',
+                            operation_name, name)
+
+            _find_inside(add_reference, value)
+            op.set(name, details['flags'], match_image, value)
 
         # build operation
         vop = vips_lib.vips_cache_operation_build(op.pointer)
@@ -215,56 +282,31 @@ class Operation(pyvips.VipsObject):
             raise Error('unable to call {0}'.format(operation_name))
         op = Operation(vop)
 
-        # find all input images and gather up all the references they hold
-        references = []
-
-        def add_reference(x):
+        # attach all input refs to output x
+        def set_reference(x):
             if isinstance(x, pyvips.Image):
-                for i in x._references:
-                    if i not in references:
-                        # references += [i] won't work with py27
-                        references.append(i)
-
+                x._references += references
             return False
 
-        _find_inside(add_reference, args)
-        for key, value in kwargs.items():
-            _find_inside(add_reference, value)
-
-        # fetch required output args, plus modified input images
+        # fetch required output args (plus modified input images)
         result = []
-        for name, flags in arguments:
-            if ((flags & _OUTPUT) != 0 and
-                    (flags & _REQUIRED) != 0 and
-                    (flags & _DEPRECATED) == 0):
-                result.append(op.get(name))
-
-            if (flags & _INPUT) != 0 and (flags & _MODIFY) != 0:
-                result.append(op.get(name))
+        for name in intro.required_output:
+            value = op.get(name)
+            _find_inside(set_reference, value)
+            result.append(value)
 
         # fetch optional output args
         opts = {}
-        for name, value in kwargs.items():
-            flags = flags_from_name[name]
-
-            if ((flags & _OUTPUT) != 0 and
-                    (flags & _REQUIRED) == 0 and
-                    (flags & _DEPRECATED) == 0):
-                opts[name] = op.get(name)
-
-        vips_lib.vips_object_unref_outputs(op.object)
+        for name in intro.optional_output:
+            if name in kwargs:
+                value = op.get(name)
+                _find_inside(set_reference, value)
+                opts[name] = value
 
         if len(opts) > 0:
             result.append(opts)
 
-        # all output images need all input references
-        def set_reference(x):
-            if isinstance(x, pyvips.Image):
-                x._references += references
-
-            return False
-
-        _find_inside(set_reference, result)
+        vips_lib.vips_object_unref_outputs(op.vobject)
 
         if len(result) == 0:
             result = None
@@ -283,95 +325,60 @@ class Operation(pyvips.VipsObject):
 
         """
 
+        # we cache these to save regeneration
         if operation_name in Operation._docstring_cache:
             return Operation._docstring_cache[operation_name]
 
-        op = Operation.new_from_name(operation_name)
-        if (op.get_flags() & _OPERATION_DEPRECATED) != 0:
+        intro = Introspect.get(operation_name)
+        if (intro.flags & _OPERATION_DEPRECATED) != 0:
             raise Error('No such operator.',
                         'operator "{0}" is deprecated'.format(operation_name))
 
-        # we are only interested in non-deprecated args
-        args = [[name, flags] for name, flags in op.get_args()
-                if not flags & _DEPRECATED]
+        result = intro.description[0].upper() + intro.description[1:] + '.\n\n'
+        result += 'Example:\n'
 
-        # find the first required input image arg, if any ... that will be self
-        member_x = None
-        for name, flags in args:
-            if ((flags & _INPUT) != 0 and
-                    (flags & _REQUIRED) != 0 and
-                    op.get_typeof(name) == GValue.image_type):
-                member_x = name
-                break
-
-        required_input = [name for name, flags in args
-                          if (flags & _INPUT) != 0 and
-                          (flags & _REQUIRED) != 0 and
-                          name != member_x]
-
-        optional_input = [name for name, flags in args
-                          if (flags & _INPUT) != 0 and
-                             (flags & _REQUIRED) == 0]
-
-        required_output = [name for name, flags in args
-                           if ((flags & _OUTPUT) != 0 and
-                               (flags & _REQUIRED) != 0) or
-                              ((flags & _INPUT) != 0 and
-                               (flags & _REQUIRED) != 0 and
-                               (flags & _MODIFY) != 0)]
-
-        optional_output = [name for name, flags in args
-                           if (flags & _OUTPUT) != 0 and
-                              (flags & _REQUIRED) == 0]
-
-        description = op.get_description()
-        result = description[0].upper() + description[1:] + ".\n\n"
-        result += "Example:\n"
-
-        result += "   " + ", ".join(required_output) + " = "
-        if member_x is not None:
-            result += member_x + "." + operation_name + "("
+        result += '   ' + ', '.join(intro.required_output) + ' = '
+        if intro.member_x is not None:
+            result += intro.member_x + '.' + operation_name + '('
         else:
-            result += "pyvips.Image." + operation_name + "("
+            result += 'pyvips.Image.' + operation_name + '('
 
-        result += ", ".join(required_input)
-        if len(optional_input) > 0 and len(required_input) > 0:
-            result += ", "
-        result += ", ".join([x + " = " +
-                             GValue.gtype_to_python(op.get_typeof(x))
-                             for x in optional_input])
-        result += ")\n"
+        args = []
+        args += intro.method_args
+        args += [x + '=' + GValue.gtype_to_python(intro.details[x]['type'])
+                 for x in intro.optional_input]
+        args += [x + '=bool'
+                 for x in intro.optional_output]
+        result += ", ".join(args) + ')\n'
 
         def argstr(name):
+            details = intro.details[name]
             return (u'    {0} ({1}): {2}\n'.
                     format(name,
-                           GValue.gtype_to_python(op.get_typeof(name)),
-                           op.get_blurb(name)))
+                           GValue.gtype_to_python(details['type']),
+                           details['blurb']))
 
-        result += "\nReturns:\n"
-        for name in required_output:
+        result += '\nReturns:\n'
+        for name in intro.required_output:
             result += argstr(name)
 
-        names = []
-        if member_x is not None:
-            names += [member_x]
-        names += required_input
-
-        result += "\nArgs:\n"
-        for name in names:
+        result += '\nArgs:\n'
+        if intro.member_x is not None:
+            result += argstr(intro.member_x)
+        for name in intro.method_args:
             result += argstr(name)
 
-        if len(optional_input) > 0:
-            result += "\nKeyword args:\n"
-            for name in optional_input:
+        if len(intro.optional_input) > 0:
+            result += '\nKeyword args:\n'
+            for name in intro.optional_input:
                 result += argstr(name)
 
-        if len(optional_output) > 0:
-            result += "\nOther Parameters:\n"
-            for name in optional_output:
+        if len(intro.optional_output) > 0:
+            result += '\nOther Parameters:\n'
+            for name in intro.optional_output:
                 result += argstr(name)
 
-        result += "\nRaises:\n    :class:`.Error`\n"
+        result += '\nRaises:\n    :class:`.Error`\n'
 
         # add to cache to save building again
         Operation._docstring_cache[operation_name] = result
@@ -386,91 +393,58 @@ class Operation(pyvips.VipsObject):
 
         """
 
-        op = Operation.new_from_name(operation_name)
-        if (op.get_flags() & _OPERATION_DEPRECATED) != 0:
+        intro = Introspect.get(operation_name)
+        if (intro.flags & _OPERATION_DEPRECATED) != 0:
             raise Error('No such operator.',
                         'operator "{0}" is deprecated'.format(operation_name))
 
-        # we are only interested in non-deprecated args
-        args = [[name, flags] for name, flags in op.get_args()
-                if not flags & _DEPRECATED]
-
-        # find the first required input image arg, if any ... that will be self
-        member_x = None
-        for name, flags in args:
-            if ((flags & _INPUT) != 0 and
-                    (flags & _REQUIRED) != 0 and
-                    op.get_typeof(name) == GValue.image_type):
-                member_x = name
-                break
-
-        required_input = [name for name, flags in args
-                          if (flags & _INPUT) != 0 and
-                          (flags & _REQUIRED) != 0 and
-                          name != member_x]
-
-        optional_input = [name for name, flags in args
-                          if (flags & _INPUT) != 0 and
-                             (flags & _REQUIRED) == 0]
-
-        required_output = [name for name, flags in args
-                           if ((flags & _OUTPUT) != 0 and
-                               (flags & _REQUIRED) != 0) or
-                              ((flags & _INPUT) != 0 and
-                               (flags & _REQUIRED) != 0 and
-                               (flags & _MODIFY) != 0)]
-
-        optional_output = [name for name, flags in args
-                           if (flags & _OUTPUT) != 0 and
-                              (flags & _REQUIRED) == 0]
-
-        if member_x is not None:
+        if intro.member_x is not None:
             result = '.. method:: '
         else:
             result = '.. staticmethod:: '
         args = []
-        args += required_input
-        args += [x + ' = ' + GValue.gtype_to_python(op.get_typeof(x))
-                 for x in optional_input]
-        args += [x + ' = bool'
-                 for x in optional_output]
+        args += intro.method_args
+        args += [x + '=' + GValue.gtype_to_python(intro.details[x]['type'])
+                 for x in intro.optional_input]
+        args += [x + '=bool'
+                 for x in intro.optional_output]
         result += operation_name + '(' + ", ".join(args) + ')\n\n'
 
-        description = op.get_description()
-        result += description[0].upper() + description[1:] + '.\n\n'
+        result += intro.description[0].upper() + \
+            intro.description[1:] + '.\n\n'
 
         result += 'Example:\n'
-        result += '    ' + ', '.join(required_output) + ' = '
-        if member_x is not None:
-            result += member_x + "." + operation_name + '('
+        result += '    ' + ', '.join(intro.required_output) + ' = '
+        if intro.member_x is not None:
+            result += intro.member_x + "." + operation_name + '('
         else:
             result += 'pyvips.Image.' + operation_name + '('
-        result += ', '.join(required_input)
-        if len(optional_input) > 0 and len(required_input) > 0:
-            result += ', '
-        result += ', '.join([x + ' = ' +
-                             GValue.gtype_to_python(op.get_typeof(x))
-                             for x in optional_input])
+        args = []
+        args += intro.method_args
+        args += [x + '=' + GValue.gtype_to_python(intro.details[x]['type'])
+                 for x in intro.optional_input]
+        result += ', '.join(args)
         result += ')\n\n'
 
-        for name in required_input + optional_input:
+        for name in intro.method_args + intro.optional_input:
+            details = intro.details[name]
             result += (':param {0} {1}: {2}\n'.
-                       format(GValue.gtype_to_python(op.get_typeof(name)),
+                       format(GValue.gtype_to_python(details['type']),
                               name,
-                              op.get_blurb(name)))
-        for name in optional_output:
+                              details['blurb']))
+        for name in intro.optional_output:
             result += (':param bool {0}: enable output: {1}\n'.
                        format(name,
-                              op.get_blurb(name)))
+                              intro.details[name]['blurb']))
 
-        output_types = [GValue.gtype_to_python(op.get_typeof(name))
-                        for name in required_output]
+        output_types = [GValue.gtype_to_python(intro.details[name]['type'])
+                        for name in intro.required_output]
         if len(output_types) == 1:
             output_type = output_types[0]
         else:
             output_type = 'list[' + ', '.join(output_types) + ']'
 
-        if len(optional_output) > 0:
+        if len(intro.optional_output) > 0:
             output_types += ['Dict[str, mixed]']
             output_type += ' or list[' + ', '.join(output_types) + ']'
 

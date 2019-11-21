@@ -72,3 +72,6 @@ class Region(pyvips.VipsObject):
 
         pointer = ffi.gc(pointer, glib_lib.g_free)
         return ffi.buffer(pointer, psize[0])
+
+
+__all__ = ['Region']

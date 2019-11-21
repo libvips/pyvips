@@ -273,7 +273,7 @@ class Combine(object):
 
 
 class PCS(object):
-    """Set Perofile Connection Space.
+    """Set Profile Connection Space.
 
     See for example :meth:`.icc_import`.
 
@@ -285,3 +285,8 @@ class PCS(object):
 
     LAB = 'lab'
     XYZ = 'xyz'
+
+
+__all__ = ['BandFormat', 'Access', 'Interpretation', 'Angle', 'Angle45',
+           'Intent', 'Extend', 'Precision', 'Coding', 'Direction',
+           'Align', 'Combine', 'PCS']

@@ -53,6 +53,7 @@ def cdefs(features):
         void g_log_remove_handler (const char* log_domain, int handler_id);
 
         typedef struct _VipsImage VipsImage;
+        typedef struct _VipsProgress VipsProgress;
         typedef struct _GValue GValue;
 
         void* g_malloc (size_t size);
@@ -89,7 +90,7 @@ def cdefs(features):
             GType gtype, const char* str);
         const char *vips_enum_nick (GType gtype, int value);
 
-        void g_value_set_boolean (GValue* value, int v_boolean);
+        void g_value_set_boolean (GValue* value, bool v_boolean);
         void g_value_set_int (GValue* value, int i);
         void g_value_set_uint64 (GValue* value, uint64_t ull);
         void g_value_set_double (GValue* value, double d);
@@ -107,7 +108,7 @@ def cdefs(features):
         void vips_value_set_blob (GValue* value,
             VipsCallbackFn free_fn, void* data, size_t length);
 
-        int g_value_get_boolean (const GValue* value);
+        bool g_value_get_boolean (const GValue* value);
         int g_value_get_int (GValue* value);
         uint64_t g_value_get_uint64 (GValue* value);
         double g_value_get_double (GValue* value);
@@ -186,6 +187,31 @@ def cdefs(features):
             const char *name, GValue* value);
         void g_object_get_property (GObject* object,
             const char* name, GValue* value);
+
+        typedef void (*GCallback)(void);
+        typedef void (*GClosureNotify)(void* data, struct _GClosure *);
+        long g_signal_connect_data (GObject* object,
+            const char* detailed_signal,
+            GCallback c_handler,
+            void* data,
+            GClosureNotify destroy_data,
+            int connect_flags);
+
+        extern "Python" void _marshall_image_progress (VipsImage*,
+            void*, void*);
+
+        void vips_image_set_progress (VipsImage* image, bool progress);
+
+        typedef struct _VipsProgress {
+            VipsImage* im;
+
+            int run;
+            int eta;
+            int64_t tpels;
+            int64_t npels;
+            int percent;
+            void* start;
+        } VipsProgress;
 
         typedef struct _VipsObject {
     '''

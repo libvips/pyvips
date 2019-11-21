@@ -29,6 +29,7 @@ class GValue(object):
     GValue lifetime is managed automatically.
 
     """
+    __slots__ = ('pointer', 'gvalue')
 
     # look up some common gtypes at init for speed
     gbool_type = type_from_name('gboolean')
@@ -274,7 +275,7 @@ class GValue(object):
             # we want a ref that will last with the life of the vimage:
             # this ref is matched by the unref that's attached to finalize
             # by Image()
-            gobject_lib.g_object_ref(go)
+            gobject_lib.g_object_ref(vi)
 
             result = pyvips.Image(vi)
         elif gtype == GValue.array_int_type:
