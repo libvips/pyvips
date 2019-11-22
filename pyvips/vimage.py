@@ -700,6 +700,15 @@ class Image(pyvips.VipsObject):
         """
         vips_lib.vips_image_set_progress(self.pointer, progress)
 
+    def set_kill(self, kill):
+        """Kill processing of an image.
+
+        Use this to kill evaluation of an image. You can call it from one of
+        the progress signals, for example. See :method:`set_progress`.
+
+        """
+        vips_lib.vips_image_set_kill(self.pointer, kill)
+
     # get/set metadata
 
     def get_typeof(self, name):

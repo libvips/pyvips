@@ -41,7 +41,8 @@ class VipsObject(pyvips.GObject):
         pspec = ffi.new('GParamSpec **')
         argument_class = ffi.new('VipsArgumentClass **')
         argument_instance = ffi.new('VipsArgumentInstance **')
-        result = vips_lib.vips_object_get_argument(self.vobject, _to_bytes(name),
+        result = vips_lib.vips_object_get_argument(self.vobject,
+                                                   _to_bytes(name),
                                                    pspec, argument_class,
                                                    argument_instance)
 

@@ -23,7 +23,10 @@ def cdefs(features):
 
     """
 
-    code = ''
+    code = '''
+        typedef uint64_t guint64;
+        typedef int64_t gint64;
+    '''
 
     # apparently the safest way to do this
     is_64bits = sys.maxsize > 2 ** 32
@@ -32,11 +35,11 @@ def cdefs(features):
     # size_t, sadly
     if is_64bits:
         code += '''
-            typedef uint64_t GType;
+            typedef guint64 GType;
         '''
     else:
         code += '''
-            typedef uint32_t GType;
+            typedef guint32 GType;
         '''
 
     code += '''
@@ -79,7 +82,7 @@ def cdefs(features):
 
         typedef struct _GValue {
             GType g_type;
-            uint64_t data[2];
+            guint64 data[2];
         } GValue;
 
         void g_value_init (GValue* value, GType gtype);
@@ -92,7 +95,7 @@ def cdefs(features):
 
         void g_value_set_boolean (GValue* value, bool v_boolean);
         void g_value_set_int (GValue* value, int i);
-        void g_value_set_uint64 (GValue* value, uint64_t ull);
+        void g_value_set_uint64 (GValue* value, guint64 ull);
         void g_value_set_double (GValue* value, double d);
         void g_value_set_enum (GValue* value, int e);
         void g_value_set_flags (GValue* value, unsigned int f);
@@ -110,7 +113,7 @@ def cdefs(features):
 
         bool g_value_get_boolean (const GValue* value);
         int g_value_get_int (GValue* value);
-        uint64_t g_value_get_uint64 (GValue* value);
+        guint64 g_value_get_uint64 (GValue* value);
         double g_value_get_double (GValue* value);
         int g_value_get_enum (GValue* value);
         unsigned int g_value_get_flags (GValue* value);
@@ -197,18 +200,19 @@ def cdefs(features):
             GClosureNotify destroy_data,
             int connect_flags);
 
-        extern "Python" void _marshall_image_progress (VipsImage*,
+        extern "Python" void _marshal_image_progress (VipsImage*,
             void*, void*);
 
         void vips_image_set_progress (VipsImage* image, bool progress);
+        void vips_image_set_kill (VipsImage* image, bool kill);
 
         typedef struct _VipsProgress {
             VipsImage* im;
 
             int run;
             int eta;
-            int64_t tpels;
-            int64_t npels;
+            gint64 tpels;
+            gint64 npels;
             int percent;
             void* start;
         } VipsProgress;
@@ -439,9 +443,9 @@ def cdefs(features):
 
             VipsStreami* vips_streamiu_new (void);
 
-            extern "Python" gint64 _marshall_read (VipsStreamiu*, 
+            extern "Python" gint64 _marshal_read (VipsStreamiu*,
                 void*, gint64, void*);
-            extern "Python" gint64 _marshall_seek (VipsStreamiu*, 
+            extern "Python" gint64 _marshal_seek (VipsStreamiu*,
                 gint64, int, void*);
 
             typedef struct _VipsStreamo {
@@ -465,9 +469,9 @@ def cdefs(features):
             const char* vips_foreign_find_load_stream (VipsStreami *streami);
             const char* vips_foreign_find_save_stream (const char* suffix);
 
-            extern "Python" gint64 _marshall_write (VipsStreamou*, 
+            extern "Python" gint64 _marshal_write (VipsStreamou*,
                 void*, gint64, void*);
-            extern "Python" void _marshall_finish (VipsStreamou*, void*);
+            extern "Python" void _marshal_finish (VipsStreamou*, void*);
 
         '''
 
