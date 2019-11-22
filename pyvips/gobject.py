@@ -7,34 +7,64 @@ from pyvips import ffi, gobject_lib, _to_bytes
 
 logger = logging.getLogger(__name__)
 
-# the python marshallers for gobject signal handling
+# the python marshalers for gobject signal handling
 # we keep a ref to each callback to stop them being GCd
 
 if pyvips.API_mode:
     @ffi.def_extern()
-    def _marshall_image_progress(vi, pointer, handle):
-        # the image we're passed is not reffed for us, so make a ref for us
-        gobject_lib.g_object_ref(vi)
-        image = pyvips.Image(vi)
-        callback = ffi.from_handle(handle)
-        progress = ffi.cast('VipsProgress*', pointer)
-        callback(image, progress)
+def _marshal_image_progress(vi, pointer, handle):
+    # the image we're passed is not reffed for us, so make a ref for us
+    gobject_lib.g_object_ref(vi)
+    image = pyvips.Image(vi)
+    callback = ffi.from_handle(handle)
+    progress = ffi.cast('VipsProgress*', pointer)
+    callback(image, progress)
 
-    _marshall_image_progress_cb = \
-        ffi.cast('GCallback', gobject_lib._marshall_image_progress)
+if pyvips.API_mode:
+    _marshal_image_progress_cb = \
+        ffi.cast('GCallback', gobject_lib._marshal_image_progress)
 else:
-    def _marshall_image_progress(vi, pointer, handle):
-        # the image we're passed is not reffed for us, so make a ref for us
-        gobject_lib.g_object_ref(vi)
-        image = pyvips.Image(vi)
-        callback = ffi.from_handle(handle)
-        progress = ffi.cast('VipsProgress*', pointer)
-        callback(image, progress)
-
-    _marshall_image_progress_cb = \
+    _marshal_image_progress_cb = \
         ffi.cast('GCallback',
                  ffi.callback('void(VipsImage*, void*, void*)',
-                              _marshall_image_progress))
+                              _marshal_image_progress))
+
+if pyvips.API_mode:
+    @ffi.def_extern()
+def _marshal_read(streamiu, pointer, length, handle):
+    buf = ffi.buffer(pointer, length)
+    callback = ffi.from_handle(handle)
+    callback(streamiu, buf)
+
+if pyvips.API_mode:
+    _marshal_read_cb = \
+        ffi.cast('GCallback', gobject_lib._marshal_read)
+else:
+    _marshal_read_cb = \
+        ffi.cast('GCallback',
+                 ffi.callback('gint64(VipsStreamiu*, void*, gint64, void*)',
+                              _marshal_read))
+
+_marshalers = [
+    "image_progress": _marshal_image_progress_cb,
+    "read": _marshal_read_cb,
+    "seek": _marshal_seek_cb,
+]
+
+if pyvips.API_mode:
+    @ffi.def_extern()
+def _marshal_seek(streamiu, offset, whence, handle):
+    callback = ffi.from_handle(handle)
+    callback(streamiu, offset, whence)
+
+if pyvips.API_mode:
+    _marshal_read_cb = \
+        ffi.cast('GCallback', gobject_lib._marshal_seek)
+else:
+    _marshal_read_cb = \
+        ffi.cast('GCallback',
+                 ffi.callback('gint64(VipsStreamiu*, gint64, int, void*)',
+                              _marshal_seek))
 
 
 class GObject(object):
@@ -77,7 +107,7 @@ class GObject(object):
         self._handles.append(handle)
 
         gobject_lib.g_signal_connect_data(go, _to_bytes(name),
-                                          _marshall_image_progress_cb,
+                                          _marshal_image_progress_cb,
                                           handle, ffi.NULL, 0)
 
 

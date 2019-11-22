@@ -431,6 +431,19 @@ def cdefs(features):
             VipsStreami* vips_streami_new_from_memory (const void* data,
                 size_t size);
 
+            typedef struct _VipsStreamiu {
+                VipsStreami parent_object;
+
+                // more
+            } VipsStreamiu;
+
+            VipsStreami* vips_streamiu_new (void);
+
+            extern "Python" gint64 _marshall_read (VipsStreamiu*, 
+                void*, gint64, void*);
+            extern "Python" gint64 _marshall_seek (VipsStreamiu*, 
+                gint64, int, void*);
+
             typedef struct _VipsStreamo {
                 VipsStream parent_object;
 
@@ -441,9 +454,20 @@ def cdefs(features):
             VipsStreamo* vips_streamo_new_to_filename (const char* filename);
             VipsStreamo* vips_streamo_new_to_memory (void);
 
+            typedef struct _VipsStreamou {
+                VipsStreamo parent_object;
+
+                // more
+            } VipsStreamou;
+
+            VipsStreami* vips_streamou_new (void);
+
             const char* vips_foreign_find_load_stream (VipsStreami *streami);
             const char* vips_foreign_find_save_stream (const char* suffix);
 
+            extern "Python" gint64 _marshall_write (VipsStreamou*, 
+                void*, gint64, void*);
+            extern "Python" void _marshall_finish (VipsStreamou*, void*);
 
         '''
 
