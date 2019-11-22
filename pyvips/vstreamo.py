@@ -44,20 +44,20 @@ class Streamo(pyvips.Stream):
         return Streamo(pointer)
 
     @staticmethod
-    def new_to_filename(filename):
-        """Make a new stream to write to a filename.
+    def new_to_file(filename):
+        """Make a new stream to write to a file.
 
         Make a new stream that will write to the named file. For example::
 
-            streamo = pyvips.Streamo.new_to_filename("myfile.jpg")
+            streamo = pyvips.Streamo.new_to_file("myfile.jpg")
 
         You can pass this stream to (for example) :meth:`write_to_stream`.
 
         """
 
-        # logger.debug('VipsStreamo.new_to_filename: filename = %s', filename)
+        # logger.debug('VipsStreamo.new_to_file: filename = %s', filename)
 
-        pointer = vips_lib.vips_streamo_new_to_filename(_to_bytes(filename))
+        pointer = vips_lib.vips_streamo_new_to_file(_to_bytes(filename))
         if pointer == ffi.NULL:
             raise Error("can't create output stream from filename {0}"
                         .format(filename))

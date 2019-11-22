@@ -431,7 +431,7 @@ def cdefs(features):
             } VipsStreami;
 
             VipsStreami* vips_streami_new_from_descriptor (int descriptor);
-            VipsStreami* vips_streami_new_from_filename (const char* filename);
+            VipsStreami* vips_streami_new_from_file (const char* filename);
             VipsStreami* vips_streami_new_from_memory (const void* data,
                 size_t size);
 
@@ -455,7 +455,7 @@ def cdefs(features):
             } VipsStreamo;
 
             VipsStreamo* vips_streamo_new_to_descriptor (int descriptor);
-            VipsStreamo* vips_streamo_new_to_filename (const char* filename);
+            VipsStreamo* vips_streamo_new_to_file (const char* filename);
             VipsStreamo* vips_streamo_new_to_memory (void);
 
             typedef struct _VipsStreamou {

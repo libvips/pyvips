@@ -43,21 +43,21 @@ class Streami(pyvips.Stream):
         return Streami(pointer)
 
     @staticmethod
-    def new_from_filename(filename):
+    def new_from_file(filename):
         """Make a new stream from a filename.
 
         Make a new stream that is attached to the named file. For example::
 
-            streami = pyvips.Streami.new_from_filename("myfile.jpg")
+            streami = pyvips.Streami.new_from_file("myfile.jpg")
 
         You can pass this stream to (for example) :meth:`new_from_stream`.
 
         """
 
-        # logger.debug('VipsStreami.new_from_filename: filename = %s',
+        # logger.debug('VipsStreami.new_from_file: filename = %s',
         #              filename)
 
-        pointer = vips_lib.vips_streami_new_from_filename(_to_bytes(filename))
+        pointer = vips_lib.vips_streami_new_from_file(_to_bytes(filename))
         if pointer == ffi.NULL:
             raise Error("can't create input stream from filename {0}"
                         .format(filename))

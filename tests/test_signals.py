@@ -1,10 +1,18 @@
 # vim: set fileencoding=utf-8 :
 
+import os
 import pytest
+import tempfile
+
 import pyvips
+from helpers import JPEG_FILE, temp_filename, skip_if_no
 
 
 class TestSignals:
+    @classmethod
+    def setup_class(cls):
+        cls.tempdir = tempfile.mkdtemp()
+
     def test_progress(self):
         # py27 reques this pattern for non-local modification
         notes = {}
@@ -71,3 +79,17 @@ class TestSignals:
 
         with pytest.raises(Exception):
             image.copy_memory()
+
+    @skip_if_no('jpegload')
+    def test_stream(self):
+        streami = pyvips.Streami.new_from_file(JPEG_FILE)
+        image = pyvips.Image.new_from_stream(streami, '', access='sequential')
+        filename = temp_filename(self.tempdir, '.jpg')
+        streamo = pyvips.Streamo.new_to_file(filename)
+        image.write_to_stream(streamo, '.jpg')
+
+        image = pyvips.Image.new_from_file(JPEG_FILE)
+        image2 = pyvips.Image.new_from_file(filename)
+
+        assert abs(image.avg() - image2.avg()) < 0.1
+
