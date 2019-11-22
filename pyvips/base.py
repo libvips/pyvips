@@ -60,8 +60,8 @@ def get_suffixes():
     return names
 
 
-# we need to define this before we import the decls: they need to know which
-# bits of decl to make
+# we need to define this before we import the declarations: they need to know 
+# which bits to make
 def at_least_libvips(x, y):
     """Is this at least libvips x.y?"""
 

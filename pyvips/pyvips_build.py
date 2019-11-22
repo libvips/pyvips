@@ -38,14 +38,14 @@ features = {
     'api': True,
 }
 
-from pyvips import decls
+from pyvips import vdecls
 
 # handy for debugging
 #with open('vips-source.txt','w') as f:
-#    c = decls.cdefs(features)
+#    c = vdecls.cdefs(features)
 #    f.write(c)
 
-ffibuilder.cdef(decls.cdefs(features))
+ffibuilder.cdef(vdecls.cdefs(features))
 
 if __name__ == "__main__":
     ffibuilder.compile(verbose=True)
