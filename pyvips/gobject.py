@@ -8,65 +8,62 @@ from pyvips import ffi, gobject_lib, _to_bytes, Error
 logger = logging.getLogger(__name__)
 
 # the python marshalers for gobject signal handling
-# we keep a ref to each callback to stop them being GCd
-
-
-def conditional_decorator(dec, condition):
-    def decorator(func):
-        if not condition:
-            # Return the function unchanged, not decorated.
-            return func
-        return dec(func)
-    return decorator
-
-
-@conditional_decorator(ffi.def_extern(), pyvips.API_mode)
-def _marshal_image_progress(vi, pointer, handle):
-    # the image we're passed is not reffed for us, so make a ref for us
-    gobject_lib.g_object_ref(vi)
-    image = pyvips.Image(vi)
-    callback = ffi.from_handle(handle)
-    progress = ffi.cast('VipsProgress*', pointer)
-    callback(image, progress)
-
+# - we keep a ref to each callback to stop them being GCd
+# - I tried to make this less copy-paste, but failed -- check again
 
 if pyvips.API_mode:
+    @ffi.def_extern()
+    def _marshal_image_progress(vi, pointer, handle):
+        # the image we're passed is not reffed for us, so make a ref for us
+        gobject_lib.g_object_ref(vi)
+        image = pyvips.Image(vi)
+        callback = ffi.from_handle(handle)
+        progress = ffi.cast('VipsProgress*', pointer)
+        callback(image, progress)
     _marshal_image_progress_cb = \
         ffi.cast('GCallback', gobject_lib._marshal_image_progress)
 else:
+    def _marshal_image_progress(vi, pointer, handle):
+        # the image we're passed is not reffed for us, so make a ref for us
+        gobject_lib.g_object_ref(vi)
+        image = pyvips.Image(vi)
+        callback = ffi.from_handle(handle)
+        progress = ffi.cast('VipsProgress*', pointer)
+        callback(image, progress)
     _marshal_image_progress_cb = \
         ffi.cast('GCallback',
                  ffi.callback('void(VipsImage*, void*, void*)',
                               _marshal_image_progress))
 
-
-@conditional_decorator(ffi.def_extern(), pyvips.API_mode)
-def _marshal_read(streamiu, pointer, length, handle):
-    buf = ffi.buffer(pointer, length)
-    callback = ffi.from_handle(handle)
-    return callback(streamiu, buf)
-
-
 if pyvips.API_mode:
+    @ffi.def_extern()
+    def _marshal_read(streamiu, pointer, length, handle):
+        buf = ffi.buffer(pointer, length)
+        callback = ffi.from_handle(handle)
+        return callback(streamiu, buf)
     _marshal_read_cb = \
         ffi.cast('GCallback', gobject_lib._marshal_read)
 else:
+    def _marshal_read(streamiu, pointer, length, handle):
+        buf = ffi.buffer(pointer, length)
+        callback = ffi.from_handle(handle)
+        return callback(streamiu, buf)
     _marshal_read_cb = \
         ffi.cast('GCallback',
                  ffi.callback('gint64(VipsStreamiu*, void*, gint64, void*)',
                               _marshal_read))
 
-
-@conditional_decorator(ffi.def_extern(), pyvips.API_mode)
-def _marshal_seek(streamiu, offset, whence, handle):
-    callback = ffi.from_handle(handle)
-    return callback(streamiu, offset, whence)
-
-
 if pyvips.API_mode:
+    @ffi.def_extern()
+    def _marshal_seek(streamiu, offset, whence, handle):
+        callback = ffi.from_handle(handle)
+        return callback(streamiu, offset, whence)
     _marshal_seek_cb = \
         ffi.cast('GCallback', gobject_lib._marshal_seek)
 else:
+    def _marshal_seek(streamiu, offset, whence, handle):
+        callback = ffi.from_handle(handle)
+        return callback(streamiu, offset, whence)
     _marshal_seek_cb = \
         ffi.cast('GCallback',
                  ffi.callback('gint64(VipsStreamiu*, gint64, int, void*)',
