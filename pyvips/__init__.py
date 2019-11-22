@@ -179,7 +179,9 @@ from .vobject import *
 from .vinterpolate import *
 from .vstream import *
 from .vstreami import *
+from .vstreamiu import *
 from .vstreamo import *
+from .vstreamou import *
 from .voperation import *
 from .vimage import *
 from .vregion import *
