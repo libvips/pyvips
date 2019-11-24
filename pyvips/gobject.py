@@ -3,7 +3,7 @@ from __future__ import division
 import logging
 
 import pyvips
-from pyvips import ffi, gobject_lib, _to_bytes, Error
+from pyvips import ffi, gobject_lib, _to_bytes, Error, type_name
 
 logger = logging.getLogger(__name__)
 
@@ -57,7 +57,9 @@ if pyvips.API_mode:
     @ffi.def_extern()
     def _marshal_seek(streamiu, offset, whence, handle):
         callback = ffi.from_handle(handle)
-        return callback(streamiu, offset, whence)
+        result = callback(streamiu, offset, whence)
+        print(f'_marshal_seek: result = {result}')
+        return result
     _marshal_seek_cb = \
         ffi.cast('GCallback', gobject_lib._marshal_seek)
 else:
@@ -100,6 +102,31 @@ class GObject(object):
         # on GC, unref
         self.pointer = ffi.gc(pointer, gobject_lib.g_object_unref)
         # logger.debug('GObject.__init__: pointer = %s', str(self.pointer))
+
+    @staticmethod
+    def new_pointer_from_gtype(gtype):
+        """Make a new GObject pointer from a gtype.
+
+        This is useful for subclasses which need to control the construction
+        process. 
+        
+        You can pass the result pointer to the Python constructor for the 
+        object you are building. You will need to call VipsObject.build() to
+        finish construction.
+
+        Returns:
+            A pointer to a new GObject.
+
+        Raises:
+            :class:`.Error`
+
+        """
+
+        pointer = gobject_lib.g_object_new(gtype, ffi.NULL)
+        if pointer == ffi.NULL:
+            raise Error("can't create {0}".format(type_name(gtype)))
+
+        return pointer
 
     def signal_connect(self, name, callback):
         """Connect to a signal on this object.

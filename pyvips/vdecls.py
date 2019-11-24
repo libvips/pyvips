@@ -183,6 +183,7 @@ def cdefs(features):
 
         void* g_type_class_ref (GType type);
 
+        void* g_object_new (GType type, void*);
         void g_object_ref (void* object);
         void g_object_unref (void* object);
 
@@ -368,6 +369,7 @@ def cdefs(features):
 
         VipsRegion* vips_region_new (VipsImage*);
 
+        int vips_object_build (VipsObject*);
         VipsOperation* vips_cache_operation_build (VipsOperation* operation);
         void vips_object_unref_outputs (VipsObject* object);
 
