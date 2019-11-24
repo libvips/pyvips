@@ -26,12 +26,12 @@ class TestSignals:
         def posteval_cb(image, progress):
             notes['seen_posteval'] = True
 
-        image = pyvips.Image.black(10, 1000)
+        image = pyvips.Image.black(10, 100000)
         image.set_progress(True)
         image.signal_connect('preeval', preeval_cb)
         image.signal_connect('eval', eval_cb)
         image.signal_connect('posteval', posteval_cb)
-        image.copy_memory()
+        image.avg()
 
         assert notes['seen_preeval']
         assert notes['seen_eval']
@@ -58,9 +58,8 @@ class TestSignals:
         image.signal_connect('preeval', preeval_cb)
         image.signal_connect('eval', eval_cb)
         image.signal_connect('posteval', posteval_cb)
-        image.copy_memory()
+        image.avg()
 
-    @pytest.mark.skip(reason='this works in my code, but segvs in pytest')
     def test_progress_kill(self):
         def preeval_cb(image, progress):
             pass
@@ -71,7 +70,7 @@ class TestSignals:
         def posteval_cb(image, progress):
             pass
 
-        image = pyvips.Image.black(10, 1000)
+        image = pyvips.Image.black(10, 10000)
         image.set_progress(True)
         image.signal_connect('preeval', preeval_cb)
         image.signal_connect('eval', eval_cb)
