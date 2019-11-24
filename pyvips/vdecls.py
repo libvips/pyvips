@@ -476,10 +476,6 @@ def cdefs(features):
             const char* vips_foreign_find_load_stream (VipsStreami *streami);
             const char* vips_foreign_find_save_stream (const char* suffix);
 
-            extern "Python" gint64 _marshal_write (VipsStreamou*,
-                void*, gint64, void*);
-            extern "Python" void _marshal_finish (VipsStreamou*, void*);
-
         '''
 
     # we must only define these in API mode ... in ABI mode we need to call
