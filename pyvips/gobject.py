@@ -40,14 +40,14 @@ if pyvips.API_mode:
     def _marshal_read(streamiu, pointer, length, handle):
         buf = ffi.buffer(pointer, length)
         callback = ffi.from_handle(handle)
-        return callback(streamiu, buf)
+        return callback(buf)
     _marshal_read_cb = \
         ffi.cast('GCallback', gobject_lib._marshal_read)
 else:
     def _marshal_read(streamiu, pointer, length, handle):
         buf = ffi.buffer(pointer, length)
         callback = ffi.from_handle(handle)
-        return callback(streamiu, buf)
+        return callback(buf)
     _marshal_read_cb = \
         ffi.cast('GCallback',
                  ffi.callback('gint64(VipsStreamiu*, void*, gint64, void*)',
@@ -57,19 +57,53 @@ if pyvips.API_mode:
     @ffi.def_extern()
     def _marshal_seek(streamiu, offset, whence, handle):
         callback = ffi.from_handle(handle)
-        result = callback(streamiu, offset, whence)
-        print(f'_marshal_seek: result = {result}')
+        result = callback(offset, whence)
         return result
     _marshal_seek_cb = \
         ffi.cast('GCallback', gobject_lib._marshal_seek)
 else:
     def _marshal_seek(streamiu, offset, whence, handle):
         callback = ffi.from_handle(handle)
-        return callback(streamiu, offset, whence)
+        return callback(offset, whence)
     _marshal_seek_cb = \
         ffi.cast('GCallback',
                  ffi.callback('gint64(VipsStreamiu*, gint64, int, void*)',
                               _marshal_seek))
+
+if pyvips.API_mode:
+    @ffi.def_extern()
+    def _marshal_write(streamiu, pointer, length, handle):
+        buf = ffi.buffer(pointer, length)
+        callback = ffi.from_handle(handle)
+        result = callback(buf)
+        return result
+    _marshal_write_cb = \
+        ffi.cast('GCallback', gobject_lib._marshal_write)
+else:
+    def _marshal_write(streamiu, pointer, length, handle):
+        buf = ffi.buffer(pointer, length)
+        callback = ffi.from_handle(handle)
+        return callback(buf)
+    _marshal_write_cb = \
+        ffi.cast('GCallback',
+                 ffi.callback('gint64(VipsStreamou*, void*, gint64, void*)',
+                              _marshal_write))
+
+if pyvips.API_mode:
+    @ffi.def_extern()
+    def _marshal_finish(streamiu, handle):
+        callback = ffi.from_handle(handle)
+        callback()
+    _marshal_finish_cb = \
+        ffi.cast('GCallback', gobject_lib._marshal_finish)
+else:
+    def _marshal_finish(streamiu, handle):
+        callback = ffi.from_handle(handle)
+        callback()
+    _marshal_finish_cb = \
+        ffi.cast('GCallback',
+                 ffi.callback('void(VipsStreamou*, void*)',
+                              _marshal_finish))
 
 _marshalers = {
     "preeval": _marshal_image_progress_cb,
@@ -77,6 +111,8 @@ _marshalers = {
     "posteval": _marshal_image_progress_cb,
     "read": _marshal_read_cb,
     "seek": _marshal_seek_cb,
+    "write": _marshal_write_cb,
+    "finish": _marshal_finish_cb,
 }
 
 

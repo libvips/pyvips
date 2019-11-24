@@ -468,6 +468,11 @@ def cdefs(features):
 
             VipsStreami* vips_streamou_new (void);
 
+            extern "Python" gint64 _marshal_write (VipsStreamou*,
+                void*, gint64, void*);
+            extern "Python" void _marshal_finish (VipsStreamou*, 
+                void*);
+
             const char* vips_foreign_find_load_stream (VipsStreami *streami);
             const char* vips_foreign_find_save_stream (const char* suffix);
 
