@@ -38,7 +38,7 @@ features = {
     'api': True,
 }
 
-from pyvips import vdecls
+import vdecls
 
 # handy for debugging
 #with open('vips-source.txt','w') as f:

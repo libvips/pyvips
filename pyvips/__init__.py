@@ -88,7 +88,7 @@ if vips_lib.vips_init(sys.argv[0].encode()) != 0:
 logger.debug('Inited libvips')
 
 if not API_mode:
-    from pyvips import vdecls
+    from .vdecls import cdefs
 
     major = vips_lib.vips_version(0)
     minor = vips_lib.vips_version(1)
@@ -100,7 +100,7 @@ if not API_mode:
         'api': False,
     }
 
-    ffi.cdef(vdecls.cdefs(features))
+    ffi.cdef(cdefs(features))
 
 from .error import *
 
