@@ -470,7 +470,7 @@ def cdefs(features):
 
             extern "Python" gint64 _marshal_write (VipsStreamou*,
                 void*, gint64, void*);
-            extern "Python" void _marshal_finish (VipsStreamou*, 
+            extern "Python" void _marshal_finish (VipsStreamou*,
                 void*);
 
             const char* vips_foreign_find_load_stream (VipsStreami *streami);

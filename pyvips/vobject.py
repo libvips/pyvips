@@ -54,7 +54,7 @@ class VipsObject(pyvips.GObject):
     def build(self):
         """Build a VipsObject.
 
-        If you have made a VipsObject pointer yourself with 
+        If you have made a VipsObject pointer yourself with
         new_pointer_from_gtype(), you'll need to run the build phase yourself.
 
         Returns self, so it can be chained easily.

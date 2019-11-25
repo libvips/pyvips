@@ -144,9 +144,9 @@ class GObject(object):
         """Make a new GObject pointer from a gtype.
 
         This is useful for subclasses which need to control the construction
-        process. 
-        
-        You can pass the result pointer to the Python constructor for the 
+        process.
+
+        You can pass the result pointer to the Python constructor for the
         object you are building. You will need to call VipsObject.build() to
         finish construction.
 
@@ -181,7 +181,12 @@ class GObject(object):
 
         go = ffi.cast('GObject *', self.pointer)
         handle = ffi.new_handle(callback)
+        # we need to keep refs to the ffi handle and the callback to prevent
+        # them being GCed
+        # the callback might be a bound method (a closure) rather than a simple
+        # function, so it can vanish
         self._handles.append(handle)
+        self._handles.append(callback)
 
         gobject_lib.g_signal_connect_data(go, _to_bytes(name),
                                           _marshalers[name],
