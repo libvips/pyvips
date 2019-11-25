@@ -19,7 +19,7 @@ class TestSignals:
         def posteval_cb(image, progress):
             notes['seen_posteval'] = True
 
-        image = pyvips.Image.black(10, 10000)
+        image = pyvips.Image.black(1, 100000)
         image.set_progress(True)
         image.signal_connect('preeval', preeval_cb)
         image.signal_connect('eval', eval_cb)
@@ -65,7 +65,7 @@ class TestSignals:
 
         # has to be very tall to ensure the kill has enough threadpool loops
         # to work
-        image = pyvips.Image.black(1, 100000)
+        image = pyvips.Image.black(1, 1000000)
         image.set_progress(True)
         image.signal_connect('preeval', preeval_cb)
         image.signal_connect('eval', eval_cb)
