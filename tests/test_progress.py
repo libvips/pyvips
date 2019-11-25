@@ -5,7 +5,7 @@ import pytest
 import pyvips
 
 
-class TestSignals:
+class TestProgress:
     def test_progress(self):
         # py27 reques this pattern for non-local modification
         notes = {}
