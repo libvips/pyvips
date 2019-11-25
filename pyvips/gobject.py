@@ -57,8 +57,7 @@ if pyvips.API_mode:
     @ffi.def_extern()
     def _marshal_seek(streamiu, offset, whence, handle):
         callback = ffi.from_handle(handle)
-        result = callback(offset, whence)
-        return result
+        return callback(offset, whence)
     _marshal_seek_cb = \
         ffi.cast('GCallback', gobject_lib._marshal_seek)
 else:
@@ -75,8 +74,7 @@ if pyvips.API_mode:
     def _marshal_write(streamiu, pointer, length, handle):
         buf = ffi.buffer(pointer, length)
         callback = ffi.from_handle(handle)
-        result = callback(buf)
-        return result
+        return callback(buf)
     _marshal_write_cb = \
         ffi.cast('GCallback', gobject_lib._marshal_write)
 else:

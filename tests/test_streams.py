@@ -27,24 +27,30 @@ class Mystreami(pyvips.Streamiu):
         self.name = name
         self.pipe_mode = pipe_mode
         self.loaded_bytes = open(name, 'rb').read()
-        self.memory = memoryview(loaded_bytes)
+        self.memory = memoryview(self.loaded_bytes)
         self.length = len(self.loaded_bytes)
         self.read_point = 0
 
         return self.build()
 
     def read_cb(self, buf):
-        #print('read: {0} bytes ...'.format(len(buf)))
+        # print('read: {0} bytes ...'.format(len(buf)))
         p = self.read_point
         bytes_available = self.length - p
         bytes_to_copy = min(bytes_available, len(buf))
         buf[:bytes_to_copy] = self.memory[p:p + bytes_to_copy]
         self.read_point += bytes_to_copy
+        # print('    copied from position {0}'.format(p))
 
         return bytes_to_copy
 
     def seek_cb(self, offset, whence):
-        #print('seek: offset = {0}, whence = {1} ...'.format(offset, whence))
+        # print('seek: offset = {0}, whence = {1} ...'.format(offset, whence))
+
+        if self.pipe_mode:
+            # print('   -1 (pipe mode)')
+            return -1
+
         if whence == 0:
             # SEEK_SET
             new_read_point = offset
@@ -58,12 +64,9 @@ class Mystreami(pyvips.Streamiu):
             raise Exception('bad whence {0}'.format(whence))
 
         self.read_point = max(0, min(self.length, new_read_point))
-        #print('   new read_point = {0}'.format(self.read_point))
+        # print('   new read_point = {0}'.format(self.read_point))
 
-        if self.pipe_mode:
-            return -1
-        else:
-            return self.read_point
+        return self.read_point
 
 
 class Mystreamo(pyvips.Streamou):
@@ -90,14 +93,14 @@ class Mystreamo(pyvips.Streamou):
         return self.build()
 
     def write_cb(self, buf):
-        #print('write: {0} bytes ...'.format(len(buf)))
-
+        # print('write: {0} bytes ...'.format(len(buf)))
+        # py2 write does not return number of bytes written
         self.f.write(buf)
 
         return len(buf)
 
     def finish_cb(self):
-        #print('finish: ...')
+        # print('finish: ...')
         self.f.close()
 
 
@@ -128,8 +131,8 @@ class TestSignals:
         streamou = Mystreamo.new(filename)
         image.write_to_stream(streamou, '.png')
 
-        image = pyvips.Image.new_from_file(JPEG_FILE)
-        image2 = pyvips.Image.new_from_file(filename)
+        image = pyvips.Image.new_from_file(JPEG_FILE, access='sequential')
+        image2 = pyvips.Image.new_from_file(filename, access='sequential')
 
         assert abs(image - image2).abs().max() < 10
 
@@ -142,7 +145,7 @@ class TestSignals:
         streamou = Mystreamo.new(filename)
         image.write_to_stream(streamou, '.png')
 
-        image = pyvips.Image.new_from_file(JPEG_FILE)
-        image2 = pyvips.Image.new_from_file(filename)
+        image = pyvips.Image.new_from_file(JPEG_FILE, access='sequential')
+        image2 = pyvips.Image.new_from_file(filename, access='sequential')
 
         assert abs(image - image2).abs().max() < 10
