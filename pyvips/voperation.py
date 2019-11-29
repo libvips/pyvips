@@ -531,7 +531,7 @@ def cache_set_trace(trace):
 
 
 __all__ = [
-    'Operation',
+    'Introspect', 'Operation',
     'cache_set_max', 'cache_set_max_mem', 'cache_set_max_files',
     'cache_set_trace'
 ]

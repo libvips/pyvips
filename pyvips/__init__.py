@@ -187,7 +187,7 @@ from .vimage import *
 from .vregion import *
 
 __all__ = [
-    'Error', 'Image', 'Region', 'Operation', 'GValue', 'Interpolate', 'GObject',
+    'Error', 'Image', 'Region', 'Introspect', 'Operation', 'GValue', 'Interpolate', 'GObject',
     'VipsObject', 'type_find', 'type_name', 'version', '__version__',
     'at_least_libvips', 'API_mode',
     'get_suffixes',
