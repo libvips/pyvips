@@ -3,7 +3,7 @@ from __future__ import division
 import logging
 
 import pyvips
-from pyvips import ffi, vips_lib, Error
+from pyvips import vips_lib
 
 logger = logging.getLogger(__name__)
 
@@ -14,12 +14,8 @@ class Streamiu(pyvips.Streami):
 
     """
 
-    def __init__(self, pointer):
-        super(Streamiu, self).__init__(pointer)
-
-    @staticmethod
-    def new():
-        """Make a new stream from a file descriptor (a small integer).
+    def __init__(self):
+        """Make a new user input stream.
 
         Attach handlers to the `::read` and `::seek` signals to implement
         other behavours. Subclass this to add state.
@@ -28,12 +24,7 @@ class Streamiu(pyvips.Streami):
 
         """
 
-        # logger.debug('VipsStreamiu.new:')
-        pointer = vips_lib.vips_streamiu_new()
-        if pointer == ffi.NULL:
-            raise Error("can't create streamiu")
-
-        return Streamiu(pointer)
+        super(Streamiu, self).__init__(vips_lib.vips_streamiu_new())
 
 
 __all__ = ['Streamiu']

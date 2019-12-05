@@ -51,27 +51,6 @@ class VipsObject(pyvips.GObject):
 
         return pspec[0]
 
-    def build(self):
-        """Build a VipsObject.
-
-        If you have made a VipsObject pointer yourself with
-        new_pointer_from_gtype(), you'll need to run the build phase yourself.
-
-        Returns self, so it can be chained easily.
-
-        Returns:
-            self
-
-        Raises:
-            :class:`.Error`
-
-        """
-
-        if vips_lib.vips_object_build(self.pointer) != 0:
-            raise Error('')
-
-        return self
-
     def get_typeof(self, name):
         """Get the GType of a GObject property.
 

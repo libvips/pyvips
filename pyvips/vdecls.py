@@ -369,7 +369,6 @@ def cdefs(features):
 
         VipsRegion* vips_region_new (VipsImage*);
 
-        int vips_object_build (VipsObject*);
         VipsOperation* vips_cache_operation_build (VipsOperation* operation);
         void vips_object_unref_outputs (VipsObject* object);
 
