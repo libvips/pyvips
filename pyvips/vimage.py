@@ -198,7 +198,7 @@ class Image(pyvips.VipsObject):
 
         Keyword args:
             memory (bool): If set True, load the image via memory rather than
-                via a temporary disc file. See :meth:`.new_temp_file` for
+                via a temporary disc file. See :meth:`new_temp_file` for
                 notes on where temporary files are created. Small images are
                 loaded via memory by default, use ``VIPS_DISC_THRESHOLD`` to
                 set the definition of small.
@@ -271,7 +271,7 @@ class Image(pyvips.VipsObject):
 
         A new one-band image with :class:`BandFormat` ``'double'`` pixels is
         created from the array. These image are useful with the libvips
-        convolution operator :meth:`Image.conv`.
+        convolution operator :meth:`conv`.
 
         Args:
             array (list[list[float]]): Create the image from these values.
@@ -327,9 +327,9 @@ class Image(pyvips.VipsObject):
         This method is useful for efficiently transferring images from PIL or
         NumPy into libvips.
 
-        See :meth:`.write_to_memory` for the opposite operation.
+        See :meth:`write_to_memory` for the opposite operation.
 
-        Use :meth:`.copy` to set other image attributes.
+        Use :meth:`copy` to set other image attributes.
 
         Args:
             data (bytes): A memoryview or buffer object.
@@ -846,13 +846,18 @@ class Image(pyvips.VipsObject):
     def remove(self, name):
         """Remove an item of metadata.
 
-        The named metadata item is removed.
+        The named metadata item is removed. The function returns True if the
+        named metadata item could be removed, and False if no metadata item of
+        that name exists.
+
+        This method modifies the image, so it cannot be used on shared
+        images. Always call :meth:`copy` before using this method.
 
         Args:
             name (str): The name of the piece of metadata to remove.
 
         Returns:
-            None
+            bool
 
         Raises:
             None

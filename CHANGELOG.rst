@@ -1,9 +1,5 @@
 # master 
 
-## Version 2.1.10 (7 Nov 2019) [add-stream branch]
-
-* add support for Stream [jcupitt]
-
 ## Version 2.1.9 (13 Sep 2019)
 
 * revise README [jcupitt]
