@@ -84,7 +84,8 @@ if at_least_libvips(8, 9):
         def _marshal_write(streamiu, pointer, length, handle):
             buf = ffi.buffer(pointer, length)
             callback = ffi.from_handle(handle)
-            return callback(buf)
+            result = callback(buf)
+            return result
         _marshal_write_cb = \
             ffi.cast('GCallback', gobject_lib._marshal_write)
     else:
