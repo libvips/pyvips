@@ -4,7 +4,7 @@ import tempfile
 import pytest
 
 import pyvips
-from helpers import JPEG_FILE, temp_filename, skip_if_no
+from helpers import JPEG_FILE, WEBP_FILE, temp_filename, skip_if_no
 
 
 class TestStreams:
@@ -25,7 +25,7 @@ class TestStreams:
         image = pyvips.Image.new_from_file(JPEG_FILE, access='sequential')
         image2 = pyvips.Image.new_from_file(filename, access='sequential')
 
-        assert abs(image - image2).abs().max() < 10
+        assert (image - image2).abs().max() < 10
 
     @skip_if_no('jpegload')
     @pytest.mark.skipif(not pyvips.at_least_libvips(8, 9),
@@ -43,7 +43,7 @@ class TestStreams:
                                              access='sequential')
         image2 = pyvips.Image.new_from_file(JPEG_FILE, access='sequential')
 
-        assert abs(image - image2).abs().max() == 0
+        assert (image - image2).abs().max() == 0
 
     @skip_if_no('jpegload')
     @pytest.mark.skipif(not pyvips.at_least_libvips(8, 9),
@@ -66,7 +66,7 @@ class TestStreams:
                                              access='sequential')
         image2 = pyvips.Image.new_from_file(JPEG_FILE, access='sequential')
 
-        assert abs(image - image2).abs().max() == 0
+        assert (image - image2).abs().max() == 0
 
     @skip_if_no('jpegload')
     @pytest.mark.skipif(not pyvips.at_least_libvips(8, 9),
@@ -88,6 +88,50 @@ class TestStreams:
         image = pyvips.Image.new_from_file(JPEG_FILE, access='sequential')
         image.write_to_stream(output_stream, '.png')
 
+        image = pyvips.Image.new_from_file(JPEG_FILE, access='sequential')
         image2 = pyvips.Image.new_from_file(filename, access='sequential')
 
-        assert abs(image - image2).abs().max() == 0
+        assert (image - image2).abs().max() == 0
+
+    # test webp as well, since that maps the stream rather than using read
+
+    @skip_if_no('webpload')
+    @pytest.mark.skipif(not pyvips.at_least_libvips(8, 9),
+                        reason="requires libvips >= 8.9")
+    def test_streamiuw(self):
+        input_file = open(WEBP_FILE, "rb")
+
+        def read_handler(size):
+            return input_file.read(size)
+
+        input_stream = pyvips.Streamiu()
+        input_stream.on_read(read_handler)
+
+        image = pyvips.Image.new_from_stream(input_stream, '',
+                                             access='sequential')
+        image2 = pyvips.Image.new_from_file(WEBP_FILE, access='sequential')
+
+        assert (image - image2).abs().max() == 0
+
+    @skip_if_no('webpload')
+    @pytest.mark.skipif(not pyvips.at_least_libvips(8, 9),
+                        reason="requires libvips >= 8.9")
+    def test_streamiuw(self):
+        input_file = open(WEBP_FILE, "rb")
+
+        def read_handler(size):
+            return input_file.read(size)
+
+        def seek_handler(offset, whence):
+            input_file.seek(offset, whence)
+            return input_file.tell()
+
+        input_stream = pyvips.Streamiu()
+        input_stream.on_read(read_handler)
+        input_stream.on_seek(seek_handler)
+
+        image = pyvips.Image.new_from_stream(input_stream, '',
+                                             access='sequential')
+        image2 = pyvips.Image.new_from_file(WEBP_FILE, access='sequential')
+
+        assert (image - image2).abs().max() == 0
