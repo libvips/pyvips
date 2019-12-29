@@ -8,20 +8,20 @@ from pyvips import vips_lib
 logger = logging.getLogger(__name__)
 
 
-class Streamiu(pyvips.Streami):
-    """An input stream you can connect action signals to to implement
+class SourceCustom(pyvips.Source):
+    """An source you can connect action signals to to implement
     behaviour.
 
     """
 
     def __init__(self):
-        """Make a new user input stream.
+        """Make a new custom source.
 
-        You can pass this stream to (for example) :meth:`new_from_stream`.
+        You can pass this source to (for example) :meth:`new_from_source`.
 
         """
 
-        super(Streamiu, self).__init__(vips_lib.vips_streamiu_new())
+        super(SourceCustom, self).__init__(vips_lib.vips_source_custom_new())
 
     def on_read(self, handler):
         """Attach a read handler.
@@ -54,7 +54,7 @@ class Streamiu(pyvips.Streami):
         However, the handler MUST return the new seek position. A simple way
         to do this is to call io.tell() and return that result.
 
-        Seek handlers are optional. If you do not set one, your stream will be
+        Seek handlers are optional. If you do not set one, your source will be
         treated as unseekable and libvips will do extra caching.
 
         """
@@ -62,4 +62,4 @@ class Streamiu(pyvips.Streami):
         self.signal_connect("seek", handler)
 
 
-__all__ = ['Streamiu']
+__all__ = ['SourceCustom']

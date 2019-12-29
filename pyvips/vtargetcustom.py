@@ -8,20 +8,20 @@ from pyvips import vips_lib
 logger = logging.getLogger(__name__)
 
 
-class Streamou(pyvips.Streamo):
-    """An output stream you can connect action signals to to implement
+class TargetCustom(pyvips.Target):
+    """An output target you can connect action signals to to implement
     behaviour.
 
     """
 
     def __init__(self):
-        """Make a new stream from a file descriptor (a small integer).
+        """Make a new target you can customise.
 
-        You can pass this stream to (for example) :meth:`write_to_stream`.
+        You can pass this target to (for example) :meth:`write_to_target`.
 
         """
 
-        super(Streamou, self).__init__(vips_lib.vips_streamou_new())
+        super(TargetCustom, self).__init__(vips_lib.vips_target_custom_new())
 
     def on_write(self, handler):
         """Attach a write handler.
@@ -54,4 +54,4 @@ class Streamou(pyvips.Streamo):
         self.signal_connect("finish", handler)
 
 
-__all__ = ['Streamou']
+__all__ = ['TargetCustom']

@@ -177,11 +177,11 @@ from .gobject import *
 from .gvalue import *
 from .vobject import *
 from .vinterpolate import *
-from .vstream import *
-from .vstreami import *
-from .vstreamiu import *
-from .vstreamo import *
-from .vstreamou import *
+from .vconnection import *
+from .vsource import *
+from .vsourcecustom import *
+from .vtarget import *
+from .vtargetcustom import *
 from .voperation import *
 from .vimage import *
 from .vregion import *

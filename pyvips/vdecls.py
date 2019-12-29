@@ -416,64 +416,64 @@ def cdefs(features):
 
     if _at_least(features, 8, 9):
         code += '''
-            typedef struct _VipsStream {
+            typedef struct _VipsConnection {
                 VipsObject parent_object;
 
                 // more
-            } VipsStream;
+            } VipsConnection;
 
-            const char* vips_stream_filename (VipsStream* stream);
-            const char* vips_stream_nick (VipsStream* stream);
+            const char* vips_connection_filename (VipsConnection* stream);
+            const char* vips_connection_nick (VipsConnection* stream);
 
-            typedef struct _VipsStreami {
-                VipsStream parent_object;
+            typedef struct _VipsSource {
+                VipsConnection parent_object;
 
                 // more
-            } VipsStreami;
+            } VipsSource;
 
-            VipsStreami* vips_streami_new_from_descriptor (int descriptor);
-            VipsStreami* vips_streami_new_from_file (const char* filename);
-            VipsStreami* vips_streami_new_from_memory (const void* data,
+            VipsSource* vips_source_new_from_descriptor (int descriptor);
+            VipsSource* vips_source_new_from_file (const char* filename);
+            VipsSource* vips_source_new_from_memory (const void* data,
                 size_t size);
 
-            typedef struct _VipsStreamiu {
-                VipsStreami parent_object;
+            typedef struct _VipsSourceCustom {
+                VipsSource parent_object;
 
                 // more
-            } VipsStreamiu;
+            } VipsSourceCustom;
 
-            VipsStreami* vips_streamiu_new (void);
+            VipsSource* vips_source_custom_new (void);
 
-            extern "Python" gint64 _marshal_read (VipsStreamiu*,
+            extern "Python" gint64 _marshal_read (VipsSourceCustom*,
                 void*, gint64, void*);
-            extern "Python" gint64 _marshal_seek (VipsStreamiu*,
+            extern "Python" gint64 _marshal_seek (VipsSourceCustom*,
                 gint64, int, void*);
 
-            typedef struct _VipsStreamo {
-                VipsStream parent_object;
+            typedef struct _VipsTarget {
+                VipsConnection parent_object;
 
                 // more
-            } VipsStreamo;
+            } VipsTarget;
 
-            VipsStreamo* vips_streamo_new_to_descriptor (int descriptor);
-            VipsStreamo* vips_streamo_new_to_file (const char* filename);
-            VipsStreamo* vips_streamo_new_to_memory (void);
+            VipsTarget* vips_target_new_to_descriptor (int descriptor);
+            VipsTarget* vips_target_new_to_file (const char* filename);
+            VipsTarget* vips_target_new_to_memory (void);
 
-            typedef struct _VipsStreamou {
-                VipsStreamo parent_object;
+            typedef struct _VipsTargetCustom {
+                VipsTarget parent_object;
 
                 // more
-            } VipsStreamou;
+            } VipsTargetCustom;
 
-            VipsStreami* vips_streamou_new (void);
+            VipsSource* vips_target_custom_new (void);
 
-            extern "Python" gint64 _marshal_write (VipsStreamou*,
+            extern "Python" gint64 _marshal_write (VipsTargetCustom*,
                 void*, gint64, void*);
-            extern "Python" void _marshal_finish (VipsStreamou*,
+            extern "Python" void _marshal_finish (VipsTargetCustom*,
                 void*);
 
-            const char* vips_foreign_find_load_stream (VipsStreami *streami);
-            const char* vips_foreign_find_save_stream (const char* suffix);
+            const char* vips_foreign_find_load_source (VipsSource *source);
+            const char* vips_foreign_find_save_target (const char* suffix);
 
         '''
 
