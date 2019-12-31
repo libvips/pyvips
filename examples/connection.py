@@ -15,9 +15,9 @@ def seek_handler(offset, whence):
     return input_file.tell()
 
 
-input_stream = pyvips.Streamiu()
-input_stream.on_read(read_handler)
-input_stream.on_seek(seek_handler)
+source = pyvips.SourceCustom()
+source.on_read(read_handler)
+source.on_seek(seek_handler)
 
 output_file = open(sys.argv[2], "wb")
 
@@ -30,9 +30,9 @@ def finish_handler():
     output_file.close()
 
 
-output_stream = pyvips.Streamou()
-output_stream.on_write(write_handler)
-output_stream.on_finish(finish_handler)
+target = pyvips.TargetCustom()
+target.on_write(write_handler)
+target.on_finish(finish_handler)
 
-image = pyvips.Image.new_from_stream(input_stream, '', access='sequential')
-image.write_to_stream(output_stream, '.png')
+image = pyvips.Image.new_from_source(source, '', access='sequential')
+image.write_to_target(target, '.png')

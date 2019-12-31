@@ -8,3 +8,4 @@ this class to get and set :class:`.GObject` properties.
 
 .. automodule:: pyvips.gvalue
         :members:
+

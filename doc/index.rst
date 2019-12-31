@@ -20,6 +20,11 @@ Contents
    base
    error
    enums
+   vconnection
+   vsource
+   vtarget
+   vsourcecustom
+   vtargetcustom
    vinterpolate
    gvalue
    gobject
