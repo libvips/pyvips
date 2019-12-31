@@ -64,7 +64,7 @@ http://libvips.github.io/libvips/API/current/How-it-opens-files.md.html
 conda Install
 -------------
 
-The conda packagc includes a matching libvips binary, so just enter:
+The conda package includes a matching libvips binary, so just enter:
 
 .. code-block:: shell
 
@@ -87,19 +87,17 @@ Next, install this package, perhaps:
     $ pip install --user pyvips
 
 On Windows, you'll need a 64-bit Python. The official one works well. 
-
-On Windows, you will need to add ``vips-dev-x.y\bin`` to your ``PATH`` so
+You will also need to add ``vips-dev-x.y\bin`` to your ``PATH`` so
 that pyvips can find all the DLLs it needs. You can either do this in the
 **Advanced System Settings** control panel, or you can just change
-``PATH`` for your pyvips program.
+``PATH`` in your Python program.
 
 If you set the PATH environment variable in the control panel, you can use
 the ``vips`` command-line tools, which I find useful. However, this will add
 a lot of extra DLLs to your search path and they might conflict with other
 programs, so it's usually safer just to set ``PATH`` in your program.
 
-To set ``PATH`` from within Python, you need something like this at the start
-of your program:
+To set ``PATH`` from within Python, you need something like this at the start:
 
 .. code-block:: python
 

@@ -46,6 +46,8 @@ class GValue(object):
     array_image_type = type_from_name('VipsArrayImage')
     refstr_type = type_from_name('VipsRefString')
     blob_type = type_from_name('VipsBlob')
+    source_type = type_from_name('VipsSource')
+    target_type = type_from_name('VipsTarget')
 
     pyvips.vips_lib.vips_band_format_get_type()
     format_type = type_from_name('VipsBandFormat')
@@ -69,7 +71,9 @@ class GValue(object):
         array_int_type: 'list[int]',
         array_double_type: 'list[float]',
         array_image_type: 'list[Image]',
-        blob_type: 'str'
+        blob_type: 'str',
+        source_type: 'Source',
+        target_type: 'Target',
     }
 
     @staticmethod
