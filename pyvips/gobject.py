@@ -15,26 +15,23 @@ logger = logging.getLogger(__name__)
 if pyvips.API_mode:
     @ffi.def_extern()
     def _marshal_image_progress(vi, pointer, handle):
-        # the image we're passed is not reffed for us, so make a ref for us
         gobject_lib.g_object_ref(vi)
         image = pyvips.Image(vi)
         callback = ffi.from_handle(handle)
         progress = ffi.cast('VipsProgress*', pointer)
         callback(image, progress)
-    _marshal_image_progress_cb = \
+    _marshal_image_progress_cb =  \
         ffi.cast('GCallback', gobject_lib._marshal_image_progress)
 else:
+    @ffi.callback('void(VipsImage*, void*, void*)')
     def _marshal_image_progress(vi, pointer, handle):
-        # the image we're passed is not reffed for us, so make a ref for us
         gobject_lib.g_object_ref(vi)
         image = pyvips.Image(vi)
         callback = ffi.from_handle(handle)
         progress = ffi.cast('VipsProgress*', pointer)
         callback(image, progress)
     _marshal_image_progress_cb = \
-        ffi.cast('GCallback',
-                 ffi.callback('void(VipsImage*, void*, void*)',
-                              _marshal_image_progress))
+        ffi.cast('GCallback', _marshal_image_progress)
 
 _marshalers = {
     'preeval': _marshal_image_progress_cb,
@@ -45,75 +42,64 @@ _marshalers = {
 if at_least_libvips(8, 9):
     if pyvips.API_mode:
         @ffi.def_extern()
-        def _marshal_read(streamiu, pointer, length, handle):
+        def _marshal_read(source_custom, pointer, length, handle):
             buf = ffi.buffer(pointer, length)
             callback = ffi.from_handle(handle)
             return callback(buf)
-        _marshal_read_cb = \
-            ffi.cast('GCallback', gobject_lib._marshal_read)
+        _marshal_read_cb = ffi.cast('GCallback', gobject_lib._marshal_read)
     else:
-        def _marshal_read(streamiu, pointer, length, handle):
+        @ffi.callback('gint64(VipsSourceCustom*, void*, gint64, void*)')
+        def _marshal_read(source_custom, pointer, length, handle):
             buf = ffi.buffer(pointer, length)
             callback = ffi.from_handle(handle)
             return callback(buf)
-        _marshal_read_cb = \
-            ffi.cast('GCallback',
-                     ffi.callback('gint64(VipsStreamiu*, void*, gint64, void*)',
-                                  _marshal_read))
+        _marshal_read_cb = ffi.cast('GCallback', _marshal_read)
     _marshalers['read'] = _marshal_read_cb
 
     if pyvips.API_mode:
         @ffi.def_extern()
-        def _marshal_seek(streamiu, offset, whence, handle):
+        def _marshal_seek(source_custom, offset, whence, handle):
             callback = ffi.from_handle(handle)
             return callback(offset, whence)
         _marshal_seek_cb = \
             ffi.cast('GCallback', gobject_lib._marshal_seek)
     else:
-        def _marshal_seek(streamiu, offset, whence, handle):
+        @ffi.callback('gint64(VipsSourceCustom*, gint64, int, void*)')
+        def _marshal_seek(source_custom, offset, whence, handle):
             callback = ffi.from_handle(handle)
             return callback(offset, whence)
-        _marshal_seek_cb = \
-            ffi.cast('GCallback',
-                     ffi.callback('gint64(VipsStreamiu*, gint64, int, void*)',
-                                  _marshal_seek))
+        _marshal_seek_cb = ffi.cast('GCallback', _marshal_seek)
     _marshalers['seek'] = _marshal_seek_cb
 
     if pyvips.API_mode:
         @ffi.def_extern()
-        def _marshal_write(streamiu, pointer, length, handle):
+        def _marshal_write(source_custom, pointer, length, handle):
             buf = ffi.buffer(pointer, length)
             callback = ffi.from_handle(handle)
             result = callback(buf)
             return result
-        _marshal_write_cb = \
-            ffi.cast('GCallback', gobject_lib._marshal_write)
+        _marshal_write_cb = ffi.cast('GCallback', gobject_lib._marshal_write)
     else:
-        def _marshal_write(streamiu, pointer, length, handle):
+        @ffi.callback('gint64(VipsTargetCustom*, void*, gint64, void*)')
+        def _marshal_write(source_custom, pointer, length, handle):
             buf = ffi.buffer(pointer, length)
             callback = ffi.from_handle(handle)
             return callback(buf)
-        _marshal_write_cb = \
-            ffi.cast('GCallback',
-                     ffi.callback('gint64(VipsStreamou*, void*, gint64, void*)',
-                                  _marshal_write))
+        _marshal_write_cb = ffi.cast('GCallback', _marshal_write)
     _marshalers['write'] = _marshal_write_cb
 
     if pyvips.API_mode:
         @ffi.def_extern()
-        def _marshal_finish(streamiu, handle):
+        def _marshal_finish(source_custom, handle):
             callback = ffi.from_handle(handle)
             callback()
-        _marshal_finish_cb = \
-            ffi.cast('GCallback', gobject_lib._marshal_finish)
+        _marshal_finish_cb = ffi.cast('GCallback', gobject_lib._marshal_finish)
     else:
-        def _marshal_finish(streamiu, handle):
+        @ffi.callback('void(VipsTargetCustom*, void*)')
+        def _marshal_finish(source_custom, handle):
             callback = ffi.from_handle(handle)
             callback()
-        _marshal_finish_cb = \
-            ffi.cast('GCallback',
-                     ffi.callback('void(VipsStreamou*, void*)',
-                                  _marshal_finish))
+        _marshal_finish_cb = ffi.cast('GCallback', _marshal_finish)
     _marshalers['finish'] = _marshal_finish_cb
 
 
