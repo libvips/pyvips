@@ -468,44 +468,53 @@ class Operation(pyvips.VipsObject):
 
         """
 
-        # generate list of all nicknames we can generate docstrings for
+        # these names are aliased
+        alias = ["crop"]
+        alias_gtypes = {}
+        for name in alias:
+            gtype = pyvips.type_find("VipsOperation", name)
+            alias_gtypes[gtype] = name
 
-        all_nicknames = []
+        # all names we can generate docstrings for
+        all_names = []
 
-        def add_nickname(gtype, a, b):
-            nickname = nickname_find(gtype)
+        def add_name(gtype, a, b):
+            if gtype in alias_gtypes:
+                name = alias_gtypes[gtype]
+            else:
+                name = nickname_find(gtype)
+
             try:
-                Operation.generate_sphinx(nickname)
-                all_nicknames.append(nickname)
+                Operation.generate_sphinx(name)
+                all_names.append(name)
             except Error:
                 pass
 
-            type_map(gtype, add_nickname)
+            type_map(gtype, add_name)
 
             return ffi.NULL
 
-        type_map(type_from_name('VipsOperation'), add_nickname)
+        type_map(type_from_name('VipsOperation'), add_name)
 
-        all_nicknames.sort()
+        all_names.sort()
 
         # remove operations we have to wrap by hand
-
         exclude = ['scale', 'ifthenelse', 'bandjoin', 'bandrank']
-        all_nicknames = [x for x in all_nicknames if x not in exclude]
+        all_names = [x for x in all_names if x not in exclude]
 
         # Output summary table
         print('.. class:: pyvips.Image\n')
         print('   .. rubric:: Methods\n')
         print('   .. autosummary::')
         print('      :nosignatures:\n')
-        for nickname in all_nicknames:
-            print('      ~{0}'.format(nickname))
+        for name in all_names:
+            print('      ~{0}'.format(name))
         print()
 
         # Output docs
         print()
-        for nickname in all_nicknames:
-            docstr = Operation.generate_sphinx(nickname)
+        for name in all_names:
+            docstr = Operation.generate_sphinx(name)
             docstr = docstr.replace('\n', '\n      ')
             print('   ' + docstr)
 
