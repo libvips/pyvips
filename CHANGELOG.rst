@@ -1,6 +1,6 @@
 # master 
 
-## Version 2.1.10 (7 Nov 2019) 
+## Version 2.1.11 (7 Nov 2019) 
 
 * revise README [jcupitt]
 * add watermark example [jcupitt]
