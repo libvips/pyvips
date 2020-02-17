@@ -1,5 +1,10 @@
 # master 
 
+## Version 2.1.12 (17 Feb 2020) 
+
+* update enums.py [tony612]
+* add gen-enums.py [jcupitt]
+
 ## Version 2.1.11 (7 Nov 2019) 
 
 * revise README [jcupitt]

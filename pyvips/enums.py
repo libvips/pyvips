@@ -1,26 +1,10 @@
-from __future__ import division
+class GsfOutputCsvQuotingMode(object):
+    NEVER = 'never'
+    AUTO = 'auto'
 
 
 class BandFormat(object):
-    """The format of image bands.
-
-    The format used for each band element. Each corresponds to a native C type
-    for the current machine.
-
-    Attributes:
-        UCHAR (str): unsigned char format
-        CHAR (str): char format
-        USHORT (str): unsigned short format
-        SHORT (str): short format
-        UINT (str): unsigned int format
-        INT (str): int format
-        FLOAT (str): float format
-        COMPLEX (str): complex (two floats) format
-        DOUBLE (str): double float format
-        DPCOMPLEX (str): double complex (two double) format
-
-    """
-
+    NOTSET = 'notset'
     UCHAR = 'uchar'
     CHAR = 'char'
     USHORT = 'ushort'
@@ -33,50 +17,43 @@ class BandFormat(object):
     DPCOMPLEX = 'dpcomplex'
 
 
-class Access(object):
-    """The type of access an operation has to supply.
+class BlendMode(object):
+    CLEAR = 'clear'
+    SOURCE = 'source'
+    OVER = 'over'
+    IN = 'in'
+    OUT = 'out'
+    ATOP = 'atop'
+    DEST = 'dest'
+    DEST_OVER = 'dest-over'
+    DEST_IN = 'dest-in'
+    DEST_OUT = 'dest-out'
+    DEST_ATOP = 'dest-atop'
+    XOR = 'xor'
+    ADD = 'add'
+    SATURATE = 'saturate'
+    MULTIPLY = 'multiply'
+    SCREEN = 'screen'
+    OVERLAY = 'overlay'
+    DARKEN = 'darken'
+    LIGHTEN = 'lighten'
+    COLOUR_DODGE = 'colour-dodge'
+    COLOUR_BURN = 'colour-burn'
+    HARD_LIGHT = 'hard-light'
+    SOFT_LIGHT = 'soft-light'
+    DIFFERENCE = 'difference'
+    EXCLUSION = 'exclusion'
 
-    Attributes:
-        RANDOM (str): Requests can come in any order.
-        SEQUENTIAL (str): Means requests will be top-to-bottom, but with some
-            amount of buffering behind the read point for small non-local
-            accesses.
 
-    """
-
-    RANDOM = 'random'
-    SEQUENTIAL = 'sequential'
+class Coding(object):
+    ERROR = 'error'
+    NONE = 'none'
+    LABQ = 'labq'
+    RAD = 'rad'
 
 
 class Interpretation(object):
-    """How the values in an image should be interpreted.
-
-    For example, a three-band float image of type LAB should have its
-    pixels interpreted as coordinates in CIE Lab space.
-
-    Attributes:
-        MULTIBAND (str): generic many-band image
-        B_W (str): some kind of single-band image
-        HISTOGRAM (str): a 1D image, eg. histogram or lookup table
-        FOURIER (str): image is in fourier space
-        XYZ (str): the first three bands are CIE XYZ
-        LAB (str): pixels are in CIE Lab space
-        CMYK (str): the first four bands are in CMYK space
-        LABQ (str): implies #VIPS_CODING_LABQ
-        RGB (str): generic RGB space
-        CMC (str): a uniform colourspace based on CMC(1:1)
-        LCH (str): pixels are in CIE LCh space
-        LABS (str): CIE LAB coded as three signed 16-bit values
-        SRGB (str): pixels are sRGB
-        HSV (str): pixels are HSV
-        SCRGB (str): pixels are scRGB
-        YXY (str): pixels are CIE Yxy
-        RGB16 (str): generic 16-bit RGB
-        GREY16 (str): generic 16-bit mono
-        MATRIX (str): a matrix
-
-    """
-
+    ERROR = 'error'
     MULTIBAND = 'multiband'
     B_W = 'b-w'
     HISTOGRAM = 'histogram'
@@ -98,19 +75,123 @@ class Interpretation(object):
     HSV = 'hsv'
 
 
+class DemandStyle(object):
+    ERROR = 'error'
+    SMALLTILE = 'smalltile'
+    FATSTRIP = 'fatstrip'
+    THINSTRIP = 'thinstrip'
+
+
+class OperationRelational(object):
+    EQUAL = 'equal'
+    NOTEQ = 'noteq'
+    LESS = 'less'
+    LESSEQ = 'lesseq'
+    MORE = 'more'
+    MOREEQ = 'moreeq'
+
+
+class OperationBoolean(object):
+    AND = 'and'
+    OR = 'or'
+    EOR = 'eor'
+    LSHIFT = 'lshift'
+    RSHIFT = 'rshift'
+
+
+class OperationMath2(object):
+    POW = 'pow'
+    WOP = 'wop'
+
+
+class OperationComplex2(object):
+    CROSS_PHASE = 'cross-phase'
+
+
+class OperationMath(object):
+    SIN = 'sin'
+    COS = 'cos'
+    TAN = 'tan'
+    ASIN = 'asin'
+    ACOS = 'acos'
+    ATAN = 'atan'
+    LOG = 'log'
+    LOG10 = 'log10'
+    EXP = 'exp'
+    EXP10 = 'exp10'
+
+
+class OperationRound(object):
+    RINT = 'rint'
+    CEIL = 'ceil'
+    FLOOR = 'floor'
+
+
+class OperationComplex(object):
+    POLAR = 'polar'
+    RECT = 'rect'
+    CONJ = 'conj'
+
+
+class OperationComplexget(object):
+    REAL = 'real'
+    IMAG = 'imag'
+
+
+class Combine(object):
+    MAX = 'max'
+    SUM = 'sum'
+    MIN = 'min'
+
+
+class Access(object):
+    RANDOM = 'random'
+    SEQUENTIAL = 'sequential'
+    SEQUENTIAL_UNBUFFERED = 'sequential-unbuffered'
+
+
+class Extend(object):
+    BLACK = 'black'
+    COPY = 'copy'
+    REPEAT = 'repeat'
+    MIRROR = 'mirror'
+    WHITE = 'white'
+    BACKGROUND = 'background'
+
+
+class CompassDirection(object):
+    CENTRE = 'centre'
+    NORTH = 'north'
+    EAST = 'east'
+    SOUTH = 'south'
+    WEST = 'west'
+    NORTH_EAST = 'north-east'
+    SOUTH_EAST = 'south-east'
+    SOUTH_WEST = 'south-west'
+    NORTH_WEST = 'north-west'
+
+
+class Direction(object):
+    HORIZONTAL = 'horizontal'
+    VERTICAL = 'vertical'
+
+
+class Align(object):
+    LOW = 'low'
+    CENTRE = 'centre'
+    HIGH = 'high'
+
+
+class Interesting(object):
+    NONE = 'none'
+    CENTRE = 'centre'
+    ENTROPY = 'entropy'
+    ATTENTION = 'attention'
+    LOW = 'low'
+    HIGH = 'high'
+
+
 class Angle(object):
-    """Various fixed 90 degree rotation angles.
-
-    See for example :meth:`.rot`.
-
-    Attributes:
-        D0 (str): no rotate
-        D90 (str): 90 degrees clockwise
-        D180 (str): 180 degrees
-        D270 (str): 90 degrees anti-clockwise
-
-    """
-
     D0 = 'd0'
     D90 = 'd90'
     D180 = 'd180'
@@ -118,22 +199,6 @@ class Angle(object):
 
 
 class Angle45(object):
-    """Various fixed 45 degree rotation angles.
-
-    See for example :meth:`.rot45`.
-
-    Attributes:
-        D0 (str): no rotate
-        D45 (str): 45 degrees clockwise
-        D90 (str): 90 degrees clockwise
-        D135 (str): 135 degrees clockwise
-        D180 (str): 180 degrees
-        D225 (str): 135 degrees anti-clockwise
-        D270 (str): 90 degrees anti-clockwise
-        D315 (str): 45 degrees anti-clockwise
-
-    """
-
     D0 = 'd0'
     D45 = 'd45'
     D90 = 'd90'
@@ -144,149 +209,140 @@ class Angle45(object):
     D315 = 'd315'
 
 
+class Precision(object):
+    INTEGER = 'integer'
+    FLOAT = 'float'
+    APPROXIMATE = 'approximate'
+
+
+class ForeignDzLayout(object):
+    DZ = 'dz'
+    ZOOMIFY = 'zoomify'
+    GOOGLE = 'google'
+    IIIF = 'iiif'
+
+
+class ForeignDzDepth(object):
+    ONEPIXEL = 'onepixel'
+    ONETILE = 'onetile'
+    ONE = 'one'
+
+
+class ForeignDzContainer(object):
+    FS = 'fs'
+    ZIP = 'zip'
+    SZI = 'szi'
+
+
+class RegionShrink(object):
+    MEAN = 'mean'
+    MEDIAN = 'median'
+    MODE = 'mode'
+    MAX = 'max'
+    MIN = 'min'
+    NEAREST = 'nearest'
+
+
+class ForeignWebpPreset(object):
+    DEFAULT = 'default'
+    PICTURE = 'picture'
+    PHOTO = 'photo'
+    DRAWING = 'drawing'
+    ICON = 'icon'
+    TEXT = 'text'
+
+
+class ForeignTiffCompression(object):
+    NONE = 'none'
+    JPEG = 'jpeg'
+    DEFLATE = 'deflate'
+    PACKBITS = 'packbits'
+    CCITTFAX4 = 'ccittfax4'
+    LZW = 'lzw'
+    WEBP = 'webp'
+    ZSTD = 'zstd'
+
+
+class ForeignTiffPredictor(object):
+    NONE = 'none'
+    HORIZONTAL = 'horizontal'
+    FLOAT = 'float'
+
+
+class ForeignTiffResunit(object):
+    CM = 'cm'
+    INCH = 'inch'
+
+
+class ForeignHeifCompression(object):
+    HEVC = 'hevc'
+    AVC = 'avc'
+    JPEG = 'jpeg'
+    AV1 = 'av1'
+
+
+class Size(object):
+    BOTH = 'both'
+    UP = 'up'
+    DOWN = 'down'
+    FORCE = 'force'
+
+
 class Intent(object):
-    """The rendering intent.
-
-    See :meth:`.icc_transform`.
-
-    Attributes:
-        PERCEPTUAL (str):
-        RELATIVE (str):
-        SATURATION (str):
-        ABSOLUTE (str):
-
-    """
-
     PERCEPTUAL = 'perceptual'
     RELATIVE = 'relative'
     SATURATION = 'saturation'
     ABSOLUTE = 'absolute'
 
 
-class Extend(object):
-    """How to extend image edges.
-
-    When the edges of an image are extended, you can specify how you want
-    the extension done.  See :meth:`.embed`, :meth:`.conv`, :meth:`.affine`
-    and so on.
-
-    Attributes:
-        BLACK (str): new pixels are black, ie. all bits are zero.
-        COPY (str): each new pixel takes the value of the nearest edge pixel
-        REPEAT (str): the image is tiled to fill the new area
-        MIRROR (str): the image is reflected and tiled to reduce hash edges
-        WHITE (str): new pixels are white, ie. all bits are set
-        BACKGROUND (str): colour set from the @background property
-
-    """
-
-    BLACK = 'black'
-    COPY = 'copy'
-    REPEAT = 'repeat'
-    MIRROR = 'mirror'
-    WHITE = 'white'
-    BACKGROUND = 'background'
-
-
-class Precision(object):
-    """Computation precision.
-
-    See for example :meth:`.conv`.
-
-    Attributes:
-        INTEGER (str): Integer.
-        FLOAT (str): Floating point.
-        APPROXIMATE (str): Compute approximate result.
-
-    """
-
-    INTEGER = 'integer'
-    FLOAT = 'float'
-    APPROXIMATE = 'approximate'
-
-
-class Coding(object):
-    """How pixels are coded.
-
-    Normally, pixels are uncoded and can be manipulated as you would expect.
-    However some file formats code pixels for compression, and sometimes it's
-    useful to be able to manipulate images in the coded format.
-
-    Attributes:
-        NONE (str): pixels are not coded
-        LABQ (str): pixels encode 3 float CIELAB values as 4 uchar
-        RAD (str): pixels encode 3 float RGB as 4 uchar (Radiance coding)
-
-    """
-
-    NONE = 'none'
-    LABQ = 'labq'
-    RAD = 'rad'
-
-
-class Direction(object):
-    """A direction.
-
-    Operations like :meth:`.flip` need to be told whether to flip
-    left-right or top-bottom.
-
-    Attributes:
-        HORIZONTAL (str): left-right
-        VERTICAL (str): top-bottom
-
-    """
-
-    HORIZONTAL = 'horizontal'
-    VERTICAL = 'vertical'
-
-
-class Align(object):
-    """Various types of alignment.
-
-    See :meth:`.join`, for example.
-
-    Attributes:
-        LOW (str): Align on the low coordinate edge
-        CENTRE (str): Align on the centre
-        HIGH (str): Align on the high coordinate edge
-
-    """
-
-    LOW = 'low'
-    CENTRE = 'centre'
-    HIGH = 'high'
-
-
-class Combine(object):
-    """How to combine passes.
-
-    See for example :meth:`.compass`.
-
-    Attributes:
-        MAX (str): Take the maximum of all values.
-        SUM (str): Take the sum of all values.
-
-    """
-
-    MAX = 'max'
-    SUM = 'sum'
+class Kernel(object):
+    NEAREST = 'nearest'
+    LINEAR = 'linear'
+    CUBIC = 'cubic'
+    MITCHELL = 'mitchell'
+    LANCZOS2 = 'lanczos2'
+    LANCZOS3 = 'lanczos3'
 
 
 class PCS(object):
-    """Set Profile Connection Space.
-
-    See for example :meth:`.icc_import`.
-
-    Attributes:
-        LAB (str): CIE Lab space.
-        XYZ (str): CIE XYZ space.
-
-    """
-
     LAB = 'lab'
     XYZ = 'xyz'
 
 
-__all__ = ['BandFormat', 'Access', 'Interpretation', 'Angle', 'Angle45',
-           'Intent', 'Extend', 'Precision', 'Coding', 'Direction',
-           'Align', 'Combine', 'PCS']
+class OperationMorphology(object):
+    ERODE = 'erode'
+    DILATE = 'dilate'
+
+
+class CombineMode(object):
+    SET = 'set'
+    ADD = 'add'
+
+
+class Token(object):
+    LEFT = 'left'
+    RIGHT = 'right'
+    STRING = 'string'
+    EQUALS = 'equals'
+
+
+class Saveable(object):
+    MONO = 'mono'
+    RGB = 'rgb'
+    RGBA = 'rgba'
+    RGBA_ONLY = 'rgba-only'
+    RGB_CMYK = 'rgb-cmyk'
+    ANY = 'any'
+
+
+class ImageType(object):
+    ERROR = 'error'
+    NONE = 'none'
+    SETBUF = 'setbuf'
+    SETBUF_FOREIGN = 'setbuf-foreign'
+    OPENIN = 'openin'
+    MMAPIN = 'mmapin'
+    MMAPINRW = 'mmapinrw'
+    OPENOUT = 'openout'
+
+
