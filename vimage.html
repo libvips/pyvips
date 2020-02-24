@@ -21,11 +21,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-        <script type="text/javascript" src="_static/collapse.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="_static/collapse.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -237,7 +237,7 @@ via a temporary disc file. See <a class="reference internal" href="#pyvips.Image
 notes on where temporary files are created. Small images are
 loaded via memory by default, use <code class="docutils literal notranslate"><span class="pre">VIPS_DISC_THRESHOLD</span></code> to
 set the definition of small.</p></li>
-<li><p><strong>access</strong> (<em>Access</em>) – Hint the expected access pattern for the image.</p></li>
+<li><p><strong>access</strong> (<a class="reference internal" href="enums.html#pyvips.enums.Access" title="pyvips.enums.Access"><em>Access</em></a>) – Hint the expected access pattern for the image.</p></li>
 <li><p><strong>fail</strong> (<em>bool</em>) – If set True, the loader will fail with an error on
 the first serious error in the file. By default, libvips
 will attempt to read everything it can from a damaged image.</p></li>
@@ -272,7 +272,7 @@ load the image from.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Keyword Arguments</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>access</strong> (<em>Access</em>) – Hint the expected access pattern for the image.</p></li>
+<li><p><strong>access</strong> (<a class="reference internal" href="enums.html#pyvips.enums.Access" title="pyvips.enums.Access"><em>Access</em></a>) – Hint the expected access pattern for the image.</p></li>
 <li><p><strong>fail</strong> (<em>bool</em>) – If set True, the loader will fail with an error on the
 first serious error in the image. By default, libvips will
 attempt to read everything it can from a damaged image.</p></li>
@@ -338,7 +338,7 @@ NumPy into libvips.</p>
 <li><p><strong>width</strong> (<em>int</em>) – Image width in pixels.</p></li>
 <li><p><strong>height</strong> (<em>int</em>) – Image height in pixels.</p></li>
 <li><p><strong>bands</strong> (<em>int</em>) – Number of bands.</p></li>
-<li><p><strong>format</strong> (<em>BandFormat</em>) – Band format.</p></li>
+<li><p><strong>format</strong> (<a class="reference internal" href="enums.html#pyvips.enums.BandFormat" title="pyvips.enums.BandFormat"><em>BandFormat</em></a>) – Band format.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -368,7 +368,7 @@ loaded from the source rather than from a file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Keyword Arguments</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>access</strong> (<em>Access</em>) – Hint the expected access pattern for the image.</p></li>
+<li><p><strong>access</strong> (<a class="reference internal" href="enums.html#pyvips.enums.Access" title="pyvips.enums.Access"><em>Access</em></a>) – Hint the expected access pattern for the image.</p></li>
 <li><p><strong>fail</strong> (<em>bool</em>) – If set True, the loader will fail with an error on the
 first serious error in the image. By default, libvips will
 attempt to read everything it can from a damaged image.</p></li>
@@ -1202,20 +1202,20 @@ the <code class="docutils literal notranslate"><span class="pre">scale</span></c
 <dl class="attribute">
 <dt id="pyvips.Image.format">
 <code class="sig-name descname">format</code><a class="headerlink" href="#pyvips.Image.format" title="Permalink to this definition">¶</a></dt>
-<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">BandFormat</span></code>, read-only: Image format.</p>
+<dd><p><a class="reference internal" href="enums.html#pyvips.enums.BandFormat" title="pyvips.enums.BandFormat"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandFormat</span></code></a>, read-only: Image format.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyvips.Image.interpretation">
 <code class="sig-name descname">interpretation</code><a class="headerlink" href="#pyvips.Image.interpretation" title="Permalink to this definition">¶</a></dt>
-<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Interpretation</span></code>, read-only: Suggested interpretation of
+<dd><p><a class="reference internal" href="enums.html#pyvips.enums.Interpretation" title="pyvips.enums.Interpretation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Interpretation</span></code></a>, read-only: Suggested interpretation of
 image pixel values.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyvips.Image.coding">
 <code class="sig-name descname">coding</code><a class="headerlink" href="#pyvips.Image.coding" title="Permalink to this definition">¶</a></dt>
-<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Coding</span></code>, read-only: Pixel coding.</p>
+<dd><p><a class="reference internal" href="enums.html#pyvips.enums.Coding" title="pyvips.enums.Coding"><code class="xref py py-class docutils literal notranslate"><span class="pre">Coding</span></code></a>, read-only: Pixel coding.</p>
 </dd></dl>
 
 <dl class="attribute">

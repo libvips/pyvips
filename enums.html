@@ -21,11 +21,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-        <script type="text/javascript" src="_static/collapse.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="_static/collapse.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -175,7 +175,673 @@
 <p>This module contains the various libvips enums as Python classes.</p>
 <p>Enums values are represented in pyvips as strings. These classes contain the
 valid strings for each enum.</p>
-<span class="target" id="module-pyvips.enums"></span></div>
+<span class="target" id="module-pyvips.enums"></span><dl class="class">
+<dt id="pyvips.enums.BandFormat">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">BandFormat</code><a class="reference internal" href="_modules/pyvips/enums.html#BandFormat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.BandFormat" title="Permalink to this definition">¶</a></dt>
+<dd><p>BandFormat.</p>
+<blockquote>
+<div><p>The format used for each band element.</p>
+</div></blockquote>
+<p>Each corresponds to a native C type for the current machine. For example,
+#VIPS_FORMAT_USHORT is &lt;type&gt;unsigned short&lt;/type&gt;.</p>
+<blockquote>
+<div><p>NOTSET - invalid setting
+UCHAR - unsigned char format
+CHAR - char format
+USHORT - unsigned short format
+SHORT - short format
+UINT - unsigned int format
+INT - int format
+FLOAT - float format
+COMPLEX - complex (two floats) format
+DOUBLE - double float format
+DPCOMPLEX - double complex (two double) format</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.BlendMode">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">BlendMode</code><a class="reference internal" href="_modules/pyvips/enums.html#BlendMode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.BlendMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>BlendMode.</p>
+<blockquote>
+<div><p>The various Porter-Duff and PDF blend modes. See vips_composite(),</p>
+</div></blockquote>
+<p>for example.</p>
+<p>The Cairo docs have a nice explanation of all the blend modes:</p>
+<p><a class="reference external" href="https://www.cairographics.org/operators">https://www.cairographics.org/operators</a></p>
+<p>The non-separable modes are not implemented.</p>
+<blockquote>
+<div><p>CLEAR - where the second object is drawn, the first is removed
+SOURCE - the second object is drawn as if nothing were below
+OVER - the image shows what you would expect if you held two semi-transparent slides on top of each other
+IN - the first object is removed completely, the second is only drawn where the first was
+OUT - the second is drawn only where the first isn’t
+ATOP - this leaves the first object mostly intact, but mixes both objects in the overlapping area
+DEST - leaves the first object untouched, the second is discarded completely
+DEST_OVER - like OVER, but swaps the arguments
+DEST_IN - like IN, but swaps the arguments
+DEST_OUT - like OUT, but swaps the arguments
+DEST_ATOP - like ATOP, but swaps the arguments
+XOR - something like a difference operator
+ADD - a bit like adding the two images
+SATURATE - a bit like the darker of the two
+MULTIPLY - at least as dark as the darker of the two inputs
+SCREEN - at least as light as the lighter of the inputs
+OVERLAY - multiplies or screens colors, depending on the lightness
+DARKEN - the darker of each component
+LIGHTEN - the lighter of each component
+COLOUR_DODGE - brighten first by a factor second
+COLOUR_BURN - darken first by a factor of second
+HARD_LIGHT - multiply or screen, depending on lightness
+SOFT_LIGHT - darken or lighten, depending on lightness
+DIFFERENCE - difference of the two
+EXCLUSION - somewhat like DIFFERENCE, but lower-contrast</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.Coding">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Coding</code><a class="reference internal" href="_modules/pyvips/enums.html#Coding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Coding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coding.</p>
+<blockquote>
+<div><p>How pixels are coded.</p>
+</div></blockquote>
+<p>Normally, pixels are uncoded and can be manipulated as you would expect.
+However some file formats code pixels for compression, and sometimes it’s
+useful to be able to manipulate images in the coded format.</p>
+<p>The gaps in the numbering are historical and must be maintained. Allocate
+new numbers from the end.</p>
+<blockquote>
+<div><p>NONE - pixels are not coded
+LABQ - pixels encode 3 float CIELAB values as 4 uchar
+RAD - pixels encode 3 float RGB as 4 uchar (Radiance coding)</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.Interpretation">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Interpretation</code><a class="reference internal" href="_modules/pyvips/enums.html#Interpretation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Interpretation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interpretation.</p>
+<blockquote>
+<div><p>How the values in an image should be interpreted. For example, a</p>
+</div></blockquote>
+<p>three-band float image of type #VIPS_INTERPRETATION_LAB should have its
+pixels interpreted as coordinates in CIE Lab space.</p>
+<p>RGB and sRGB are treated in the same way. Use the colourspace functions if
+you want some other behaviour.</p>
+<p>The gaps in numbering are historical and must be maintained. Allocate
+new numbers from the end.</p>
+<blockquote>
+<div><p>MULTIBAND - generic many-band image
+B_W - some kind of single-band image
+HISTOGRAM - a 1D image, eg. histogram or lookup table
+XYZ - the first three bands are CIE XYZ
+LAB - pixels are in CIE Lab space
+CMYK - the first four bands are in CMYK space
+LABQ - implies #VIPS_CODING_LABQ
+RGB - generic RGB space
+CMC - a uniform colourspace based on CMC(1:1)
+LCH - pixels are in CIE LCh space
+LABS - CIE LAB coded as three signed 16-bit values
+SRGB - pixels are sRGB
+YXY - pixels are CIE Yxy
+FOURIER - image is in fourier space
+RGB16 - generic 16-bit RGB
+GREY16 - generic 16-bit mono
+MATRIX - a matrix
+SCRGB - pixels are scRGB
+HSV - pixels are HSV</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.DemandStyle">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">DemandStyle</code><a class="reference internal" href="_modules/pyvips/enums.html#DemandStyle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.DemandStyle" title="Permalink to this definition">¶</a></dt>
+<dd><p>DemandStyle.</p>
+<blockquote>
+<div><p>See vips_image_pipelinev(). Operations can hint to the VIPS image IO</p>
+</div></blockquote>
+<p>system about the kind of demand geometry they prefer.</p>
+<p>These demand styles are given below in order of increasing
+restrictiveness.  When demanding output from a pipeline,
+vips_image_generate()
+will use the most restrictive of the styles requested by the operations
+in the pipeline.</p>
+<p>#VIPS_DEMAND_STYLE_THINSTRIP — This operation would like to output strips
+the width of the image and a few pels high. This is option suitable for
+point-to-point operations, such as those in the arithmetic package.</p>
+<p>This option is only efficient for cases where each output pel depends
+upon the pel in the corresponding position in the input image.</p>
+<p>#VIPS_DEMAND_STYLE_FATSTRIP — This operation would like to output strips
+the width of the image and as high as possible. This option is suitable
+for area operations which do not violently transform coordinates, such
+as vips_conv().</p>
+<p>#VIPS_DEMAND_STYLE_SMALLTILE — This is the most general demand format.
+Output is demanded in small (around 100x100 pel) sections. This style works
+reasonably efficiently, even for bizzare operations like 45 degree rotate.</p>
+<p>#VIPS_DEMAND_STYLE_ANY — This image is not being demand-read from a disc
+file (even indirectly) so any demand style is OK. It’s used for things like
+vips_black() where the pixels are calculated.</p>
+<p>See also: vips_image_pipelinev().</p>
+<blockquote>
+<div><p>SMALLTILE - demand in small (typically 64x64 pixel) tiles
+FATSTRIP - demand in fat (typically 10 pixel high) strips
+THINSTRIP - demand in thin (typically 1 pixel high) strips</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.OperationRelational">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">OperationRelational</code><a class="reference internal" href="_modules/pyvips/enums.html#OperationRelational"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.OperationRelational" title="Permalink to this definition">¶</a></dt>
+<dd><p>OperationRelational.</p>
+<p>See also: vips_relational().</p>
+<p>EQUAL - ==
+NOTEQ - !=
+LESS - &lt;
+LESSEQ - &lt;=
+MORE - &gt;
+MOREEQ - &gt;=</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.OperationBoolean">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">OperationBoolean</code><a class="reference internal" href="_modules/pyvips/enums.html#OperationBoolean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.OperationBoolean" title="Permalink to this definition">¶</a></dt>
+<dd><p>OperationBoolean.</p>
+<p>See also: vips_boolean().</p>
+<p>AND - &amp;
+OR - |
+EOR - ^
+LSHIFT - &gt;&gt;
+RSHIFT - &lt;&lt;</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.OperationMath2">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">OperationMath2</code><a class="reference internal" href="_modules/pyvips/enums.html#OperationMath2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.OperationMath2" title="Permalink to this definition">¶</a></dt>
+<dd><p>OperationMath2.</p>
+<p>See also: vips_math().</p>
+<p>POW - pow( left, right )
+WOP - pow( right, left )</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.OperationComplex2">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">OperationComplex2</code><a class="reference internal" href="_modules/pyvips/enums.html#OperationComplex2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.OperationComplex2" title="Permalink to this definition">¶</a></dt>
+<dd><p>OperationComplex2.</p>
+<p>See also: vips_complex2().</p>
+<p>CROSS_PHASE - convert to polar coordinates</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.OperationMath">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">OperationMath</code><a class="reference internal" href="_modules/pyvips/enums.html#OperationMath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.OperationMath" title="Permalink to this definition">¶</a></dt>
+<dd><p>OperationMath.</p>
+<p>See also: vips_math().</p>
+<p>SIN - sin(), angles in degrees
+COS - cos(), angles in degrees
+TAN - tan(), angles in degrees
+ASIN - asin(), angles in degrees
+ACOS - acos(), angles in degrees
+ATAN - atan(), angles in degrees
+LOG - log base e
+LOG10 - log base 10
+EXP - e to the something
+EXP10 - 10 to the something</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.OperationRound">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">OperationRound</code><a class="reference internal" href="_modules/pyvips/enums.html#OperationRound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.OperationRound" title="Permalink to this definition">¶</a></dt>
+<dd><p>OperationRound.</p>
+<p>See also: vips_round().</p>
+<p>RINT - round to nearest
+CEIL - the smallest integral value not less than
+FLOOR - largest integral value not greater than</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.OperationComplex">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">OperationComplex</code><a class="reference internal" href="_modules/pyvips/enums.html#OperationComplex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.OperationComplex" title="Permalink to this definition">¶</a></dt>
+<dd><p>OperationComplex.</p>
+<p>See also: vips_complex().</p>
+<p>POLAR - convert to polar coordinates
+RECT - convert to rectangular coordinates
+CONJ - complex conjugate</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.OperationComplexget">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">OperationComplexget</code><a class="reference internal" href="_modules/pyvips/enums.html#OperationComplexget"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.OperationComplexget" title="Permalink to this definition">¶</a></dt>
+<dd><p>OperationComplexget.</p>
+<p>See also: vips_complexget().</p>
+<p>REAL - get real component
+IMAG - get imaginary component</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.Combine">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Combine</code><a class="reference internal" href="_modules/pyvips/enums.html#Combine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Combine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combine.</p>
+<p>How to combine values. See vips_compass(), for example.</p>
+<p>MAX - take the maximum of the possible values
+SUM - sum all the values
+MIN - take the minimum value</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.Access">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Access</code><a class="reference internal" href="_modules/pyvips/enums.html#Access"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Access" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access.</p>
+<blockquote>
+<div><p>The type of access an operation has to supply. See vips_tilecache()</p>
+</div></blockquote>
+<p>and #VipsForeign.</p>
+<p>&#64;VIPS_ACCESS_RANDOM means requests can come in any order.</p>
+<p>&#64;VIPS_ACCESS_SEQUENTIAL means requests will be top-to-bottom, but with some
+amount of buffering behind the read point for small non-local accesses.</p>
+<blockquote>
+<div><p>RANDOM - can read anywhere
+SEQUENTIAL - top-to-bottom reading only, but with a small buffer</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.Extend">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Extend</code><a class="reference internal" href="_modules/pyvips/enums.html#Extend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Extend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extend.</p>
+<blockquote>
+<div><p>See vips_embed(), vips_conv(), vips_affine() and so on.</p>
+</div></blockquote>
+<p>When the edges of an image are extended, you can specify
+how you want the extension done.</p>
+<p>#VIPS_EXTEND_BLACK — new pixels are black, ie. all bits are zero.</p>
+<p>#VIPS_EXTEND_COPY — each new pixel takes the value of the nearest edge
+pixel</p>
+<p>#VIPS_EXTEND_REPEAT — the image is tiled to fill the new area</p>
+<p>#VIPS_EXTEND_MIRROR — the image is reflected and tiled to reduce hash
+edges</p>
+<p>#VIPS_EXTEND_WHITE — new pixels are white, ie. all bits are set</p>
+<p>#VIPS_EXTEND_BACKGROUND — colour set from the &#64;background property</p>
+<p>We have to specify the exact value of each enum member since we have to
+keep these frozen for back compat with vips7.</p>
+<p>See also: vips_embed().</p>
+<blockquote>
+<div><p>BLACK - extend with black (all 0) pixels
+COPY - copy the image edges
+REPEAT - repeat the whole image
+MIRROR - mirror the whole image
+WHITE - extend with white (all bits set) pixels
+BACKGROUND - extend with colour from the &#64;background property</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.CompassDirection">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">CompassDirection</code><a class="reference internal" href="_modules/pyvips/enums.html#CompassDirection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.CompassDirection" title="Permalink to this definition">¶</a></dt>
+<dd><p>CompassDirection.</p>
+<p>A direction on a compass. Used for vips_gravity(), for example.</p>
+<p>CENTRE - centre
+NORTH - north
+EAST - east
+SOUTH - south
+WEST - west
+NORTH_EAST - north-east
+SOUTH_EAST - south-east
+SOUTH_WEST - south-west
+NORTH_WEST - north-west</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.Direction">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Direction</code><a class="reference internal" href="_modules/pyvips/enums.html#Direction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Direction.</p>
+<blockquote>
+<div><p>See vips_flip(), vips_join() and so on.</p>
+</div></blockquote>
+<p>Operations like vips_flip() need to be told whether to flip left-right or
+top-bottom.</p>
+<p>See also: vips_flip(), vips_join().</p>
+<blockquote>
+<div><p>HORIZONTAL - left-right
+VERTICAL - top-bottom</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.Align">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Align</code><a class="reference internal" href="_modules/pyvips/enums.html#Align"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Align" title="Permalink to this definition">¶</a></dt>
+<dd><p>Align.</p>
+<blockquote>
+<div><p>See vips_join() and so on.</p>
+</div></blockquote>
+<p>Operations like vips_join() need to be told whether to align images on the
+low or high coordinate edge, or centre.</p>
+<p>See also: vips_join().</p>
+<blockquote>
+<div><p>LOW - align low coordinate edge
+CENTRE - align centre
+HIGH - align high coordinate edge</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.Interesting">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Interesting</code><a class="reference internal" href="_modules/pyvips/enums.html#Interesting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Interesting" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interesting.</p>
+<blockquote>
+<div><p>Pick the algorithm vips uses to decide image “interestingness”. This is used</p>
+</div></blockquote>
+<p>by vips_smartcrop(), for example, to decide what parts of the image to
+keep.</p>
+<p>#VIPS_INTERESTING_NONE and #VIPS_INTERESTING_LOW mean the same – the
+crop is positioned at the top or left. #VIPS_INTERESTING_HIGH positions at
+the bottom or right.</p>
+<p>See also: vips_smartcrop().</p>
+<blockquote>
+<div><p>NONE - do nothing
+CENTRE - just take the centre
+ENTROPY - use an entropy measure
+ATTENTION - look for features likely to draw human attention
+LOW - position the crop towards the low coordinate
+HIGH - position the crop towards the high coordinate</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.Angle">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Angle</code><a class="reference internal" href="_modules/pyvips/enums.html#Angle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Angle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Angle.</p>
+<blockquote>
+<div><p>See vips_rot() and so on.</p>
+</div></blockquote>
+<p>Fixed rotate angles.</p>
+<p>See also: vips_rot().</p>
+<blockquote>
+<div><p>D0 - no rotate
+D90 - 90 degrees clockwise
+D180 - 180 degree rotate
+D270 - 90 degrees anti-clockwise</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.Angle45">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Angle45</code><a class="reference internal" href="_modules/pyvips/enums.html#Angle45"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Angle45" title="Permalink to this definition">¶</a></dt>
+<dd><p>Angle45.</p>
+<blockquote>
+<div><p>See vips_rot45() and so on.</p>
+</div></blockquote>
+<p>Fixed rotate angles.</p>
+<p>See also: vips_rot45().</p>
+<blockquote>
+<div><p>D0 - no rotate
+D45 - 45 degrees clockwise
+D90 - 90 degrees clockwise
+D135 - 135 degrees clockwise
+D180 - 180 degrees
+D225 - 135 degrees anti-clockwise
+D270 - 90 degrees anti-clockwise
+D315 - 45 degrees anti-clockwise</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.Precision">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Precision</code><a class="reference internal" href="_modules/pyvips/enums.html#Precision"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Precision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Precision.</p>
+<p>How accurate an operation should be.</p>
+<p>INTEGER - int everywhere
+FLOAT - float everywhere
+APPROXIMATE - approximate integer output</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.ForeignDzLayout">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">ForeignDzLayout</code><a class="reference internal" href="_modules/pyvips/enums.html#ForeignDzLayout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.ForeignDzLayout" title="Permalink to this definition">¶</a></dt>
+<dd><p>ForeignDzLayout.</p>
+<p>What directory layout and metadata standard to use.</p>
+<p>DZ - use DeepZoom directory layout
+ZOOMIFY - use Zoomify directory layout
+GOOGLE - use Google maps directory layout
+IIIF - use IIIF directory layout</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.ForeignDzDepth">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">ForeignDzDepth</code><a class="reference internal" href="_modules/pyvips/enums.html#ForeignDzDepth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.ForeignDzDepth" title="Permalink to this definition">¶</a></dt>
+<dd><p>ForeignDzDepth.</p>
+<p>How many pyramid layers to create.</p>
+<p>ONEPIXEL - create layers down to 1x1 pixel
+ONETILE - create layers down to 1x1 tile
+ONE - only create a single layer</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.ForeignDzContainer">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">ForeignDzContainer</code><a class="reference internal" href="_modules/pyvips/enums.html#ForeignDzContainer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.ForeignDzContainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>ForeignDzContainer.</p>
+<p>How many pyramid layers to create.</p>
+<p>FS - write tiles to the filesystem
+ZIP - write tiles to a zip file
+SZI - write to a szi file</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.RegionShrink">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">RegionShrink</code><a class="reference internal" href="_modules/pyvips/enums.html#RegionShrink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.RegionShrink" title="Permalink to this definition">¶</a></dt>
+<dd><p>RegionShrink.</p>
+<p>How to calculate the output pixels when shrinking a 2x2 region.</p>
+<p>MEAN - use the average
+MEDIAN - use the median
+MODE - use the mode
+MAX - use the maximum
+MIN - use the minimum
+NEAREST - use the top-left pixel</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.ForeignJpegSubsample">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">ForeignJpegSubsample</code><a class="reference internal" href="_modules/pyvips/enums.html#ForeignJpegSubsample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.ForeignJpegSubsample" title="Permalink to this definition">¶</a></dt>
+<dd><p>ForeignJpegSubsample.</p>
+<p>Set jpeg subsampling mode.</p>
+<p>AUTO - default preset
+ON - always perform subsampling
+OFF - never perform subsampling</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.ForeignWebpPreset">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">ForeignWebpPreset</code><a class="reference internal" href="_modules/pyvips/enums.html#ForeignWebpPreset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.ForeignWebpPreset" title="Permalink to this definition">¶</a></dt>
+<dd><p>ForeignWebpPreset.</p>
+<p>Tune lossy encoder settings for different image types.</p>
+<p>DEFAULT - default preset
+PICTURE - digital picture, like portrait, inner shot
+PHOTO - outdoor photograph, with natural lighting
+DRAWING - hand or line drawing, with high-contrast details
+ICON - small-sized colorful images
+TEXT - text-like</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.ForeignTiffCompression">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">ForeignTiffCompression</code><a class="reference internal" href="_modules/pyvips/enums.html#ForeignTiffCompression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.ForeignTiffCompression" title="Permalink to this definition">¶</a></dt>
+<dd><p>ForeignTiffCompression.</p>
+<blockquote>
+<div><p>The compression types supported by the tiff writer.</p>
+</div></blockquote>
+<p>Use &#64;Q to set the jpeg compression level, default 75.</p>
+<p>Use &#64;prediction to set the lzw or deflate prediction, default none.</p>
+<p>Use &#64;lossless to set WEBP lossless compression.</p>
+<p>Use &#64;level to set webp and zstd compression level.</p>
+<blockquote>
+<div><p>NONE - no compression
+JPEG - jpeg compression
+DEFLATE - deflate (zip) compression
+PACKBITS - packbits compression
+CCITTFAX4 - fax4 compression
+LZW - LZW compression
+WEBP - WEBP compression
+ZSTD - ZSTD compression</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.ForeignTiffPredictor">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">ForeignTiffPredictor</code><a class="reference internal" href="_modules/pyvips/enums.html#ForeignTiffPredictor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.ForeignTiffPredictor" title="Permalink to this definition">¶</a></dt>
+<dd><p>ForeignTiffPredictor.</p>
+<blockquote>
+<div><p>The predictor can help deflate and lzw compression. The values are fixed by</p>
+</div></blockquote>
+<p>the tiff library.</p>
+<blockquote>
+<div><p>NONE - no prediction
+HORIZONTAL - horizontal differencing
+FLOAT - float predictor</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.ForeignTiffResunit">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">ForeignTiffResunit</code><a class="reference internal" href="_modules/pyvips/enums.html#ForeignTiffResunit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.ForeignTiffResunit" title="Permalink to this definition">¶</a></dt>
+<dd><p>ForeignTiffResunit.</p>
+<p>Use inches or centimeters as the resolution unit for a tiff file.</p>
+<p>CM - use centimeters
+INCH - use inches</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.ForeignHeifCompression">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">ForeignHeifCompression</code><a class="reference internal" href="_modules/pyvips/enums.html#ForeignHeifCompression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.ForeignHeifCompression" title="Permalink to this definition">¶</a></dt>
+<dd><p>ForeignHeifCompression.</p>
+<blockquote>
+<div><p>The compression format to use inside a HEIF container.</p>
+</div></blockquote>
+<p>This is assumed to use the same numbering as %heif_compression_format.</p>
+<blockquote>
+<div><p>HEVC - x265
+AVC - x264
+JPEG - jpeg
+AV1 - aom</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.Size">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Size</code><a class="reference internal" href="_modules/pyvips/enums.html#Size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Size.</p>
+<blockquote>
+<div><p>Controls whether an operation should upsize, downsize, both up and</p>
+</div></blockquote>
+<p>downsize, or force a size.</p>
+<p>See also: vips_thumbnail().</p>
+<blockquote>
+<div><p>BOTH - size both up and down
+UP - only upsize
+DOWN - only downsize
+FORCE - force size, that is, break aspect ratio</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.Intent">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Intent</code><a class="reference internal" href="_modules/pyvips/enums.html#Intent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Intent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Intent.</p>
+<blockquote>
+<div><p>The rendering intent. #VIPS_INTENT_ABSOLUTE is best for</p>
+</div></blockquote>
+<p>scientific work, #VIPS_INTENT_RELATIVE is usually best for
+accurate communication with other imaging libraries.</p>
+<blockquote>
+<div><p>PERCEPTUAL - perceptual rendering intent
+RELATIVE - relative colorimetric rendering intent
+SATURATION - saturation rendering intent
+ABSOLUTE - absolute colorimetric rendering intent</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.Kernel">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Kernel</code><a class="reference internal" href="_modules/pyvips/enums.html#Kernel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Kernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kernel.</p>
+<p>The resampling kernels vips supports. See vips_reduce(), for example.</p>
+<p>NEAREST - The nearest pixel to the point.
+LINEAR - Convolve with a triangle filter.
+CUBIC - Convolve with a cubic filter.
+LANCZOS2 - Convolve with a two-lobe Lanczos kernel.
+LANCZOS3 - Convolve with a three-lobe Lanczos kernel.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.PCS">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">PCS</code><a class="reference internal" href="_modules/pyvips/enums.html#PCS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.PCS" title="Permalink to this definition">¶</a></dt>
+<dd><p>PCS.</p>
+<blockquote>
+<div><p>Pick a Profile Connection Space for vips_icc_import() and</p>
+</div></blockquote>
+<p>vips_icc_export(). LAB is usually best, XYZ can be more convenient in some
+cases.</p>
+<blockquote>
+<div><p>LAB - use CIELAB D65 as the Profile Connection Space
+XYZ - use XYZ as the Profile Connection Space</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.OperationMorphology">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">OperationMorphology</code><a class="reference internal" href="_modules/pyvips/enums.html#OperationMorphology"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.OperationMorphology" title="Permalink to this definition">¶</a></dt>
+<dd><p>OperationMorphology.</p>
+<blockquote>
+<div><p>More like hit-miss, really.</p>
+</div></blockquote>
+<p>See also: vips_morph().</p>
+<blockquote>
+<div><p>ERODE - true if all set
+DILATE - true if one set</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.CombineMode">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">CombineMode</code><a class="reference internal" href="_modules/pyvips/enums.html#CombineMode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.CombineMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>CombineMode.</p>
+<blockquote>
+<div><p>See vips_draw_image() and so on.</p>
+</div></blockquote>
+<p>Operations like vips_draw_image() need to be told how to combine images
+from two sources.</p>
+<p>See also: vips_join().</p>
+<blockquote>
+<div><p>SET - set pixels to the new value
+ADD - add pixels</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.Token">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Token</code><a class="reference internal" href="_modules/pyvips/enums.html#Token"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Token.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.Saveable">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Saveable</code><a class="reference internal" href="_modules/pyvips/enums.html#Saveable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Saveable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saveable.</p>
+<p>See also: #VipsForeignSave.</p>
+<p>MONO - 1 band (eg. CSV)
+RGB - 1 or 3 bands (eg. PPM)
+RGBA - 1, 2, 3 or 4 bands (eg. PNG)
+RGBA_ONLY - 3 or 4 bands (eg. WEBP)
+RGB_CMYK - 1, 3 or 4 bands (eg. JPEG)
+ANY - any number of bands (eg. TIFF)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyvips.enums.ImageType">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">ImageType</code><a class="reference internal" href="_modules/pyvips/enums.html#ImageType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.ImageType" title="Permalink to this definition">¶</a></dt>
+<dd><p>ImageType.</p>
+</dd></dl>
+
+</div>
 
 
            </div>
