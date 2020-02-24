@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyvips.vinterpolate &mdash; pyvips 2.1.12 documentation</title>
+  <title>pyvips.vsourcecustom &mdash; pyvips 2.1.12 documentation</title>
   
 
   
@@ -149,7 +149,7 @@
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
-      <li>pyvips.vinterpolate</li>
+      <li>pyvips.vsourcecustom</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -164,52 +164,72 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for pyvips.vinterpolate</h1><div class="highlight"><pre>
+  <h1>Source code for pyvips.vsourcecustom</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
 
+<span class="kn">import</span> <span class="nn">logging</span>
+
 <span class="kn">import</span> <span class="nn">pyvips</span>
-<span class="kn">from</span> <span class="nn">pyvips</span> <span class="k">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">Error</span><span class="p">,</span> <span class="n">_to_bytes</span>
+<span class="kn">from</span> <span class="nn">pyvips</span> <span class="k">import</span> <span class="n">vips_lib</span>
 
-<span class="c1"># import logging</span>
-<span class="c1"># logger = logging.getLogger(__name__)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Interpolate"><a class="viewcode-back" href="../../vinterpolate.html#pyvips.vinterpolate.Interpolate">[docs]</a><span class="k">class</span> <span class="nc">Interpolate</span><span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">VipsObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Make interpolators for operators like :meth:`.affine`.</span>
+<div class="viewcode-block" id="SourceCustom"><a class="viewcode-back" href="../../vsourcecustom.html#pyvips.vsourcecustom.SourceCustom">[docs]</a><span class="k">class</span> <span class="nc">SourceCustom</span><span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">Source</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An source you can connect action signals to to implement</span>
+<span class="sd">    behaviour.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointer</span><span class="p">):</span>
-        <span class="c1"># logger.debug(&#39;Operation.__init__: pointer = %s&#39;, pointer)</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Interpolate</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Make a new custom source.</span>
 
-<div class="viewcode-block" id="Interpolate.new"><a class="viewcode-back" href="../../vinterpolate.html#pyvips.vinterpolate.Interpolate.new">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">new</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Make a new interpolator by name.</span>
-
-<span class="sd">        Make a new interpolator from the libvips class nickname. For example::</span>
-
-<span class="sd">            inter = pyvips.Interpolator.new(&#39;bicubic&#39;)</span>
-
-<span class="sd">        You can get a list of all supported interpolators from the command-line</span>
-<span class="sd">        with::</span>
-
-<span class="sd">            $ vips -l interpolate</span>
-
-<span class="sd">        See for example :meth:`.affine`.</span>
+<span class="sd">        You can pass this source to (for example) :meth:`new_from_source`.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c1"># logger.debug(&#39;VipsInterpolate.new: name = %s&#39;, name)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SourceCustom</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_source_custom_new</span><span class="p">())</span>
 
-        <span class="n">vi</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_interpolate_new</span><span class="p">(</span><span class="n">_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">vi</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;no such interpolator </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+<div class="viewcode-block" id="SourceCustom.on_read"><a class="viewcode-back" href="../../vsourcecustom.html#pyvips.vsourcecustom.SourceCustom.on_read">[docs]</a>    <span class="k">def</span> <span class="nf">on_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Attach a read handler.</span>
 
-        <span class="k">return</span> <span class="n">Interpolate</span><span class="p">(</span><span class="n">vi</span><span class="p">)</span></div></div>
+<span class="sd">        The interface is exactly as io.read(). The handler is given a number</span>
+<span class="sd">        of bytes to fetch, and should return a bytes-like object containing up</span>
+<span class="sd">        to that number of bytes. If there is no more data available, it should</span>
+<span class="sd">        return None.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">interface_handler</span><span class="p">(</span><span class="n">buf</span><span class="p">):</span>
+            <span class="n">chunk</span> <span class="o">=</span> <span class="n">handler</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">buf</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">chunk</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">0</span>
+
+            <span class="n">bytes_read</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+            <span class="n">buf</span><span class="p">[:</span><span class="n">bytes_read</span><span class="p">]</span> <span class="o">=</span> <span class="n">chunk</span>
+
+            <span class="k">return</span> <span class="n">bytes_read</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">signal_connect</span><span class="p">(</span><span class="s2">&quot;read&quot;</span><span class="p">,</span> <span class="n">interface_handler</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SourceCustom.on_seek"><a class="viewcode-back" href="../../vsourcecustom.html#pyvips.vsourcecustom.SourceCustom.on_seek">[docs]</a>    <span class="k">def</span> <span class="nf">on_seek</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Attach a seek handler.</span>
+
+<span class="sd">        The interface is the same as io.seek(), so the handler is passed</span>
+<span class="sd">        parameters for offset and whence with the same meanings.</span>
+
+<span class="sd">        However, the handler MUST return the new seek position. A simple way</span>
+<span class="sd">        to do this is to call io.tell() and return that result.</span>
+
+<span class="sd">        Seek handlers are optional. If you do not set one, your source will be</span>
+<span class="sd">        treated as unseekable and libvips will do extra caching.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">signal_connect</span><span class="p">(</span><span class="s2">&quot;seek&quot;</span><span class="p">,</span> <span class="n">handler</span><span class="p">)</span></div></div>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Interpolate&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SourceCustom&#39;</span><span class="p">]</span>
 </pre></div>
 
            </div>

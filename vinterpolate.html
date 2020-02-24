@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Interpolate &mdash; pyvips 2.1.4 documentation</title>
+  <title>Interpolate &mdash; pyvips 2.1.12 documentation</title>
   
 
   
@@ -17,24 +17,28 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/collapse.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="GValue" href="gvalue.html" />
-    <link rel="prev" title="The libvips enums" href="enums.html" />
+    <link rel="prev" title="TargetCustom" href="vtargetcustom.html" />
     <link href="_static/style.css" rel="stylesheet" type="text/css">
-
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
 
 </head>
 
@@ -42,11 +46,10 @@
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -91,6 +94,11 @@
 <li class="toctree-l1"><a class="reference internal" href="base.html">Base definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="error.html"><code class="docutils literal notranslate"><span class="pre">Error</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="enums.html">The libvips enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vconnection.html"><code class="docutils literal notranslate"><span class="pre">Connection</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="vsource.html"><code class="docutils literal notranslate"><span class="pre">Source</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtarget.html"><code class="docutils literal notranslate"><span class="pre">Target</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="vsourcecustom.html"><code class="docutils literal notranslate"><span class="pre">SourceCustom</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtargetcustom.html"><code class="docutils literal notranslate"><span class="pre">TargetCustom</span></code></a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">Interpolate</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="gvalue.html"><code class="docutils literal notranslate"><span class="pre">GValue</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="gobject.html"><code class="docutils literal notranslate"><span class="pre">GObject</span></code></a></li>
@@ -166,11 +174,11 @@
 <span id="interpolate"></span><h1><code class="docutils literal notranslate"><span class="pre">Interpolate</span></code><a class="headerlink" href="#module-pyvips.vinterpolate" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pyvips.vinterpolate.Interpolate">
-<em class="property">class </em><code class="descclassname">pyvips.vinterpolate.</code><code class="descname">Interpolate</code><span class="sig-paren">(</span><em>pointer</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vinterpolate.html#Interpolate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.vinterpolate.Interpolate" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.vinterpolate.</code><code class="sig-name descname">Interpolate</code><span class="sig-paren">(</span><em class="sig-param">pointer</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vinterpolate.html#Interpolate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.vinterpolate.Interpolate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make interpolators for operators like <a class="reference internal" href="vimage.html#pyvips.Image.affine" title="pyvips.Image.affine"><code class="xref py py-meth docutils literal notranslate"><span class="pre">affine()</span></code></a>.</p>
-<dl class="staticmethod">
+<dl class="method">
 <dt id="pyvips.vinterpolate.Interpolate.new">
-<em class="property">static </em><code class="descname">new</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vinterpolate.html#Interpolate.new"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.vinterpolate.Interpolate.new" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">new</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vinterpolate.html#Interpolate.new"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.vinterpolate.Interpolate.new" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make a new interpolator by name.</p>
 <p>Make a new interpolator from the libvips class nickname. For example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">inter</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Interpolator</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;bicubic&#39;</span><span class="p">)</span>
@@ -199,7 +207,7 @@ with:</p>
         <a href="gvalue.html" class="btn btn-neutral float-right" title="GValue" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="enums.html" class="btn btn-neutral" title="The libvips enums" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="vtargetcustom.html" class="btn btn-neutral float-left" title="TargetCustom" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -208,7 +216,7 @@ with:</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, John Cupitt.
+        &copy; Copyright 2019, John Cupitt
 
     </p>
   </div>
@@ -225,34 +233,16 @@ with:</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'2.1.4',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-      <script type="text/javascript" src="_static/collapse.js"></script>
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

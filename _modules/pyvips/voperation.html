@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyvips.voperation &mdash; pyvips 2.1.4 documentation</title>
+  <title>pyvips.voperation &mdash; pyvips 2.1.12 documentation</title>
   
 
   
@@ -17,22 +17,26 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script type="text/javascript" src="../../../../_static/collapse.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link href="../../_static/style.css" rel="stylesheet" type="text/css">
-
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
@@ -40,11 +44,10 @@
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -89,6 +92,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../../base.html">Base definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../error.html"><code class="docutils literal notranslate"><span class="pre">Error</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../enums.html">The libvips enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vconnection.html"><code class="docutils literal notranslate"><span class="pre">Connection</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vsource.html"><code class="docutils literal notranslate"><span class="pre">Source</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vtarget.html"><code class="docutils literal notranslate"><span class="pre">Target</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vsourcecustom.html"><code class="docutils literal notranslate"><span class="pre">SourceCustom</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vtargetcustom.html"><code class="docutils literal notranslate"><span class="pre">TargetCustom</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../vinterpolate.html"><code class="docutils literal notranslate"><span class="pre">Interpolate</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../gvalue.html"><code class="docutils literal notranslate"><span class="pre">GValue</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../gobject.html"><code class="docutils literal notranslate"><span class="pre">GObject</span></code></a></li>
@@ -163,7 +171,7 @@
 
 <span class="kn">import</span> <span class="nn">pyvips</span>
 <span class="kn">from</span> <span class="nn">pyvips</span> <span class="k">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">Error</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">,</span> <span class="n">_to_string</span><span class="p">,</span> <span class="n">GValue</span><span class="p">,</span> \
-    <span class="n">type_map</span><span class="p">,</span> <span class="n">type_from_name</span><span class="p">,</span> <span class="n">nickname_find</span>
+    <span class="n">type_map</span><span class="p">,</span> <span class="n">type_from_name</span><span class="p">,</span> <span class="n">nickname_find</span><span class="p">,</span> <span class="n">at_least_libvips</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -179,6 +187,127 @@
 
 <span class="c1"># for VipsOperationFlags</span>
 <span class="n">_OPERATION_DEPRECATED</span> <span class="o">=</span> <span class="mi">8</span>
+
+
+<div class="viewcode-block" id="Introspect"><a class="viewcode-back" href="../../voperation.html#pyvips.voperation.Introspect">[docs]</a><span class="k">class</span> <span class="nc">Introspect</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Build introspection data for operations.</span>
+
+<span class="sd">    Make an operation, introspect it, and build a structure representing</span>
+<span class="sd">    everything we know about it.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="s1">&#39;flags&#39;</span><span class="p">,</span> <span class="s1">&#39;details&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;required_input&#39;</span><span class="p">,</span> <span class="s1">&#39;optional_input&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;required_output&#39;</span><span class="p">,</span> <span class="s1">&#39;optional_output&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;member_x&#39;</span><span class="p">,</span> <span class="s1">&#39;method_args&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operation_name</span><span class="p">):</span>
+        <span class="n">op</span> <span class="o">=</span> <span class="n">Operation</span><span class="o">.</span><span class="n">new_from_name</span><span class="p">(</span><span class="n">operation_name</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">get_description</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flags</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_operation_get_flags</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span>
+
+        <span class="c1"># build a list of constructor arg [name, flags] pairs in arg order</span>
+        <span class="n">arguments</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">def</span> <span class="nf">add_args</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">flags</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_CONSTRUCT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># libvips uses &#39;-&#39; to separate parts of arg names, but we</span>
+                <span class="c1"># need &#39;_&#39; for Python</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span>
+                <span class="n">arguments</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">name</span><span class="p">,</span> <span class="n">flags</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">at_least_libvips</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">7</span><span class="p">):</span>
+            <span class="n">p_names</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;char**[1]&#39;</span><span class="p">)</span>
+            <span class="n">p_flags</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;int*[1]&#39;</span><span class="p">)</span>
+            <span class="n">p_n_args</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;int[1]&#39;</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_object_get_args</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">vobject</span><span class="p">,</span>
+                                                   <span class="n">p_names</span><span class="p">,</span> <span class="n">p_flags</span><span class="p">,</span> <span class="n">p_n_args</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to get arguments from operation&#39;</span><span class="p">)</span>
+            <span class="n">p_names</span> <span class="o">=</span> <span class="n">p_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">p_flags</span> <span class="o">=</span> <span class="n">p_flags</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">n_args</span> <span class="o">=</span> <span class="n">p_n_args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_args</span><span class="p">):</span>
+                <span class="n">add_args</span><span class="p">(</span><span class="n">_to_string</span><span class="p">(</span><span class="n">p_names</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">p_flags</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">def</span> <span class="nf">add_construct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pspec</span><span class="p">,</span> <span class="n">argument_class</span><span class="p">,</span>
+                              <span class="n">argument_instance</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+                <span class="n">add_args</span><span class="p">(</span><span class="n">_to_string</span><span class="p">(</span><span class="n">pspec</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="n">argument_class</span><span class="o">.</span><span class="n">flags</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span>
+
+            <span class="n">cb</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="s1">&#39;VipsArgumentMapFn&#39;</span><span class="p">,</span> <span class="n">add_construct</span><span class="p">)</span>
+            <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_argument_map</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">vobject</span><span class="p">,</span> <span class="n">cb</span><span class="p">,</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">,</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">)</span>
+
+        <span class="c1"># logger.debug(&#39;arguments = %s&#39;, self.arguments)</span>
+
+        <span class="c1"># build a hash from arg name to detailed arg information</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">details</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">flags</span> <span class="ow">in</span> <span class="n">arguments</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">details</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+                <span class="s2">&quot;flags&quot;</span><span class="p">:</span> <span class="n">flags</span><span class="p">,</span>
+                <span class="s2">&quot;blurb&quot;</span><span class="p">:</span> <span class="n">op</span><span class="o">.</span><span class="n">get_blurb</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">op</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="p">}</span>
+
+        <span class="c1"># lists of arg names by category</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required_input</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optional_input</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required_output</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optional_output</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">flags</span> <span class="ow">in</span> <span class="n">arguments</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">((</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_INPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
+                    <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
+                    <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_DEPRECATED</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">required_input</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+                <span class="c1"># required inputs which we MODIFY are also required outputs</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_MODIFY</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">required_output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="p">((</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_OUTPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
+                    <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
+                    <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_DEPRECATED</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">required_output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+            <span class="c1"># we let deprecated optional args through, but warn about them</span>
+            <span class="c1"># if they get used, see below</span>
+            <span class="k">if</span> <span class="p">((</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_INPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
+                    <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">optional_input</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="p">((</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_OUTPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
+                    <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">optional_output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="c1"># find the first required input image arg, if any ... that will be self</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">member_x</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_input</span><span class="p">:</span>
+            <span class="n">details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">details</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">details</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">GValue</span><span class="o">.</span><span class="n">image_type</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">member_x</span> <span class="o">=</span> <span class="n">name</span>
+                <span class="k">break</span>
+
+        <span class="c1"># method args are required args, but without the image they are a</span>
+        <span class="c1"># method on</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">member_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">method_args</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">required_input</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">method_args</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">member_x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">method_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_input</span>
+
+    <span class="c1"># a hash mapping operation names to introspection data</span>
+    <span class="n">_introspect_cache</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">operation_name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">operation_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_introspect_cache</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_introspect_cache</span><span class="p">[</span><span class="n">operation_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">Introspect</span><span class="p">(</span><span class="n">operation_name</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_introspect_cache</span><span class="p">[</span><span class="n">operation_name</span><span class="p">]</span></div>
 
 
 <span class="c1"># search an array with a predicate, recursing into subarrays as we see them</span>
@@ -203,6 +332,7 @@
 <span class="sd">    This class wraps the libvips VipsOperation class.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
 
     <span class="c1"># cache nickname -&gt; docstring here</span>
     <span class="n">_docstring_cache</span> <span class="o">=</span> <span class="p">{}</span>
@@ -210,7 +340,6 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointer</span><span class="p">):</span>
         <span class="c1"># logger.debug(&#39;Operation.__init__: pointer = %s&#39;, pointer)</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Operation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;VipsObject*&#39;</span><span class="p">,</span> <span class="n">pointer</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">new_from_name</span><span class="p">(</span><span class="n">operation_name</span><span class="p">):</span>
@@ -241,32 +370,6 @@
 
         <span class="nb">super</span><span class="p">(</span><span class="n">Operation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">get_flags</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_operation_get_flags</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span>
-
-    <span class="c1"># this is slow ... call as little as possible</span>
-    <span class="k">def</span> <span class="nf">get_args</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="k">def</span> <span class="nf">add_construct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pspec</span><span class="p">,</span> <span class="n">argument_class</span><span class="p">,</span>
-                          <span class="n">argument_instance</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-            <span class="n">flags</span> <span class="o">=</span> <span class="n">argument_class</span><span class="o">.</span><span class="n">flags</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_CONSTRUCT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">name</span> <span class="o">=</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">pspec</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-
-                <span class="c1"># libvips uses &#39;-&#39; to separate parts of arg names, but we</span>
-                <span class="c1"># need &#39;_&#39; for Python</span>
-                <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span>
-
-                <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">name</span><span class="p">,</span> <span class="n">flags</span><span class="p">])</span>
-
-            <span class="k">return</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span>
-
-        <span class="n">cb</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="s1">&#39;VipsArgumentMapFn&#39;</span><span class="p">,</span> <span class="n">add_construct</span><span class="p">)</span>
-        <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_argument_map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="n">cb</span><span class="p">,</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">,</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">args</span>
-
 <div class="viewcode-block" id="Operation.call"><a class="viewcode-back" href="../../voperation.html#pyvips.voperation.Operation.call">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="n">operation_name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Call a libvips operation.</span>
@@ -283,64 +386,62 @@
         <span class="c1"># logger.debug(&#39;VipsOperation.call: args = %s, kwargs =%s&#39;,</span>
         <span class="c1">#              args, kwargs)</span>
 
-        <span class="c1"># pull out the special string_options kwarg</span>
-        <span class="n">string_options</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;string_options&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">intro</span> <span class="o">=</span> <span class="n">Introspect</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">operation_name</span><span class="p">)</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;VipsOperation.call: string_options = </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">string_options</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">intro</span><span class="o">.</span><span class="n">required_input</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0}</span><span class="s1"> needs </span><span class="si">{1}</span><span class="s1"> arguments, but </span><span class="si">{2}</span><span class="s1"> given&#39;</span>
+                        <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">operation_name</span><span class="p">,</span>
+                                <span class="nb">len</span><span class="p">(</span><span class="n">intro</span><span class="o">.</span><span class="n">required_input</span><span class="p">),</span>
+                                <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)))</span>
 
         <span class="n">op</span> <span class="o">=</span> <span class="n">Operation</span><span class="o">.</span><span class="n">new_from_name</span><span class="p">(</span><span class="n">operation_name</span><span class="p">)</span>
 
-        <span class="n">arguments</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">get_args</span><span class="p">()</span>
-        <span class="c1"># logger.debug(&#39;arguments = %s&#39;, arguments)</span>
-
-        <span class="c1"># make a thing to quickly get flags from an arg name</span>
-        <span class="n">flags_from_name</span> <span class="o">=</span> <span class="p">{}</span>
-
-        <span class="c1"># count required input args</span>
-        <span class="n">n_required</span> <span class="o">=</span> <span class="mi">0</span>
-
-        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">flags</span> <span class="ow">in</span> <span class="n">arguments</span><span class="p">:</span>
-            <span class="n">flags_from_name</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">flags</span>
-
-            <span class="k">if</span> <span class="p">((</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_INPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                    <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                    <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_DEPRECATED</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
-                <span class="n">n_required</span> <span class="o">+=</span> <span class="mi">1</span>
-
-        <span class="k">if</span> <span class="n">n_required</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to call </span><span class="si">{0}</span><span class="s1">: </span><span class="si">{1}</span><span class="s1"> arguments given, &#39;</span>
-                        <span class="s1">&#39;but </span><span class="si">{2}</span><span class="s1"> required&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">operation_name</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">),</span>
-                                                  <span class="n">n_required</span><span class="p">))</span>
+        <span class="c1"># set any string options before any args so they can&#39;t be</span>
+        <span class="c1"># overridden</span>
+        <span class="n">string_options</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;string_options&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">op</span><span class="o">.</span><span class="n">set_string</span><span class="p">(</span><span class="n">string_options</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to call </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">operation_name</span><span class="p">))</span>
 
         <span class="c1"># the first image argument is the thing we expand constants to</span>
         <span class="c1"># match ... look inside tables for images, since we may be passing</span>
-        <span class="c1"># an array of image as a single param</span>
-        <span class="n">match_image</span> <span class="o">=</span> <span class="n">_find_inside</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span>
-                                   <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="p">),</span>
+        <span class="c1"># an array of images as a single param</span>
+        <span class="n">match_image</span> <span class="o">=</span> <span class="n">_find_inside</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="p">),</span>
                                    <span class="n">args</span><span class="p">)</span>
 
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;VipsOperation.call: match_image = </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">match_image</span><span class="p">)</span>
 
-        <span class="c1"># set any string options before any args so they can&#39;t be</span>
-        <span class="c1"># overridden</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">op</span><span class="o">.</span><span class="n">set_string</span><span class="p">(</span><span class="n">string_options</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to call </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">operation_name</span><span class="p">))</span>
+        <span class="c1"># collect a list of all input references here ... we can&#39;t use a set,</span>
+        <span class="c1"># unfortunately, because bytearrays are unhashable</span>
+        <span class="n">references</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="c1"># set required and optional args</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">flags</span> <span class="ow">in</span> <span class="n">arguments</span><span class="p">:</span>
-            <span class="k">if</span> <span class="p">((</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_INPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                    <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                    <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_DEPRECATED</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
-                <span class="n">op</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">match_image</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
-                <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">def</span> <span class="nf">add_reference</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">_references</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">references</span><span class="p">:</span>
+                        <span class="n">references</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
 
-        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">flags_from_name</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0}</span><span class="s1"> does not support argument &#39;</span>
-                            <span class="s1">&#39;</span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">operation_name</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+        <span class="c1"># set required input args</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">intro</span><span class="o">.</span><span class="n">required_input</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+            <span class="n">_find_inside</span><span class="p">(</span><span class="n">add_reference</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="n">op</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">intro</span><span class="o">.</span><span class="n">details</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;flags&#39;</span><span class="p">],</span> <span class="n">match_image</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
-            <span class="n">op</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">flags_from_name</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">match_image</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="c1"># set any optional args</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+            <span class="n">details</span> <span class="o">=</span> <span class="n">intro</span><span class="o">.</span><span class="n">details</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">intro</span><span class="o">.</span><span class="n">optional_input</span> <span class="ow">and</span>
+                    <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">intro</span><span class="o">.</span><span class="n">optional_output</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0}</span><span class="s1"> does not support optional argument </span><span class="si">{1}</span><span class="s1">&#39;</span>
+                            <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">operation_name</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">details</span><span class="p">[</span><span class="s1">&#39;flags&#39;</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">_DEPRECATED</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0}</span><span class="s1"> argument </span><span class="si">{1}</span><span class="s1"> is deprecated&#39;</span><span class="p">,</span>
+                            <span class="n">operation_name</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+            <span class="n">_find_inside</span><span class="p">(</span><span class="n">add_reference</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="n">op</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">details</span><span class="p">[</span><span class="s1">&#39;flags&#39;</span><span class="p">],</span> <span class="n">match_image</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
         <span class="c1"># build operation</span>
         <span class="n">vop</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_cache_operation_build</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span>
@@ -348,31 +449,31 @@
             <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to call </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">operation_name</span><span class="p">))</span>
         <span class="n">op</span> <span class="o">=</span> <span class="n">Operation</span><span class="p">(</span><span class="n">vop</span><span class="p">)</span>
 
-        <span class="c1"># fetch required output args, plus modified input images</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">flags</span> <span class="ow">in</span> <span class="n">arguments</span><span class="p">:</span>
-            <span class="k">if</span> <span class="p">((</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_OUTPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                    <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                    <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_DEPRECATED</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
-                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="c1"># attach all input refs to output x</span>
+        <span class="k">def</span> <span class="nf">set_reference</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="p">):</span>
+                <span class="n">x</span><span class="o">.</span><span class="n">_references</span> <span class="o">+=</span> <span class="n">references</span>
+            <span class="k">return</span> <span class="kc">False</span>
 
-            <span class="k">if</span> <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_INPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_MODIFY</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="c1"># fetch required output args (plus modified input images)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">intro</span><span class="o">.</span><span class="n">required_output</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">_find_inside</span><span class="p">(</span><span class="n">set_reference</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
         <span class="c1"># fetch optional output args</span>
         <span class="n">opts</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">flags</span> <span class="o">=</span> <span class="n">flags_from_name</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-
-            <span class="k">if</span> <span class="p">((</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_OUTPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                    <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span>
-                    <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_DEPRECATED</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
-                <span class="n">opts</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-
-        <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_object_unref_outputs</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">object</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">intro</span><span class="o">.</span><span class="n">optional_output</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">_find_inside</span><span class="p">(</span><span class="n">set_reference</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+                <span class="n">opts</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span>
+
+        <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_object_unref_outputs</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">vobject</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
@@ -391,95 +492,60 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="c1"># we cache these to save regeneration</span>
         <span class="k">if</span> <span class="n">operation_name</span> <span class="ow">in</span> <span class="n">Operation</span><span class="o">.</span><span class="n">_docstring_cache</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">Operation</span><span class="o">.</span><span class="n">_docstring_cache</span><span class="p">[</span><span class="n">operation_name</span><span class="p">]</span>
 
-        <span class="n">op</span> <span class="o">=</span> <span class="n">Operation</span><span class="o">.</span><span class="n">new_from_name</span><span class="p">(</span><span class="n">operation_name</span><span class="p">)</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">get_flags</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">_OPERATION_DEPRECATED</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">intro</span> <span class="o">=</span> <span class="n">Introspect</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">operation_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">intro</span><span class="o">.</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_OPERATION_DEPRECATED</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;No such operator.&#39;</span><span class="p">,</span>
                         <span class="s1">&#39;operator &quot;</span><span class="si">{0}</span><span class="s1">&quot; is deprecated&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">operation_name</span><span class="p">))</span>
 
-        <span class="c1"># we are only interested in non-deprecated args</span>
-        <span class="n">args</span> <span class="o">=</span> <span class="p">[[</span><span class="n">name</span><span class="p">,</span> <span class="n">flags</span><span class="p">]</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">flags</span> <span class="ow">in</span> <span class="n">op</span><span class="o">.</span><span class="n">get_args</span><span class="p">()</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_DEPRECATED</span><span class="p">]</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">intro</span><span class="o">.</span><span class="n">description</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="n">intro</span><span class="o">.</span><span class="n">description</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="s1">&#39;.</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;Example:</span><span class="se">\n</span><span class="s1">&#39;</span>
 
-        <span class="c1"># find the first required input image arg, if any ... that will be self</span>
-        <span class="n">member_x</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">flags</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-            <span class="k">if</span> <span class="p">((</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_INPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                    <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                    <span class="n">op</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">==</span> <span class="n">GValue</span><span class="o">.</span><span class="n">image_type</span><span class="p">):</span>
-                <span class="n">member_x</span> <span class="o">=</span> <span class="n">name</span>
-                <span class="k">break</span>
-
-        <span class="n">required_input</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">flags</span> <span class="ow">in</span> <span class="n">args</span>
-                          <span class="k">if</span> <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_INPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                          <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                          <span class="n">name</span> <span class="o">!=</span> <span class="n">member_x</span><span class="p">]</span>
-
-        <span class="n">optional_input</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">flags</span> <span class="ow">in</span> <span class="n">args</span>
-                          <span class="k">if</span> <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_INPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                             <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
-
-        <span class="n">required_output</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">flags</span> <span class="ow">in</span> <span class="n">args</span>
-                           <span class="k">if</span> <span class="p">((</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_OUTPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                               <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span>
-                              <span class="p">((</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_INPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                               <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                               <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_MODIFY</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)]</span>
-
-        <span class="n">optional_output</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">flags</span> <span class="ow">in</span> <span class="n">args</span>
-                           <span class="k">if</span> <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_OUTPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                              <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
-
-        <span class="n">description</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">get_description</span><span class="p">()</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">description</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="n">description</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="s2">&quot;.</span><span class="se">\n\n</span><span class="s2">&quot;</span>
-        <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;Example:</span><span class="se">\n</span><span class="s2">&quot;</span>
-
-        <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;   &quot;</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">required_output</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; = &quot;</span>
-        <span class="k">if</span> <span class="n">member_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">result</span> <span class="o">+=</span> <span class="n">member_x</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">operation_name</span> <span class="o">+</span> <span class="s2">&quot;(&quot;</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;   &#39;</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">intro</span><span class="o">.</span><span class="n">required_output</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; = &#39;</span>
+        <span class="k">if</span> <span class="n">intro</span><span class="o">.</span><span class="n">member_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="n">intro</span><span class="o">.</span><span class="n">member_x</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">operation_name</span> <span class="o">+</span> <span class="s1">&#39;(&#39;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;pyvips.Image.&quot;</span> <span class="o">+</span> <span class="n">operation_name</span> <span class="o">+</span> <span class="s2">&quot;(&quot;</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;pyvips.Image.&#39;</span> <span class="o">+</span> <span class="n">operation_name</span> <span class="o">+</span> <span class="s1">&#39;(&#39;</span>
 
-        <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">required_input</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">optional_input</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">required_input</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span>
-        <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">x</span> <span class="o">+</span> <span class="s2">&quot; = &quot;</span> <span class="o">+</span>
-                             <span class="n">GValue</span><span class="o">.</span><span class="n">gtype_to_python</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-                             <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">optional_input</span><span class="p">])</span>
-        <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;)</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">args</span> <span class="o">+=</span> <span class="n">intro</span><span class="o">.</span><span class="n">method_args</span>
+        <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="n">GValue</span><span class="o">.</span><span class="n">gtype_to_python</span><span class="p">(</span><span class="n">intro</span><span class="o">.</span><span class="n">details</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s1">&#39;type&#39;</span><span class="p">])</span>
+                 <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">intro</span><span class="o">.</span><span class="n">optional_input</span><span class="p">]</span>
+        <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="s1">&#39;=bool&#39;</span>
+                 <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">intro</span><span class="o">.</span><span class="n">optional_output</span><span class="p">]</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;)</span><span class="se">\n</span><span class="s1">&#39;</span>
 
         <span class="k">def</span> <span class="nf">argstr</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+            <span class="n">details</span> <span class="o">=</span> <span class="n">intro</span><span class="o">.</span><span class="n">details</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
             <span class="k">return</span> <span class="p">(</span><span class="sa">u</span><span class="s1">&#39;    </span><span class="si">{0}</span><span class="s1"> (</span><span class="si">{1}</span><span class="s1">): </span><span class="si">{2}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span>
                     <span class="nb">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span>
-                           <span class="n">GValue</span><span class="o">.</span><span class="n">gtype_to_python</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">name</span><span class="p">)),</span>
-                           <span class="n">op</span><span class="o">.</span><span class="n">get_blurb</span><span class="p">(</span><span class="n">name</span><span class="p">)))</span>
+                           <span class="n">GValue</span><span class="o">.</span><span class="n">gtype_to_python</span><span class="p">(</span><span class="n">details</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]),</span>
+                           <span class="n">details</span><span class="p">[</span><span class="s1">&#39;blurb&#39;</span><span class="p">]))</span>
 
-        <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Returns:</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">required_output</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Returns:</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">intro</span><span class="o">.</span><span class="n">required_output</span><span class="p">:</span>
             <span class="n">result</span> <span class="o">+=</span> <span class="n">argstr</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
-        <span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="n">member_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">names</span> <span class="o">+=</span> <span class="p">[</span><span class="n">member_x</span><span class="p">]</span>
-        <span class="n">names</span> <span class="o">+=</span> <span class="n">required_input</span>
-
-        <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Args:</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Args:</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="k">if</span> <span class="n">intro</span><span class="o">.</span><span class="n">member_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="n">argstr</span><span class="p">(</span><span class="n">intro</span><span class="o">.</span><span class="n">member_x</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">intro</span><span class="o">.</span><span class="n">method_args</span><span class="p">:</span>
             <span class="n">result</span> <span class="o">+=</span> <span class="n">argstr</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">optional_input</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Keyword args:</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">optional_input</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">intro</span><span class="o">.</span><span class="n">optional_input</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Keyword args:</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">intro</span><span class="o">.</span><span class="n">optional_input</span><span class="p">:</span>
                 <span class="n">result</span> <span class="o">+=</span> <span class="n">argstr</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">optional_output</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Other Parameters:</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">optional_output</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">intro</span><span class="o">.</span><span class="n">optional_output</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Other Parameters:</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">intro</span><span class="o">.</span><span class="n">optional_output</span><span class="p">:</span>
                 <span class="n">result</span> <span class="o">+=</span> <span class="n">argstr</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
-        <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Raises:</span><span class="se">\n</span><span class="s2">    :class:`.Error`</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Raises:</span><span class="se">\n</span><span class="s1">    :class:`.Error`</span><span class="se">\n</span><span class="s1">&#39;</span>
 
         <span class="c1"># add to cache to save building again</span>
         <span class="n">Operation</span><span class="o">.</span><span class="n">_docstring_cache</span><span class="p">[</span><span class="n">operation_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
@@ -494,91 +560,58 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">op</span> <span class="o">=</span> <span class="n">Operation</span><span class="o">.</span><span class="n">new_from_name</span><span class="p">(</span><span class="n">operation_name</span><span class="p">)</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">get_flags</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">_OPERATION_DEPRECATED</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">intro</span> <span class="o">=</span> <span class="n">Introspect</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">operation_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">intro</span><span class="o">.</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_OPERATION_DEPRECATED</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;No such operator.&#39;</span><span class="p">,</span>
                         <span class="s1">&#39;operator &quot;</span><span class="si">{0}</span><span class="s1">&quot; is deprecated&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">operation_name</span><span class="p">))</span>
 
-        <span class="c1"># we are only interested in non-deprecated args</span>
-        <span class="n">args</span> <span class="o">=</span> <span class="p">[[</span><span class="n">name</span><span class="p">,</span> <span class="n">flags</span><span class="p">]</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">flags</span> <span class="ow">in</span> <span class="n">op</span><span class="o">.</span><span class="n">get_args</span><span class="p">()</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_DEPRECATED</span><span class="p">]</span>
-
-        <span class="c1"># find the first required input image arg, if any ... that will be self</span>
-        <span class="n">member_x</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">flags</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-            <span class="k">if</span> <span class="p">((</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_INPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                    <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                    <span class="n">op</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">==</span> <span class="n">GValue</span><span class="o">.</span><span class="n">image_type</span><span class="p">):</span>
-                <span class="n">member_x</span> <span class="o">=</span> <span class="n">name</span>
-                <span class="k">break</span>
-
-        <span class="n">required_input</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">flags</span> <span class="ow">in</span> <span class="n">args</span>
-                          <span class="k">if</span> <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_INPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                          <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                          <span class="n">name</span> <span class="o">!=</span> <span class="n">member_x</span><span class="p">]</span>
-
-        <span class="n">optional_input</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">flags</span> <span class="ow">in</span> <span class="n">args</span>
-                          <span class="k">if</span> <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_INPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                             <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
-
-        <span class="n">required_output</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">flags</span> <span class="ow">in</span> <span class="n">args</span>
-                           <span class="k">if</span> <span class="p">((</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_OUTPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                               <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span>
-                              <span class="p">((</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_INPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                               <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                               <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_MODIFY</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)]</span>
-
-        <span class="n">optional_output</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">flags</span> <span class="ow">in</span> <span class="n">args</span>
-                           <span class="k">if</span> <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_OUTPUT</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span>
-                              <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">_REQUIRED</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
-
-        <span class="k">if</span> <span class="n">member_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">intro</span><span class="o">.</span><span class="n">member_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">result</span> <span class="o">=</span> <span class="s1">&#39;.. method:: &#39;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">result</span> <span class="o">=</span> <span class="s1">&#39;.. staticmethod:: &#39;</span>
         <span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">args</span> <span class="o">+=</span> <span class="n">required_input</span>
-        <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="s1">&#39; = &#39;</span> <span class="o">+</span> <span class="n">GValue</span><span class="o">.</span><span class="n">gtype_to_python</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-                 <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">optional_input</span><span class="p">]</span>
-        <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="s1">&#39; = bool&#39;</span>
-                 <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">optional_output</span><span class="p">]</span>
+        <span class="n">args</span> <span class="o">+=</span> <span class="n">intro</span><span class="o">.</span><span class="n">method_args</span>
+        <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="n">GValue</span><span class="o">.</span><span class="n">gtype_to_python</span><span class="p">(</span><span class="n">intro</span><span class="o">.</span><span class="n">details</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s1">&#39;type&#39;</span><span class="p">])</span>
+                 <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">intro</span><span class="o">.</span><span class="n">optional_input</span><span class="p">]</span>
+        <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="s1">&#39;=bool&#39;</span>
+                 <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">intro</span><span class="o">.</span><span class="n">optional_output</span><span class="p">]</span>
         <span class="n">result</span> <span class="o">+=</span> <span class="n">operation_name</span> <span class="o">+</span> <span class="s1">&#39;(&#39;</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;)</span><span class="se">\n\n</span><span class="s1">&#39;</span>
 
-        <span class="n">description</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">get_description</span><span class="p">()</span>
-        <span class="n">result</span> <span class="o">+=</span> <span class="n">description</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="n">description</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="s1">&#39;.</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="n">intro</span><span class="o">.</span><span class="n">description</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> \
+            <span class="n">intro</span><span class="o">.</span><span class="n">description</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="s1">&#39;.</span><span class="se">\n\n</span><span class="s1">&#39;</span>
 
         <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;Example:</span><span class="se">\n</span><span class="s1">&#39;</span>
-        <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;    &#39;</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">required_output</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; = &#39;</span>
-        <span class="k">if</span> <span class="n">member_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">result</span> <span class="o">+=</span> <span class="n">member_x</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">operation_name</span> <span class="o">+</span> <span class="s1">&#39;(&#39;</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;    &#39;</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">intro</span><span class="o">.</span><span class="n">required_output</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; = &#39;</span>
+        <span class="k">if</span> <span class="n">intro</span><span class="o">.</span><span class="n">member_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="n">intro</span><span class="o">.</span><span class="n">member_x</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">operation_name</span> <span class="o">+</span> <span class="s1">&#39;(&#39;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;pyvips.Image.&#39;</span> <span class="o">+</span> <span class="n">operation_name</span> <span class="o">+</span> <span class="s1">&#39;(&#39;</span>
-        <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">required_input</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">optional_input</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">required_input</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;, &#39;</span>
-        <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">x</span> <span class="o">+</span> <span class="s1">&#39; = &#39;</span> <span class="o">+</span>
-                             <span class="n">GValue</span><span class="o">.</span><span class="n">gtype_to_python</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-                             <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">optional_input</span><span class="p">])</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">args</span> <span class="o">+=</span> <span class="n">intro</span><span class="o">.</span><span class="n">method_args</span>
+        <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="n">GValue</span><span class="o">.</span><span class="n">gtype_to_python</span><span class="p">(</span><span class="n">intro</span><span class="o">.</span><span class="n">details</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s1">&#39;type&#39;</span><span class="p">])</span>
+                 <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">intro</span><span class="o">.</span><span class="n">optional_input</span><span class="p">]</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;)</span><span class="se">\n\n</span><span class="s1">&#39;</span>
 
-        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">required_input</span> <span class="o">+</span> <span class="n">optional_input</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">intro</span><span class="o">.</span><span class="n">method_args</span> <span class="o">+</span> <span class="n">intro</span><span class="o">.</span><span class="n">optional_input</span><span class="p">:</span>
+            <span class="n">details</span> <span class="o">=</span> <span class="n">intro</span><span class="o">.</span><span class="n">details</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
             <span class="n">result</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;:param </span><span class="si">{0}</span><span class="s1"> </span><span class="si">{1}</span><span class="s1">: </span><span class="si">{2}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span>
-                       <span class="nb">format</span><span class="p">(</span><span class="n">GValue</span><span class="o">.</span><span class="n">gtype_to_python</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">name</span><span class="p">)),</span>
+                       <span class="nb">format</span><span class="p">(</span><span class="n">GValue</span><span class="o">.</span><span class="n">gtype_to_python</span><span class="p">(</span><span class="n">details</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]),</span>
                               <span class="n">name</span><span class="p">,</span>
-                              <span class="n">op</span><span class="o">.</span><span class="n">get_blurb</span><span class="p">(</span><span class="n">name</span><span class="p">)))</span>
-        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">optional_output</span><span class="p">:</span>
+                              <span class="n">details</span><span class="p">[</span><span class="s1">&#39;blurb&#39;</span><span class="p">]))</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">intro</span><span class="o">.</span><span class="n">optional_output</span><span class="p">:</span>
             <span class="n">result</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;:param bool </span><span class="si">{0}</span><span class="s1">: enable output: </span><span class="si">{1}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span>
                        <span class="nb">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span>
-                              <span class="n">op</span><span class="o">.</span><span class="n">get_blurb</span><span class="p">(</span><span class="n">name</span><span class="p">)))</span>
+                              <span class="n">intro</span><span class="o">.</span><span class="n">details</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;blurb&#39;</span><span class="p">]))</span>
 
-        <span class="n">output_types</span> <span class="o">=</span> <span class="p">[</span><span class="n">GValue</span><span class="o">.</span><span class="n">gtype_to_python</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
-                        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">required_output</span><span class="p">]</span>
+        <span class="n">output_types</span> <span class="o">=</span> <span class="p">[</span><span class="n">GValue</span><span class="o">.</span><span class="n">gtype_to_python</span><span class="p">(</span><span class="n">intro</span><span class="o">.</span><span class="n">details</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;type&#39;</span><span class="p">])</span>
+                        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">intro</span><span class="o">.</span><span class="n">required_output</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">output_types</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">output_type</span> <span class="o">=</span> <span class="n">output_types</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">output_type</span> <span class="o">=</span> <span class="s1">&#39;list[&#39;</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_types</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">optional_output</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">intro</span><span class="o">.</span><span class="n">optional_output</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">output_types</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;Dict[str, mixed]&#39;</span><span class="p">]</span>
             <span class="n">output_type</span> <span class="o">+=</span> <span class="s1">&#39; or list[&#39;</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_types</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span>
 
@@ -602,44 +635,53 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c1"># generate list of all nicknames we can generate docstrings for</span>
+        <span class="c1"># these names are aliased</span>
+        <span class="n">alias</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;crop&quot;</span><span class="p">]</span>
+        <span class="n">alias_gtypes</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">alias</span><span class="p">:</span>
+            <span class="n">gtype</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">type_find</span><span class="p">(</span><span class="s2">&quot;VipsOperation&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="n">alias_gtypes</span><span class="p">[</span><span class="n">gtype</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
 
-        <span class="n">all_nicknames</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># all names we can generate docstrings for</span>
+        <span class="n">all_names</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="k">def</span> <span class="nf">add_nickname</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-            <span class="n">nickname</span> <span class="o">=</span> <span class="n">nickname_find</span><span class="p">(</span><span class="n">gtype</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">add_name</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">gtype</span> <span class="ow">in</span> <span class="n">alias_gtypes</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">alias_gtypes</span><span class="p">[</span><span class="n">gtype</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">nickname_find</span><span class="p">(</span><span class="n">gtype</span><span class="p">)</span>
+
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">Operation</span><span class="o">.</span><span class="n">generate_sphinx</span><span class="p">(</span><span class="n">nickname</span><span class="p">)</span>
-                <span class="n">all_nicknames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nickname</span><span class="p">)</span>
+                <span class="n">Operation</span><span class="o">.</span><span class="n">generate_sphinx</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">all_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
             <span class="k">except</span> <span class="n">Error</span><span class="p">:</span>
                 <span class="k">pass</span>
 
-            <span class="n">type_map</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">add_nickname</span><span class="p">)</span>
+            <span class="n">type_map</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">add_name</span><span class="p">)</span>
 
             <span class="k">return</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span>
 
-        <span class="n">type_map</span><span class="p">(</span><span class="n">type_from_name</span><span class="p">(</span><span class="s1">&#39;VipsOperation&#39;</span><span class="p">),</span> <span class="n">add_nickname</span><span class="p">)</span>
+        <span class="n">type_map</span><span class="p">(</span><span class="n">type_from_name</span><span class="p">(</span><span class="s1">&#39;VipsOperation&#39;</span><span class="p">),</span> <span class="n">add_name</span><span class="p">)</span>
 
-        <span class="n">all_nicknames</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="n">all_names</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
 
         <span class="c1"># remove operations we have to wrap by hand</span>
-
         <span class="n">exclude</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="s1">&#39;ifthenelse&#39;</span><span class="p">,</span> <span class="s1">&#39;bandjoin&#39;</span><span class="p">,</span> <span class="s1">&#39;bandrank&#39;</span><span class="p">]</span>
-        <span class="n">all_nicknames</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">all_nicknames</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude</span><span class="p">]</span>
+        <span class="n">all_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">all_names</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude</span><span class="p">]</span>
 
         <span class="c1"># Output summary table</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;.. class:: pyvips.Image</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;   .. rubric:: Methods</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;   .. autosummary::&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;      :nosignatures:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">nickname</span> <span class="ow">in</span> <span class="n">all_nicknames</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;      ~</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nickname</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">all_names</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;      ~</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
         <span class="nb">print</span><span class="p">()</span>
 
         <span class="c1"># Output docs</span>
         <span class="nb">print</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">nickname</span> <span class="ow">in</span> <span class="n">all_nicknames</span><span class="p">:</span>
-            <span class="n">docstr</span> <span class="o">=</span> <span class="n">Operation</span><span class="o">.</span><span class="n">generate_sphinx</span><span class="p">(</span><span class="n">nickname</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">all_names</span><span class="p">:</span>
+            <span class="n">docstr</span> <span class="o">=</span> <span class="n">Operation</span><span class="o">.</span><span class="n">generate_sphinx</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
             <span class="n">docstr</span> <span class="o">=</span> <span class="n">docstr</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">      &#39;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;   &#39;</span> <span class="o">+</span> <span class="n">docstr</span><span class="p">)</span></div></div>
 
@@ -665,7 +707,7 @@
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s1">&#39;Operation&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Introspect&#39;</span><span class="p">,</span> <span class="s1">&#39;Operation&#39;</span><span class="p">,</span>
     <span class="s1">&#39;cache_set_max&#39;</span><span class="p">,</span> <span class="s1">&#39;cache_set_max_mem&#39;</span><span class="p">,</span> <span class="s1">&#39;cache_set_max_files&#39;</span><span class="p">,</span>
     <span class="s1">&#39;cache_set_trace&#39;</span>
 <span class="p">]</span>
@@ -681,7 +723,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, John Cupitt.
+        &copy; Copyright 2019, John Cupitt
 
     </p>
   </div>
@@ -698,34 +740,16 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'2.1.4',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-      <script type="text/javascript" src="../../../../_static/collapse.js"></script>
-
-  
-
-  <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyvips.vinterpolate &mdash; pyvips 2.1.12 documentation</title>
+  <title>pyvips.vtargetcustom &mdash; pyvips 2.1.12 documentation</title>
   
 
   
@@ -149,7 +149,7 @@
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
-      <li>pyvips.vinterpolate</li>
+      <li>pyvips.vtargetcustom</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -164,52 +164,64 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for pyvips.vinterpolate</h1><div class="highlight"><pre>
+  <h1>Source code for pyvips.vtargetcustom</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
 
+<span class="kn">import</span> <span class="nn">logging</span>
+
 <span class="kn">import</span> <span class="nn">pyvips</span>
-<span class="kn">from</span> <span class="nn">pyvips</span> <span class="k">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">Error</span><span class="p">,</span> <span class="n">_to_bytes</span>
+<span class="kn">from</span> <span class="nn">pyvips</span> <span class="k">import</span> <span class="n">vips_lib</span>
 
-<span class="c1"># import logging</span>
-<span class="c1"># logger = logging.getLogger(__name__)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Interpolate"><a class="viewcode-back" href="../../vinterpolate.html#pyvips.vinterpolate.Interpolate">[docs]</a><span class="k">class</span> <span class="nc">Interpolate</span><span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">VipsObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Make interpolators for operators like :meth:`.affine`.</span>
+<div class="viewcode-block" id="TargetCustom"><a class="viewcode-back" href="../../vtargetcustom.html#pyvips.vtargetcustom.TargetCustom">[docs]</a><span class="k">class</span> <span class="nc">TargetCustom</span><span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">Target</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An output target you can connect action signals to to implement</span>
+<span class="sd">    behaviour.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointer</span><span class="p">):</span>
-        <span class="c1"># logger.debug(&#39;Operation.__init__: pointer = %s&#39;, pointer)</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Interpolate</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Make a new target you can customise.</span>
 
-<div class="viewcode-block" id="Interpolate.new"><a class="viewcode-back" href="../../vinterpolate.html#pyvips.vinterpolate.Interpolate.new">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">new</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Make a new interpolator by name.</span>
-
-<span class="sd">        Make a new interpolator from the libvips class nickname. For example::</span>
-
-<span class="sd">            inter = pyvips.Interpolator.new(&#39;bicubic&#39;)</span>
-
-<span class="sd">        You can get a list of all supported interpolators from the command-line</span>
-<span class="sd">        with::</span>
-
-<span class="sd">            $ vips -l interpolate</span>
-
-<span class="sd">        See for example :meth:`.affine`.</span>
+<span class="sd">        You can pass this target to (for example) :meth:`write_to_target`.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c1"># logger.debug(&#39;VipsInterpolate.new: name = %s&#39;, name)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TargetCustom</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_target_custom_new</span><span class="p">())</span>
 
-        <span class="n">vi</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_interpolate_new</span><span class="p">(</span><span class="n">_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">vi</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;no such interpolator </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+<div class="viewcode-block" id="TargetCustom.on_write"><a class="viewcode-back" href="../../vtargetcustom.html#pyvips.vtargetcustom.TargetCustom.on_write">[docs]</a>    <span class="k">def</span> <span class="nf">on_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Attach a write handler.</span>
 
-        <span class="k">return</span> <span class="n">Interpolate</span><span class="p">(</span><span class="n">vi</span><span class="p">)</span></div></div>
+<span class="sd">        The interface is exactly as io.write(). The handler is given a</span>
+<span class="sd">        bytes-like object to write, and should return the number of bytes</span>
+<span class="sd">        written.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">interface_handler</span><span class="p">(</span><span class="n">buf</span><span class="p">):</span>
+            <span class="n">bytes_written</span> <span class="o">=</span> <span class="n">handler</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+            <span class="c1"># py2 will often return None for bytes_written ... replace with</span>
+            <span class="c1"># the length of the string</span>
+            <span class="k">if</span> <span class="n">bytes_written</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">bytes_written</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">bytes_written</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">signal_connect</span><span class="p">(</span><span class="s2">&quot;write&quot;</span><span class="p">,</span> <span class="n">interface_handler</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TargetCustom.on_finish"><a class="viewcode-back" href="../../vtargetcustom.html#pyvips.vtargetcustom.TargetCustom.on_finish">[docs]</a>    <span class="k">def</span> <span class="nf">on_finish</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Attach a finish handler.</span>
+
+<span class="sd">        This optional handler is called at the end of write. It should do any</span>
+<span class="sd">        cleaning up necessary.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">signal_connect</span><span class="p">(</span><span class="s2">&quot;finish&quot;</span><span class="p">,</span> <span class="n">handler</span><span class="p">)</span></div></div>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Interpolate&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;TargetCustom&#39;</span><span class="p">]</span>
 </pre></div>
 
            </div>

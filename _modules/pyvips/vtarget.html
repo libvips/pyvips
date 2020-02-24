@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyvips.vinterpolate &mdash; pyvips 2.1.12 documentation</title>
+  <title>pyvips.vtarget &mdash; pyvips 2.1.12 documentation</title>
   
 
   
@@ -149,7 +149,7 @@
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
-      <li>pyvips.vinterpolate</li>
+      <li>pyvips.vtarget</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -164,52 +164,98 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for pyvips.vinterpolate</h1><div class="highlight"><pre>
+  <h1>Source code for pyvips.vtarget</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="kn">import</span> <span class="nn">pyvips</span>
 <span class="kn">from</span> <span class="nn">pyvips</span> <span class="k">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">Error</span><span class="p">,</span> <span class="n">_to_bytes</span>
 
-<span class="c1"># import logging</span>
-<span class="c1"># logger = logging.getLogger(__name__)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Interpolate"><a class="viewcode-back" href="../../vinterpolate.html#pyvips.vinterpolate.Interpolate">[docs]</a><span class="k">class</span> <span class="nc">Interpolate</span><span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">VipsObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Make interpolators for operators like :meth:`.affine`.</span>
+<div class="viewcode-block" id="Target"><a class="viewcode-back" href="../../vtarget.html#pyvips.vtarget.Target">[docs]</a><span class="k">class</span> <span class="nc">Target</span><span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">Connection</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An output connection.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointer</span><span class="p">):</span>
         <span class="c1"># logger.debug(&#39;Operation.__init__: pointer = %s&#39;, pointer)</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Interpolate</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Target</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Interpolate.new"><a class="viewcode-back" href="../../vinterpolate.html#pyvips.vinterpolate.Interpolate.new">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">new</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Make a new interpolator by name.</span>
+<div class="viewcode-block" id="Target.new_to_descriptor"><a class="viewcode-back" href="../../vtarget.html#pyvips.vtarget.Target.new_to_descriptor">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">new_to_descriptor</span><span class="p">(</span><span class="n">descriptor</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Make a new target to write to a file descriptor (a small</span>
+<span class="sd">        integer).</span>
 
-<span class="sd">        Make a new interpolator from the libvips class nickname. For example::</span>
+<span class="sd">        Make a new target that is attached to the descriptor. For example::</span>
 
-<span class="sd">            inter = pyvips.Interpolator.new(&#39;bicubic&#39;)</span>
+<span class="sd">            target = pyvips.Target.new_to_descriptor(1)</span>
 
-<span class="sd">        You can get a list of all supported interpolators from the command-line</span>
-<span class="sd">        with::</span>
+<span class="sd">        Makes a descriptor attached to stdout.</span>
 
-<span class="sd">            $ vips -l interpolate</span>
-
-<span class="sd">        See for example :meth:`.affine`.</span>
+<span class="sd">        You can pass this target to (for example) :meth:`write_to_target`.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c1"># logger.debug(&#39;VipsInterpolate.new: name = %s&#39;, name)</span>
+        <span class="c1"># logger.debug(&#39;VipsTarget.new_to_descriptor: descriptor = %d&#39;,</span>
+        <span class="c1">#   descriptor)</span>
 
-        <span class="n">vi</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_interpolate_new</span><span class="p">(</span><span class="n">_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">vi</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;no such interpolator </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="c1"># targets are mutable, so we can&#39;t use the cache</span>
+        <span class="n">pointer</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_target_new_to_descriptor</span><span class="p">(</span><span class="n">descriptor</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pointer</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s2">&quot;can&#39;t create output target from descriptor </span><span class="si">{0}</span><span class="s2">&quot;</span>
+                        <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">descriptor</span><span class="p">))</span>
 
-        <span class="k">return</span> <span class="n">Interpolate</span><span class="p">(</span><span class="n">vi</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">Target</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Target.new_to_file"><a class="viewcode-back" href="../../vtarget.html#pyvips.vtarget.Target.new_to_file">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">new_to_file</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Make a new target to write to a file.</span>
+
+<span class="sd">        Make a new target that will write to the named file. For example::</span>
+
+<span class="sd">            target = pyvips.Target.new_to_file(&quot;myfile.jpg&quot;)</span>
+
+<span class="sd">        You can pass this target to (for example) :meth:`write_to_target`.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># logger.debug(&#39;VipsTarget.new_to_file: filename = %s&#39;, filename)</span>
+
+        <span class="n">pointer</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_target_new_to_file</span><span class="p">(</span><span class="n">_to_bytes</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">pointer</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s2">&quot;can&#39;t create output target from filename </span><span class="si">{0}</span><span class="s2">&quot;</span>
+                        <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">Target</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Target.new_to_memory"><a class="viewcode-back" href="../../vtarget.html#pyvips.vtarget.Target.new_to_memory">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">new_to_memory</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;Make a new target to write to an area of memory.</span>
+
+<span class="sd">        Make a new target that will write to memory. For example::</span>
+
+<span class="sd">            target = pyvips.Target.new_to_memory()</span>
+
+<span class="sd">        You can pass this target to (for example) :meth:`write_to_target`.</span>
+
+<span class="sd">        After writing to the target, fetch the bytes from the target object</span>
+<span class="sd">        with `target.get(&quot;blob&quot;)`.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># logger.debug(&#39;VipsTarget.new_to_memory:&#39;)</span>
+
+        <span class="n">pointer</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_target_new_to_memory</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">pointer</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s2">&quot;can&#39;t create output target from memory&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Target</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span></div></div>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Interpolate&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Target&#39;</span><span class="p">]</span>
 </pre></div>
 
            </div>

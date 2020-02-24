@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyvips.gvalue &mdash; pyvips 2.1.4 documentation</title>
+  <title>pyvips.gvalue &mdash; pyvips 2.1.12 documentation</title>
   
 
   
@@ -17,22 +17,26 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script type="text/javascript" src="../../../../_static/collapse.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link href="../../_static/style.css" rel="stylesheet" type="text/css">
-
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
@@ -40,11 +44,10 @@
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -89,6 +92,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../../base.html">Base definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../error.html"><code class="docutils literal notranslate"><span class="pre">Error</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../enums.html">The libvips enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vconnection.html"><code class="docutils literal notranslate"><span class="pre">Connection</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vsource.html"><code class="docutils literal notranslate"><span class="pre">Source</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vtarget.html"><code class="docutils literal notranslate"><span class="pre">Target</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vsourcecustom.html"><code class="docutils literal notranslate"><span class="pre">SourceCustom</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vtargetcustom.html"><code class="docutils literal notranslate"><span class="pre">TargetCustom</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../vinterpolate.html"><code class="docutils literal notranslate"><span class="pre">Interpolate</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../gvalue.html"><code class="docutils literal notranslate"><span class="pre">GValue</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../gobject.html"><code class="docutils literal notranslate"><span class="pre">GObject</span></code></a></li>
@@ -174,14 +182,6 @@
 <span class="n">_is_PY2</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">==</span> <span class="mi">2</span>
 
 
-<span class="c1"># g_free() as something we can use for a VipsCallbackFn</span>
-<span class="k">def</span> <span class="nf">_g_free_cb_function</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-    <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_free</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-
-
-<span class="n">_g_free_cb</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="s1">&#39;VipsCallbackFn&#39;</span><span class="p">,</span> <span class="n">_g_free_cb_function</span><span class="p">)</span>
-
-
 <div class="viewcode-block" id="GValue"><a class="viewcode-back" href="../../gvalue.html#pyvips.gvalue.GValue">[docs]</a><span class="k">class</span> <span class="nc">GValue</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;Wrap GValue in a Python class.</span>
@@ -196,10 +196,12 @@
 <span class="sd">    GValue lifetime is managed automatically.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;pointer&#39;</span><span class="p">,</span> <span class="s1">&#39;gvalue&#39;</span><span class="p">)</span>
 
     <span class="c1"># look up some common gtypes at init for speed</span>
     <span class="n">gbool_type</span> <span class="o">=</span> <span class="n">type_from_name</span><span class="p">(</span><span class="s1">&#39;gboolean&#39;</span><span class="p">)</span>
     <span class="n">gint_type</span> <span class="o">=</span> <span class="n">type_from_name</span><span class="p">(</span><span class="s1">&#39;gint&#39;</span><span class="p">)</span>
+    <span class="n">guint64_type</span> <span class="o">=</span> <span class="n">type_from_name</span><span class="p">(</span><span class="s1">&#39;guint64&#39;</span><span class="p">)</span>
     <span class="n">gdouble_type</span> <span class="o">=</span> <span class="n">type_from_name</span><span class="p">(</span><span class="s1">&#39;gdouble&#39;</span><span class="p">)</span>
     <span class="n">gstr_type</span> <span class="o">=</span> <span class="n">type_from_name</span><span class="p">(</span><span class="s1">&#39;gchararray&#39;</span><span class="p">)</span>
     <span class="n">genum_type</span> <span class="o">=</span> <span class="n">type_from_name</span><span class="p">(</span><span class="s1">&#39;GEnum&#39;</span><span class="p">)</span>
@@ -211,6 +213,8 @@
     <span class="n">array_image_type</span> <span class="o">=</span> <span class="n">type_from_name</span><span class="p">(</span><span class="s1">&#39;VipsArrayImage&#39;</span><span class="p">)</span>
     <span class="n">refstr_type</span> <span class="o">=</span> <span class="n">type_from_name</span><span class="p">(</span><span class="s1">&#39;VipsRefString&#39;</span><span class="p">)</span>
     <span class="n">blob_type</span> <span class="o">=</span> <span class="n">type_from_name</span><span class="p">(</span><span class="s1">&#39;VipsBlob&#39;</span><span class="p">)</span>
+    <span class="n">source_type</span> <span class="o">=</span> <span class="n">type_from_name</span><span class="p">(</span><span class="s1">&#39;VipsSource&#39;</span><span class="p">)</span>
+    <span class="n">target_type</span> <span class="o">=</span> <span class="n">type_from_name</span><span class="p">(</span><span class="s1">&#39;VipsTarget&#39;</span><span class="p">)</span>
 
     <span class="n">pyvips</span><span class="o">.</span><span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_band_format_get_type</span><span class="p">()</span>
     <span class="n">format_type</span> <span class="o">=</span> <span class="n">type_from_name</span><span class="p">(</span><span class="s1">&#39;VipsBandFormat&#39;</span><span class="p">)</span>
@@ -223,6 +227,7 @@
     <span class="n">_gtype_to_python</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">gbool_type</span><span class="p">:</span> <span class="s1">&#39;bool&#39;</span><span class="p">,</span>
         <span class="n">gint_type</span><span class="p">:</span> <span class="s1">&#39;int&#39;</span><span class="p">,</span>
+        <span class="n">guint64_type</span><span class="p">:</span> <span class="s1">&#39;long&#39;</span><span class="p">,</span>  <span class="c1"># Note: int and long are unified in Python 3</span>
         <span class="n">gdouble_type</span><span class="p">:</span> <span class="s1">&#39;float&#39;</span><span class="p">,</span>
         <span class="n">gstr_type</span><span class="p">:</span> <span class="s1">&#39;str&#39;</span><span class="p">,</span>
         <span class="n">refstr_type</span><span class="p">:</span> <span class="s1">&#39;str&#39;</span><span class="p">,</span>
@@ -233,7 +238,9 @@
         <span class="n">array_int_type</span><span class="p">:</span> <span class="s1">&#39;list[int]&#39;</span><span class="p">,</span>
         <span class="n">array_double_type</span><span class="p">:</span> <span class="s1">&#39;list[float]&#39;</span><span class="p">,</span>
         <span class="n">array_image_type</span><span class="p">:</span> <span class="s1">&#39;list[Image]&#39;</span><span class="p">,</span>
-        <span class="n">blob_type</span><span class="p">:</span> <span class="s1">&#39;str&#39;</span>
+        <span class="n">blob_type</span><span class="p">:</span> <span class="s1">&#39;str&#39;</span><span class="p">,</span>
+        <span class="n">source_type</span><span class="p">:</span> <span class="s1">&#39;Source&#39;</span><span class="p">,</span>
+        <span class="n">target_type</span><span class="p">:</span> <span class="s1">&#39;Target&#39;</span><span class="p">,</span>
     <span class="p">}</span>
 
 <div class="viewcode-block" id="GValue.gtype_to_python"><a class="viewcode-back" href="../../gvalue.html#pyvips.gvalue.GValue.gtype_to_python">[docs]</a>    <span class="nd">@staticmethod</span>
@@ -318,6 +325,8 @@
             <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_value_set_boolean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gvalue</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GValue</span><span class="o">.</span><span class="n">gint_type</span><span class="p">:</span>
             <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_value_set_int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gvalue</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GValue</span><span class="o">.</span><span class="n">guint64_type</span><span class="p">:</span>
+            <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_value_set_uint64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gvalue</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GValue</span><span class="o">.</span><span class="n">gdouble_type</span><span class="p">:</span>
             <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_value_set_double</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gvalue</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">fundamental</span> <span class="o">==</span> <span class="n">GValue</span><span class="o">.</span><span class="n">genum_type</span><span class="p">:</span>
@@ -407,6 +416,8 @@
             <span class="n">result</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_value_get_boolean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gvalue</span><span class="p">))</span>
         <span class="k">elif</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GValue</span><span class="o">.</span><span class="n">gint_type</span><span class="p">:</span>
             <span class="n">result</span> <span class="o">=</span> <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_value_get_int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gvalue</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GValue</span><span class="o">.</span><span class="n">guint64_type</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_value_get_uint64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gvalue</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GValue</span><span class="o">.</span><span class="n">gdouble_type</span><span class="p">:</span>
             <span class="n">result</span> <span class="o">=</span> <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_value_get_double</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gvalue</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">fundamental</span> <span class="o">==</span> <span class="n">GValue</span><span class="o">.</span><span class="n">genum_type</span><span class="p">:</span>
@@ -435,7 +446,7 @@
             <span class="c1"># we want a ref that will last with the life of the vimage:</span>
             <span class="c1"># this ref is matched by the unref that&#39;s attached to finalize</span>
             <span class="c1"># by Image()</span>
-            <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_object_ref</span><span class="p">(</span><span class="n">go</span><span class="p">)</span>
+            <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_object_ref</span><span class="p">(</span><span class="n">vi</span><span class="p">)</span>
 
             <span class="n">result</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="n">vi</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GValue</span><span class="o">.</span><span class="n">array_int_type</span><span class="p">:</span>
@@ -488,7 +499,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, John Cupitt.
+        &copy; Copyright 2019, John Cupitt
 
     </p>
   </div>
@@ -505,34 +516,16 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'2.1.4',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-      <script type="text/javascript" src="../../../../_static/collapse.js"></script>
-
-  
-
-  <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

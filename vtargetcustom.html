@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>GObject &mdash; pyvips 2.1.12 documentation</title>
+  <title>TargetCustom &mdash; pyvips 2.1.12 documentation</title>
   
 
   
@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Operation" href="voperation.html" />
-    <link rel="prev" title="GValue" href="gvalue.html" />
+    <link rel="next" title="Interpolate" href="vinterpolate.html" />
+    <link rel="prev" title="SourceCustom" href="vsourcecustom.html" />
     <link href="_static/style.css" rel="stylesheet" type="text/css">
 
 </head>
@@ -98,10 +98,10 @@
 <li class="toctree-l1"><a class="reference internal" href="vsource.html"><code class="docutils literal notranslate"><span class="pre">Source</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="vtarget.html"><code class="docutils literal notranslate"><span class="pre">Target</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="vsourcecustom.html"><code class="docutils literal notranslate"><span class="pre">SourceCustom</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="vtargetcustom.html"><code class="docutils literal notranslate"><span class="pre">TargetCustom</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">TargetCustom</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="vinterpolate.html"><code class="docutils literal notranslate"><span class="pre">Interpolate</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="gvalue.html"><code class="docutils literal notranslate"><span class="pre">GValue</span></code></a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">GObject</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="gobject.html"><code class="docutils literal notranslate"><span class="pre">GObject</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="voperation.html"><code class="docutils literal notranslate"><span class="pre">Operation</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="vobject.html"><code class="docutils literal notranslate"><span class="pre">VipsObject</span></code></a></li>
 </ul>
@@ -149,14 +149,14 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li><code class="docutils literal notranslate"><span class="pre">GObject</span></code></li>
+      <li><code class="docutils literal notranslate"><span class="pre">TargetCustom</span></code></li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
             
-              <a href="https://github.com/libvips/pyvips/blob/master/doc/gobject.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/libvips/pyvips/blob/master/doc/vtargetcustom.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -170,48 +170,28 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-pyvips.gobject">
-<span id="gobject"></span><h1><code class="docutils literal notranslate"><span class="pre">GObject</span></code><a class="headerlink" href="#module-pyvips.gobject" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pyvips.vtargetcustom">
+<span id="targetcustom"></span><h1><code class="docutils literal notranslate"><span class="pre">TargetCustom</span></code><a class="headerlink" href="#module-pyvips.vtargetcustom" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="pyvips.gobject.GObject">
-<em class="property">class </em><code class="sig-prename descclassname">pyvips.gobject.</code><code class="sig-name descname">GObject</code><span class="sig-paren">(</span><em class="sig-param">pointer</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/gobject.html#GObject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gobject.GObject" title="Permalink to this definition">¶</a></dt>
-<dd><p>Manage GObject lifetime.</p>
+<dt id="pyvips.vtargetcustom.TargetCustom">
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.vtargetcustom.</code><code class="sig-name descname">TargetCustom</code><a class="reference internal" href="_modules/pyvips/vtargetcustom.html#TargetCustom"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.vtargetcustom.TargetCustom" title="Permalink to this definition">¶</a></dt>
+<dd><p>An output target you can connect action signals to to implement
+behaviour.</p>
 <dl class="method">
-<dt id="pyvips.gobject.GObject.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">pointer</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/gobject.html#GObject.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gobject.GObject.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrap around a pointer.</p>
-<p>Wraps a GObject instance around an underlying pointer. When the
-instance is garbage-collected, the underlying object is unreferenced.</p>
+<dt id="pyvips.vtargetcustom.TargetCustom.on_write">
+<code class="sig-name descname">on_write</code><span class="sig-paren">(</span><em class="sig-param">handler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vtargetcustom.html#TargetCustom.on_write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.vtargetcustom.TargetCustom.on_write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attach a write handler.</p>
+<p>The interface is exactly as io.write(). The handler is given a
+bytes-like object to write, and should return the number of bytes
+written.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyvips.gobject.GObject.new_pointer_from_gtype">
-<em class="property">static </em><code class="sig-name descname">new_pointer_from_gtype</code><span class="sig-paren">(</span><em class="sig-param">gtype</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/gobject.html#GObject.new_pointer_from_gtype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gobject.GObject.new_pointer_from_gtype" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make a new GObject pointer from a gtype.</p>
-<p>This is useful for subclasses which need to control the construction
-process.</p>
-<p>You can pass the result pointer to the Python constructor for the
-object you are building. You will need to call VipsObject.build() to
-finish construction.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>A pointer to a new GObject.</p>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference internal" href="error.html#pyvips.error.Error" title="pyvips.error.Error"><strong>Error</strong></a> – </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyvips.gobject.GObject.signal_connect">
-<code class="sig-name descname">signal_connect</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">callback</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/gobject.html#GObject.signal_connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gobject.GObject.signal_connect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Connect to a signal on this object.</p>
-<p>The callback will be triggered every time this signal is issued on this
-instance. It will be passed the image (‘self’ here), and a single
-<cite>void *</cite> pointer from libvips.</p>
-<p>The value of the pointer, if any, depends on the signal – for
-example, ::eval passes a pointer to a <cite>VipsProgress</cite> struct.</p>
+<dt id="pyvips.vtargetcustom.TargetCustom.on_finish">
+<code class="sig-name descname">on_finish</code><span class="sig-paren">(</span><em class="sig-param">handler</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vtargetcustom.html#TargetCustom.on_finish"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.vtargetcustom.TargetCustom.on_finish" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attach a finish handler.</p>
+<p>This optional handler is called at the end of write. It should do any
+cleaning up necessary.</p>
 </dd></dl>
 
 </dd></dl>
@@ -226,10 +206,10 @@ example, ::eval passes a pointer to a <cite>VipsProgress</cite> struct.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="voperation.html" class="btn btn-neutral float-right" title="Operation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="vinterpolate.html" class="btn btn-neutral float-right" title="Interpolate" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="gvalue.html" class="btn btn-neutral float-left" title="GValue" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="vsourcecustom.html" class="btn btn-neutral float-left" title="SourceCustom" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

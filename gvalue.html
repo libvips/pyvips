@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>GValue &mdash; pyvips 2.1.4 documentation</title>
+  <title>GValue &mdash; pyvips 2.1.12 documentation</title>
   
 
   
@@ -17,13 +17,21 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/collapse.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
@@ -32,21 +40,16 @@
     <link rel="prev" title="Interpolate" href="vinterpolate.html" />
     <link href="_static/style.css" rel="stylesheet" type="text/css">
 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -91,6 +94,11 @@
 <li class="toctree-l1"><a class="reference internal" href="base.html">Base definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="error.html"><code class="docutils literal notranslate"><span class="pre">Error</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="enums.html">The libvips enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vconnection.html"><code class="docutils literal notranslate"><span class="pre">Connection</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="vsource.html"><code class="docutils literal notranslate"><span class="pre">Source</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtarget.html"><code class="docutils literal notranslate"><span class="pre">Target</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="vsourcecustom.html"><code class="docutils literal notranslate"><span class="pre">SourceCustom</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtargetcustom.html"><code class="docutils literal notranslate"><span class="pre">TargetCustom</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="vinterpolate.html"><code class="docutils literal notranslate"><span class="pre">Interpolate</span></code></a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">GValue</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="gobject.html"><code class="docutils literal notranslate"><span class="pre">GObject</span></code></a></li>
@@ -168,7 +176,7 @@
 this class to get and set <a class="reference internal" href="gobject.html#pyvips.gobject.GObject" title="pyvips.gobject.GObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">GObject</span></code></a> properties.</p>
 <span class="target" id="module-pyvips.gvalue"></span><dl class="class">
 <dt id="pyvips.gvalue.GValue">
-<em class="property">class </em><code class="descclassname">pyvips.gvalue.</code><code class="descname">GValue</code><a class="reference internal" href="_modules/pyvips/gvalue.html#GValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gvalue.GValue" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.gvalue.</code><code class="sig-name descname">GValue</code><a class="reference internal" href="_modules/pyvips/gvalue.html#GValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gvalue.GValue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrap GValue in a Python class.</p>
 <p>This class wraps <a class="reference internal" href="#pyvips.gvalue.GValue" title="pyvips.gvalue.GValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">GValue</span></code></a> in a convenient interface. You can use
 instances of this class to get and set <a class="reference internal" href="gobject.html#pyvips.gobject.GObject" title="pyvips.gobject.GObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">GObject</span></code></a> properties.</p>
@@ -176,27 +184,27 @@ instances of this class to get and set <a class="reference internal" href="gobje
 a get function to have it filled by <a class="reference internal" href="gobject.html#pyvips.gobject.GObject" title="pyvips.gobject.GObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">GObject</span></code></a>, or use init to
 set a type, set to set a value, then use it to set an object property.</p>
 <p>GValue lifetime is managed automatically.</p>
-<dl class="staticmethod">
+<dl class="method">
 <dt id="pyvips.gvalue.GValue.gtype_to_python">
-<em class="property">static </em><code class="descname">gtype_to_python</code><span class="sig-paren">(</span><em>gtype</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/gvalue.html#GValue.gtype_to_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gvalue.GValue.gtype_to_python" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">gtype_to_python</code><span class="sig-paren">(</span><em class="sig-param">gtype</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/gvalue.html#GValue.gtype_to_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gvalue.GValue.gtype_to_python" title="Permalink to this definition">¶</a></dt>
 <dd><p>Map a gtype to the name of the Python type we use to represent it.</p>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="pyvips.gvalue.GValue.to_enum">
-<em class="property">static </em><code class="descname">to_enum</code><span class="sig-paren">(</span><em>gtype</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/gvalue.html#GValue.to_enum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gvalue.GValue.to_enum" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">to_enum</code><span class="sig-paren">(</span><em class="sig-param">gtype</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/gvalue.html#GValue.to_enum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gvalue.GValue.to_enum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Turn a string into an enum value ready to be passed into libvips.</p>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="pyvips.gvalue.GValue.from_enum">
-<em class="property">static </em><code class="descname">from_enum</code><span class="sig-paren">(</span><em>gtype</em>, <em>enum_value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/gvalue.html#GValue.from_enum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gvalue.GValue.from_enum" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">from_enum</code><span class="sig-paren">(</span><em class="sig-param">gtype</em>, <em class="sig-param">enum_value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/gvalue.html#GValue.from_enum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gvalue.GValue.from_enum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Turn an int back into an enum string.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyvips.gvalue.GValue.set_type">
-<code class="descname">set_type</code><span class="sig-paren">(</span><em>gtype</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/gvalue.html#GValue.set_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gvalue.GValue.set_type" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_type</code><span class="sig-paren">(</span><em class="sig-param">gtype</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/gvalue.html#GValue.set_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gvalue.GValue.set_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the type of a GValue.</p>
 <p>GValues have a set type, fixed at creation time. Use set_type to set
 the type of a GValue before assigning to it.</p>
@@ -206,7 +214,7 @@ type_find.</p>
 
 <dl class="method">
 <dt id="pyvips.gvalue.GValue.set">
-<code class="descname">set</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/gvalue.html#GValue.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gvalue.GValue.set" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/gvalue.html#GValue.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gvalue.GValue.set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set a GValue.</p>
 <p>The value is converted to the type of the GValue, if possible, and
 assigned.</p>
@@ -214,7 +222,7 @@ assigned.</p>
 
 <dl class="method">
 <dt id="pyvips.gvalue.GValue.get">
-<code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/gvalue.html#GValue.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gvalue.GValue.get" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/gvalue.html#GValue.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gvalue.GValue.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the contents of a GValue.</p>
 <p>The contents of the GValue are read out as a Python type.</p>
 </dd></dl>
@@ -234,7 +242,7 @@ assigned.</p>
         <a href="gobject.html" class="btn btn-neutral float-right" title="GObject" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="vinterpolate.html" class="btn btn-neutral" title="Interpolate" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="vinterpolate.html" class="btn btn-neutral float-left" title="Interpolate" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -243,7 +251,7 @@ assigned.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, John Cupitt.
+        &copy; Copyright 2019, John Cupitt
 
     </p>
   </div>
@@ -260,34 +268,16 @@ assigned.</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'2.1.4',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-      <script type="text/javascript" src="_static/collapse.js"></script>
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

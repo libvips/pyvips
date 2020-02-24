@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyvips.vinterpolate &mdash; pyvips 2.1.12 documentation</title>
+  <title>pyvips.vconnection &mdash; pyvips 2.1.12 documentation</title>
   
 
   
@@ -149,7 +149,7 @@
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
-      <li>pyvips.vinterpolate</li>
+      <li>pyvips.vconnection</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -164,52 +164,54 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for pyvips.vinterpolate</h1><div class="highlight"><pre>
+  <h1>Source code for pyvips.vconnection</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
 
+<span class="kn">import</span> <span class="nn">logging</span>
+
 <span class="kn">import</span> <span class="nn">pyvips</span>
-<span class="kn">from</span> <span class="nn">pyvips</span> <span class="k">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">Error</span><span class="p">,</span> <span class="n">_to_bytes</span>
+<span class="kn">from</span> <span class="nn">pyvips</span> <span class="k">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">_to_string</span>
 
-<span class="c1"># import logging</span>
-<span class="c1"># logger = logging.getLogger(__name__)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Interpolate"><a class="viewcode-back" href="../../vinterpolate.html#pyvips.vinterpolate.Interpolate">[docs]</a><span class="k">class</span> <span class="nc">Interpolate</span><span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">VipsObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Make interpolators for operators like :meth:`.affine`.</span>
+<div class="viewcode-block" id="Connection"><a class="viewcode-back" href="../../vconnection.html#pyvips.vconnection.Connection">[docs]</a><span class="k">class</span> <span class="nc">Connection</span><span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">VipsObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The abstract base Connection class.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointer</span><span class="p">):</span>
         <span class="c1"># logger.debug(&#39;Operation.__init__: pointer = %s&#39;, pointer)</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Interpolate</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Connection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Interpolate.new"><a class="viewcode-back" href="../../vinterpolate.html#pyvips.vinterpolate.Interpolate.new">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">new</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Make a new interpolator by name.</span>
-
-<span class="sd">        Make a new interpolator from the libvips class nickname. For example::</span>
-
-<span class="sd">            inter = pyvips.Interpolator.new(&#39;bicubic&#39;)</span>
-
-<span class="sd">        You can get a list of all supported interpolators from the command-line</span>
-<span class="sd">        with::</span>
-
-<span class="sd">            $ vips -l interpolate</span>
-
-<span class="sd">        See for example :meth:`.affine`.</span>
+<div class="viewcode-block" id="Connection.filename"><a class="viewcode-back" href="../../vconnection.html#pyvips.vconnection.Connection.filename">[docs]</a>    <span class="k">def</span> <span class="nf">filename</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the filename associated with a connection. Return None if there</span>
+<span class="sd">        is no associated file.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c1"># logger.debug(&#39;VipsInterpolate.new: name = %s&#39;, name)</span>
+        <span class="n">so</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;VipsConnection *&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span>
+        <span class="n">pointer</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_connection_filename</span><span class="p">(</span><span class="n">so</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pointer</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span></div>
 
-        <span class="n">vi</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_interpolate_new</span><span class="p">(</span><span class="n">_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">vi</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;no such interpolator </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+<div class="viewcode-block" id="Connection.nick"><a class="viewcode-back" href="../../vconnection.html#pyvips.vconnection.Connection.nick">[docs]</a>    <span class="k">def</span> <span class="nf">nick</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Make a human-readable name for a connection suitable for error</span>
+<span class="sd">        messages.</span>
 
-        <span class="k">return</span> <span class="n">Interpolate</span><span class="p">(</span><span class="n">vi</span><span class="p">)</span></div></div>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">so</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;VipsConnection *&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span>
+        <span class="n">pointer</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_connection_nick</span><span class="p">(</span><span class="n">so</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pointer</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span></div></div>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Interpolate&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Connection&#39;</span><span class="p">]</span>
 </pre></div>
 
            </div>

@@ -29,7 +29,7 @@ Reading this example line by line, we have::
 
     image = pyvips.Image.new_from_file('some-image.jpg', access='sequential')
 
-:meth:`.new_from_file` can load any image file supported by libvips. In
+:meth:`.Image.new_from_file` can load any image file supported by libvips. In
 this example, we will be accessing pixels top-to-bottom as we sweep through
 the image reading and writing, so `sequential` access mode is best for us.
 
@@ -120,7 +120,7 @@ it.
 NumPy and PIL
 -------------
 
-You can use :meth:`.write_to_memory` and :meth:`.new_from_memory` to pass
+You can use :meth:`.write_to_memory` and :meth:`.Image.new_from_memory` to pass
 buffers of pixels between PIL, NumPy and pyvips. For example::
 
     import pyvips
@@ -276,18 +276,6 @@ Add these lines somewhere near the start of your program::
         logging.basicConfig(level=logging.WARNING)
 
 
-Automatic documentation
------------------------
-
-The bulk of these API docs are generated automatically by
-:meth:`.Operation.generate_sphinx_all`. It examines libvips and writes a
-summary of each operation and the arguments and options that that operation
-expects.
-
-Use the C API docs for more detail:
-
-https://libvips.github.io/libvips/API/current
-
 Exceptions
 ----------
 
@@ -300,23 +288,6 @@ Enums
 The libvips enums, such as ``VipsBandFormat``, appear in pyvips as strings
 like ``'uchar'``. They are documented as a set of classes for convenience, see
 :class:`.Access`, for example.
-
-Draw operations
----------------
-
-Paint operations like :meth:`.Image.draw_circle` and
-:meth:`.Image.draw_line` modify their input image. This makes them
-hard to use with the rest of libvips: you need to be very careful about
-the order in which operations execute or you can get nasty crashes.
-
-The wrapper spots operations of this type and makes a private copy of the
-image in memory before calling the operation. This stops crashes, but it does
-make it inefficient. If you draw 100 lines on an image, for example, you'll
-copy the image 100 times. The wrapper does make sure that memory is recycled
-where possible, so you won't have 100 copies in memory.
-
-If you want to avoid the copies, you'll need to call drawing operations
-yourself.
 
 Overloads
 ---------
@@ -347,4 +318,106 @@ Convenience functions
 The wrapper defines a few extra useful utility functions:
 :meth:`.bandsplit`, :meth:`.maxpos`, :meth:`.minpos`,
 :meth:`.median`.
+
+Tracking and interrupting computation
+-------------------------------------
+
+You can attach progress handlers to images to watch the progress of
+computation.
+
+For example::
+
+    image = pyvips.Image.black(1, 500)
+    image.set_progress(True)
+    image.signal_connect('preeval', preeval_handler)
+    image.signal_connect('eval', eval_handler)
+    image.signal_connect('posteval', posteval_handler)
+    image.avg()
+
+Handlers are given a `progress` object containing a number of useful fields.
+For example::
+
+   def eval_handler(image, progress):
+       print('run time so far (secs) = {}'.format(progress.run))
+       print('estimated time of arrival (secs) = {}'.format(progress.eta))
+       print('total number of pels to process = {}'.format(progress.tpels))
+       print('number of pels processed so far = {}'.format(progress.npels))
+       print('percent complete = {}'.format(progress.percent))
+
+Use :meth:`.Image.set_kill` on the image to stop computation early. 
+
+For example::
+
+   def eval_handler(image, progress):
+       if progress.percent > 50:
+           image.set_kill(True)
+
+Custom sources and targets
+--------------------------
+
+You can load and save images to and from :class:`.Source` and
+:class:`.Target`. 
+
+For example::
+
+   source = pyvips.Source.new_from_file("some/file/name")
+   image = pyvips.Image.new_from_source(source, "", access="sequential")
+   target = pyvips.Target.new_to_file("some/file/name")
+   image.write_to_target(target, ".png")
+
+Sources and targets can be files, descriptors (eg. pipes) and areas of memory.
+
+You can define :class:`.SourceCustom` and :class:`.TargetCustom` too. 
+
+For example::
+
+   input_file = open(sys.argv[1], "rb")
+
+   def read_handler(size):
+       return input_file.read(size)
+
+   source = pyvips.SourceCustom()
+   source.on_read(read_handler)
+
+   output_file = open(sys.argv[2], "wb")
+
+   def write_handler(chunk):
+       return output_file.write(chunk)
+
+   target = pyvips.TargetCustom()
+   target.on_write(write_handler)
+
+   image = pyvips.Image.new_from_source(source, '', access='sequential')
+   image.write_to_target(target, '.png')
+
+You can also define seek and finish handlers, see the docs.
+
+Automatic documentation
+-----------------------
+
+The bulk of these API docs are generated automatically by
+:meth:`.Operation.generate_sphinx_all`. It examines libvips and writes a
+summary of each operation and the arguments and options that that operation
+expects.
+
+Use the C API docs for more detail:
+
+https://libvips.github.io/libvips/API/current
+
+Draw operations
+---------------
+
+Paint operations like :meth:`.Image.draw_circle` and
+:meth:`.Image.draw_line` modify their input image. This makes them
+hard to use with the rest of libvips: you need to be very careful about
+the order in which operations execute or you can get nasty crashes.
+
+The wrapper spots operations of this type and makes a private copy of the
+image in memory before calling the operation. This stops crashes, but it does
+make it inefficient. If you draw 100 lines on an image, for example, you'll
+copy the image 100 times. The wrapper does make sure that memory is recycled
+where possible, so you won't have 100 copies in memory.
+
+If you want to avoid the copies, you'll need to call drawing operations
+yourself.
 

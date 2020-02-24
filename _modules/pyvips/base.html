@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyvips.base &mdash; pyvips 2.1.4 documentation</title>
+  <title>pyvips.base &mdash; pyvips 2.1.12 documentation</title>
   
 
   
@@ -17,22 +17,26 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script type="text/javascript" src="../../../../_static/collapse.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link href="../../_static/style.css" rel="stylesheet" type="text/css">
-
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
@@ -40,11 +44,10 @@
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -89,6 +92,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../../base.html">Base definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../error.html"><code class="docutils literal notranslate"><span class="pre">Error</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../enums.html">The libvips enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vconnection.html"><code class="docutils literal notranslate"><span class="pre">Connection</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vsource.html"><code class="docutils literal notranslate"><span class="pre">Source</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vtarget.html"><code class="docutils literal notranslate"><span class="pre">Target</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vsourcecustom.html"><code class="docutils literal notranslate"><span class="pre">SourceCustom</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vtargetcustom.html"><code class="docutils literal notranslate"><span class="pre">TargetCustom</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../vinterpolate.html"><code class="docutils literal notranslate"><span class="pre">Interpolate</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../gvalue.html"><code class="docutils literal notranslate"><span class="pre">GValue</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../gobject.html"><code class="docutils literal notranslate"><span class="pre">GObject</span></code></a></li>
@@ -160,7 +168,7 @@
 <span></span><span class="c1"># basic defs and link to ffi</span>
 
 
-<span class="kn">from</span> <span class="nn">pyvips</span> <span class="k">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">glib_lib</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="p">,</span> \
+<span class="kn">from</span> <span class="nn">pyvips</span> <span class="k">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">glib_lib</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="p">,</span> \
     <span class="n">_to_string</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">,</span> <span class="n">Error</span>
 
 
@@ -170,6 +178,7 @@
 <span class="sd">    With this enabled, libvips will check for object and area leaks on exit.</span>
 <span class="sd">    Enabling this option will make libvips run slightly more slowly.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">return</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_leak_set</span><span class="p">(</span><span class="n">leak</span><span class="p">)</span></div>
 
 
@@ -185,7 +194,6 @@
 
 <span class="sd">    Raises:</span>
 <span class="sd">        :class:`.Error`</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">value</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_version</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
@@ -195,8 +203,32 @@
     <span class="k">return</span> <span class="n">value</span></div>
 
 
-<span class="c1"># we need to define this before we import the decls: they need to know which</span>
-<span class="c1"># bits of decl to make</span>
+<div class="viewcode-block" id="get_suffixes"><a class="viewcode-back" href="../../base.html#pyvips.base.get_suffixes">[docs]</a><span class="k">def</span> <span class="nf">get_suffixes</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Get a list of all the filename suffixes supported by libvips.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        [string]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="n">at_least_libvips</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">):</span>
+        <span class="n">array</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_foreign_get_suffixes</span><span class="p">()</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+                <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">glib_lib</span><span class="o">.</span><span class="n">g_free</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">glib_lib</span><span class="o">.</span><span class="n">g_free</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">names</span></div>
+
+
+<span class="c1"># we need to define this before we import the declarations: they need to know</span>
+<span class="c1"># which bits to make</span>
 <div class="viewcode-block" id="at_least_libvips"><a class="viewcode-back" href="../../base.html#pyvips.base.at_least_libvips">[docs]</a><span class="k">def</span> <span class="nf">at_least_libvips</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Is this at least libvips x.y?&quot;&quot;&quot;</span>
 
@@ -220,6 +252,7 @@
 <span class="sd">    Looks up the GType for a nickname. Types below basename in the type</span>
 <span class="sd">    hierarchy are searched.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">return</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_type_find</span><span class="p">(</span><span class="n">_to_bytes</span><span class="p">(</span><span class="n">basename</span><span class="p">),</span> <span class="n">_to_bytes</span><span class="p">(</span><span class="n">nickname</span><span class="p">))</span></div>
 
 
@@ -243,6 +276,7 @@
 
 <div class="viewcode-block" id="type_map"><a class="viewcode-back" href="../../base.html#pyvips.base.type_map">[docs]</a><span class="k">def</span> <span class="nf">type_map</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Map fn over all child types of gtype.&quot;&quot;&quot;</span>
+
     <span class="n">cb</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="s1">&#39;VipsTypeMap2Fn&#39;</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_type_map</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">cb</span><span class="p">,</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">,</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">)</span></div>
 
@@ -271,6 +305,7 @@
     <span class="s1">&#39;path_mode7&#39;</span><span class="p">,</span>
     <span class="s1">&#39;type_find&#39;</span><span class="p">,</span>
     <span class="s1">&#39;nickname_find&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;get_suffixes&#39;</span><span class="p">,</span>
     <span class="s1">&#39;type_name&#39;</span><span class="p">,</span>
     <span class="s1">&#39;type_map&#39;</span><span class="p">,</span>
     <span class="s1">&#39;type_from_name&#39;</span><span class="p">,</span>
@@ -288,7 +323,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, John Cupitt.
+        &copy; Copyright 2019, John Cupitt
 
     </p>
   </div>
@@ -305,34 +340,16 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'2.1.4',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-      <script type="text/javascript" src="../../../../_static/collapse.js"></script>
-
-  
-
-  <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

@@ -9,9 +9,21 @@ PyPI package:
 
 https://pypi.python.org/pypi/pyvips
 
-This module wraps the libvips image processing library. 
+conda package:
+
+https://anaconda.org/conda-forge/pyvips
+
+We have formatted docs online here:
+
+https://libvips.github.io/pyvips/
+
+This module wraps the libvips image processing library:
 
 https://libvips.github.io/libvips/
+
+The libvips docs are also very useful:
+
+https://libvips.github.io/libvips/API/current/
 
 If you have the development headers for libvips installed and have a working C
 compiler, this module will use cffi API mode to try to build a libvips 
@@ -25,10 +37,6 @@ pyvips installed with ``pip show pyvips``.
 This binding passes the vips test suite cleanly and with no leaks under
 python2.7 - python3.6, pypy and pypy3 on Windows, macOS and Linux. 
 
-We have formatted docs online here:
-
-https://libvips.github.io/pyvips/
-
 How it works
 ------------
 
@@ -40,7 +48,7 @@ destination a section at a time.
 
 Because ``pyvips`` is parallel, it's quick, and because it doesn't need to
 keep entire images in memory, it's light.  For example, the libvips 
-speed and memory use benchmark: 
+speed and memory use benchmark:
 
 https://github.com/libvips/libvips/wiki/Speed-and-memory-use
 
@@ -53,56 +61,59 @@ which gives some more background.
 
 http://libvips.github.io/libvips/API/current/How-it-opens-files.md.html
 
-Install
--------
+conda Install
+-------------
 
-You need the libvips shared library on your library search path, version 8.2 or
-later. On Linux and macOS, you can just install via your package manager; on 
-Windows you can download a pre-compiled binary from the libvips website.
+The conda package includes a matching libvips binary, so just enter:
+
+.. code-block:: shell
+
+    $ conda install --channel conda-forge pyvips
+
+Non-conda install
+-----------------
+
+First, you need the libvips shared library on your library search path, version
+8.2 or later. On Linux and macOS, you can just install via your package
+manager; on Windows you can download a pre-compiled binary from the libvips
+website.
 
 https://libvips.github.io/libvips/install.html
 
-On Windows, you will need to add `vips-dev-x.y\bin` to your `PATH`.
+Next, install this package, perhaps:
 
-Next, install this package, perhaps::
+.. code-block:: shell
 
     $ pip install --user pyvips
 
-To test your install, try this test program::
+On Windows, you'll need a 64-bit Python. The official one works well. 
+You will also need to add ``vips-dev-x.y\bin`` to your ``PATH`` so
+that pyvips can find all the DLLs it needs. You can either do this in the
+**Advanced System Settings** control panel, or you can just change
+``PATH`` in your Python program.
 
-    import logging
-    logging.basicConfig(level = logging.DEBUG)
-    import pyvips
+If you set the PATH environment variable in the control panel, you can use
+the ``vips`` command-line tools, which I find useful. However, this will add
+a lot of extra DLLs to your search path and they might conflict with other
+programs, so it's usually safer just to set ``PATH`` in your program.
 
-If pyvips was able to build and use a binary module on your computer (API
-mode) you should see::
+To set ``PATH`` from within Python, you need something like this at the start:
 
-    $ ./pyv.py 
-    DEBUG:pyvips:Loaded binary module _libvips
-    DEBUG:pyvips:Inited libvips
+.. code-block:: python
 
-If the build failed (fallback to ABI mode), or there was a header or version
-mismatch, you might see::
+    import os
+    vipshome = 'c:\\vips-dev-8.7\\bin'
+    os.environ['PATH'] = vipshome + ';' + os.environ['PATH']
 
-    $ ./pyv.py 
-    DEBUG:pyvips:Loaded binary module _libvips
-    DEBUG:pyvips:Binary module load failed: not all arguments converted during string formatting
-    DEBUG:pyvips:Falling back to ABI mode
-    DEBUG:pyvips:Loaded lib <cffi.api.FFILibrary_libvips.so.42 object at 0x7f29fa015190>
-    DEBUG:pyvips:Loaded lib <cffi.api.FFILibrary_libgobject-2.0.so.0 object at 0x7f29fa015110>
-    DEBUG:pyvips:Inited libvips
-
-pyvips will work fine in this fallback mode, it's just a bit slower. 
-
-If API mode stops working, you can fix it by reinstalling pyvips. You should
-make sure pip is not reusing a cached wheel, e.g. by using ``pip install
---no-cache-dir pyvips``.
+Now when you import pyvips, it should be able to find the DLLs.
 
 Example
 -------
 
 This sample program loads a JPG image, doubles the value of every green pixel,
-sharpens, and then writes the image back to the filesystem again::
+sharpens, and then writes the image back to the filesystem again:
+
+.. code-block:: python
 
     import pyvips
 
@@ -115,92 +126,74 @@ sharpens, and then writes the image back to the filesystem again::
     image = image.conv(mask, precision='integer')
     image.write_to_file('x.jpg')
 
-Converting old code
--------------------
-
-To convert old code, replace the lines::
-
-    import gi
-    gi.require_version('Vips', '8.0')
-    from gi.repository import Vips 
-
-with::
-
-    import pyvips
-    Vips = pyvips
-
-Instead of the ``pyvips = Vips``, you can of course also swap all ``Vips`` for
-``pyvips`` with eg.::
-
-    %s/Vips/pyvips/g
-
-Background
-----------
-
-The Python binding included in libvips works, but porting and installation
-are more difficult than they should be. 
-
-This new binding is:
-
-* compatible with the current Python binding (it runs the same test suite,
-  unmodified)
-
-* easier to install, since the stack is much smaller, and there are 
-  no issues with the overrides directory
-
-* faster, since we implement Buffer and save some copies
-
-* faster, since it is "thinner". The ffi Ruby binding is about twice
-  as fast as the gobject-introspection one, when running the test suite
-
-* portable across CPython, PyPy and others
-
-* more simply portable to Windows 
-
-* easy to package for pip
 
 Notes
 -----
 
-Local user install::
+Local user install:
+
+.. code-block:: shell
 
     $ pip install --user -e .
-    $ pip3 install --user -e .
+    $ pip3 install -e .
     $ pypy -m pip --user -e .
 
-Run all tests::
+Run all tests:
+
+.. code-block:: shell
 
     $ tox 
 
-Run test suite::
+Run test suite:
+
+.. code-block:: shell
 
     $ tox test
 
-Run a specific test::
+Run a specific test:
 
-    $ pytest tests/test_conversion.py
+.. code-block:: shell
 
-Stylecheck::
+    $ pytest tests/test_saveload.py
+
+Run perf tests:
+
+.. code-block:: shell
+
+   $ cd tests/perf
+   $ ./run.sh
+
+Stylecheck:
+
+.. code-block:: shell
 
     $ tox qa
 
-Generate HTML docs in ``doc/build/html``::
+Generate HTML docs in ``doc/build/html``:
+
+.. code-block:: shell
 
     $ cd doc; sphinx-build -bhtml . build/html
 
-Regenerate autodocs::
+Regenerate autodocs:
+
+.. code-block:: shell
 
     $ cd doc; \
       python -c "import pyvips; pyvips.Operation.generate_sphinx_all()" > x 
 
 And copy-paste ``x`` into the obvious place in ``doc/vimage.rst``.
 
-Update version number::
+Update version number:
+
+.. code-block:: shell
 
     $ vi pyvips/version.py
     $ vi doc/conf.py
 
-Update pypi package::
+Update pypi package:
+
+.. code-block:: shell
 
     $ python setup.py sdist
     $ twine upload dist/*

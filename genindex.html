@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; pyvips 2.1.4 documentation</title>
+  <title>Index &mdash; pyvips 2.1.12 documentation</title>
   
 
   
@@ -18,22 +18,26 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/collapse.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" />
     <link href="_static/style.css" rel="stylesheet" type="text/css">
-
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
 
 </head>
 
@@ -41,11 +45,10 @@
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -90,6 +93,11 @@
 <li class="toctree-l1"><a class="reference internal" href="base.html">Base definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="error.html"><code class="docutils literal notranslate"><span class="pre">Error</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="enums.html">The libvips enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vconnection.html"><code class="docutils literal notranslate"><span class="pre">Connection</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="vsource.html"><code class="docutils literal notranslate"><span class="pre">Source</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtarget.html"><code class="docutils literal notranslate"><span class="pre">Target</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="vsourcecustom.html"><code class="docutils literal notranslate"><span class="pre">SourceCustom</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtargetcustom.html"><code class="docutils literal notranslate"><span class="pre">TargetCustom</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="vinterpolate.html"><code class="docutils literal notranslate"><span class="pre">Interpolate</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="gvalue.html"><code class="docutils literal notranslate"><span class="pre">GValue</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="gobject.html"><code class="docutils literal notranslate"><span class="pre">GObject</span></code></a></li>
@@ -224,8 +232,6 @@
 </li>
       <li><a href="vimage.html#pyvips.Image.__repr__">__repr__() (pyvips.Image method)</a>
 </li>
-      <li><a href="gobject.html#pyvips.gobject.GObject.__weakref__">__weakref__ (pyvips.gobject.GObject attribute)</a>
-</li>
   </ul></td>
 </tr></table>
 
@@ -234,28 +240,18 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="vimage.html#pyvips.Image.abs">abs() (pyvips.Image method)</a>
 </li>
-      <li><a href="enums.html#pyvips.enums.Intent.ABSOLUTE">ABSOLUTE (pyvips.enums.Intent attribute)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Access">Access (class in pyvips.enums)</a>
-</li>
       <li><a href="vimage.html#pyvips.Image.acos">acos() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.add">add() (pyvips.Image method)</a>
 </li>
-      <li><a href="vimage.html#pyvips.Image.affine">affine() (pyvips.Image method)</a>
+      <li><a href="vimage.html#pyvips.Image.addalpha">addalpha() (pyvips.Image method)</a>
 </li>
-      <li><a href="enums.html#pyvips.enums.Align">Align (class in pyvips.enums)</a>
+      <li><a href="vimage.html#pyvips.Image.affine">affine() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.analyzeload">analyzeload() (pyvips.Image static method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="enums.html#pyvips.enums.Angle">Angle (class in pyvips.enums)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Angle45">Angle45 (class in pyvips.enums)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Precision.APPROXIMATE">APPROXIMATE (pyvips.enums.Precision attribute)</a>
-</li>
       <li><a href="vimage.html#pyvips.Image.arrayjoin">arrayjoin() (pyvips.Image static method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.asin">asin() (pyvips.Image method)</a>
@@ -274,10 +270,6 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="enums.html#pyvips.enums.Interpretation.B_W">B_W (pyvips.enums.Interpretation attribute)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Extend.BACKGROUND">BACKGROUND (pyvips.enums.Extend attribute)</a>
-</li>
       <li><a href="vimage.html#pyvips.Image.bandand">bandand() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.bandbool">bandbool() (pyvips.Image method)</a>
@@ -286,18 +278,16 @@
 </li>
       <li><a href="vimage.html#pyvips.Image.bandfold">bandfold() (pyvips.Image method)</a>
 </li>
-      <li><a href="enums.html#pyvips.enums.BandFormat">BandFormat (class in pyvips.enums)</a>
-</li>
       <li><a href="vimage.html#pyvips.Image.bandjoin">bandjoin() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.bandjoin_const">bandjoin_const() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.bandmean">bandmean() (pyvips.Image method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="vimage.html#pyvips.Image.bandor">bandor() (pyvips.Image method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="vimage.html#pyvips.Image.bandrank">bandrank() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.bands">bands (pyvips.Image attribute)</a>
@@ -305,8 +295,6 @@
       <li><a href="vimage.html#pyvips.Image.bandsplit">bandsplit() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.bandunfold">bandunfold() (pyvips.Image method)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Extend.BLACK">BLACK (pyvips.enums.Extend attribute)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.black">black() (pyvips.Image static method)</a>
 </li>
@@ -338,40 +326,30 @@
 </li>
       <li><a href="vimage.html#pyvips.Image.canny">canny() (pyvips.Image method)</a>
 </li>
+      <li><a href="vimage.html#pyvips.Image.case">case() (pyvips.Image method)</a>
+</li>
       <li><a href="vimage.html#pyvips.Image.cast">cast() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.ceil">ceil() (pyvips.Image method)</a>
 </li>
-      <li><a href="enums.html#pyvips.enums.Align.CENTRE">CENTRE (pyvips.enums.Align attribute)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.BandFormat.CHAR">CHAR (pyvips.enums.BandFormat attribute)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Interpretation.CMC">CMC (pyvips.enums.Interpretation attribute)</a>
-</li>
       <li><a href="vimage.html#pyvips.Image.CMC2LCh">CMC2LCh() (pyvips.Image method)</a>
 </li>
-      <li><a href="enums.html#pyvips.enums.Interpretation.CMYK">CMYK (pyvips.enums.Interpretation attribute)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Coding">Coding (class in pyvips.enums)</a>
+      <li><a href="vimage.html#pyvips.Image.CMYK2XYZ">CMYK2XYZ() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.coding">coding (pyvips.Image attribute)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.colourspace">colourspace() (pyvips.Image method)</a>
 </li>
-      <li><a href="enums.html#pyvips.enums.Combine">Combine (class in pyvips.enums)</a>
-</li>
       <li><a href="vimage.html#pyvips.Image.compass">compass() (pyvips.Image method)</a>
 </li>
-      <li><a href="enums.html#pyvips.enums.BandFormat.COMPLEX">COMPLEX (pyvips.enums.BandFormat attribute)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="vimage.html#pyvips.Image.complex">complex() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.complex2">complex2() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.complexform">complexform() (pyvips.Image method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="vimage.html#pyvips.Image.complexget">complexget() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.composite">composite() (pyvips.Image method)</a>
@@ -383,6 +361,8 @@
       <li><a href="vimage.html#pyvips.Image.composite2">composite2() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.conj">conj() (pyvips.Image method)</a>
+</li>
+      <li><a href="vconnection.html#pyvips.vconnection.Connection">Connection (class in pyvips.vconnection)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.conv">conv() (pyvips.Image method)</a>
 </li>
@@ -396,8 +376,6 @@
 </li>
       <li><a href="vimage.html#pyvips.Image.convsep">convsep() (pyvips.Image method)</a>
 </li>
-      <li><a href="enums.html#pyvips.enums.Extend.COPY">COPY (pyvips.enums.Extend attribute)</a>
-</li>
       <li><a href="vimage.html#pyvips.Image.copy">copy() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.copy_memory">copy_memory() (pyvips.Image method)</a>
@@ -405,6 +383,8 @@
       <li><a href="vimage.html#pyvips.Image.cos">cos() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.countlines">countlines() (pyvips.Image method)</a>
+</li>
+      <li><a href="vimage.html#pyvips.Image.crop">crop() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.csvload">csvload() (pyvips.Image static method)</a>
 </li>
@@ -416,62 +396,24 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="enums.html#pyvips.enums.Angle.D0">D0 (pyvips.enums.Angle attribute)</a>
-
-      <ul>
-        <li><a href="enums.html#pyvips.enums.Angle45.D0">(pyvips.enums.Angle45 attribute)</a>
-</li>
-      </ul></li>
-      <li><a href="enums.html#pyvips.enums.Angle45.D135">D135 (pyvips.enums.Angle45 attribute)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Angle.D180">D180 (pyvips.enums.Angle attribute)</a>
-
-      <ul>
-        <li><a href="enums.html#pyvips.enums.Angle45.D180">(pyvips.enums.Angle45 attribute)</a>
-</li>
-      </ul></li>
-      <li><a href="enums.html#pyvips.enums.Angle45.D225">D225 (pyvips.enums.Angle45 attribute)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Angle.D270">D270 (pyvips.enums.Angle attribute)</a>
-
-      <ul>
-        <li><a href="enums.html#pyvips.enums.Angle45.D270">(pyvips.enums.Angle45 attribute)</a>
-</li>
-      </ul></li>
-      <li><a href="enums.html#pyvips.enums.Angle45.D315">D315 (pyvips.enums.Angle45 attribute)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Angle45.D45">D45 (pyvips.enums.Angle45 attribute)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Angle.D90">D90 (pyvips.enums.Angle attribute)</a>
-
-      <ul>
-        <li><a href="enums.html#pyvips.enums.Angle45.D90">(pyvips.enums.Angle45 attribute)</a>
-</li>
-      </ul></li>
       <li><a href="vimage.html#pyvips.Image.dE00">dE00() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.dE76">dE76() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.dECMC">dECMC() (pyvips.Image method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="error.html#pyvips.error.Error.detail">detail (pyvips.error.Error attribute)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.deviate">deviate() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.dilate">dilate() (pyvips.Image method)</a>
 </li>
-      <li><a href="enums.html#pyvips.enums.Direction">Direction (class in pyvips.enums)</a>
-</li>
       <li><a href="vimage.html#pyvips.Image.divide">divide() (pyvips.Image method)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.BandFormat.DOUBLE">DOUBLE (pyvips.enums.BandFormat attribute)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.BandFormat.DPCOMPLEX">DPCOMPLEX (pyvips.enums.BandFormat attribute)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.draw_circle">draw_circle() (pyvips.Image method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="vimage.html#pyvips.Image.draw_flood">draw_flood() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.draw_image">draw_image() (pyvips.Image method)</a>
@@ -506,9 +448,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="vimage.html#pyvips.Image.exp10">exp10() (pyvips.Image method)</a>
 </li>
-      <li><a href="enums.html#pyvips.enums.Extend">Extend (class in pyvips.enums)</a>
-</li>
-      <li><a href="vimage.html#pyvips.Image.extract_area">extract_area() (pyvips.Image method)</a>, <a href="vimage.html#pyvips.Image.extract_area">[1]</a>
+      <li><a href="vimage.html#pyvips.Image.extract_area">extract_area() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.extract_band">extract_band() (pyvips.Image method)</a>
 </li>
@@ -526,6 +466,8 @@
 </li>
       <li><a href="vimage.html#pyvips.Image.filename">filename (pyvips.Image attribute)</a>
 </li>
+      <li><a href="vconnection.html#pyvips.vconnection.Connection.filename">filename() (pyvips.vconnection.Connection method)</a>
+</li>
       <li><a href="vimage.html#pyvips.Image.fill_nearest">fill_nearest() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.find_trim">find_trim() (pyvips.Image method)</a>
@@ -536,27 +478,19 @@
 </li>
       <li><a href="vimage.html#pyvips.Image.flatten">flatten() (pyvips.Image method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="vimage.html#pyvips.Image.flip">flip() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.fliphor">fliphor() (pyvips.Image method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="vimage.html#pyvips.Image.flipver">flipver() (pyvips.Image method)</a>
 </li>
-      <li><a href="enums.html#pyvips.enums.BandFormat.FLOAT">FLOAT (pyvips.enums.BandFormat attribute)</a>
-
-      <ul>
-        <li><a href="enums.html#pyvips.enums.Precision.FLOAT">(pyvips.enums.Precision attribute)</a>
-</li>
-      </ul></li>
       <li><a href="vimage.html#pyvips.Image.float2rad">float2rad() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.floor">floor() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.format">format (pyvips.Image attribute)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Interpretation.FOURIER">FOURIER (pyvips.enums.Interpretation attribute)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.fractsurf">fractsurf() (pyvips.Image static method)</a>
 </li>
@@ -602,6 +536,8 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="base.html#pyvips.base.get_suffixes">get_suffixes() (in module pyvips.base)</a>
+</li>
       <li><a href="vimage.html#pyvips.Image.get_typeof">get_typeof() (pyvips.Image method)</a>
 
       <ul>
@@ -614,6 +550,8 @@
 </li>
       <li><a href="vimage.html#pyvips.Image.gifload_buffer">gifload_buffer() (pyvips.Image static method)</a>
 </li>
+      <li><a href="vimage.html#pyvips.Image.gifload_source">gifload_source() (pyvips.Image static method)</a>
+</li>
       <li><a href="vimage.html#pyvips.Image.globalbalance">globalbalance() (pyvips.Image method)</a>
 </li>
       <li><a href="gobject.html#pyvips.gobject.GObject">GObject (class in pyvips.gobject)</a>
@@ -621,8 +559,6 @@
       <li><a href="vimage.html#pyvips.Image.gravity">gravity() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.grey">grey() (pyvips.Image static method)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Interpretation.GREY16">GREY16 (pyvips.enums.Interpretation attribute)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.grid">grid() (pyvips.Image method)</a>
 </li>
@@ -636,9 +572,17 @@
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="vimage.html#pyvips.Image.height">height (pyvips.Image attribute)</a>
+      <li><a href="vimage.html#pyvips.Image.hasalpha">hasalpha() (pyvips.Image method)</a>
 </li>
-      <li><a href="enums.html#pyvips.enums.Align.HIGH">HIGH (pyvips.enums.Align attribute)</a>
+      <li><a href="vimage.html#pyvips.Image.heifload">heifload() (pyvips.Image static method)</a>
+</li>
+      <li><a href="vimage.html#pyvips.Image.heifload_buffer">heifload_buffer() (pyvips.Image static method)</a>
+</li>
+      <li><a href="vimage.html#pyvips.Image.heifsave">heifsave() (pyvips.Image method)</a>
+</li>
+      <li><a href="vimage.html#pyvips.Image.heifsave_buffer">heifsave_buffer() (pyvips.Image method)</a>
+</li>
+      <li><a href="vimage.html#pyvips.Image.height">height (pyvips.Image attribute)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.hist_cum">hist_cum() (pyvips.Image method)</a>
 </li>
@@ -648,14 +592,14 @@
 </li>
       <li><a href="vimage.html#pyvips.Image.hist_find">hist_find() (pyvips.Image method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="vimage.html#pyvips.Image.hist_find_indexed">hist_find_indexed() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.hist_find_ndim">hist_find_ndim() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.hist_ismonotonic">hist_ismonotonic() (pyvips.Image method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="vimage.html#pyvips.Image.hist_local">hist_local() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.hist_match">hist_match() (pyvips.Image method)</a>
@@ -664,15 +608,9 @@
 </li>
       <li><a href="vimage.html#pyvips.Image.hist_plot">hist_plot() (pyvips.Image method)</a>
 </li>
-      <li><a href="enums.html#pyvips.enums.Interpretation.HISTOGRAM">HISTOGRAM (pyvips.enums.Interpretation attribute)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Direction.HORIZONTAL">HORIZONTAL (pyvips.enums.Direction attribute)</a>
-</li>
       <li><a href="vimage.html#pyvips.Image.hough_circle">hough_circle() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.hough_line">hough_line() (pyvips.Image method)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Interpretation.HSV">HSV (pyvips.enums.Interpretation attribute)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.HSV2sRGB">HSV2sRGB() (pyvips.Image method)</a>
 </li>
@@ -696,21 +634,15 @@
 </li>
       <li><a href="vimage.html#pyvips.Image">Image (class in pyvips)</a>
 </li>
-      <li><a href="vimage.html#pyvips.Image.insert">insert() (pyvips.Image method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="enums.html#pyvips.enums.BandFormat.INT">INT (pyvips.enums.BandFormat attribute)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Precision.INTEGER">INTEGER (pyvips.enums.Precision attribute)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Intent">Intent (class in pyvips.enums)</a>
+      <li><a href="vimage.html#pyvips.Image.insert">insert() (pyvips.Image method)</a>
 </li>
       <li><a href="vinterpolate.html#pyvips.vinterpolate.Interpolate">Interpolate (class in pyvips.vinterpolate)</a>
 </li>
-      <li><a href="enums.html#pyvips.enums.Interpretation">Interpretation (class in pyvips.enums)</a>
-</li>
       <li><a href="vimage.html#pyvips.Image.interpretation">interpretation (pyvips.Image attribute)</a>
+</li>
+      <li><a href="voperation.html#pyvips.voperation.Introspect">Introspect (class in pyvips.voperation)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.invert">invert() (pyvips.Image method)</a>
 </li>
@@ -730,6 +662,8 @@
 </li>
       <li><a href="vimage.html#pyvips.Image.jpegload_buffer">jpegload_buffer() (pyvips.Image static method)</a>
 </li>
+      <li><a href="vimage.html#pyvips.Image.jpegload_source">jpegload_source() (pyvips.Image static method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="vimage.html#pyvips.Image.jpegsave">jpegsave() (pyvips.Image method)</a>
@@ -738,18 +672,14 @@
 </li>
       <li><a href="vimage.html#pyvips.Image.jpegsave_mime">jpegsave_mime() (pyvips.Image method)</a>
 </li>
+      <li><a href="vimage.html#pyvips.Image.jpegsave_target">jpegsave_target() (pyvips.Image method)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="enums.html#pyvips.enums.Interpretation.LAB">LAB (pyvips.enums.Interpretation attribute)</a>
-
-      <ul>
-        <li><a href="enums.html#pyvips.enums.PCS.LAB">(pyvips.enums.PCS attribute)</a>
-</li>
-      </ul></li>
       <li><a href="vimage.html#pyvips.Image.Lab2LabQ">Lab2LabQ() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.Lab2LabS">Lab2LabS() (pyvips.Image method)</a>
@@ -760,27 +690,17 @@
 </li>
       <li><a href="vimage.html#pyvips.Image.labelregions">labelregions() (pyvips.Image method)</a>
 </li>
-      <li><a href="enums.html#pyvips.enums.Coding.LABQ">LABQ (pyvips.enums.Coding attribute)</a>
-
-      <ul>
-        <li><a href="enums.html#pyvips.enums.Interpretation.LABQ">(pyvips.enums.Interpretation attribute)</a>
-</li>
-      </ul></li>
       <li><a href="vimage.html#pyvips.Image.LabQ2Lab">LabQ2Lab() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.LabQ2LabS">LabQ2LabS() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.LabQ2sRGB">LabQ2sRGB() (pyvips.Image method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="enums.html#pyvips.enums.Interpretation.LABS">LABS (pyvips.enums.Interpretation attribute)</a>
-</li>
       <li><a href="vimage.html#pyvips.Image.LabS2Lab">LabS2Lab() (pyvips.Image method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="vimage.html#pyvips.Image.LabS2LabQ">LabS2LabQ() (pyvips.Image method)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Interpretation.LCH">LCH (pyvips.enums.Interpretation attribute)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.LCh2CMC">LCh2CMC() (pyvips.Image method)</a>
 </li>
@@ -797,8 +717,6 @@
       <li><a href="vimage.html#pyvips.Image.log10">log10() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.logmat">logmat() (pyvips.Image static method)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Align.LOW">LOW (pyvips.enums.Align attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -842,23 +760,19 @@
 </li>
       <li><a href="vimage.html#pyvips.Image.math">math() (pyvips.Image method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="vimage.html#pyvips.Image.math2">math2() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.math2_const">math2_const() (pyvips.Image method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="vimage.html#pyvips.Image.matload">matload() (pyvips.Image static method)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Interpretation.MATRIX">MATRIX (pyvips.enums.Interpretation attribute)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.matrixload">matrixload() (pyvips.Image static method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.matrixprint">matrixprint() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.matrixsave">matrixsave() (pyvips.Image method)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Combine.MAX">MAX (pyvips.enums.Combine attribute)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.max">max() (pyvips.Image method)</a>
 </li>
@@ -876,8 +790,6 @@
 </li>
       <li><a href="vimage.html#pyvips.Image.minpos">minpos() (pyvips.Image method)</a>
 </li>
-      <li><a href="enums.html#pyvips.enums.Extend.MIRROR">MIRROR (pyvips.enums.Extend attribute)</a>
-</li>
       <li><a href="vimage.html#pyvips.Image.morph">morph() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.mosaic">mosaic() (pyvips.Image method)</a>
@@ -885,8 +797,6 @@
       <li><a href="vimage.html#pyvips.Image.mosaic1">mosaic1() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.msb">msb() (pyvips.Image method)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Interpretation.MULTIBAND">MULTIBAND (pyvips.enums.Interpretation attribute)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.multiply">multiply() (pyvips.Image method)</a>
 </li>
@@ -902,23 +812,43 @@
 </li>
       <li><a href="vimage.html#pyvips.Image.new_from_buffer">new_from_buffer() (pyvips.Image static method)</a>
 </li>
-      <li><a href="vimage.html#pyvips.Image.new_from_file">new_from_file() (pyvips.Image static method)</a>
+      <li><a href="vsource.html#pyvips.vsource.Source.new_from_descriptor">new_from_descriptor() (pyvips.vsource.Source static method)</a>
 </li>
+      <li><a href="vimage.html#pyvips.Image.new_from_file">new_from_file() (pyvips.Image static method)</a>
+
+      <ul>
+        <li><a href="vsource.html#pyvips.vsource.Source.new_from_file">(pyvips.vsource.Source static method)</a>
+</li>
+      </ul></li>
       <li><a href="vimage.html#pyvips.Image.new_from_image">new_from_image() (pyvips.Image method)</a>
 </li>
+      <li><a href="vimage.html#pyvips.Image.new_from_memory">new_from_memory() (pyvips.Image static method)</a>
+
+      <ul>
+        <li><a href="vsource.html#pyvips.vsource.Source.new_from_memory">(pyvips.vsource.Source static method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="vimage.html#pyvips.Image.new_from_memory">new_from_memory() (pyvips.Image static method)</a>
+      <li><a href="vimage.html#pyvips.Image.new_from_source">new_from_source() (pyvips.Image static method)</a>
+</li>
+      <li><a href="gobject.html#pyvips.gobject.GObject.new_pointer_from_gtype">new_pointer_from_gtype() (pyvips.gobject.GObject static method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.new_temp_file">new_temp_file() (pyvips.Image static method)</a>
+</li>
+      <li><a href="vtarget.html#pyvips.vtarget.Target.new_to_descriptor">new_to_descriptor() (pyvips.vtarget.Target static method)</a>
+</li>
+      <li><a href="vtarget.html#pyvips.vtarget.Target.new_to_file">new_to_file() (pyvips.vtarget.Target static method)</a>
+</li>
+      <li><a href="vtarget.html#pyvips.vtarget.Target.new_to_memory">new_to_memory() (pyvips.vtarget.Target static method)</a>
+</li>
+      <li><a href="vconnection.html#pyvips.vconnection.Connection.nick">nick() (pyvips.vconnection.Connection method)</a>
 </li>
       <li><a href="base.html#pyvips.base.nickname_find">nickname_find() (in module pyvips.base)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.niftiload">niftiload() (pyvips.Image static method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.niftisave">niftisave() (pyvips.Image method)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Coding.NONE">NONE (pyvips.enums.Coding attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -928,10 +858,18 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="vimage.html#pyvips.Image.offset">offset (pyvips.Image attribute)</a>
 </li>
-      <li><a href="vimage.html#pyvips.Image.openexrload">openexrload() (pyvips.Image static method)</a>
+      <li><a href="vtargetcustom.html#pyvips.vtargetcustom.TargetCustom.on_finish">on_finish() (pyvips.vtargetcustom.TargetCustom method)</a>
+</li>
+      <li><a href="vsourcecustom.html#pyvips.vsourcecustom.SourceCustom.on_read">on_read() (pyvips.vsourcecustom.SourceCustom method)</a>
+</li>
+      <li><a href="vsourcecustom.html#pyvips.vsourcecustom.SourceCustom.on_seek">on_seek() (pyvips.vsourcecustom.SourceCustom method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="vtargetcustom.html#pyvips.vtargetcustom.TargetCustom.on_write">on_write() (pyvips.vtargetcustom.TargetCustom method)</a>
+</li>
+      <li><a href="vimage.html#pyvips.Image.openexrload">openexrload() (pyvips.Image static method)</a>
+</li>
       <li><a href="vimage.html#pyvips.Image.openslideload">openslideload() (pyvips.Image static method)</a>
 </li>
       <li><a href="voperation.html#pyvips.voperation.Operation">Operation (class in pyvips.voperation)</a>
@@ -942,15 +880,11 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="enums.html#pyvips.enums.PCS">PCS (class in pyvips.enums)</a>
-</li>
       <li><a href="vimage.html#pyvips.Image.pdfload">pdfload() (pyvips.Image static method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.pdfload_buffer">pdfload_buffer() (pyvips.Image static method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.percent">percent() (pyvips.Image method)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Intent.PERCEPTUAL">PERCEPTUAL (pyvips.enums.Intent attribute)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.perlin">perlin() (pyvips.Image static method)</a>
 </li>
@@ -960,9 +894,13 @@
 </li>
       <li><a href="vimage.html#pyvips.Image.pngload_buffer">pngload_buffer() (pyvips.Image static method)</a>
 </li>
+      <li><a href="vimage.html#pyvips.Image.pngload_source">pngload_source() (pyvips.Image static method)</a>
+</li>
       <li><a href="vimage.html#pyvips.Image.pngsave">pngsave() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.pngsave_buffer">pngsave_buffer() (pyvips.Image method)</a>
+</li>
+      <li><a href="vimage.html#pyvips.Image.pngsave_target">pngsave_target() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.polar">polar() (pyvips.Image method)</a>
 </li>
@@ -970,15 +908,15 @@
 </li>
       <li><a href="vimage.html#pyvips.Image.ppmsave">ppmsave() (pyvips.Image method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="enums.html#pyvips.enums.Precision">Precision (class in pyvips.enums)</a>
-</li>
       <li><a href="vimage.html#pyvips.Image.premultiply">premultiply() (pyvips.Image method)</a>
 </li>
       <li><a href="vobject.html#pyvips.vobject.VipsObject.print_all">print_all() (pyvips.vobject.VipsObject static method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.profile">profile() (pyvips.Image method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="vimage.html#pyvips.Image.profile_load">profile_load() (pyvips.Image static method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.project">project() (pyvips.Image method)</a>
 </li>
@@ -996,11 +934,21 @@
 </li>
       <li><a href="vimage.html#pyvips.Image">pyvips.Image (built-in class)</a>, <a href="vimage.html#pyvips.Image">[1]</a>
 </li>
+      <li><a href="vconnection.html#module-pyvips.vconnection">pyvips.vconnection (module)</a>
+</li>
       <li><a href="vinterpolate.html#module-pyvips.vinterpolate">pyvips.vinterpolate (module)</a>
 </li>
       <li><a href="vobject.html#module-pyvips.vobject">pyvips.vobject (module)</a>
 </li>
       <li><a href="voperation.html#module-pyvips.voperation">pyvips.voperation (module)</a>
+</li>
+      <li><a href="vsource.html#module-pyvips.vsource">pyvips.vsource (module)</a>
+</li>
+      <li><a href="vsourcecustom.html#module-pyvips.vsourcecustom">pyvips.vsourcecustom (module)</a>
+</li>
+      <li><a href="vtarget.html#module-pyvips.vtarget">pyvips.vtarget (module)</a>
+</li>
+      <li><a href="vtargetcustom.html#module-pyvips.vtargetcustom">pyvips.vtargetcustom (module)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1016,17 +964,19 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="enums.html#pyvips.enums.Coding.RAD">RAD (pyvips.enums.Coding attribute)</a>
-</li>
       <li><a href="vimage.html#pyvips.Image.rad2float">rad2float() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.radload">radload() (pyvips.Image static method)</a>
+</li>
+      <li><a href="vimage.html#pyvips.Image.radload_buffer">radload_buffer() (pyvips.Image static method)</a>
+</li>
+      <li><a href="vimage.html#pyvips.Image.radload_source">radload_source() (pyvips.Image static method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.radsave">radsave() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.radsave_buffer">radsave_buffer() (pyvips.Image method)</a>
 </li>
-      <li><a href="enums.html#pyvips.enums.Access.RANDOM">RANDOM (pyvips.enums.Access attribute)</a>
+      <li><a href="vimage.html#pyvips.Image.radsave_target">radsave_target() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.rank">rank() (pyvips.Image method)</a>
 </li>
@@ -1046,15 +996,13 @@
 </li>
       <li><a href="vimage.html#pyvips.Image.reduceh">reduceh() (pyvips.Image method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="vimage.html#pyvips.Image.reducev">reducev() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.relational">relational() (pyvips.Image method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="vimage.html#pyvips.Image.relational_const">relational_const() (pyvips.Image method)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Intent.RELATIVE">RELATIVE (pyvips.enums.Intent attribute)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.remainder">remainder() (pyvips.Image method)</a>
 </li>
@@ -1062,15 +1010,9 @@
 </li>
       <li><a href="vimage.html#pyvips.Image.remove">remove() (pyvips.Image method)</a>
 </li>
-      <li><a href="enums.html#pyvips.enums.Extend.REPEAT">REPEAT (pyvips.enums.Extend attribute)</a>
-</li>
       <li><a href="vimage.html#pyvips.Image.replicate">replicate() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.resize">resize() (pyvips.Image method)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Interpretation.RGB">RGB (pyvips.enums.Interpretation attribute)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Interpretation.RGB16">RGB16 (pyvips.enums.Interpretation attribute)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.rint">rint() (pyvips.Image method)</a>
 </li>
@@ -1094,21 +1036,15 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="enums.html#pyvips.enums.Intent.SATURATION">SATURATION (pyvips.enums.Intent attribute)</a>
-</li>
       <li><a href="vimage.html#pyvips.Image.scale">scale (pyvips.Image attribute)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.scaleimage">scaleimage() (pyvips.Image method)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Interpretation.SCRGB">SCRGB (pyvips.enums.Interpretation attribute)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.scRGB2BW">scRGB2BW() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.scRGB2sRGB">scRGB2sRGB() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.scRGB2XYZ">scRGB2XYZ() (pyvips.Image method)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Access.SEQUENTIAL">SEQUENTIAL (pyvips.enums.Access attribute)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.sequential">sequential() (pyvips.Image method)</a>
 </li>
@@ -1122,6 +1058,10 @@
         <li><a href="voperation.html#pyvips.voperation.Operation.set">(pyvips.voperation.Operation method)</a>
 </li>
       </ul></li>
+      <li><a href="vimage.html#pyvips.Image.set_kill">set_kill() (pyvips.Image method)</a>
+</li>
+      <li><a href="vimage.html#pyvips.Image.set_progress">set_progress() (pyvips.Image method)</a>
+</li>
       <li><a href="vobject.html#pyvips.vobject.VipsObject.set_string">set_string() (pyvips.vobject.VipsObject method)</a>
 </li>
       <li><a href="gvalue.html#pyvips.gvalue.GValue.set_type">set_type() (pyvips.gvalue.GValue method)</a>
@@ -1132,18 +1072,18 @@
       </ul></li>
       <li><a href="vimage.html#pyvips.Image.sharpen">sharpen() (pyvips.Image method)</a>
 </li>
-      <li><a href="enums.html#pyvips.enums.BandFormat.SHORT">SHORT (pyvips.enums.BandFormat attribute)</a>
-</li>
       <li><a href="vimage.html#pyvips.Image.shrink">shrink() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.shrinkh">shrinkh() (pyvips.Image method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="vimage.html#pyvips.Image.shrinkv">shrinkv() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.sign">sign() (pyvips.Image method)</a>
 </li>
+      <li><a href="gobject.html#pyvips.gobject.GObject.signal_connect">signal_connect() (pyvips.gobject.GObject method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="vimage.html#pyvips.Image.similarity">similarity() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.sin">sin() (pyvips.Image method)</a>
@@ -1154,11 +1094,13 @@
 </li>
       <li><a href="vimage.html#pyvips.Image.sobel">sobel() (pyvips.Image method)</a>
 </li>
+      <li><a href="vsource.html#pyvips.vsource.Source">Source (class in pyvips.vsource)</a>
+</li>
+      <li><a href="vsourcecustom.html#pyvips.vsourcecustom.SourceCustom">SourceCustom (class in pyvips.vsourcecustom)</a>
+</li>
       <li><a href="vimage.html#pyvips.Image.spcor">spcor() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.spectrum">spectrum() (pyvips.Image method)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Interpretation.SRGB">SRGB (pyvips.enums.Interpretation attribute)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.sRGB2HSV">sRGB2HSV() (pyvips.Image method)</a>
 </li>
@@ -1172,13 +1114,15 @@
 </li>
       <li><a href="vimage.html#pyvips.Image.subtract">subtract() (pyvips.Image method)</a>
 </li>
-      <li><a href="enums.html#pyvips.enums.Combine.SUM">SUM (pyvips.enums.Combine attribute)</a>
-</li>
       <li><a href="vimage.html#pyvips.Image.sum">sum() (pyvips.Image static method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.svgload">svgload() (pyvips.Image static method)</a>, <a href="vimage.html#pyvips.Image.svgload">[1]</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.svgload_buffer">svgload_buffer() (pyvips.Image static method)</a>
+</li>
+      <li><a href="vimage.html#pyvips.Image.svgload_source">svgload_source() (pyvips.Image static method)</a>
+</li>
+      <li><a href="vimage.html#pyvips.Image.switch">switch() (pyvips.Image static method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.system">system() (pyvips.Image static method)</a>
 </li>
@@ -1190,6 +1134,10 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="vimage.html#pyvips.Image.tan">tan() (pyvips.Image method)</a>
 </li>
+      <li><a href="vtarget.html#pyvips.vtarget.Target">Target (class in pyvips.vtarget)</a>
+</li>
+      <li><a href="vtargetcustom.html#pyvips.vtargetcustom.TargetCustom">TargetCustom (class in pyvips.vtargetcustom)</a>
+</li>
       <li><a href="vimage.html#pyvips.Image.text">text() (pyvips.Image static method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.thumbnail">thumbnail() (pyvips.Image static method)</a>
@@ -1198,14 +1146,18 @@
 </li>
       <li><a href="vimage.html#pyvips.Image.thumbnail_image">thumbnail_image() (pyvips.Image method)</a>
 </li>
+      <li><a href="vimage.html#pyvips.Image.thumbnail_source">thumbnail_source() (pyvips.Image static method)</a>
+</li>
       <li><a href="vimage.html#pyvips.Image.tiffload">tiffload() (pyvips.Image static method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.tiffload_buffer">tiffload_buffer() (pyvips.Image static method)</a>
 </li>
-      <li><a href="vimage.html#pyvips.Image.tiffsave">tiffsave() (pyvips.Image method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="vimage.html#pyvips.Image.tiffload_source">tiffload_source() (pyvips.Image static method)</a>
+</li>
+      <li><a href="vimage.html#pyvips.Image.tiffsave">tiffsave() (pyvips.Image method)</a>
+</li>
       <li><a href="vimage.html#pyvips.Image.tiffsave_buffer">tiffsave_buffer() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.tilecache">tilecache() (pyvips.Image method)</a>
@@ -1230,15 +1182,7 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="enums.html#pyvips.enums.BandFormat.UCHAR">UCHAR (pyvips.enums.BandFormat attribute)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.BandFormat.UINT">UINT (pyvips.enums.BandFormat attribute)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="vimage.html#pyvips.Image.unpremultiply">unpremultiply() (pyvips.Image method)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.BandFormat.USHORT">USHORT (pyvips.enums.BandFormat attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1249,8 +1193,6 @@
       <li><a href="base.html#pyvips.base.values_for_enum">values_for_enum() (in module pyvips.base)</a>
 </li>
       <li><a href="base.html#pyvips.base.version">version() (in module pyvips.base)</a>
-</li>
-      <li><a href="enums.html#pyvips.enums.Direction.VERTICAL">VERTICAL (pyvips.enums.Direction attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -1270,11 +1212,13 @@
 </li>
       <li><a href="vimage.html#pyvips.Image.webpload_buffer">webpload_buffer() (pyvips.Image static method)</a>
 </li>
+      <li><a href="vimage.html#pyvips.Image.webpload_source">webpload_source() (pyvips.Image static method)</a>
+</li>
       <li><a href="vimage.html#pyvips.Image.webpsave">webpsave() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.webpsave_buffer">webpsave_buffer() (pyvips.Image method)</a>
 </li>
-      <li><a href="enums.html#pyvips.enums.Extend.WHITE">WHITE (pyvips.enums.Extend attribute)</a>
+      <li><a href="vimage.html#pyvips.Image.webpsave_target">webpsave_target() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.width">width (pyvips.Image attribute)</a>
 </li>
@@ -1292,6 +1236,8 @@
 </li>
       <li><a href="vimage.html#pyvips.Image.write_to_memory">write_to_memory() (pyvips.Image method)</a>
 </li>
+      <li><a href="vimage.html#pyvips.Image.write_to_target">write_to_target() (pyvips.Image method)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -1302,15 +1248,11 @@
 </li>
       <li><a href="vimage.html#pyvips.Image.xres">xres (pyvips.Image attribute)</a>
 </li>
-      <li><a href="enums.html#pyvips.enums.Interpretation.XYZ">XYZ (pyvips.enums.Interpretation attribute)</a>
-
-      <ul>
-        <li><a href="enums.html#pyvips.enums.PCS.XYZ">(pyvips.enums.PCS attribute)</a>
+      <li><a href="vimage.html#pyvips.Image.xyz">xyz() (pyvips.Image static method)</a>
 </li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="vimage.html#pyvips.Image.xyz">xyz() (pyvips.Image static method)</a>
+      <li><a href="vimage.html#pyvips.Image.XYZ2CMYK">XYZ2CMYK() (pyvips.Image method)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.XYZ2Lab">XYZ2Lab() (pyvips.Image method)</a>
 </li>
@@ -1326,11 +1268,9 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="vimage.html#pyvips.Image.yoffset">yoffset (pyvips.Image attribute)</a>
 </li>
-      <li><a href="vimage.html#pyvips.Image.yres">yres (pyvips.Image attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="enums.html#pyvips.enums.Interpretation.YXY">YXY (pyvips.enums.Interpretation attribute)</a>
+      <li><a href="vimage.html#pyvips.Image.yres">yres (pyvips.Image attribute)</a>
 </li>
       <li><a href="vimage.html#pyvips.Image.Yxy2XYZ">Yxy2XYZ() (pyvips.Image method)</a>
 </li>
@@ -1361,7 +1301,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, John Cupitt.
+        &copy; Copyright 2019, John Cupitt
 
     </p>
   </div>
@@ -1378,34 +1318,16 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'2.1.4',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-      <script type="text/javascript" src="_static/collapse.js"></script>
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

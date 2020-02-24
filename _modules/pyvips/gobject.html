@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyvips.gobject &mdash; pyvips 2.1.4 documentation</title>
+  <title>pyvips.gobject &mdash; pyvips 2.1.12 documentation</title>
   
 
   
@@ -17,22 +17,26 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script type="text/javascript" src="../../../../_static/collapse.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link href="../../_static/style.css" rel="stylesheet" type="text/css">
-
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
@@ -40,11 +44,10 @@
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -89,6 +92,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../../base.html">Base definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../error.html"><code class="docutils literal notranslate"><span class="pre">Error</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../enums.html">The libvips enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vconnection.html"><code class="docutils literal notranslate"><span class="pre">Connection</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vsource.html"><code class="docutils literal notranslate"><span class="pre">Source</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vtarget.html"><code class="docutils literal notranslate"><span class="pre">Target</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vsourcecustom.html"><code class="docutils literal notranslate"><span class="pre">SourceCustom</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vtargetcustom.html"><code class="docutils literal notranslate"><span class="pre">TargetCustom</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../vinterpolate.html"><code class="docutils literal notranslate"><span class="pre">Interpolate</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../gvalue.html"><code class="docutils literal notranslate"><span class="pre">GValue</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../gobject.html"><code class="docutils literal notranslate"><span class="pre">GObject</span></code></a></li>
@@ -161,15 +169,112 @@
 
 <span class="kn">import</span> <span class="nn">logging</span>
 
-<span class="kn">from</span> <span class="nn">pyvips</span> <span class="k">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">gobject_lib</span>
+<span class="kn">import</span> <span class="nn">pyvips</span>
+<span class="kn">from</span> <span class="nn">pyvips</span> <span class="k">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">,</span> <span class="n">Error</span><span class="p">,</span> <span class="n">type_name</span><span class="p">,</span> \
+    <span class="n">at_least_libvips</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1"># the python marshalers for gobject signal handling</span>
+<span class="c1"># - we keep a ref to each callback to stop them being GCd</span>
+<span class="c1"># - I tried to make this less copy-paste, but failed -- check again</span>
+
+<span class="k">if</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">API_mode</span><span class="p">:</span>
+    <span class="nd">@ffi</span><span class="o">.</span><span class="n">def_extern</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_marshal_image_progress</span><span class="p">(</span><span class="n">vi</span><span class="p">,</span> <span class="n">pointer</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+        <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_object_ref</span><span class="p">(</span><span class="n">vi</span><span class="p">)</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="n">vi</span><span class="p">)</span>
+        <span class="n">callback</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+        <span class="n">progress</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;VipsProgress*&#39;</span><span class="p">,</span> <span class="n">pointer</span><span class="p">)</span>
+        <span class="n">callback</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">progress</span><span class="p">)</span>
+    <span class="n">_marshal_image_progress_cb</span> <span class="o">=</span>  \
+        <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GCallback&#39;</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="o">.</span><span class="n">_marshal_image_progress</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nd">@ffi</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="s1">&#39;void(VipsImage*, void*, void*)&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_marshal_image_progress</span><span class="p">(</span><span class="n">vi</span><span class="p">,</span> <span class="n">pointer</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+        <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_object_ref</span><span class="p">(</span><span class="n">vi</span><span class="p">)</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="n">vi</span><span class="p">)</span>
+        <span class="n">callback</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+        <span class="n">progress</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;VipsProgress*&#39;</span><span class="p">,</span> <span class="n">pointer</span><span class="p">)</span>
+        <span class="n">callback</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">progress</span><span class="p">)</span>
+    <span class="n">_marshal_image_progress_cb</span> <span class="o">=</span> \
+        <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GCallback&#39;</span><span class="p">,</span> <span class="n">_marshal_image_progress</span><span class="p">)</span>
+
+<span class="n">_marshalers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;preeval&#39;</span><span class="p">:</span> <span class="n">_marshal_image_progress_cb</span><span class="p">,</span>
+    <span class="s1">&#39;eval&#39;</span><span class="p">:</span> <span class="n">_marshal_image_progress_cb</span><span class="p">,</span>
+    <span class="s1">&#39;posteval&#39;</span><span class="p">:</span> <span class="n">_marshal_image_progress_cb</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">if</span> <span class="n">at_least_libvips</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">API_mode</span><span class="p">:</span>
+        <span class="nd">@ffi</span><span class="o">.</span><span class="n">def_extern</span><span class="p">()</span>
+        <span class="k">def</span> <span class="nf">_marshal_read</span><span class="p">(</span><span class="n">source_custom</span><span class="p">,</span> <span class="n">pointer</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+            <span class="n">buf</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="n">pointer</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+            <span class="n">callback</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">callback</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+        <span class="n">_marshal_read_cb</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GCallback&#39;</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="o">.</span><span class="n">_marshal_read</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nd">@ffi</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="s1">&#39;gint64(VipsSourceCustom*, void*, gint64, void*)&#39;</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">_marshal_read</span><span class="p">(</span><span class="n">source_custom</span><span class="p">,</span> <span class="n">pointer</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+            <span class="n">buf</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="n">pointer</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+            <span class="n">callback</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">callback</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+        <span class="n">_marshal_read_cb</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GCallback&#39;</span><span class="p">,</span> <span class="n">_marshal_read</span><span class="p">)</span>
+    <span class="n">_marshalers</span><span class="p">[</span><span class="s1">&#39;read&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_marshal_read_cb</span>
+
+    <span class="k">if</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">API_mode</span><span class="p">:</span>
+        <span class="nd">@ffi</span><span class="o">.</span><span class="n">def_extern</span><span class="p">()</span>
+        <span class="k">def</span> <span class="nf">_marshal_seek</span><span class="p">(</span><span class="n">source_custom</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">whence</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+            <span class="n">callback</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">callback</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">whence</span><span class="p">)</span>
+        <span class="n">_marshal_seek_cb</span> <span class="o">=</span> \
+            <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GCallback&#39;</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="o">.</span><span class="n">_marshal_seek</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nd">@ffi</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="s1">&#39;gint64(VipsSourceCustom*, gint64, int, void*)&#39;</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">_marshal_seek</span><span class="p">(</span><span class="n">source_custom</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">whence</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+            <span class="n">callback</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">callback</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">whence</span><span class="p">)</span>
+        <span class="n">_marshal_seek_cb</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GCallback&#39;</span><span class="p">,</span> <span class="n">_marshal_seek</span><span class="p">)</span>
+    <span class="n">_marshalers</span><span class="p">[</span><span class="s1">&#39;seek&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_marshal_seek_cb</span>
+
+    <span class="k">if</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">API_mode</span><span class="p">:</span>
+        <span class="nd">@ffi</span><span class="o">.</span><span class="n">def_extern</span><span class="p">()</span>
+        <span class="k">def</span> <span class="nf">_marshal_write</span><span class="p">(</span><span class="n">source_custom</span><span class="p">,</span> <span class="n">pointer</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+            <span class="n">buf</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="n">pointer</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+            <span class="n">callback</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">callback</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="n">_marshal_write_cb</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GCallback&#39;</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="o">.</span><span class="n">_marshal_write</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nd">@ffi</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="s1">&#39;gint64(VipsTargetCustom*, void*, gint64, void*)&#39;</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">_marshal_write</span><span class="p">(</span><span class="n">source_custom</span><span class="p">,</span> <span class="n">pointer</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+            <span class="n">buf</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="n">pointer</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+            <span class="n">callback</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">callback</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+        <span class="n">_marshal_write_cb</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GCallback&#39;</span><span class="p">,</span> <span class="n">_marshal_write</span><span class="p">)</span>
+    <span class="n">_marshalers</span><span class="p">[</span><span class="s1">&#39;write&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_marshal_write_cb</span>
+
+    <span class="k">if</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">API_mode</span><span class="p">:</span>
+        <span class="nd">@ffi</span><span class="o">.</span><span class="n">def_extern</span><span class="p">()</span>
+        <span class="k">def</span> <span class="nf">_marshal_finish</span><span class="p">(</span><span class="n">source_custom</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+            <span class="n">callback</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+            <span class="n">callback</span><span class="p">()</span>
+        <span class="n">_marshal_finish_cb</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GCallback&#39;</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="o">.</span><span class="n">_marshal_finish</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nd">@ffi</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="s1">&#39;void(VipsTargetCustom*, void*)&#39;</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">_marshal_finish</span><span class="p">(</span><span class="n">source_custom</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+            <span class="n">callback</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+            <span class="n">callback</span><span class="p">()</span>
+        <span class="n">_marshal_finish_cb</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GCallback&#39;</span><span class="p">,</span> <span class="n">_marshal_finish</span><span class="p">)</span>
+    <span class="n">_marshalers</span><span class="p">[</span><span class="s1">&#39;finish&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_marshal_finish_cb</span>
 
 
 <div class="viewcode-block" id="GObject"><a class="viewcode-back" href="../../gobject.html#pyvips.gobject.GObject">[docs]</a><span class="k">class</span> <span class="nc">GObject</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Manage GObject lifetime.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;_handles&#39;</span><span class="p">,</span> <span class="s1">&#39;pointer&#39;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="GObject.__init__"><a class="viewcode-back" href="../../gobject.html#pyvips.gobject.GObject.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointer</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Wrap around a pointer.</span>
@@ -179,13 +284,67 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="c1"># we have to record all of the ffi.new_handle we make for callbacks on</span>
+        <span class="c1"># this object to prevent them being GC&#39;d</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_handles</span> <span class="o">=</span> <span class="p">[]</span>
+
         <span class="c1"># record the pointer we were given to manage</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span> <span class="o">=</span> <span class="n">pointer</span>
+        <span class="c1"># on GC, unref</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">gc</span><span class="p">(</span><span class="n">pointer</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_object_unref</span><span class="p">)</span></div>
         <span class="c1"># logger.debug(&#39;GObject.__init__: pointer = %s&#39;, str(self.pointer))</span>
 
-        <span class="c1"># on GC, unref</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gobject</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">gc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_object_unref</span><span class="p">)</span></div></div>
-        <span class="c1"># logger.debug(&#39;GObject.__init__: gobject = %s&#39;, str(self.gobject))</span>
+<div class="viewcode-block" id="GObject.new_pointer_from_gtype"><a class="viewcode-back" href="../../gobject.html#pyvips.gobject.GObject.new_pointer_from_gtype">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">new_pointer_from_gtype</span><span class="p">(</span><span class="n">gtype</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Make a new GObject pointer from a gtype.</span>
+
+<span class="sd">        This is useful for subclasses which need to control the construction</span>
+<span class="sd">        process.</span>
+
+<span class="sd">        You can pass the result pointer to the Python constructor for the</span>
+<span class="sd">        object you are building. You will need to call VipsObject.build() to</span>
+<span class="sd">        finish construction.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A pointer to a new GObject.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            :class:`.Error`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">pointer</span> <span class="o">=</span> <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_object_new</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pointer</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s2">&quot;can&#39;t create </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">type_name</span><span class="p">(</span><span class="n">gtype</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="n">pointer</span></div>
+
+<div class="viewcode-block" id="GObject.signal_connect"><a class="viewcode-back" href="../../gobject.html#pyvips.gobject.GObject.signal_connect">[docs]</a>    <span class="k">def</span> <span class="nf">signal_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">callback</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Connect to a signal on this object.</span>
+
+<span class="sd">        The callback will be triggered every time this signal is issued on this</span>
+<span class="sd">        instance. It will be passed the image (&#39;self&#39; here), and a single</span>
+<span class="sd">        `void *` pointer from libvips.</span>
+
+<span class="sd">        The value of the pointer, if any, depends on the signal -- for</span>
+<span class="sd">        example, ::eval passes a pointer to a `VipsProgress` struct.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_marshalers</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unsupported signal &quot;</span><span class="si">{0}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+
+        <span class="n">go</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GObject *&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span>
+        <span class="n">handle</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new_handle</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span>
+        <span class="c1"># we need to keep refs to the ffi handle and the callback to prevent</span>
+        <span class="c1"># them being GCed</span>
+        <span class="c1"># the callback might be a bound method (a closure) rather than a simple</span>
+        <span class="c1"># function, so it can vanish</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_handles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_handles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span>
+
+        <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_signal_connect_data</span><span class="p">(</span><span class="n">go</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
+                                          <span class="n">_marshalers</span><span class="p">[</span><span class="n">name</span><span class="p">],</span>
+                                          <span class="n">handle</span><span class="p">,</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div></div>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;GObject&#39;</span><span class="p">]</span>
@@ -201,7 +360,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, John Cupitt.
+        &copy; Copyright 2019, John Cupitt
 
     </p>
   </div>
@@ -218,34 +377,16 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'2.1.4',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-      <script type="text/javascript" src="../../../../_static/collapse.js"></script>
-
-  
-
-  <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

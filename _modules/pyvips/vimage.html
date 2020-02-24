@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyvips.vimage &mdash; pyvips 2.1.4 documentation</title>
+  <title>pyvips.vimage &mdash; pyvips 2.1.12 documentation</title>
   
 
   
@@ -17,22 +17,26 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script type="text/javascript" src="../../../../_static/collapse.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link href="../../_static/style.css" rel="stylesheet" type="text/css">
-
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
@@ -40,11 +44,10 @@
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -89,6 +92,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../../base.html">Base definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../error.html"><code class="docutils literal notranslate"><span class="pre">Error</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../enums.html">The libvips enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vconnection.html"><code class="docutils literal notranslate"><span class="pre">Connection</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vsource.html"><code class="docutils literal notranslate"><span class="pre">Source</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vtarget.html"><code class="docutils literal notranslate"><span class="pre">Target</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vsourcecustom.html"><code class="docutils literal notranslate"><span class="pre">SourceCustom</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vtargetcustom.html"><code class="docutils literal notranslate"><span class="pre">TargetCustom</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../vinterpolate.html"><code class="docutils literal notranslate"><span class="pre">Interpolate</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../gvalue.html"><code class="docutils literal notranslate"><span class="pre">GValue</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../gobject.html"><code class="docutils literal notranslate"><span class="pre">GObject</span></code></a></li>
@@ -242,16 +250,23 @@
 
 
 <span class="c1"># https://stackoverflow.com/a/22409540/1480019</span>
-<span class="k">def</span> <span class="nf">_with_metaclass</span><span class="p">(</span><span class="n">mcls</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="n">body</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="c1"># clean out class body</span>
-        <span class="n">body</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;__dict__&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="n">body</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;__weakref__&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">mcls</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__bases__</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">decorator</span>
+<span class="c1"># https://github.com/benjaminp/six/blob/33b584b2c551548021adb92a028ceaf892deb5be/six.py#L846-L861</span>
+<span class="k">def</span> <span class="nf">_with_metaclass</span><span class="p">(</span><span class="n">metaclass</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class decorator for creating a class with a metaclass.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">orig_vars</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">slots</span> <span class="o">=</span> <span class="n">orig_vars</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__slots__&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">slots</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">slots</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">slots</span> <span class="o">=</span> <span class="p">[</span><span class="n">slots</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">slots_var</span> <span class="ow">in</span> <span class="n">slots</span><span class="p">:</span>
+                <span class="n">orig_vars</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">slots_var</span><span class="p">)</span>
+        <span class="n">orig_vars</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;__dict__&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">orig_vars</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;__weakref__&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;__qualname__&#39;</span><span class="p">):</span>
+            <span class="n">orig_vars</span><span class="p">[</span><span class="s1">&#39;__qualname__&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__qualname__</span>
+        <span class="k">return</span> <span class="n">metaclass</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__bases__</span><span class="p">,</span> <span class="n">orig_vars</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
 
 
 <span class="c1"># decorator to set docstring</span>
@@ -294,6 +309,7 @@
     <span class="sd">&quot;&quot;&quot;Wrap a VipsImage object.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;_references&#39;</span><span class="p">,)</span>
 
     <span class="c1"># private static</span>
 
@@ -308,6 +324,10 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_from_image</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Image.__init__"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointer</span><span class="p">):</span>
+        <span class="c1"># a list of other objects which this object depends on and which need</span>
+        <span class="c1"># to be kept alive ... we can&#39;t use a set, since bytearrays are</span>
+        <span class="c1"># unhashable</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_references</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="c1"># logger.debug(&#39;Image.__init__: pointer = %s&#39;, pointer)</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Image</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span></div>
 
@@ -352,7 +372,7 @@
 <span class="sd">            access (Access): Hint the expected access pattern for the image.</span>
 <span class="sd">            fail (bool): If set True, the loader will fail with an error on</span>
 <span class="sd">                the first serious error in the file. By default, libvips</span>
-<span class="sd">                will attempt to read everything it can from a damanged image.</span>
+<span class="sd">                will attempt to read everything it can from a damaged image.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            A new :class:`.Image`.</span>
@@ -382,10 +402,11 @@
 
 <span class="sd">        This behaves exactly as :meth:`new_from_file`, but the image is</span>
 <span class="sd">        loaded from the memory object rather than from a file. The memory</span>
-<span class="sd">        object can be a string or buffer.</span>
+<span class="sd">        object can be anything that supports the Python buffer protocol.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            data (str, buffer): The memory object to load the image from.</span>
+<span class="sd">            data (array, bytearray, bytes, buffer): The memory object to</span>
+<span class="sd">                load the image from.</span>
 <span class="sd">            options (str): Load options as a string. Use ``&quot;&quot;`` for no options.</span>
 
 <span class="sd">        All loaders support at least the following options:</span>
@@ -394,7 +415,7 @@
 <span class="sd">            access (Access): Hint the expected access pattern for the image.</span>
 <span class="sd">            fail (bool): If set True, the loader will fail with an error on the</span>
 <span class="sd">                first serious error in the image. By default, libvips will</span>
-<span class="sd">                attempt to read everything it can from a damanged image.</span>
+<span class="sd">                attempt to read everything it can from a damaged image.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            A new :class:`Image`.</span>
@@ -481,6 +502,7 @@
 <span class="sd">            data (bytes): A memoryview or buffer object.</span>
 <span class="sd">            width (int): Image width in pixels.</span>
 <span class="sd">            height (int): Image height in pixels.</span>
+<span class="sd">            bands (int): Number of bands.</span>
 <span class="sd">            format (BandFormat): Band format.</span>
 
 <span class="sd">        Returns:</span>
@@ -509,10 +531,46 @@
 
         <span class="n">image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="n">vi</span><span class="p">)</span>
 
-        <span class="c1"># keep a secret ref to the underlying object</span>
-        <span class="n">image</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="c1"># keep a secret ref to the underlying object .. this reference will be</span>
+        <span class="c1"># inherited by things that in turn depend on us, so the memory we are</span>
+        <span class="c1"># using will not be freed</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">_references</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">image</span></div>
+
+<div class="viewcode-block" id="Image.new_from_source"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.new_from_source">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">new_from_source</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Load a formatted image from a source.</span>
+
+<span class="sd">        This behaves exactly as :meth:`new_from_file`, but the image is</span>
+<span class="sd">        loaded from the source rather than from a file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            source (Source): The source to load the image from.</span>
+<span class="sd">            options (str): Load options as a string. Use ``&quot;&quot;`` for no options.</span>
+
+<span class="sd">        All loaders support at least the following options:</span>
+
+<span class="sd">        Keyword args:</span>
+<span class="sd">            access (Access): Hint the expected access pattern for the image.</span>
+<span class="sd">            fail (bool): If set True, the loader will fail with an error on the</span>
+<span class="sd">                first serious error in the image. By default, libvips will</span>
+<span class="sd">                attempt to read everything it can from a damaged image.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A new :class:`Image`.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            :class:`.Error`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pointer</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_foreign_find_load_source</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pointer</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to load from source&#39;</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span>
+                                     <span class="n">string_options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Image.new_temp_file"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.new_temp_file">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">new_temp_file</span><span class="p">(</span><span class="nb">format</span><span class="p">):</span>
@@ -658,7 +716,7 @@
 
 <span class="sd">        This method can save images in any format supported by vips. The format</span>
 <span class="sd">        is selected from the suffix in the format string. This can include</span>
-<span class="sd">        embedded save options, see :func:`Image.new_from_file`.</span>
+<span class="sd">        embedded save options, see :func:`Image.write_to_file`.</span>
 
 <span class="sd">        For example::</span>
 
@@ -724,9 +782,60 @@
 
         <span class="n">psize</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;size_t *&#39;</span><span class="p">)</span>
         <span class="n">pointer</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_write_to_memory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span> <span class="n">psize</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pointer</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to write to memory&#39;</span><span class="p">)</span>
         <span class="n">pointer</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">gc</span><span class="p">(</span><span class="n">pointer</span><span class="p">,</span> <span class="n">glib_lib</span><span class="o">.</span><span class="n">g_free</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">ffi</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="n">pointer</span><span class="p">,</span> <span class="n">psize</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Image.write_to_target"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.write_to_target">[docs]</a>    <span class="k">def</span> <span class="nf">write_to_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">format_string</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write an image to a target.</span>
+
+<span class="sd">        This method will write the image to the target in the format</span>
+<span class="sd">        specified in the suffix in the format string. This can include</span>
+<span class="sd">        embedded save options, see :func:`Image.write_to_file`.</span>
+
+<span class="sd">        For example::</span>
+
+<span class="sd">            image.write_to_target(target, &#39;.jpg[Q=95]&#39;)</span>
+
+<span class="sd">        You can also supply options as keyword arguments, for example::</span>
+
+<span class="sd">            image.write_to_target(target, &#39;.jpg&#39;, Q=95)</span>
+
+<span class="sd">        The full set of options available depend upon the save operation that</span>
+<span class="sd">        will be executed. Try something like::</span>
+
+<span class="sd">            $ vips jpegsave_target</span>
+
+<span class="sd">        at the command-line to see a summary of the available options for the</span>
+<span class="sd">        JPEG saver.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            target (Target): The target to write the image to</span>
+<span class="sd">            format_string (str): The suffix, plus any string-form arguments.</span>
+
+<span class="sd">        Other arguments depend upon the save operation.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            :class:`.Error`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">format_string</span> <span class="o">=</span> <span class="n">_to_bytes</span><span class="p">(</span><span class="n">format_string</span><span class="p">)</span>
+
+        <span class="n">pointer</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_filename_get_options</span><span class="p">(</span><span class="n">format_string</span><span class="p">)</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="n">_to_string_copy</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span>
+
+        <span class="n">pointer</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_foreign_find_save_target</span><span class="p">(</span><span class="n">format_string</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pointer</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to write to target&#39;</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span>
+                                     <span class="n">string_options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Image.write"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Write an image to another image.</span>
@@ -747,6 +856,25 @@
         <span class="n">result</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to write to image&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.set_progress"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.set_progress">[docs]</a>    <span class="k">def</span> <span class="nf">set_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">progress</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Enable progress reporting on an image.</span>
+
+<span class="sd">        When progress reporting is enabled, evaluation of the most downstream</span>
+<span class="sd">        image from this image will report progress using the ::preeval, ::eval,</span>
+<span class="sd">        and ::posteval signals.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_set_progress</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span> <span class="n">progress</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.set_kill"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.set_kill">[docs]</a>    <span class="k">def</span> <span class="nf">set_kill</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kill</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Kill processing of an image.</span>
+
+<span class="sd">        Use this to kill evaluation of an image. You can call it from one of</span>
+<span class="sd">        the progress signals, for example. See :meth:`.set_progress`.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_set_kill</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span> <span class="n">kill</span><span class="p">)</span></div>
 
     <span class="c1"># get/set metadata</span>
 
@@ -1344,6 +1472,18 @@
         <span class="sd">&quot;&quot;&quot;Rotate 270 degrees clockwise.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rot</span><span class="p">(</span><span class="s1">&#39;d270&#39;</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="Image.hasalpha"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.hasalpha">[docs]</a>    <span class="k">def</span> <span class="nf">hasalpha</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;True if the image has an alpha channel.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_hasalpha</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.addalpha"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.addalpha">[docs]</a>    <span class="k">def</span> <span class="nf">addalpha</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add an alpha channel.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpretation</span> <span class="o">==</span> <span class="s1">&#39;grey16&#39;</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpretation</span> <span class="o">==</span> <span class="s1">&#39;rgb16&#39;</span><span class="p">:</span>
+            <span class="n">max_alpha</span> <span class="o">=</span> <span class="mi">65535</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">max_alpha</span> <span class="o">=</span> <span class="mi">255</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bandjoin</span><span class="p">(</span><span class="n">max_alpha</span><span class="p">)</span></div>
+
     <span class="c1"># we need different _imageize rules for this operator ... we need to</span>
     <span class="c1"># _imageize th and el to match each other first</span>
 <div class="viewcode-block" id="Image.ifthenelse"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.ifthenelse">[docs]</a>    <span class="nd">@_add_doc</span><span class="p">(</span><span class="s1">&#39;ifthenelse&#39;</span><span class="p">)</span>
@@ -1393,7 +1533,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, John Cupitt.
+        &copy; Copyright 2019, John Cupitt
 
     </p>
   </div>
@@ -1410,34 +1550,16 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'2.1.4',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-      <script type="text/javascript" src="../../../../_static/collapse.js"></script>
-
-  
-
-  <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
