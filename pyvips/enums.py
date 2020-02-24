@@ -6,17 +6,29 @@ class BandFormat(object):
 Each corresponds to a native C type for the current machine. For example,
 #VIPS_FORMAT_USHORT is <type>unsigned short</type>.
     
-    NOTSET - invalid setting
-    UCHAR - unsigned char format
-    CHAR - char format
-    USHORT - unsigned short format
-    SHORT - short format
-    UINT - unsigned int format
-    INT - int format
-    FLOAT - float format
-    COMPLEX - complex (two floats) format
-    DOUBLE - double float format
-    DPCOMPLEX - double complex (two double) format
+    Attributes:
+        NOTSET (str): invalid setting
+        
+        UCHAR (str): unsigned char format
+        
+        CHAR (str): char format
+        
+        USHORT (str): unsigned short format
+        
+        SHORT (str): short format
+        
+        UINT (str): unsigned int format
+        
+        INT (str): int format
+        
+        FLOAT (str): float format
+        
+        COMPLEX (str): complex (two floats) format
+        
+        DOUBLE (str): double float format
+        
+        DPCOMPLEX (str): double complex (two double) format
+        
     """
     
     NOTSET = 'notset'
@@ -44,31 +56,57 @@ https://www.cairographics.org/operators
 
 The non-separable modes are not implemented.
     
-    CLEAR - where the second object is drawn, the first is removed
-    SOURCE - the second object is drawn as if nothing were below
-    OVER - the image shows what you would expect if you held two semi-transparent slides on top of each other
-    IN - the first object is removed completely, the second is only drawn where the first was
-    OUT - the second is drawn only where the first isn't
-    ATOP - this leaves the first object mostly intact, but mixes both objects in the overlapping area
-    DEST - leaves the first object untouched, the second is discarded completely
-    DEST_OVER - like OVER, but swaps the arguments
-    DEST_IN - like IN, but swaps the arguments
-    DEST_OUT - like OUT, but swaps the arguments
-    DEST_ATOP - like ATOP, but swaps the arguments
-    XOR - something like a difference operator
-    ADD - a bit like adding the two images
-    SATURATE - a bit like the darker of the two
-    MULTIPLY - at least as dark as the darker of the two inputs
-    SCREEN - at least as light as the lighter of the inputs
-    OVERLAY - multiplies or screens colors, depending on the lightness
-    DARKEN - the darker of each component
-    LIGHTEN - the lighter of each component
-    COLOUR_DODGE - brighten first by a factor second
-    COLOUR_BURN - darken first by a factor of second
-    HARD_LIGHT - multiply or screen, depending on lightness
-    SOFT_LIGHT - darken or lighten, depending on lightness
-    DIFFERENCE - difference of the two
-    EXCLUSION - somewhat like DIFFERENCE, but lower-contrast
+    Attributes:
+        CLEAR (str): where the second object is drawn, the first is removed
+        
+        SOURCE (str): the second object is drawn as if nothing were below
+        
+        OVER (str): the image shows what you would expect if you held two semi-transparent slides on top of each other
+        
+        IN (str): the first object is removed completely, the second is only drawn where the first was
+        
+        OUT (str): the second is drawn only where the first isn't
+        
+        ATOP (str): this leaves the first object mostly intact, but mixes both objects in the overlapping area
+        
+        DEST (str): leaves the first object untouched, the second is discarded completely
+        
+        DEST_OVER (str): like OVER, but swaps the arguments
+        
+        DEST_IN (str): like IN, but swaps the arguments
+        
+        DEST_OUT (str): like OUT, but swaps the arguments
+        
+        DEST_ATOP (str): like ATOP, but swaps the arguments
+        
+        XOR (str): something like a difference operator
+        
+        ADD (str): a bit like adding the two images
+        
+        SATURATE (str): a bit like the darker of the two
+        
+        MULTIPLY (str): at least as dark as the darker of the two inputs
+        
+        SCREEN (str): at least as light as the lighter of the inputs
+        
+        OVERLAY (str): multiplies or screens colors, depending on the lightness
+        
+        DARKEN (str): the darker of each component
+        
+        LIGHTEN (str): the lighter of each component
+        
+        COLOUR_DODGE (str): brighten first by a factor second
+        
+        COLOUR_BURN (str): darken first by a factor of second
+        
+        HARD_LIGHT (str): multiply or screen, depending on lightness
+        
+        SOFT_LIGHT (str): darken or lighten, depending on lightness
+        
+        DIFFERENCE (str): difference of the two
+        
+        EXCLUSION (str): somewhat like DIFFERENCE, but lower-contrast
+        
     """
     
     CLEAR = 'clear'
@@ -110,9 +148,13 @@ useful to be able to manipulate images in the coded format.
 The gaps in the numbering are historical and must be maintained. Allocate
 new numbers from the end.
     
-    NONE - pixels are not coded
-    LABQ - pixels encode 3 float CIELAB values as 4 uchar
-    RAD - pixels encode 3 float RGB as 4 uchar (Radiance coding)
+    Attributes:
+        NONE (str): pixels are not coded
+        
+        LABQ (str): pixels encode 3 float CIELAB values as 4 uchar
+        
+        RAD (str): pixels encode 3 float RGB as 4 uchar (Radiance coding)
+        
     """
     
     ERROR = 'error'
@@ -134,25 +176,45 @@ you want some other behaviour.
 The gaps in numbering are historical and must be maintained. Allocate
 new numbers from the end.
     
-    MULTIBAND - generic many-band image
-    B_W - some kind of single-band image
-    HISTOGRAM - a 1D image, eg. histogram or lookup table
-    XYZ - the first three bands are CIE XYZ
-    LAB - pixels are in CIE Lab space
-    CMYK - the first four bands are in CMYK space
-    LABQ - implies #VIPS_CODING_LABQ
-    RGB - generic RGB space
-    CMC - a uniform colourspace based on CMC(1:1)
-    LCH - pixels are in CIE LCh space
-    LABS - CIE LAB coded as three signed 16-bit values
-    SRGB - pixels are sRGB
-    YXY - pixels are CIE Yxy
-    FOURIER - image is in fourier space
-    RGB16 - generic 16-bit RGB
-    GREY16 - generic 16-bit mono
-    MATRIX - a matrix
-    SCRGB - pixels are scRGB
-    HSV - pixels are HSV
+    Attributes:
+        MULTIBAND (str): generic many-band image
+        
+        B_W (str): some kind of single-band image
+        
+        HISTOGRAM (str): a 1D image, eg. histogram or lookup table
+        
+        XYZ (str): the first three bands are CIE XYZ
+        
+        LAB (str): pixels are in CIE Lab space
+        
+        CMYK (str): the first four bands are in CMYK space
+        
+        LABQ (str): implies #VIPS_CODING_LABQ
+        
+        RGB (str): generic RGB space
+        
+        CMC (str): a uniform colourspace based on CMC(1:1)
+        
+        LCH (str): pixels are in CIE LCh space
+        
+        LABS (str): CIE LAB coded as three signed 16-bit values
+        
+        SRGB (str): pixels are sRGB
+        
+        YXY (str): pixels are CIE Yxy
+        
+        FOURIER (str): image is in fourier space
+        
+        RGB16 (str): generic 16-bit RGB
+        
+        GREY16 (str): generic 16-bit mono
+        
+        MATRIX (str): a matrix
+        
+        SCRGB (str): pixels are scRGB
+        
+        HSV (str): pixels are HSV
+        
     """
     
     ERROR = 'error'
@@ -211,9 +273,13 @@ vips_black() where the pixels are calculated.
 
 See also: vips_image_pipelinev().
     
-    SMALLTILE - demand in small (typically 64x64 pixel) tiles
-    FATSTRIP - demand in fat (typically 10 pixel high) strips
-    THINSTRIP - demand in thin (typically 1 pixel high) strips
+    Attributes:
+        SMALLTILE (str): demand in small (typically 64x64 pixel) tiles
+        
+        FATSTRIP (str): demand in fat (typically 10 pixel high) strips
+        
+        THINSTRIP (str): demand in thin (typically 1 pixel high) strips
+        
     """
     
     ERROR = 'error'
@@ -227,12 +293,19 @@ class OperationRelational(object):
     
     See also: vips_relational().
     
-    EQUAL - ==
-    NOTEQ - !=
-    LESS - <
-    LESSEQ - <=
-    MORE - >
-    MOREEQ - >=
+    Attributes:
+        EQUAL (str): ==
+        
+        NOTEQ (str): !=
+        
+        LESS (str): <
+        
+        LESSEQ (str): <=
+        
+        MORE (str): >
+        
+        MOREEQ (str): >=
+        
     """
     
     EQUAL = 'equal'
@@ -248,11 +321,17 @@ class OperationBoolean(object):
     
     See also: vips_boolean().
     
-    AND - &
-    OR - |
-    EOR - ^
-    LSHIFT - >>
-    RSHIFT - <<
+    Attributes:
+        AND (str): &
+        
+        OR (str): |
+        
+        EOR (str): ^
+        
+        LSHIFT (str): >>
+        
+        RSHIFT (str): <<
+        
     """
     
     AND = 'and'
@@ -267,8 +346,11 @@ class OperationMath2(object):
     
     See also: vips_math().
     
-    POW - pow( left, right )
-    WOP - pow( right, left )
+    Attributes:
+        POW (str): pow( left, right )
+        
+        WOP (str): pow( right, left )
+        
     """
     
     POW = 'pow'
@@ -280,7 +362,9 @@ class OperationComplex2(object):
     
     See also: vips_complex2().
     
-    CROSS_PHASE - convert to polar coordinates
+    Attributes:
+        CROSS_PHASE (str): convert to polar coordinates
+        
     """
     
     CROSS_PHASE = 'cross-phase'
@@ -291,16 +375,27 @@ class OperationMath(object):
     
     See also: vips_math().
     
-    SIN - sin(), angles in degrees
-    COS - cos(), angles in degrees
-    TAN - tan(), angles in degrees
-    ASIN - asin(), angles in degrees
-    ACOS - acos(), angles in degrees
-    ATAN - atan(), angles in degrees
-    LOG - log base e
-    LOG10 - log base 10
-    EXP - e to the something
-    EXP10 - 10 to the something
+    Attributes:
+        SIN (str): sin(), angles in degrees
+        
+        COS (str): cos(), angles in degrees
+        
+        TAN (str): tan(), angles in degrees
+        
+        ASIN (str): asin(), angles in degrees
+        
+        ACOS (str): acos(), angles in degrees
+        
+        ATAN (str): atan(), angles in degrees
+        
+        LOG (str): log base e
+        
+        LOG10 (str): log base 10
+        
+        EXP (str): e to the something
+        
+        EXP10 (str): 10 to the something
+        
     """
     
     SIN = 'sin'
@@ -320,9 +415,13 @@ class OperationRound(object):
     
     See also: vips_round().
     
-    RINT - round to nearest
-    CEIL - the smallest integral value not less than
-    FLOOR - largest integral value not greater than
+    Attributes:
+        RINT (str): round to nearest
+        
+        CEIL (str): the smallest integral value not less than
+        
+        FLOOR (str): largest integral value not greater than
+        
     """
     
     RINT = 'rint'
@@ -335,9 +434,13 @@ class OperationComplex(object):
     
     See also: vips_complex().
     
-    POLAR - convert to polar coordinates
-    RECT - convert to rectangular coordinates
-    CONJ - complex conjugate
+    Attributes:
+        POLAR (str): convert to polar coordinates
+        
+        RECT (str): convert to rectangular coordinates
+        
+        CONJ (str): complex conjugate
+        
     """
     
     POLAR = 'polar'
@@ -350,8 +453,11 @@ class OperationComplexget(object):
     
     See also: vips_complexget().
     
-    REAL - get real component
-    IMAG - get imaginary component
+    Attributes:
+        REAL (str): get real component
+        
+        IMAG (str): get imaginary component
+        
     """
     
     REAL = 'real'
@@ -363,9 +469,13 @@ class Combine(object):
     
     How to combine values. See vips_compass(), for example.
     
-    MAX - take the maximum of the possible values
-    SUM - sum all the values
-    MIN - take the minimum value
+    Attributes:
+        MAX (str): take the maximum of the possible values
+        
+        SUM (str): sum all the values
+        
+        MIN (str): take the minimum value
+        
     """
     
     MAX = 'max'
@@ -384,8 +494,11 @@ and #VipsForeign.
 @VIPS_ACCESS_SEQUENTIAL means requests will be top-to-bottom, but with some
 amount of buffering behind the read point for small non-local accesses.
     
-    RANDOM - can read anywhere
-    SEQUENTIAL - top-to-bottom reading only, but with a small buffer
+    Attributes:
+        RANDOM (str): can read anywhere
+        
+        SEQUENTIAL (str): top-to-bottom reading only, but with a small buffer
+        
     """
     
     RANDOM = 'random'
@@ -420,12 +533,19 @@ keep these frozen for back compat with vips7.
 
 See also: vips_embed().
     
-    BLACK - extend with black (all 0) pixels
-    COPY - copy the image edges
-    REPEAT - repeat the whole image
-    MIRROR - mirror the whole image
-    WHITE - extend with white (all bits set) pixels
-    BACKGROUND - extend with colour from the @background property
+    Attributes:
+        BLACK (str): extend with black (all 0) pixels
+        
+        COPY (str): copy the image edges
+        
+        REPEAT (str): repeat the whole image
+        
+        MIRROR (str): mirror the whole image
+        
+        WHITE (str): extend with white (all bits set) pixels
+        
+        BACKGROUND (str): extend with colour from the @background property
+        
     """
     
     BLACK = 'black'
@@ -441,15 +561,25 @@ class CompassDirection(object):
     
     A direction on a compass. Used for vips_gravity(), for example.
     
-    CENTRE - centre
-    NORTH - north
-    EAST - east
-    SOUTH - south
-    WEST - west
-    NORTH_EAST - north-east
-    SOUTH_EAST - south-east
-    SOUTH_WEST - south-west
-    NORTH_WEST - north-west
+    Attributes:
+        CENTRE (str): centre
+        
+        NORTH (str): north
+        
+        EAST (str): east
+        
+        SOUTH (str): south
+        
+        WEST (str): west
+        
+        NORTH_EAST (str): north-east
+        
+        SOUTH_EAST (str): south-east
+        
+        SOUTH_WEST (str): south-west
+        
+        NORTH_WEST (str): north-west
+        
     """
     
     CENTRE = 'centre'
@@ -473,8 +603,11 @@ top-bottom.
 
 See also: vips_flip(), vips_join().
     
-    HORIZONTAL - left-right
-    VERTICAL - top-bottom
+    Attributes:
+        HORIZONTAL (str): left-right
+        
+        VERTICAL (str): top-bottom
+        
     """
     
     HORIZONTAL = 'horizontal'
@@ -491,9 +624,13 @@ low or high coordinate edge, or centre.
 
 See also: vips_join().
     
-    LOW - align low coordinate edge
-    CENTRE - align centre
-    HIGH - align high coordinate edge
+    Attributes:
+        LOW (str): align low coordinate edge
+        
+        CENTRE (str): align centre
+        
+        HIGH (str): align high coordinate edge
+        
     """
     
     LOW = 'low'
@@ -514,12 +651,19 @@ the bottom or right.
 
 See also: vips_smartcrop().
     
-    NONE - do nothing
-    CENTRE - just take the centre
-    ENTROPY - use an entropy measure
-    ATTENTION - look for features likely to draw human attention
-    LOW - position the crop towards the low coordinate
-    HIGH - position the crop towards the high coordinate
+    Attributes:
+        NONE (str): do nothing
+        
+        CENTRE (str): just take the centre
+        
+        ENTROPY (str): use an entropy measure
+        
+        ATTENTION (str): look for features likely to draw human attention
+        
+        LOW (str): position the crop towards the low coordinate
+        
+        HIGH (str): position the crop towards the high coordinate
+        
     """
     
     NONE = 'none'
@@ -539,10 +683,15 @@ Fixed rotate angles.
 
 See also: vips_rot().
     
-    D0 - no rotate
-    D90 - 90 degrees clockwise
-    D180 - 180 degree rotate
-    D270 - 90 degrees anti-clockwise
+    Attributes:
+        D0 (str): no rotate
+        
+        D90 (str): 90 degrees clockwise
+        
+        D180 (str): 180 degree rotate
+        
+        D270 (str): 90 degrees anti-clockwise
+        
     """
     
     D0 = 'd0'
@@ -560,14 +709,23 @@ Fixed rotate angles.
 
 See also: vips_rot45().
     
-    D0 - no rotate
-    D45 - 45 degrees clockwise
-    D90 - 90 degrees clockwise
-    D135 - 135 degrees clockwise
-    D180 - 180 degrees
-    D225 - 135 degrees anti-clockwise
-    D270 - 90 degrees anti-clockwise
-    D315 - 45 degrees anti-clockwise
+    Attributes:
+        D0 (str): no rotate
+        
+        D45 (str): 45 degrees clockwise
+        
+        D90 (str): 90 degrees clockwise
+        
+        D135 (str): 135 degrees clockwise
+        
+        D180 (str): 180 degrees
+        
+        D225 (str): 135 degrees anti-clockwise
+        
+        D270 (str): 90 degrees anti-clockwise
+        
+        D315 (str): 45 degrees anti-clockwise
+        
     """
     
     D0 = 'd0'
@@ -585,9 +743,13 @@ class Precision(object):
     
     How accurate an operation should be.
     
-    INTEGER - int everywhere
-    FLOAT - float everywhere
-    APPROXIMATE - approximate integer output
+    Attributes:
+        INTEGER (str): int everywhere
+        
+        FLOAT (str): float everywhere
+        
+        APPROXIMATE (str): approximate integer output
+        
     """
     
     INTEGER = 'integer'
@@ -600,10 +762,15 @@ class ForeignDzLayout(object):
     
     What directory layout and metadata standard to use.
     
-    DZ - use DeepZoom directory layout
-    ZOOMIFY - use Zoomify directory layout
-    GOOGLE - use Google maps directory layout
-    IIIF - use IIIF directory layout
+    Attributes:
+        DZ (str): use DeepZoom directory layout
+        
+        ZOOMIFY (str): use Zoomify directory layout
+        
+        GOOGLE (str): use Google maps directory layout
+        
+        IIIF (str): use IIIF directory layout
+        
     """
     
     DZ = 'dz'
@@ -617,9 +784,13 @@ class ForeignDzDepth(object):
     
     How many pyramid layers to create.
     
-    ONEPIXEL - create layers down to 1x1 pixel
-    ONETILE - create layers down to 1x1 tile
-    ONE - only create a single layer
+    Attributes:
+        ONEPIXEL (str): create layers down to 1x1 pixel
+        
+        ONETILE (str): create layers down to 1x1 tile
+        
+        ONE (str): only create a single layer
+        
     """
     
     ONEPIXEL = 'onepixel'
@@ -632,9 +803,13 @@ class ForeignDzContainer(object):
     
     How many pyramid layers to create.
     
-    FS - write tiles to the filesystem
-    ZIP - write tiles to a zip file
-    SZI - write to a szi file
+    Attributes:
+        FS (str): write tiles to the filesystem
+        
+        ZIP (str): write tiles to a zip file
+        
+        SZI (str): write to a szi file
+        
     """
     
     FS = 'fs'
@@ -647,12 +822,19 @@ class RegionShrink(object):
     
     How to calculate the output pixels when shrinking a 2x2 region.
     
-    MEAN - use the average
-    MEDIAN - use the median
-    MODE - use the mode
-    MAX - use the maximum
-    MIN - use the minimum
-    NEAREST - use the top-left pixel
+    Attributes:
+        MEAN (str): use the average
+        
+        MEDIAN (str): use the median
+        
+        MODE (str): use the mode
+        
+        MAX (str): use the maximum
+        
+        MIN (str): use the minimum
+        
+        NEAREST (str): use the top-left pixel
+        
     """
     
     MEAN = 'mean'
@@ -668,9 +850,13 @@ class ForeignJpegSubsample(object):
     
     Set jpeg subsampling mode.
     
-    AUTO - default preset
-    ON - always perform subsampling
-    OFF - never perform subsampling
+    Attributes:
+        AUTO (str): default preset
+        
+        ON (str): always perform subsampling
+        
+        OFF (str): never perform subsampling
+        
     """
     
     AUTO = 'auto'
@@ -683,12 +869,19 @@ class ForeignWebpPreset(object):
     
     Tune lossy encoder settings for different image types.
     
-    DEFAULT - default preset
-    PICTURE - digital picture, like portrait, inner shot
-    PHOTO - outdoor photograph, with natural lighting
-    DRAWING - hand or line drawing, with high-contrast details
-    ICON - small-sized colorful images
-    TEXT - text-like
+    Attributes:
+        DEFAULT (str): default preset
+        
+        PICTURE (str): digital picture, like portrait, inner shot
+        
+        PHOTO (str): outdoor photograph, with natural lighting
+        
+        DRAWING (str): hand or line drawing, with high-contrast details
+        
+        ICON (str): small-sized colorful images
+        
+        TEXT (str): text-like
+        
     """
     
     DEFAULT = 'default'
@@ -712,14 +905,23 @@ Use @lossless to set WEBP lossless compression.
 
 Use @level to set webp and zstd compression level.
     
-    NONE - no compression
-    JPEG - jpeg compression
-    DEFLATE - deflate (zip) compression
-    PACKBITS - packbits compression
-    CCITTFAX4 - fax4 compression
-    LZW - LZW compression
-    WEBP - WEBP compression
-    ZSTD - ZSTD compression
+    Attributes:
+        NONE (str): no compression
+        
+        JPEG (str): jpeg compression
+        
+        DEFLATE (str): deflate (zip) compression
+        
+        PACKBITS (str): packbits compression
+        
+        CCITTFAX4 (str): fax4 compression
+        
+        LZW (str): LZW compression
+        
+        WEBP (str): WEBP compression
+        
+        ZSTD (str): ZSTD compression
+        
     """
     
     NONE = 'none'
@@ -738,9 +940,13 @@ class ForeignTiffPredictor(object):
     The predictor can help deflate and lzw compression. The values are fixed by
 the tiff library.
     
-    NONE - no prediction
-    HORIZONTAL - horizontal differencing
-    FLOAT - float predictor
+    Attributes:
+        NONE (str): no prediction
+        
+        HORIZONTAL (str): horizontal differencing
+        
+        FLOAT (str): float predictor
+        
     """
     
     NONE = 'none'
@@ -753,8 +959,11 @@ class ForeignTiffResunit(object):
     
     Use inches or centimeters as the resolution unit for a tiff file.
     
-    CM - use centimeters
-    INCH - use inches
+    Attributes:
+        CM (str): use centimeters
+        
+        INCH (str): use inches
+        
     """
     
     CM = 'cm'
@@ -768,10 +977,15 @@ class ForeignHeifCompression(object):
 
 This is assumed to use the same numbering as %heif_compression_format.
     
-    HEVC - x265
-    AVC - x264
-    JPEG - jpeg
-    AV1 - aom
+    Attributes:
+        HEVC (str): x265
+        
+        AVC (str): x264
+        
+        JPEG (str): jpeg
+        
+        AV1 (str): aom
+        
     """
     
     HEVC = 'hevc'
@@ -788,10 +1002,15 @@ downsize, or force a size.
 
 See also: vips_thumbnail().
     
-    BOTH - size both up and down
-    UP - only upsize
-    DOWN - only downsize
-    FORCE - force size, that is, break aspect ratio
+    Attributes:
+        BOTH (str): size both up and down
+        
+        UP (str): only upsize
+        
+        DOWN (str): only downsize
+        
+        FORCE (str): force size, that is, break aspect ratio
+        
     """
     
     BOTH = 'both'
@@ -807,10 +1026,15 @@ class Intent(object):
 scientific work, #VIPS_INTENT_RELATIVE is usually best for
 accurate communication with other imaging libraries.
     
-    PERCEPTUAL - perceptual rendering intent
-    RELATIVE - relative colorimetric rendering intent
-    SATURATION - saturation rendering intent
-    ABSOLUTE - absolute colorimetric rendering intent
+    Attributes:
+        PERCEPTUAL (str): perceptual rendering intent
+        
+        RELATIVE (str): relative colorimetric rendering intent
+        
+        SATURATION (str): saturation rendering intent
+        
+        ABSOLUTE (str): absolute colorimetric rendering intent
+        
     """
     
     PERCEPTUAL = 'perceptual'
@@ -824,11 +1048,17 @@ class Kernel(object):
     
     The resampling kernels vips supports. See vips_reduce(), for example.
     
-    NEAREST - The nearest pixel to the point.
-    LINEAR - Convolve with a triangle filter.
-    CUBIC - Convolve with a cubic filter.
-    LANCZOS2 - Convolve with a two-lobe Lanczos kernel.
-    LANCZOS3 - Convolve with a three-lobe Lanczos kernel.
+    Attributes:
+        NEAREST (str): The nearest pixel to the point.
+        
+        LINEAR (str): Convolve with a triangle filter.
+        
+        CUBIC (str): Convolve with a cubic filter.
+        
+        LANCZOS2 (str): Convolve with a two-lobe Lanczos kernel.
+        
+        LANCZOS3 (str): Convolve with a three-lobe Lanczos kernel.
+        
     """
     
     NEAREST = 'nearest'
@@ -846,8 +1076,11 @@ class PCS(object):
 vips_icc_export(). LAB is usually best, XYZ can be more convenient in some
 cases.
     
-    LAB - use CIELAB D65 as the Profile Connection Space
-    XYZ - use XYZ as the Profile Connection Space
+    Attributes:
+        LAB (str): use CIELAB D65 as the Profile Connection Space
+        
+        XYZ (str): use XYZ as the Profile Connection Space
+        
     """
     
     LAB = 'lab'
@@ -861,8 +1094,11 @@ class OperationMorphology(object):
 
 See also: vips_morph().
     
-    ERODE - true if all set
-    DILATE - true if one set
+    Attributes:
+        ERODE (str): true if all set
+        
+        DILATE (str): true if one set
+        
     """
     
     ERODE = 'erode'
@@ -879,8 +1115,11 @@ from two sources.
 
 See also: vips_join().
     
-    SET - set pixels to the new value
-    ADD - add pixels
+    Attributes:
+        SET (str): set pixels to the new value
+        
+        ADD (str): add pixels
+        
     """
     
     SET = 'set'
@@ -890,6 +1129,7 @@ See also: vips_join().
 class Token(object):
     """Token.
     
+    Attributes:
     """
     
     LEFT = 'left'
@@ -903,12 +1143,19 @@ class Saveable(object):
     
     See also: #VipsForeignSave.
     
-    MONO - 1 band (eg. CSV)
-    RGB - 1 or 3 bands (eg. PPM)
-    RGBA - 1, 2, 3 or 4 bands (eg. PNG)
-    RGBA_ONLY - 3 or 4 bands (eg. WEBP)
-    RGB_CMYK - 1, 3 or 4 bands (eg. JPEG)
-    ANY - any number of bands (eg. TIFF)
+    Attributes:
+        MONO (str): 1 band (eg. CSV)
+        
+        RGB (str): 1 or 3 bands (eg. PPM)
+        
+        RGBA (str): 1, 2, 3 or 4 bands (eg. PNG)
+        
+        RGBA_ONLY (str): 3 or 4 bands (eg. WEBP)
+        
+        RGB_CMYK (str): 1, 3 or 4 bands (eg. JPEG)
+        
+        ANY (str): any number of bands (eg. TIFF)
+        
     """
     
     MONO = 'mono'
@@ -922,6 +1169,7 @@ class Saveable(object):
 class ImageType(object):
     """ImageType.
     
+    Attributes:
     """
     
     ERROR = 'error'

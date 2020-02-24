@@ -66,12 +66,14 @@ def generate_enums():
             print(f'    ')
             print(f'    {enum_doc.text}')
         print(f'    ')
+        print(f'    Attributes:')
         for value in values_for_enum(gtype):
             python_name = value.replace('-', '_')
             member = node.find(f"goi:member[@name='{python_name}']", namespace)
             member_doc = member.find("goi:doc", namespace)
             if member_doc != None:
-                print(f'    {python_name.upper()} - {member_doc.text}')
+                print(f'        {python_name.upper()} (str): {member_doc.text}')
+                print(f'        ')
         print(f'    """')
         print(f'    ')
 
