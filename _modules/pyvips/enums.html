@@ -173,17 +173,29 @@
 <span class="sd">Each corresponds to a native C type for the current machine. For example,</span>
 <span class="sd">#VIPS_FORMAT_USHORT is &lt;type&gt;unsigned short&lt;/type&gt;.</span>
 <span class="sd">    </span>
-<span class="sd">    NOTSET - invalid setting</span>
-<span class="sd">    UCHAR - unsigned char format</span>
-<span class="sd">    CHAR - char format</span>
-<span class="sd">    USHORT - unsigned short format</span>
-<span class="sd">    SHORT - short format</span>
-<span class="sd">    UINT - unsigned int format</span>
-<span class="sd">    INT - int format</span>
-<span class="sd">    FLOAT - float format</span>
-<span class="sd">    COMPLEX - complex (two floats) format</span>
-<span class="sd">    DOUBLE - double float format</span>
-<span class="sd">    DPCOMPLEX - double complex (two double) format</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        NOTSET (str): invalid setting</span>
+<span class="sd">        </span>
+<span class="sd">        UCHAR (str): unsigned char format</span>
+<span class="sd">        </span>
+<span class="sd">        CHAR (str): char format</span>
+<span class="sd">        </span>
+<span class="sd">        USHORT (str): unsigned short format</span>
+<span class="sd">        </span>
+<span class="sd">        SHORT (str): short format</span>
+<span class="sd">        </span>
+<span class="sd">        UINT (str): unsigned int format</span>
+<span class="sd">        </span>
+<span class="sd">        INT (str): int format</span>
+<span class="sd">        </span>
+<span class="sd">        FLOAT (str): float format</span>
+<span class="sd">        </span>
+<span class="sd">        COMPLEX (str): complex (two floats) format</span>
+<span class="sd">        </span>
+<span class="sd">        DOUBLE (str): double float format</span>
+<span class="sd">        </span>
+<span class="sd">        DPCOMPLEX (str): double complex (two double) format</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">NOTSET</span> <span class="o">=</span> <span class="s1">&#39;notset&#39;</span>
@@ -211,31 +223,57 @@
 
 <span class="sd">The non-separable modes are not implemented.</span>
 <span class="sd">    </span>
-<span class="sd">    CLEAR - where the second object is drawn, the first is removed</span>
-<span class="sd">    SOURCE - the second object is drawn as if nothing were below</span>
-<span class="sd">    OVER - the image shows what you would expect if you held two semi-transparent slides on top of each other</span>
-<span class="sd">    IN - the first object is removed completely, the second is only drawn where the first was</span>
-<span class="sd">    OUT - the second is drawn only where the first isn&#39;t</span>
-<span class="sd">    ATOP - this leaves the first object mostly intact, but mixes both objects in the overlapping area</span>
-<span class="sd">    DEST - leaves the first object untouched, the second is discarded completely</span>
-<span class="sd">    DEST_OVER - like OVER, but swaps the arguments</span>
-<span class="sd">    DEST_IN - like IN, but swaps the arguments</span>
-<span class="sd">    DEST_OUT - like OUT, but swaps the arguments</span>
-<span class="sd">    DEST_ATOP - like ATOP, but swaps the arguments</span>
-<span class="sd">    XOR - something like a difference operator</span>
-<span class="sd">    ADD - a bit like adding the two images</span>
-<span class="sd">    SATURATE - a bit like the darker of the two</span>
-<span class="sd">    MULTIPLY - at least as dark as the darker of the two inputs</span>
-<span class="sd">    SCREEN - at least as light as the lighter of the inputs</span>
-<span class="sd">    OVERLAY - multiplies or screens colors, depending on the lightness</span>
-<span class="sd">    DARKEN - the darker of each component</span>
-<span class="sd">    LIGHTEN - the lighter of each component</span>
-<span class="sd">    COLOUR_DODGE - brighten first by a factor second</span>
-<span class="sd">    COLOUR_BURN - darken first by a factor of second</span>
-<span class="sd">    HARD_LIGHT - multiply or screen, depending on lightness</span>
-<span class="sd">    SOFT_LIGHT - darken or lighten, depending on lightness</span>
-<span class="sd">    DIFFERENCE - difference of the two</span>
-<span class="sd">    EXCLUSION - somewhat like DIFFERENCE, but lower-contrast</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        CLEAR (str): where the second object is drawn, the first is removed</span>
+<span class="sd">        </span>
+<span class="sd">        SOURCE (str): the second object is drawn as if nothing were below</span>
+<span class="sd">        </span>
+<span class="sd">        OVER (str): the image shows what you would expect if you held two semi-transparent slides on top of each other</span>
+<span class="sd">        </span>
+<span class="sd">        IN (str): the first object is removed completely, the second is only drawn where the first was</span>
+<span class="sd">        </span>
+<span class="sd">        OUT (str): the second is drawn only where the first isn&#39;t</span>
+<span class="sd">        </span>
+<span class="sd">        ATOP (str): this leaves the first object mostly intact, but mixes both objects in the overlapping area</span>
+<span class="sd">        </span>
+<span class="sd">        DEST (str): leaves the first object untouched, the second is discarded completely</span>
+<span class="sd">        </span>
+<span class="sd">        DEST_OVER (str): like OVER, but swaps the arguments</span>
+<span class="sd">        </span>
+<span class="sd">        DEST_IN (str): like IN, but swaps the arguments</span>
+<span class="sd">        </span>
+<span class="sd">        DEST_OUT (str): like OUT, but swaps the arguments</span>
+<span class="sd">        </span>
+<span class="sd">        DEST_ATOP (str): like ATOP, but swaps the arguments</span>
+<span class="sd">        </span>
+<span class="sd">        XOR (str): something like a difference operator</span>
+<span class="sd">        </span>
+<span class="sd">        ADD (str): a bit like adding the two images</span>
+<span class="sd">        </span>
+<span class="sd">        SATURATE (str): a bit like the darker of the two</span>
+<span class="sd">        </span>
+<span class="sd">        MULTIPLY (str): at least as dark as the darker of the two inputs</span>
+<span class="sd">        </span>
+<span class="sd">        SCREEN (str): at least as light as the lighter of the inputs</span>
+<span class="sd">        </span>
+<span class="sd">        OVERLAY (str): multiplies or screens colors, depending on the lightness</span>
+<span class="sd">        </span>
+<span class="sd">        DARKEN (str): the darker of each component</span>
+<span class="sd">        </span>
+<span class="sd">        LIGHTEN (str): the lighter of each component</span>
+<span class="sd">        </span>
+<span class="sd">        COLOUR_DODGE (str): brighten first by a factor second</span>
+<span class="sd">        </span>
+<span class="sd">        COLOUR_BURN (str): darken first by a factor of second</span>
+<span class="sd">        </span>
+<span class="sd">        HARD_LIGHT (str): multiply or screen, depending on lightness</span>
+<span class="sd">        </span>
+<span class="sd">        SOFT_LIGHT (str): darken or lighten, depending on lightness</span>
+<span class="sd">        </span>
+<span class="sd">        DIFFERENCE (str): difference of the two</span>
+<span class="sd">        </span>
+<span class="sd">        EXCLUSION (str): somewhat like DIFFERENCE, but lower-contrast</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">CLEAR</span> <span class="o">=</span> <span class="s1">&#39;clear&#39;</span>
@@ -277,9 +315,13 @@
 <span class="sd">The gaps in the numbering are historical and must be maintained. Allocate</span>
 <span class="sd">new numbers from the end.</span>
 <span class="sd">    </span>
-<span class="sd">    NONE - pixels are not coded</span>
-<span class="sd">    LABQ - pixels encode 3 float CIELAB values as 4 uchar</span>
-<span class="sd">    RAD - pixels encode 3 float RGB as 4 uchar (Radiance coding)</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        NONE (str): pixels are not coded</span>
+<span class="sd">        </span>
+<span class="sd">        LABQ (str): pixels encode 3 float CIELAB values as 4 uchar</span>
+<span class="sd">        </span>
+<span class="sd">        RAD (str): pixels encode 3 float RGB as 4 uchar (Radiance coding)</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">ERROR</span> <span class="o">=</span> <span class="s1">&#39;error&#39;</span>
@@ -301,25 +343,45 @@
 <span class="sd">The gaps in numbering are historical and must be maintained. Allocate</span>
 <span class="sd">new numbers from the end.</span>
 <span class="sd">    </span>
-<span class="sd">    MULTIBAND - generic many-band image</span>
-<span class="sd">    B_W - some kind of single-band image</span>
-<span class="sd">    HISTOGRAM - a 1D image, eg. histogram or lookup table</span>
-<span class="sd">    XYZ - the first three bands are CIE XYZ</span>
-<span class="sd">    LAB - pixels are in CIE Lab space</span>
-<span class="sd">    CMYK - the first four bands are in CMYK space</span>
-<span class="sd">    LABQ - implies #VIPS_CODING_LABQ</span>
-<span class="sd">    RGB - generic RGB space</span>
-<span class="sd">    CMC - a uniform colourspace based on CMC(1:1)</span>
-<span class="sd">    LCH - pixels are in CIE LCh space</span>
-<span class="sd">    LABS - CIE LAB coded as three signed 16-bit values</span>
-<span class="sd">    SRGB - pixels are sRGB</span>
-<span class="sd">    YXY - pixels are CIE Yxy</span>
-<span class="sd">    FOURIER - image is in fourier space</span>
-<span class="sd">    RGB16 - generic 16-bit RGB</span>
-<span class="sd">    GREY16 - generic 16-bit mono</span>
-<span class="sd">    MATRIX - a matrix</span>
-<span class="sd">    SCRGB - pixels are scRGB</span>
-<span class="sd">    HSV - pixels are HSV</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        MULTIBAND (str): generic many-band image</span>
+<span class="sd">        </span>
+<span class="sd">        B_W (str): some kind of single-band image</span>
+<span class="sd">        </span>
+<span class="sd">        HISTOGRAM (str): a 1D image, eg. histogram or lookup table</span>
+<span class="sd">        </span>
+<span class="sd">        XYZ (str): the first three bands are CIE XYZ</span>
+<span class="sd">        </span>
+<span class="sd">        LAB (str): pixels are in CIE Lab space</span>
+<span class="sd">        </span>
+<span class="sd">        CMYK (str): the first four bands are in CMYK space</span>
+<span class="sd">        </span>
+<span class="sd">        LABQ (str): implies #VIPS_CODING_LABQ</span>
+<span class="sd">        </span>
+<span class="sd">        RGB (str): generic RGB space</span>
+<span class="sd">        </span>
+<span class="sd">        CMC (str): a uniform colourspace based on CMC(1:1)</span>
+<span class="sd">        </span>
+<span class="sd">        LCH (str): pixels are in CIE LCh space</span>
+<span class="sd">        </span>
+<span class="sd">        LABS (str): CIE LAB coded as three signed 16-bit values</span>
+<span class="sd">        </span>
+<span class="sd">        SRGB (str): pixels are sRGB</span>
+<span class="sd">        </span>
+<span class="sd">        YXY (str): pixels are CIE Yxy</span>
+<span class="sd">        </span>
+<span class="sd">        FOURIER (str): image is in fourier space</span>
+<span class="sd">        </span>
+<span class="sd">        RGB16 (str): generic 16-bit RGB</span>
+<span class="sd">        </span>
+<span class="sd">        GREY16 (str): generic 16-bit mono</span>
+<span class="sd">        </span>
+<span class="sd">        MATRIX (str): a matrix</span>
+<span class="sd">        </span>
+<span class="sd">        SCRGB (str): pixels are scRGB</span>
+<span class="sd">        </span>
+<span class="sd">        HSV (str): pixels are HSV</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">ERROR</span> <span class="o">=</span> <span class="s1">&#39;error&#39;</span>
@@ -378,9 +440,13 @@
 
 <span class="sd">See also: vips_image_pipelinev().</span>
 <span class="sd">    </span>
-<span class="sd">    SMALLTILE - demand in small (typically 64x64 pixel) tiles</span>
-<span class="sd">    FATSTRIP - demand in fat (typically 10 pixel high) strips</span>
-<span class="sd">    THINSTRIP - demand in thin (typically 1 pixel high) strips</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        SMALLTILE (str): demand in small (typically 64x64 pixel) tiles</span>
+<span class="sd">        </span>
+<span class="sd">        FATSTRIP (str): demand in fat (typically 10 pixel high) strips</span>
+<span class="sd">        </span>
+<span class="sd">        THINSTRIP (str): demand in thin (typically 1 pixel high) strips</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">ERROR</span> <span class="o">=</span> <span class="s1">&#39;error&#39;</span>
@@ -394,12 +460,19 @@
 <span class="sd">    </span>
 <span class="sd">    See also: vips_relational().</span>
 <span class="sd">    </span>
-<span class="sd">    EQUAL - ==</span>
-<span class="sd">    NOTEQ - !=</span>
-<span class="sd">    LESS - &lt;</span>
-<span class="sd">    LESSEQ - &lt;=</span>
-<span class="sd">    MORE - &gt;</span>
-<span class="sd">    MOREEQ - &gt;=</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        EQUAL (str): ==</span>
+<span class="sd">        </span>
+<span class="sd">        NOTEQ (str): !=</span>
+<span class="sd">        </span>
+<span class="sd">        LESS (str): &lt;</span>
+<span class="sd">        </span>
+<span class="sd">        LESSEQ (str): &lt;=</span>
+<span class="sd">        </span>
+<span class="sd">        MORE (str): &gt;</span>
+<span class="sd">        </span>
+<span class="sd">        MOREEQ (str): &gt;=</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">EQUAL</span> <span class="o">=</span> <span class="s1">&#39;equal&#39;</span>
@@ -415,11 +488,17 @@
 <span class="sd">    </span>
 <span class="sd">    See also: vips_boolean().</span>
 <span class="sd">    </span>
-<span class="sd">    AND - &amp;</span>
-<span class="sd">    OR - |</span>
-<span class="sd">    EOR - ^</span>
-<span class="sd">    LSHIFT - &gt;&gt;</span>
-<span class="sd">    RSHIFT - &lt;&lt;</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        AND (str): &amp;</span>
+<span class="sd">        </span>
+<span class="sd">        OR (str): |</span>
+<span class="sd">        </span>
+<span class="sd">        EOR (str): ^</span>
+<span class="sd">        </span>
+<span class="sd">        LSHIFT (str): &gt;&gt;</span>
+<span class="sd">        </span>
+<span class="sd">        RSHIFT (str): &lt;&lt;</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">AND</span> <span class="o">=</span> <span class="s1">&#39;and&#39;</span>
@@ -434,8 +513,11 @@
 <span class="sd">    </span>
 <span class="sd">    See also: vips_math().</span>
 <span class="sd">    </span>
-<span class="sd">    POW - pow( left, right )</span>
-<span class="sd">    WOP - pow( right, left )</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        POW (str): pow( left, right )</span>
+<span class="sd">        </span>
+<span class="sd">        WOP (str): pow( right, left )</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">POW</span> <span class="o">=</span> <span class="s1">&#39;pow&#39;</span>
@@ -447,7 +529,9 @@
 <span class="sd">    </span>
 <span class="sd">    See also: vips_complex2().</span>
 <span class="sd">    </span>
-<span class="sd">    CROSS_PHASE - convert to polar coordinates</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        CROSS_PHASE (str): convert to polar coordinates</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">CROSS_PHASE</span> <span class="o">=</span> <span class="s1">&#39;cross-phase&#39;</span></div>
@@ -458,16 +542,27 @@
 <span class="sd">    </span>
 <span class="sd">    See also: vips_math().</span>
 <span class="sd">    </span>
-<span class="sd">    SIN - sin(), angles in degrees</span>
-<span class="sd">    COS - cos(), angles in degrees</span>
-<span class="sd">    TAN - tan(), angles in degrees</span>
-<span class="sd">    ASIN - asin(), angles in degrees</span>
-<span class="sd">    ACOS - acos(), angles in degrees</span>
-<span class="sd">    ATAN - atan(), angles in degrees</span>
-<span class="sd">    LOG - log base e</span>
-<span class="sd">    LOG10 - log base 10</span>
-<span class="sd">    EXP - e to the something</span>
-<span class="sd">    EXP10 - 10 to the something</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        SIN (str): sin(), angles in degrees</span>
+<span class="sd">        </span>
+<span class="sd">        COS (str): cos(), angles in degrees</span>
+<span class="sd">        </span>
+<span class="sd">        TAN (str): tan(), angles in degrees</span>
+<span class="sd">        </span>
+<span class="sd">        ASIN (str): asin(), angles in degrees</span>
+<span class="sd">        </span>
+<span class="sd">        ACOS (str): acos(), angles in degrees</span>
+<span class="sd">        </span>
+<span class="sd">        ATAN (str): atan(), angles in degrees</span>
+<span class="sd">        </span>
+<span class="sd">        LOG (str): log base e</span>
+<span class="sd">        </span>
+<span class="sd">        LOG10 (str): log base 10</span>
+<span class="sd">        </span>
+<span class="sd">        EXP (str): e to the something</span>
+<span class="sd">        </span>
+<span class="sd">        EXP10 (str): 10 to the something</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">SIN</span> <span class="o">=</span> <span class="s1">&#39;sin&#39;</span>
@@ -487,9 +582,13 @@
 <span class="sd">    </span>
 <span class="sd">    See also: vips_round().</span>
 <span class="sd">    </span>
-<span class="sd">    RINT - round to nearest</span>
-<span class="sd">    CEIL - the smallest integral value not less than</span>
-<span class="sd">    FLOOR - largest integral value not greater than</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        RINT (str): round to nearest</span>
+<span class="sd">        </span>
+<span class="sd">        CEIL (str): the smallest integral value not less than</span>
+<span class="sd">        </span>
+<span class="sd">        FLOOR (str): largest integral value not greater than</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">RINT</span> <span class="o">=</span> <span class="s1">&#39;rint&#39;</span>
@@ -502,9 +601,13 @@
 <span class="sd">    </span>
 <span class="sd">    See also: vips_complex().</span>
 <span class="sd">    </span>
-<span class="sd">    POLAR - convert to polar coordinates</span>
-<span class="sd">    RECT - convert to rectangular coordinates</span>
-<span class="sd">    CONJ - complex conjugate</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        POLAR (str): convert to polar coordinates</span>
+<span class="sd">        </span>
+<span class="sd">        RECT (str): convert to rectangular coordinates</span>
+<span class="sd">        </span>
+<span class="sd">        CONJ (str): complex conjugate</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">POLAR</span> <span class="o">=</span> <span class="s1">&#39;polar&#39;</span>
@@ -517,8 +620,11 @@
 <span class="sd">    </span>
 <span class="sd">    See also: vips_complexget().</span>
 <span class="sd">    </span>
-<span class="sd">    REAL - get real component</span>
-<span class="sd">    IMAG - get imaginary component</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        REAL (str): get real component</span>
+<span class="sd">        </span>
+<span class="sd">        IMAG (str): get imaginary component</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">REAL</span> <span class="o">=</span> <span class="s1">&#39;real&#39;</span>
@@ -530,9 +636,13 @@
 <span class="sd">    </span>
 <span class="sd">    How to combine values. See vips_compass(), for example.</span>
 <span class="sd">    </span>
-<span class="sd">    MAX - take the maximum of the possible values</span>
-<span class="sd">    SUM - sum all the values</span>
-<span class="sd">    MIN - take the minimum value</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        MAX (str): take the maximum of the possible values</span>
+<span class="sd">        </span>
+<span class="sd">        SUM (str): sum all the values</span>
+<span class="sd">        </span>
+<span class="sd">        MIN (str): take the minimum value</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">MAX</span> <span class="o">=</span> <span class="s1">&#39;max&#39;</span>
@@ -551,8 +661,11 @@
 <span class="sd">@VIPS_ACCESS_SEQUENTIAL means requests will be top-to-bottom, but with some</span>
 <span class="sd">amount of buffering behind the read point for small non-local accesses.</span>
 <span class="sd">    </span>
-<span class="sd">    RANDOM - can read anywhere</span>
-<span class="sd">    SEQUENTIAL - top-to-bottom reading only, but with a small buffer</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        RANDOM (str): can read anywhere</span>
+<span class="sd">        </span>
+<span class="sd">        SEQUENTIAL (str): top-to-bottom reading only, but with a small buffer</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">RANDOM</span> <span class="o">=</span> <span class="s1">&#39;random&#39;</span>
@@ -587,12 +700,19 @@
 
 <span class="sd">See also: vips_embed().</span>
 <span class="sd">    </span>
-<span class="sd">    BLACK - extend with black (all 0) pixels</span>
-<span class="sd">    COPY - copy the image edges</span>
-<span class="sd">    REPEAT - repeat the whole image</span>
-<span class="sd">    MIRROR - mirror the whole image</span>
-<span class="sd">    WHITE - extend with white (all bits set) pixels</span>
-<span class="sd">    BACKGROUND - extend with colour from the @background property</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        BLACK (str): extend with black (all 0) pixels</span>
+<span class="sd">        </span>
+<span class="sd">        COPY (str): copy the image edges</span>
+<span class="sd">        </span>
+<span class="sd">        REPEAT (str): repeat the whole image</span>
+<span class="sd">        </span>
+<span class="sd">        MIRROR (str): mirror the whole image</span>
+<span class="sd">        </span>
+<span class="sd">        WHITE (str): extend with white (all bits set) pixels</span>
+<span class="sd">        </span>
+<span class="sd">        BACKGROUND (str): extend with colour from the @background property</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">BLACK</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span>
@@ -608,15 +728,25 @@
 <span class="sd">    </span>
 <span class="sd">    A direction on a compass. Used for vips_gravity(), for example.</span>
 <span class="sd">    </span>
-<span class="sd">    CENTRE - centre</span>
-<span class="sd">    NORTH - north</span>
-<span class="sd">    EAST - east</span>
-<span class="sd">    SOUTH - south</span>
-<span class="sd">    WEST - west</span>
-<span class="sd">    NORTH_EAST - north-east</span>
-<span class="sd">    SOUTH_EAST - south-east</span>
-<span class="sd">    SOUTH_WEST - south-west</span>
-<span class="sd">    NORTH_WEST - north-west</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        CENTRE (str): centre</span>
+<span class="sd">        </span>
+<span class="sd">        NORTH (str): north</span>
+<span class="sd">        </span>
+<span class="sd">        EAST (str): east</span>
+<span class="sd">        </span>
+<span class="sd">        SOUTH (str): south</span>
+<span class="sd">        </span>
+<span class="sd">        WEST (str): west</span>
+<span class="sd">        </span>
+<span class="sd">        NORTH_EAST (str): north-east</span>
+<span class="sd">        </span>
+<span class="sd">        SOUTH_EAST (str): south-east</span>
+<span class="sd">        </span>
+<span class="sd">        SOUTH_WEST (str): south-west</span>
+<span class="sd">        </span>
+<span class="sd">        NORTH_WEST (str): north-west</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">CENTRE</span> <span class="o">=</span> <span class="s1">&#39;centre&#39;</span>
@@ -640,8 +770,11 @@
 
 <span class="sd">See also: vips_flip(), vips_join().</span>
 <span class="sd">    </span>
-<span class="sd">    HORIZONTAL - left-right</span>
-<span class="sd">    VERTICAL - top-bottom</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        HORIZONTAL (str): left-right</span>
+<span class="sd">        </span>
+<span class="sd">        VERTICAL (str): top-bottom</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">HORIZONTAL</span> <span class="o">=</span> <span class="s1">&#39;horizontal&#39;</span>
@@ -658,9 +791,13 @@
 
 <span class="sd">See also: vips_join().</span>
 <span class="sd">    </span>
-<span class="sd">    LOW - align low coordinate edge</span>
-<span class="sd">    CENTRE - align centre</span>
-<span class="sd">    HIGH - align high coordinate edge</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        LOW (str): align low coordinate edge</span>
+<span class="sd">        </span>
+<span class="sd">        CENTRE (str): align centre</span>
+<span class="sd">        </span>
+<span class="sd">        HIGH (str): align high coordinate edge</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">LOW</span> <span class="o">=</span> <span class="s1">&#39;low&#39;</span>
@@ -681,12 +818,19 @@
 
 <span class="sd">See also: vips_smartcrop().</span>
 <span class="sd">    </span>
-<span class="sd">    NONE - do nothing</span>
-<span class="sd">    CENTRE - just take the centre</span>
-<span class="sd">    ENTROPY - use an entropy measure</span>
-<span class="sd">    ATTENTION - look for features likely to draw human attention</span>
-<span class="sd">    LOW - position the crop towards the low coordinate</span>
-<span class="sd">    HIGH - position the crop towards the high coordinate</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        NONE (str): do nothing</span>
+<span class="sd">        </span>
+<span class="sd">        CENTRE (str): just take the centre</span>
+<span class="sd">        </span>
+<span class="sd">        ENTROPY (str): use an entropy measure</span>
+<span class="sd">        </span>
+<span class="sd">        ATTENTION (str): look for features likely to draw human attention</span>
+<span class="sd">        </span>
+<span class="sd">        LOW (str): position the crop towards the low coordinate</span>
+<span class="sd">        </span>
+<span class="sd">        HIGH (str): position the crop towards the high coordinate</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">NONE</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span>
@@ -706,10 +850,15 @@
 
 <span class="sd">See also: vips_rot().</span>
 <span class="sd">    </span>
-<span class="sd">    D0 - no rotate</span>
-<span class="sd">    D90 - 90 degrees clockwise</span>
-<span class="sd">    D180 - 180 degree rotate</span>
-<span class="sd">    D270 - 90 degrees anti-clockwise</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        D0 (str): no rotate</span>
+<span class="sd">        </span>
+<span class="sd">        D90 (str): 90 degrees clockwise</span>
+<span class="sd">        </span>
+<span class="sd">        D180 (str): 180 degree rotate</span>
+<span class="sd">        </span>
+<span class="sd">        D270 (str): 90 degrees anti-clockwise</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">D0</span> <span class="o">=</span> <span class="s1">&#39;d0&#39;</span>
@@ -727,14 +876,23 @@
 
 <span class="sd">See also: vips_rot45().</span>
 <span class="sd">    </span>
-<span class="sd">    D0 - no rotate</span>
-<span class="sd">    D45 - 45 degrees clockwise</span>
-<span class="sd">    D90 - 90 degrees clockwise</span>
-<span class="sd">    D135 - 135 degrees clockwise</span>
-<span class="sd">    D180 - 180 degrees</span>
-<span class="sd">    D225 - 135 degrees anti-clockwise</span>
-<span class="sd">    D270 - 90 degrees anti-clockwise</span>
-<span class="sd">    D315 - 45 degrees anti-clockwise</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        D0 (str): no rotate</span>
+<span class="sd">        </span>
+<span class="sd">        D45 (str): 45 degrees clockwise</span>
+<span class="sd">        </span>
+<span class="sd">        D90 (str): 90 degrees clockwise</span>
+<span class="sd">        </span>
+<span class="sd">        D135 (str): 135 degrees clockwise</span>
+<span class="sd">        </span>
+<span class="sd">        D180 (str): 180 degrees</span>
+<span class="sd">        </span>
+<span class="sd">        D225 (str): 135 degrees anti-clockwise</span>
+<span class="sd">        </span>
+<span class="sd">        D270 (str): 90 degrees anti-clockwise</span>
+<span class="sd">        </span>
+<span class="sd">        D315 (str): 45 degrees anti-clockwise</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">D0</span> <span class="o">=</span> <span class="s1">&#39;d0&#39;</span>
@@ -752,9 +910,13 @@
 <span class="sd">    </span>
 <span class="sd">    How accurate an operation should be.</span>
 <span class="sd">    </span>
-<span class="sd">    INTEGER - int everywhere</span>
-<span class="sd">    FLOAT - float everywhere</span>
-<span class="sd">    APPROXIMATE - approximate integer output</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        INTEGER (str): int everywhere</span>
+<span class="sd">        </span>
+<span class="sd">        FLOAT (str): float everywhere</span>
+<span class="sd">        </span>
+<span class="sd">        APPROXIMATE (str): approximate integer output</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">INTEGER</span> <span class="o">=</span> <span class="s1">&#39;integer&#39;</span>
@@ -767,10 +929,15 @@
 <span class="sd">    </span>
 <span class="sd">    What directory layout and metadata standard to use.</span>
 <span class="sd">    </span>
-<span class="sd">    DZ - use DeepZoom directory layout</span>
-<span class="sd">    ZOOMIFY - use Zoomify directory layout</span>
-<span class="sd">    GOOGLE - use Google maps directory layout</span>
-<span class="sd">    IIIF - use IIIF directory layout</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        DZ (str): use DeepZoom directory layout</span>
+<span class="sd">        </span>
+<span class="sd">        ZOOMIFY (str): use Zoomify directory layout</span>
+<span class="sd">        </span>
+<span class="sd">        GOOGLE (str): use Google maps directory layout</span>
+<span class="sd">        </span>
+<span class="sd">        IIIF (str): use IIIF directory layout</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">DZ</span> <span class="o">=</span> <span class="s1">&#39;dz&#39;</span>
@@ -784,9 +951,13 @@
 <span class="sd">    </span>
 <span class="sd">    How many pyramid layers to create.</span>
 <span class="sd">    </span>
-<span class="sd">    ONEPIXEL - create layers down to 1x1 pixel</span>
-<span class="sd">    ONETILE - create layers down to 1x1 tile</span>
-<span class="sd">    ONE - only create a single layer</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        ONEPIXEL (str): create layers down to 1x1 pixel</span>
+<span class="sd">        </span>
+<span class="sd">        ONETILE (str): create layers down to 1x1 tile</span>
+<span class="sd">        </span>
+<span class="sd">        ONE (str): only create a single layer</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">ONEPIXEL</span> <span class="o">=</span> <span class="s1">&#39;onepixel&#39;</span>
@@ -799,9 +970,13 @@
 <span class="sd">    </span>
 <span class="sd">    How many pyramid layers to create.</span>
 <span class="sd">    </span>
-<span class="sd">    FS - write tiles to the filesystem</span>
-<span class="sd">    ZIP - write tiles to a zip file</span>
-<span class="sd">    SZI - write to a szi file</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        FS (str): write tiles to the filesystem</span>
+<span class="sd">        </span>
+<span class="sd">        ZIP (str): write tiles to a zip file</span>
+<span class="sd">        </span>
+<span class="sd">        SZI (str): write to a szi file</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">FS</span> <span class="o">=</span> <span class="s1">&#39;fs&#39;</span>
@@ -814,12 +989,19 @@
 <span class="sd">    </span>
 <span class="sd">    How to calculate the output pixels when shrinking a 2x2 region.</span>
 <span class="sd">    </span>
-<span class="sd">    MEAN - use the average</span>
-<span class="sd">    MEDIAN - use the median</span>
-<span class="sd">    MODE - use the mode</span>
-<span class="sd">    MAX - use the maximum</span>
-<span class="sd">    MIN - use the minimum</span>
-<span class="sd">    NEAREST - use the top-left pixel</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        MEAN (str): use the average</span>
+<span class="sd">        </span>
+<span class="sd">        MEDIAN (str): use the median</span>
+<span class="sd">        </span>
+<span class="sd">        MODE (str): use the mode</span>
+<span class="sd">        </span>
+<span class="sd">        MAX (str): use the maximum</span>
+<span class="sd">        </span>
+<span class="sd">        MIN (str): use the minimum</span>
+<span class="sd">        </span>
+<span class="sd">        NEAREST (str): use the top-left pixel</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">MEAN</span> <span class="o">=</span> <span class="s1">&#39;mean&#39;</span>
@@ -835,9 +1017,13 @@
 <span class="sd">    </span>
 <span class="sd">    Set jpeg subsampling mode.</span>
 <span class="sd">    </span>
-<span class="sd">    AUTO - default preset</span>
-<span class="sd">    ON - always perform subsampling</span>
-<span class="sd">    OFF - never perform subsampling</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        AUTO (str): default preset</span>
+<span class="sd">        </span>
+<span class="sd">        ON (str): always perform subsampling</span>
+<span class="sd">        </span>
+<span class="sd">        OFF (str): never perform subsampling</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">AUTO</span> <span class="o">=</span> <span class="s1">&#39;auto&#39;</span>
@@ -850,12 +1036,19 @@
 <span class="sd">    </span>
 <span class="sd">    Tune lossy encoder settings for different image types.</span>
 <span class="sd">    </span>
-<span class="sd">    DEFAULT - default preset</span>
-<span class="sd">    PICTURE - digital picture, like portrait, inner shot</span>
-<span class="sd">    PHOTO - outdoor photograph, with natural lighting</span>
-<span class="sd">    DRAWING - hand or line drawing, with high-contrast details</span>
-<span class="sd">    ICON - small-sized colorful images</span>
-<span class="sd">    TEXT - text-like</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        DEFAULT (str): default preset</span>
+<span class="sd">        </span>
+<span class="sd">        PICTURE (str): digital picture, like portrait, inner shot</span>
+<span class="sd">        </span>
+<span class="sd">        PHOTO (str): outdoor photograph, with natural lighting</span>
+<span class="sd">        </span>
+<span class="sd">        DRAWING (str): hand or line drawing, with high-contrast details</span>
+<span class="sd">        </span>
+<span class="sd">        ICON (str): small-sized colorful images</span>
+<span class="sd">        </span>
+<span class="sd">        TEXT (str): text-like</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">DEFAULT</span> <span class="o">=</span> <span class="s1">&#39;default&#39;</span>
@@ -879,14 +1072,23 @@
 
 <span class="sd">Use @level to set webp and zstd compression level.</span>
 <span class="sd">    </span>
-<span class="sd">    NONE - no compression</span>
-<span class="sd">    JPEG - jpeg compression</span>
-<span class="sd">    DEFLATE - deflate (zip) compression</span>
-<span class="sd">    PACKBITS - packbits compression</span>
-<span class="sd">    CCITTFAX4 - fax4 compression</span>
-<span class="sd">    LZW - LZW compression</span>
-<span class="sd">    WEBP - WEBP compression</span>
-<span class="sd">    ZSTD - ZSTD compression</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        NONE (str): no compression</span>
+<span class="sd">        </span>
+<span class="sd">        JPEG (str): jpeg compression</span>
+<span class="sd">        </span>
+<span class="sd">        DEFLATE (str): deflate (zip) compression</span>
+<span class="sd">        </span>
+<span class="sd">        PACKBITS (str): packbits compression</span>
+<span class="sd">        </span>
+<span class="sd">        CCITTFAX4 (str): fax4 compression</span>
+<span class="sd">        </span>
+<span class="sd">        LZW (str): LZW compression</span>
+<span class="sd">        </span>
+<span class="sd">        WEBP (str): WEBP compression</span>
+<span class="sd">        </span>
+<span class="sd">        ZSTD (str): ZSTD compression</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">NONE</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span>
@@ -905,9 +1107,13 @@
 <span class="sd">    The predictor can help deflate and lzw compression. The values are fixed by</span>
 <span class="sd">the tiff library.</span>
 <span class="sd">    </span>
-<span class="sd">    NONE - no prediction</span>
-<span class="sd">    HORIZONTAL - horizontal differencing</span>
-<span class="sd">    FLOAT - float predictor</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        NONE (str): no prediction</span>
+<span class="sd">        </span>
+<span class="sd">        HORIZONTAL (str): horizontal differencing</span>
+<span class="sd">        </span>
+<span class="sd">        FLOAT (str): float predictor</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">NONE</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span>
@@ -920,8 +1126,11 @@
 <span class="sd">    </span>
 <span class="sd">    Use inches or centimeters as the resolution unit for a tiff file.</span>
 <span class="sd">    </span>
-<span class="sd">    CM - use centimeters</span>
-<span class="sd">    INCH - use inches</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        CM (str): use centimeters</span>
+<span class="sd">        </span>
+<span class="sd">        INCH (str): use inches</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">CM</span> <span class="o">=</span> <span class="s1">&#39;cm&#39;</span>
@@ -935,10 +1144,15 @@
 
 <span class="sd">This is assumed to use the same numbering as %heif_compression_format.</span>
 <span class="sd">    </span>
-<span class="sd">    HEVC - x265</span>
-<span class="sd">    AVC - x264</span>
-<span class="sd">    JPEG - jpeg</span>
-<span class="sd">    AV1 - aom</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        HEVC (str): x265</span>
+<span class="sd">        </span>
+<span class="sd">        AVC (str): x264</span>
+<span class="sd">        </span>
+<span class="sd">        JPEG (str): jpeg</span>
+<span class="sd">        </span>
+<span class="sd">        AV1 (str): aom</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">HEVC</span> <span class="o">=</span> <span class="s1">&#39;hevc&#39;</span>
@@ -955,10 +1169,15 @@
 
 <span class="sd">See also: vips_thumbnail().</span>
 <span class="sd">    </span>
-<span class="sd">    BOTH - size both up and down</span>
-<span class="sd">    UP - only upsize</span>
-<span class="sd">    DOWN - only downsize</span>
-<span class="sd">    FORCE - force size, that is, break aspect ratio</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        BOTH (str): size both up and down</span>
+<span class="sd">        </span>
+<span class="sd">        UP (str): only upsize</span>
+<span class="sd">        </span>
+<span class="sd">        DOWN (str): only downsize</span>
+<span class="sd">        </span>
+<span class="sd">        FORCE (str): force size, that is, break aspect ratio</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">BOTH</span> <span class="o">=</span> <span class="s1">&#39;both&#39;</span>
@@ -974,10 +1193,15 @@
 <span class="sd">scientific work, #VIPS_INTENT_RELATIVE is usually best for</span>
 <span class="sd">accurate communication with other imaging libraries.</span>
 <span class="sd">    </span>
-<span class="sd">    PERCEPTUAL - perceptual rendering intent</span>
-<span class="sd">    RELATIVE - relative colorimetric rendering intent</span>
-<span class="sd">    SATURATION - saturation rendering intent</span>
-<span class="sd">    ABSOLUTE - absolute colorimetric rendering intent</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        PERCEPTUAL (str): perceptual rendering intent</span>
+<span class="sd">        </span>
+<span class="sd">        RELATIVE (str): relative colorimetric rendering intent</span>
+<span class="sd">        </span>
+<span class="sd">        SATURATION (str): saturation rendering intent</span>
+<span class="sd">        </span>
+<span class="sd">        ABSOLUTE (str): absolute colorimetric rendering intent</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">PERCEPTUAL</span> <span class="o">=</span> <span class="s1">&#39;perceptual&#39;</span>
@@ -991,11 +1215,17 @@
 <span class="sd">    </span>
 <span class="sd">    The resampling kernels vips supports. See vips_reduce(), for example.</span>
 <span class="sd">    </span>
-<span class="sd">    NEAREST - The nearest pixel to the point.</span>
-<span class="sd">    LINEAR - Convolve with a triangle filter.</span>
-<span class="sd">    CUBIC - Convolve with a cubic filter.</span>
-<span class="sd">    LANCZOS2 - Convolve with a two-lobe Lanczos kernel.</span>
-<span class="sd">    LANCZOS3 - Convolve with a three-lobe Lanczos kernel.</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        NEAREST (str): The nearest pixel to the point.</span>
+<span class="sd">        </span>
+<span class="sd">        LINEAR (str): Convolve with a triangle filter.</span>
+<span class="sd">        </span>
+<span class="sd">        CUBIC (str): Convolve with a cubic filter.</span>
+<span class="sd">        </span>
+<span class="sd">        LANCZOS2 (str): Convolve with a two-lobe Lanczos kernel.</span>
+<span class="sd">        </span>
+<span class="sd">        LANCZOS3 (str): Convolve with a three-lobe Lanczos kernel.</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">NEAREST</span> <span class="o">=</span> <span class="s1">&#39;nearest&#39;</span>
@@ -1013,8 +1243,11 @@
 <span class="sd">vips_icc_export(). LAB is usually best, XYZ can be more convenient in some</span>
 <span class="sd">cases.</span>
 <span class="sd">    </span>
-<span class="sd">    LAB - use CIELAB D65 as the Profile Connection Space</span>
-<span class="sd">    XYZ - use XYZ as the Profile Connection Space</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        LAB (str): use CIELAB D65 as the Profile Connection Space</span>
+<span class="sd">        </span>
+<span class="sd">        XYZ (str): use XYZ as the Profile Connection Space</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">LAB</span> <span class="o">=</span> <span class="s1">&#39;lab&#39;</span>
@@ -1028,8 +1261,11 @@
 
 <span class="sd">See also: vips_morph().</span>
 <span class="sd">    </span>
-<span class="sd">    ERODE - true if all set</span>
-<span class="sd">    DILATE - true if one set</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        ERODE (str): true if all set</span>
+<span class="sd">        </span>
+<span class="sd">        DILATE (str): true if one set</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">ERODE</span> <span class="o">=</span> <span class="s1">&#39;erode&#39;</span>
@@ -1046,8 +1282,11 @@
 
 <span class="sd">See also: vips_join().</span>
 <span class="sd">    </span>
-<span class="sd">    SET - set pixels to the new value</span>
-<span class="sd">    ADD - add pixels</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        SET (str): set pixels to the new value</span>
+<span class="sd">        </span>
+<span class="sd">        ADD (str): add pixels</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">SET</span> <span class="o">=</span> <span class="s1">&#39;set&#39;</span>
@@ -1057,6 +1296,7 @@
 <div class="viewcode-block" id="Token"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Token">[docs]</a><span class="k">class</span> <span class="nc">Token</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Token.</span>
 <span class="sd">    </span>
+<span class="sd">    Attributes:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">LEFT</span> <span class="o">=</span> <span class="s1">&#39;left&#39;</span>
@@ -1070,12 +1310,19 @@
 <span class="sd">    </span>
 <span class="sd">    See also: #VipsForeignSave.</span>
 <span class="sd">    </span>
-<span class="sd">    MONO - 1 band (eg. CSV)</span>
-<span class="sd">    RGB - 1 or 3 bands (eg. PPM)</span>
-<span class="sd">    RGBA - 1, 2, 3 or 4 bands (eg. PNG)</span>
-<span class="sd">    RGBA_ONLY - 3 or 4 bands (eg. WEBP)</span>
-<span class="sd">    RGB_CMYK - 1, 3 or 4 bands (eg. JPEG)</span>
-<span class="sd">    ANY - any number of bands (eg. TIFF)</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        MONO (str): 1 band (eg. CSV)</span>
+<span class="sd">        </span>
+<span class="sd">        RGB (str): 1 or 3 bands (eg. PPM)</span>
+<span class="sd">        </span>
+<span class="sd">        RGBA (str): 1, 2, 3 or 4 bands (eg. PNG)</span>
+<span class="sd">        </span>
+<span class="sd">        RGBA_ONLY (str): 3 or 4 bands (eg. WEBP)</span>
+<span class="sd">        </span>
+<span class="sd">        RGB_CMYK (str): 1, 3 or 4 bands (eg. JPEG)</span>
+<span class="sd">        </span>
+<span class="sd">        ANY (str): any number of bands (eg. TIFF)</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">MONO</span> <span class="o">=</span> <span class="s1">&#39;mono&#39;</span>
@@ -1089,6 +1336,7 @@
 <div class="viewcode-block" id="ImageType"><a class="viewcode-back" href="../../enums.html#pyvips.enums.ImageType">[docs]</a><span class="k">class</span> <span class="nc">ImageType</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;ImageType.</span>
 <span class="sd">    </span>
+<span class="sd">    Attributes:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">ERROR</span> <span class="o">=</span> <span class="s1">&#39;error&#39;</span>
