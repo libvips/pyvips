@@ -1,4 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
+
+import sys
+import xml.etree.ElementTree as ET
 
 from pyvips import Image, Operation, GValue, Error, \
     ffi, values_for_enum, vips_lib, gobject_lib, \
@@ -7,9 +10,19 @@ from pyvips import Image, Operation, GValue, Error, \
 # This file generates enums.py -- the set of classes giving the permissible
 # values for the pyvips enums. Run with something like:
 # 
-#   ./gen-enums.py > enums.py
+#   ./gen-enums.py ~/GIT/libvips/libvips/Vips-8.0.gir > enums.py
 #   mv enums.py ../pyvips
 
+# The GIR file
+root = ET.parse(sys.argv[1]).getroot()
+namespace = {
+    "goi": "http://www.gtk.org/introspection/core/1.0"
+}
+
+# find all the enumerations and make a dict for them
+xml_enums = {}
+for node in root.findall("goi:namespace/goi:enumeration", namespace):
+    xml_enums[node.get('name')] = node
 
 def remove_prefix(enum_str):
     prefix = 'Vips'
@@ -41,8 +54,26 @@ def generate_enums():
     for name in all_enums:
         gtype = type_from_name(name)
         python_name = remove_prefix(name)
+        if python_name not in xml_enums:
+            continue
 
-        print('class {0}(object):'.format(python_name))
+        node = xml_enums[python_name]
+        enum_doc = node.find("goi:doc", namespace)
+
+        print(f'class {python_name}(object):')
+        print(f'    """{python_name}.')
+        if enum_doc != None:
+            print(f'    ')
+            print(f'    {enum_doc.text}')
+        print(f'    ')
+        for value in values_for_enum(gtype):
+            python_name = value.replace('-', '_')
+            member = node.find(f"goi:member[@name='{python_name}']", namespace)
+            member_doc = member.find("goi:doc", namespace)
+            if member_doc != None:
+                print(f'    {python_name.upper()} - {member_doc.text}')
+        print(f'    """')
+        print(f'    ')
 
         for value in values_for_enum(gtype):
             python_name = value.replace('-', '_').upper()
