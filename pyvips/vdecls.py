@@ -107,9 +107,9 @@ def cdefs(features):
         void vips_value_set_array_int (GValue* value,
             const int* array, int n );
         void vips_value_set_array_image (GValue *value, int n);
-        typedef int (*VipsCallbackFn)(void* a, void* b);
+        typedef void (*FreeFn)(void* a);
         void vips_value_set_blob (GValue* value,
-            VipsCallbackFn free_fn, void* data, size_t length);
+            FreeFn free_fn, void* data, size_t length);
 
         bool g_value_get_boolean (const GValue* value);
         int g_value_get_int (GValue* value);

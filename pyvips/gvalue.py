@@ -221,6 +221,9 @@ class GValue(object):
                 vips_lib.vips_value_set_blob_free(self.gvalue,
                                                   memory, len(value))
             else:
+                # we declare the type of the free func in set_blob incorrectly
+                # so that we can pass g_free at runtime without triggering an
+                # exception
                 if pyvips.API_mode:
                     vips_lib.vips_value_set_blob(self.gvalue,
                                                  ffi.NULL, memory, len(value))
