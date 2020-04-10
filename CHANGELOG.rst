@@ -4,6 +4,7 @@
 
 * update enums.py [tony612]
 * add gen-enums.py [jcupitt]
+* improve custom source/target types [jcupitt]
 
 ## Version 2.1.11 (7 Nov 2019) 
 

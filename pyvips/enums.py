@@ -344,5 +344,3 @@ class ImageType(object):
     MMAPIN = 'mmapin'
     MMAPINRW = 'mmapinrw'
     OPENOUT = 'openout'
-
-

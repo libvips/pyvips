@@ -3,7 +3,7 @@ from __future__ import division
 import logging
 
 import pyvips
-from pyvips import vips_lib
+from pyvips import ffi, vips_lib
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,8 @@ class TargetCustom(pyvips.Target):
 
         """
 
-        super(TargetCustom, self).__init__(vips_lib.vips_target_custom_new())
+        target = ffi.cast('VipsTarget*', vips_lib.vips_target_custom_new())
+        super(TargetCustom, self).__init__(target)
 
     def on_write(self, handler):
         """Attach a write handler.

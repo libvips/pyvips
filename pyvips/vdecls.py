@@ -442,11 +442,11 @@ def cdefs(features):
                 // more
             } VipsSourceCustom;
 
-            VipsSource* vips_source_custom_new (void);
+            VipsSourceCustom* vips_source_custom_new (void);
 
-            extern "Python" gint64 _marshal_read (VipsSourceCustom*,
+            extern "Python" gint64 _marshal_read (VipsSource*,
                 void*, gint64, void*);
-            extern "Python" gint64 _marshal_seek (VipsSourceCustom*,
+            extern "Python" gint64 _marshal_seek (VipsSource*,
                 gint64, int, void*);
 
             typedef struct _VipsTarget {
@@ -465,11 +465,11 @@ def cdefs(features):
                 // more
             } VipsTargetCustom;
 
-            VipsSource* vips_target_custom_new (void);
+            VipsTargetCustom* vips_target_custom_new (void);
 
-            extern "Python" gint64 _marshal_write (VipsTargetCustom*,
+            extern "Python" gint64 _marshal_write (VipsTarget*,
                 void*, gint64, void*);
-            extern "Python" void _marshal_finish (VipsTargetCustom*,
+            extern "Python" void _marshal_finish (VipsTarget*,
                 void*);
 
             const char* vips_foreign_find_load_source (VipsSource *source);

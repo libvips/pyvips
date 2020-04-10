@@ -3,7 +3,7 @@ from __future__ import division
 import logging
 
 import pyvips
-from pyvips import vips_lib
+from pyvips import ffi, vips_lib
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,8 @@ class SourceCustom(pyvips.Source):
 
         """
 
-        super(SourceCustom, self).__init__(vips_lib.vips_source_custom_new())
+        source = ffi.cast('VipsSource*', vips_lib.vips_source_custom_new())
+        super(SourceCustom, self).__init__(source)
 
     def on_read(self, handler):
         """Attach a read handler.

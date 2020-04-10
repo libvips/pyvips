@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 
-from pyvips import Image, Operation, GValue, Error, \
-    ffi, values_for_enum, vips_lib, gobject_lib, \
-    type_map, type_name, type_from_name, nickname_find
+from pyvips import ffi, values_for_enum, vips_lib, \
+    type_map, type_name, type_from_name
 
 # This file generates enums.py -- the set of classes giving the permissible
 # values for the pyvips enums. Run with something like:
-# 
+#
 #   ./gen-enums.py > enums.py
 #   mv enums.py ../pyvips
 
