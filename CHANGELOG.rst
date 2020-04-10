@@ -5,7 +5,7 @@
 * update enums.py [tony612]
 * add gen-enums.py [jcupitt]
 * improve custom source/target types [jcupitt]
-* revise types for set_blob [jcupitt]
+* revise types for set_blob to fix exception with old libvips [jcupitt]
 
 ## Version 2.1.11 (7 Nov 2019) 
 
