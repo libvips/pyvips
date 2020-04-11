@@ -6,6 +6,7 @@
 * add gen-enums.py [jcupitt]
 * improve custom source/target types [jcupitt]
 * revise types for set_blob to fix exception with old libvips [jcupitt]
+* fix 32-bit support [dqxpb]
 
 ## Version 2.1.11 (7 Nov 2019) 
 

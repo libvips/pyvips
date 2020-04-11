@@ -23,7 +23,10 @@ def cdefs(features):
 
     """
 
+    # we need the glib names for these types
     code = '''
+        typedef uint32_t guint32;
+        typedef int32_t gint32;
         typedef uint64_t guint64;
         typedef int64_t gint64;
     '''
