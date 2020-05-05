@@ -134,7 +134,6 @@ Local user install:
 
 .. code-block:: shell
 
-    $ pip install --user -e .
     $ pip3 install -e .
     $ pypy -m pip --user -e .
 
@@ -154,7 +153,7 @@ Run a specific test:
 
 .. code-block:: shell
 
-    $ pytest tests/test_saveload.py
+    $ pytest-3 tests/test_saveload.py
 
 Run perf tests:
 
@@ -180,7 +179,7 @@ Regenerate autodocs:
 .. code-block:: shell
 
     $ cd doc; \
-      python -c "import pyvips; pyvips.Operation.generate_sphinx_all()" > x 
+      python3 -c "import pyvips; pyvips.Operation.generate_sphinx_all()" > x 
 
 And copy-paste ``x`` into the obvious place in ``doc/vimage.rst``.
 
@@ -195,6 +194,8 @@ Update pypi package:
 
 .. code-block:: shell
 
-    $ python setup.py sdist
+    $ python3 setup.py sdist
+    $ git tag -a v2.1.12
+    $ git push origin v2.1.12
     $ twine upload dist/*
 

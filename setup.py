@@ -42,7 +42,6 @@ pyvips_classifiers = [
 
 setup_deps = [
     'cffi>=1.0.0',
-    'pytest-runner',
 ]
 
 install_deps = [
@@ -51,6 +50,7 @@ install_deps = [
 
 test_deps = [
     'cffi>=1.0.0',
+    'pytest-runner',
     'pytest',
     'pytest-flake8',
     'pyperf',
