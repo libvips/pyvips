@@ -8,6 +8,7 @@
 * revise types for set_blob to fix exception with old libvips [jcupitt]
 * fix 32-bit support [dqxpb]
 * remove pytest-runner from pipy deps [lgbaldoni]
+* add watermark with image example [jcupitt]
 
 ## Version 2.1.11 (7 Nov 2019) 
 
