@@ -11,6 +11,7 @@ from codecs import open
 from os import path
 
 from setuptools import setup, find_packages
+from distutils import log
 
 here = path.abspath(path.dirname(__file__))
 
@@ -116,5 +117,6 @@ def setup_ABI():
 
 try:
     setup_API()
-except Exception:
+except Exception as e:
+    log.warn('Falling back to ABI mode. Details: {0}'.format(e))
     setup_ABI()
