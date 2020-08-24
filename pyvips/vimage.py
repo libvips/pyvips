@@ -1318,19 +1318,19 @@ class Image(pyvips.VipsObject):
         return self.bandjoin(max_alpha)
 
     # we need different _imageize rules for this operator ... we need to
-    # _imageize th and el to match each other first
+    # _imageize in1 and in2 to match each other first
     @_add_doc('ifthenelse')
-    def ifthenelse(self, th, el, **kwargs):
-        for match_image in [th, el, self]:
+    def ifthenelse(self, in1, in2, **kwargs):
+        for match_image in [in1, in2, self]:
             if isinstance(match_image, pyvips.Image):
                 break
 
-        if not isinstance(th, pyvips.Image):
-            th = Image._imageize(match_image, th)
-        if not isinstance(el, pyvips.Image):
-            el = Image._imageize(match_image, el)
+        if not isinstance(in1, pyvips.Image):
+            in1 = Image._imageize(match_image, in1)
+        if not isinstance(in2, pyvips.Image):
+            in2 = Image._imageize(match_image, in2)
 
-        return pyvips.Operation.call('ifthenelse', self, th, el, **kwargs)
+        return pyvips.Operation.call('ifthenelse', self, in1, in2, **kwargs)
 
     def scaleimage(self, **kwargs):
         """Scale an image to 0 - 255.
