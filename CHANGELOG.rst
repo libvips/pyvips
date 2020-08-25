@@ -3,6 +3,7 @@
 ## Version 2.1.13 (4 Jul 2020)
 
 * better diagnostics for API mode install failure [kleisauke]
+* revise docs [int-ua]
 
 ## Version 2.1.12 (17 Feb 2020) 
 
