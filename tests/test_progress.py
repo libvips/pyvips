@@ -7,7 +7,7 @@ import pyvips
 
 class TestProgress:
     def test_progress(self):
-        # py27 reques this pattern for non-local modification
+        # py27 requires this pattern for non-local modification
         notes = {}
 
         def preeval_cb(image, progress):
