@@ -243,14 +243,25 @@ class Operation(pyvips.VipsObject):
 
         logger.debug('VipsOperation.call: match_image = %s', match_image)
 
-        # collect a list of all input references here ... we can't use a set,
-        # unfortunately, because bytearrays are unhashable
+        # collect a list of all input references here 
+        # we can't use a set because set elements are unique under "==", and 
+        # Python checks memoryview equality with hash functions, not pointer
+        # equality
         references = []
+
+        # does a list contain an element using "is" (pointer equality) to test 
+        # equality ... we can't use "in" since that uses "==", which means
+        # hash equality
+        def contains(array, x):
+            for y in array:
+                if x is y:
+                    return True
+            return False
 
         def add_reference(x):
             if isinstance(x, pyvips.Image):
                 for i in x._references:
-                    if i not in references:
+                    if not contains(references, i):
                         references.append(i)
             return False
 
@@ -285,7 +296,7 @@ class Operation(pyvips.VipsObject):
         # attach all input refs to output x
         def set_reference(x):
             if isinstance(x, pyvips.Image):
-                x._references += references
+                x._references.append(references)
             return False
 
         # fetch required output args (plus modified input images)

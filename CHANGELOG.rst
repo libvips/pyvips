@@ -4,6 +4,7 @@
 
 * better diagnostics for API mode install failure [kleisauke]
 * revise docs [int-ua]
+* better reference tracking for new_from_memory [aspadm]
 
 ## Version 2.1.12 (17 Feb 2020) 
 
