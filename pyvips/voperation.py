@@ -295,7 +295,7 @@ class Operation(pyvips.VipsObject):
         # attach all input refs to output x
         def set_reference(x):
             if isinstance(x, pyvips.Image):
-                x._references.append(references)
+                x._references.extend(references)
             return False
 
         # fetch required output args (plus modified input images)
