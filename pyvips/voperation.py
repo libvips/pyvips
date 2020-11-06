@@ -249,12 +249,11 @@ class Operation(pyvips.VipsObject):
         # equality
         references = []
 
-        # does a list contain an element using "is" (pointer equality) to test 
-        # equality ... we can't use "in" since that uses "==", which means
-        # hash equality
+        # does a list contain an element using pointer equality
+        # we can't use "in" since that uses "==", which means hash equality
         def contains(array, x):
             for y in array:
-                if x is y:
+                if id(x) == id(y):
                     return True
             return False
 
