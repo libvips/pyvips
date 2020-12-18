@@ -4,6 +4,7 @@
 
 * add `stdio.py` example
 * update examples
+* improve formatting of enum documentation
 * remove old `vips_free` declaration, fixing API build on some platforms 
   [rajasagashe]
 

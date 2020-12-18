@@ -158,8 +158,8 @@ class Image(pyvips.VipsObject):
 
     def __init__(self, pointer):
         # a list of other objects which this object depends on and which need
-        # to be kept alive 
-        # we can't use a set because set elements are unique under "==", and 
+        # to be kept alive
+        # we can't use a set because set elements are unique under "==", and
         # Python checks memoryview equality with hash functions, not pointer
         # equality
         self._references = []

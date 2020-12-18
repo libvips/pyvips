@@ -13,7 +13,7 @@ image = image.resize(0.5)
 watermark *= [1, 1, 1, 0.2]
 
 # overlay the watermark at the bottom left, with a 100 pixel margin
-image = image.composite(watermark, "over", 
+image = image.composite(watermark, "over",
                         x=100, y=image.height - watermark.height - 100)
 
 image.write_to_file(sys.argv[2])
