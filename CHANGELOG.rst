@@ -1,5 +1,12 @@
 # master 
 
+## Version 2.1.14 (18 Dec 2020)
+
+* add `stdio.py` example
+* update examples
+* remove old `vips_free` declaration, fixing API build on some platforms 
+  [rajasagashe]
+
 ## Version 2.1.13 (4 Jul 2020)
 
 * better diagnostics for API mode install failure [kleisauke]

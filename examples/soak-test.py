@@ -1,8 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 
-from __future__ import print_function
 import sys
-
 import pyvips
 
 pyvips.leak_set(True)

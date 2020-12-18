@@ -1,10 +1,10 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import sys
 
 import pyvips
 
-im = pyvips.Image.new_from_file(sys.argv[1], access=pyvips.Access.SEQUENTIAL)
+im = pyvips.Image.new_from_file(sys.argv[1], access="sequential")
 
 footer = pyvips.Image.black(im.width, 150)
 left_text = pyvips.Image.text("left corner", dpi=300)

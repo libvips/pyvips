@@ -1,7 +1,6 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import logging
-
 import pyvips
 
 logging.basicConfig(level=logging.DEBUG)

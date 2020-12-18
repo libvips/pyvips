@@ -64,7 +64,6 @@ def cdefs(features):
 
         void* g_malloc (size_t size);
         void g_free (void* data);
-        int vips_free (void* a);
 
         void vips_leak_set (int leak);
 
