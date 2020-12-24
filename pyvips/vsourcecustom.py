@@ -9,9 +9,11 @@ logger = logging.getLogger(__name__)
 
 
 class SourceCustom(pyvips.Source):
-    """An source you can connect action signals to to implement
-    behaviour.
+    """Custom sources allow reading data from otherwise unsupported sources.
+    Requires libvips `>= 8.9.0`.
 
+    To use, create a SourceCustom object, then provide callbacks to
+    :meth:`on_read` and :meth:`on_seek`.
     """
 
     def __init__(self):
