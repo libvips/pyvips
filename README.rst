@@ -74,9 +74,9 @@ Non-conda install
 -----------------
 
 First, you need the libvips shared library on your library search path, version
-8.2 or later. On Linux and macOS, you can just install via your package
-manager; on Windows you can download a pre-compiled binary from the libvips
-website.
+8.2 or later, though at least version 8.9 is required for all features to work. 
+On Linux and macOS, you can just install via your package manager; on Windows you
+can download a pre-compiled binary from the libvips website.
 
 https://libvips.github.io/libvips/install.html
 
