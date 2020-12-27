@@ -438,14 +438,14 @@ class Operation(pyvips.VipsObject):
 
         for name in intro.method_args + intro.optional_input:
             details = intro.details[name]
-            result += (':param {0} {1}: {2}\n'.
-                       format(GValue.gtype_to_python(details['type']),
-                              name,
-                              details['blurb']))
+            result += (':param {0}: {1}\n'.
+                       format(name, details['blurb']))
+            result += (':type {0}: {1}\n'.
+                       format(name, GValue.gtype_to_python(details['type'])))
         for name in intro.optional_output:
-            result += (':param bool {0}: enable output: {1}\n'.
-                       format(name,
-                              intro.details[name]['blurb']))
+            result += (':param {0}: enable output: {1}\n'.
+                       format(name, intro.details[name]['blurb']))
+            result += (':type {0}: bool\n'.format(name))
 
         output_types = [GValue.gtype_to_python(intro.details[name]['type'])
                         for name in intro.required_output]

@@ -84,6 +84,13 @@ class GValue(object):
 
         fundamental = gobject_lib.g_type_fundamental(gtype)
 
+        # enums can be strings or class members ... we want to generate a union
+        # type
+        if fundamental == GValue.genum_type:
+            name = type_name(gtype)
+            if name.startswith('Vips'):
+                name = name[4:]
+            return "Union[str, %s]" % name
         if gtype in GValue._gtype_to_python:
             return GValue._gtype_to_python[gtype]
         if fundamental in GValue._gtype_to_python:
