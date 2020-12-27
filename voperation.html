@@ -1,15 +1,18 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Operation &mdash; pyvips 2.1.12 documentation</title>
+  <title>Operation &mdash; pyvips 2.1.14 documentation</title>
   
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
 
   
   
@@ -17,23 +20,20 @@
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
         <script src="_static/collapse.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="VipsObject" href="vobject.html" />
@@ -53,7 +53,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> pyvips
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> pyvips
           
 
           
@@ -80,6 +80,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -109,6 +110,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -147,7 +149,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li><code class="docutils literal notranslate"><span class="pre">Operation</span></code></li>
     
@@ -172,29 +174,29 @@
             
   <div class="section" id="module-pyvips.voperation">
 <span id="operation"></span><h1><code class="docutils literal notranslate"><span class="pre">Operation</span></code><a class="headerlink" href="#module-pyvips.voperation" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="pyvips.voperation.Introspect">
-<em class="property">class </em><code class="sig-prename descclassname">pyvips.voperation.</code><code class="sig-name descname">Introspect</code><span class="sig-paren">(</span><em class="sig-param">operation_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/voperation.html#Introspect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.voperation.Introspect" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.voperation.</code><code class="sig-name descname">Introspect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">operation_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/voperation.html#Introspect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.voperation.Introspect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build introspection data for operations.</p>
 <p>Make an operation, introspect it, and build a structure representing
 everything we know about it.</p>
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="pyvips.voperation.Operation">
-<em class="property">class </em><code class="sig-prename descclassname">pyvips.voperation.</code><code class="sig-name descname">Operation</code><span class="sig-paren">(</span><em class="sig-param">pointer</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/voperation.html#Operation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.voperation.Operation" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.voperation.</code><code class="sig-name descname">Operation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pointer</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/voperation.html#Operation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.voperation.Operation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call libvips operations.</p>
 <p>This class wraps the libvips VipsOperation class.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="pyvips.voperation.Operation.set">
-<code class="sig-name descname">set</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">flags</em>, <em class="sig-param">match_image</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/voperation.html#Operation.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.voperation.Operation.set" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">flags</span></em>, <em class="sig-param"><span class="n">match_image</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/voperation.html#Operation.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.voperation.Operation.set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set a GObject property.</p>
 <p>The value is converted to the property type, if possible.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyvips.voperation.Operation.call">
-<em class="property">static </em><code class="sig-name descname">call</code><span class="sig-paren">(</span><em class="sig-param">operation_name</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/voperation.html#Operation.call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.voperation.Operation.call" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">call</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">operation_name</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/voperation.html#Operation.call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.voperation.Operation.call" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call a libvips operation.</p>
 <p>Use this method to call any libvips operation. For example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">black_image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
@@ -203,21 +205,21 @@ everything we know about it.</p>
 <p>See the Introduction for notes on how this works.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyvips.voperation.Operation.generate_docstring">
-<em class="property">static </em><code class="sig-name descname">generate_docstring</code><span class="sig-paren">(</span><em class="sig-param">operation_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/voperation.html#Operation.generate_docstring"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.voperation.Operation.generate_docstring" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">generate_docstring</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">operation_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/voperation.html#Operation.generate_docstring"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.voperation.Operation.generate_docstring" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make a google-style docstring.</p>
 <p>This is used to generate help() output.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyvips.voperation.Operation.generate_sphinx">
-<em class="property">static </em><code class="sig-name descname">generate_sphinx</code><span class="sig-paren">(</span><em class="sig-param">operation_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/voperation.html#Operation.generate_sphinx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.voperation.Operation.generate_sphinx" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">generate_sphinx</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">operation_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/voperation.html#Operation.generate_sphinx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.voperation.Operation.generate_sphinx" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make a sphinx-style docstring.</p>
 <p>This is used to generate the off-line docs.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyvips.voperation.Operation.generate_sphinx_all">
 <em class="property">static </em><code class="sig-name descname">generate_sphinx_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/voperation.html#Operation.generate_sphinx_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.voperation.Operation.generate_sphinx_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate sphinx documentation.</p>
@@ -232,27 +234,27 @@ place.</p>
 
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyvips.voperation.cache_set_max">
-<code class="sig-prename descclassname">pyvips.voperation.</code><code class="sig-name descname">cache_set_max</code><span class="sig-paren">(</span><em class="sig-param">mx</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/voperation.html#cache_set_max"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.voperation.cache_set_max" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyvips.voperation.</code><code class="sig-name descname">cache_set_max</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mx</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/voperation.html#cache_set_max"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.voperation.cache_set_max" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the maximum number of operations libvips will cache.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyvips.voperation.cache_set_max_mem">
-<code class="sig-prename descclassname">pyvips.voperation.</code><code class="sig-name descname">cache_set_max_mem</code><span class="sig-paren">(</span><em class="sig-param">mx</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/voperation.html#cache_set_max_mem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.voperation.cache_set_max_mem" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyvips.voperation.</code><code class="sig-name descname">cache_set_max_mem</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mx</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/voperation.html#cache_set_max_mem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.voperation.cache_set_max_mem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Limit the operation cache by memory use.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyvips.voperation.cache_set_max_files">
-<code class="sig-prename descclassname">pyvips.voperation.</code><code class="sig-name descname">cache_set_max_files</code><span class="sig-paren">(</span><em class="sig-param">mx</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/voperation.html#cache_set_max_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.voperation.cache_set_max_files" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyvips.voperation.</code><code class="sig-name descname">cache_set_max_files</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mx</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/voperation.html#cache_set_max_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.voperation.cache_set_max_files" title="Permalink to this definition">¶</a></dt>
 <dd><p>Limit the operation cache by number of open files.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyvips.voperation.cache_set_trace">
-<code class="sig-prename descclassname">pyvips.voperation.</code><code class="sig-name descname">cache_set_trace</code><span class="sig-paren">(</span><em class="sig-param">trace</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/voperation.html#cache_set_trace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.voperation.cache_set_trace" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyvips.voperation.</code><code class="sig-name descname">cache_set_trace</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">trace</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/voperation.html#cache_set_trace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.voperation.cache_set_trace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Turn on libvips cache tracing.</p>
 </dd></dl>
 
@@ -278,11 +280,19 @@ place.</p>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2019, John Cupitt
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -293,7 +303,6 @@ place.</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

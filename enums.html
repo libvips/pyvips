@@ -1,15 +1,18 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The libvips enums &mdash; pyvips 2.1.12 documentation</title>
+  <title>The libvips enums &mdash; pyvips 2.1.14 documentation</title>
   
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
 
   
   
@@ -17,23 +20,20 @@
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
         <script src="_static/collapse.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Connection" href="vconnection.html" />
@@ -53,7 +53,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> pyvips
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> pyvips
           
 
           
@@ -80,6 +80,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -109,6 +110,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -147,7 +149,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li>The libvips enums</li>
     
@@ -175,145 +177,695 @@
 <p>This module contains the various libvips enums as Python classes.</p>
 <p>Enums values are represented in pyvips as strings. These classes contain the
 valid strings for each enum.</p>
-<span class="target" id="module-pyvips.enums"></span><dl class="class">
+<span class="target" id="module-pyvips.enums"></span><dl class="py class">
 <dt id="pyvips.enums.BandFormat">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">BandFormat</code><a class="reference internal" href="_modules/pyvips/enums.html#BandFormat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.BandFormat" title="Permalink to this definition">¶</a></dt>
 <dd><p>BandFormat.</p>
-<blockquote>
-<div><p>The format used for each band element.</p>
-</div></blockquote>
+<p>The format used for each band element.</p>
 <p>Each corresponds to a native C type for the current machine. For example,
 #VIPS_FORMAT_USHORT is &lt;type&gt;unsigned short&lt;/type&gt;.</p>
-<blockquote>
-<div><dl>
-<dt>Attributes:</dt><dd><p>NOTSET (str): invalid setting</p>
-<p>UCHAR (str): unsigned char format</p>
-<p>CHAR (str): char format</p>
-<p>USHORT (str): unsigned short format</p>
-<p>SHORT (str): short format</p>
-<p>UINT (str): unsigned int format</p>
-<p>INT (str): int format</p>
-<p>FLOAT (str): float format</p>
-<p>COMPLEX (str): complex (two floats) format</p>
-<p>DOUBLE (str): double float format</p>
-<p>DPCOMPLEX (str): double complex (two double) format</p>
+<dl class="py attribute">
+<dt id="pyvips.enums.BandFormat.NOTSET">
+<code class="sig-name descname">NOTSET</code><a class="headerlink" href="#pyvips.enums.BandFormat.NOTSET" title="Permalink to this definition">¶</a></dt>
+<dd><p>invalid setting</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
-<dl class="class">
+<dl class="py attribute">
+<dt id="pyvips.enums.BandFormat.UCHAR">
+<code class="sig-name descname">UCHAR</code><a class="headerlink" href="#pyvips.enums.BandFormat.UCHAR" title="Permalink to this definition">¶</a></dt>
+<dd><p>unsigned char format</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BandFormat.CHAR">
+<code class="sig-name descname">CHAR</code><a class="headerlink" href="#pyvips.enums.BandFormat.CHAR" title="Permalink to this definition">¶</a></dt>
+<dd><p>char format</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BandFormat.USHORT">
+<code class="sig-name descname">USHORT</code><a class="headerlink" href="#pyvips.enums.BandFormat.USHORT" title="Permalink to this definition">¶</a></dt>
+<dd><p>unsigned short format</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BandFormat.SHORT">
+<code class="sig-name descname">SHORT</code><a class="headerlink" href="#pyvips.enums.BandFormat.SHORT" title="Permalink to this definition">¶</a></dt>
+<dd><p>short format</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BandFormat.UINT">
+<code class="sig-name descname">UINT</code><a class="headerlink" href="#pyvips.enums.BandFormat.UINT" title="Permalink to this definition">¶</a></dt>
+<dd><p>unsigned int format</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BandFormat.INT">
+<code class="sig-name descname">INT</code><a class="headerlink" href="#pyvips.enums.BandFormat.INT" title="Permalink to this definition">¶</a></dt>
+<dd><p>int format</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BandFormat.FLOAT">
+<code class="sig-name descname">FLOAT</code><a class="headerlink" href="#pyvips.enums.BandFormat.FLOAT" title="Permalink to this definition">¶</a></dt>
+<dd><p>float format</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BandFormat.COMPLEX">
+<code class="sig-name descname">COMPLEX</code><a class="headerlink" href="#pyvips.enums.BandFormat.COMPLEX" title="Permalink to this definition">¶</a></dt>
+<dd><p>complex (two floats) format</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BandFormat.DOUBLE">
+<code class="sig-name descname">DOUBLE</code><a class="headerlink" href="#pyvips.enums.BandFormat.DOUBLE" title="Permalink to this definition">¶</a></dt>
+<dd><p>double float format</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BandFormat.DPCOMPLEX">
+<code class="sig-name descname">DPCOMPLEX</code><a class="headerlink" href="#pyvips.enums.BandFormat.DPCOMPLEX" title="Permalink to this definition">¶</a></dt>
+<dd><p>double complex (two double) format</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="pyvips.enums.BlendMode">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">BlendMode</code><a class="reference internal" href="_modules/pyvips/enums.html#BlendMode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.BlendMode" title="Permalink to this definition">¶</a></dt>
 <dd><p>BlendMode.</p>
-<blockquote>
-<div><p>The various Porter-Duff and PDF blend modes. See vips_composite(),</p>
-</div></blockquote>
-<p>for example.</p>
+<p>The various Porter-Duff and PDF blend modes. See vips_composite(),
+for example.</p>
 <p>The Cairo docs have a nice explanation of all the blend modes:</p>
 <p><a class="reference external" href="https://www.cairographics.org/operators">https://www.cairographics.org/operators</a></p>
 <p>The non-separable modes are not implemented.</p>
-<blockquote>
-<div><dl>
-<dt>Attributes:</dt><dd><p>CLEAR (str): where the second object is drawn, the first is removed</p>
-<p>SOURCE (str): the second object is drawn as if nothing were below</p>
-<p>OVER (str): the image shows what you would expect if you held two semi-transparent slides on top of each other</p>
-<p>IN (str): the first object is removed completely, the second is only drawn where the first was</p>
-<p>OUT (str): the second is drawn only where the first isn’t</p>
-<p>ATOP (str): this leaves the first object mostly intact, but mixes both objects in the overlapping area</p>
-<p>DEST (str): leaves the first object untouched, the second is discarded completely</p>
-<p>DEST_OVER (str): like OVER, but swaps the arguments</p>
-<p>DEST_IN (str): like IN, but swaps the arguments</p>
-<p>DEST_OUT (str): like OUT, but swaps the arguments</p>
-<p>DEST_ATOP (str): like ATOP, but swaps the arguments</p>
-<p>XOR (str): something like a difference operator</p>
-<p>ADD (str): a bit like adding the two images</p>
-<p>SATURATE (str): a bit like the darker of the two</p>
-<p>MULTIPLY (str): at least as dark as the darker of the two inputs</p>
-<p>SCREEN (str): at least as light as the lighter of the inputs</p>
-<p>OVERLAY (str): multiplies or screens colors, depending on the lightness</p>
-<p>DARKEN (str): the darker of each component</p>
-<p>LIGHTEN (str): the lighter of each component</p>
-<p>COLOUR_DODGE (str): brighten first by a factor second</p>
-<p>COLOUR_BURN (str): darken first by a factor of second</p>
-<p>HARD_LIGHT (str): multiply or screen, depending on lightness</p>
-<p>SOFT_LIGHT (str): darken or lighten, depending on lightness</p>
-<p>DIFFERENCE (str): difference of the two</p>
-<p>EXCLUSION (str): somewhat like DIFFERENCE, but lower-contrast</p>
+<dl class="py attribute">
+<dt id="pyvips.enums.BlendMode.CLEAR">
+<code class="sig-name descname">CLEAR</code><a class="headerlink" href="#pyvips.enums.BlendMode.CLEAR" title="Permalink to this definition">¶</a></dt>
+<dd><p>where the second object is drawn, the first is removed</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
-<dl class="class">
+<dl class="py attribute">
+<dt id="pyvips.enums.BlendMode.SOURCE">
+<code class="sig-name descname">SOURCE</code><a class="headerlink" href="#pyvips.enums.BlendMode.SOURCE" title="Permalink to this definition">¶</a></dt>
+<dd><p>the second object is drawn as if nothing were below</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BlendMode.OVER">
+<code class="sig-name descname">OVER</code><a class="headerlink" href="#pyvips.enums.BlendMode.OVER" title="Permalink to this definition">¶</a></dt>
+<dd><p>the image shows what you would expect if you held two semi-transparent slides on top of each other</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BlendMode.IN">
+<code class="sig-name descname">IN</code><a class="headerlink" href="#pyvips.enums.BlendMode.IN" title="Permalink to this definition">¶</a></dt>
+<dd><p>the first object is removed completely, the second is only drawn where the first was</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BlendMode.OUT">
+<code class="sig-name descname">OUT</code><a class="headerlink" href="#pyvips.enums.BlendMode.OUT" title="Permalink to this definition">¶</a></dt>
+<dd><p>the second is drawn only where the first isn’t</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BlendMode.ATOP">
+<code class="sig-name descname">ATOP</code><a class="headerlink" href="#pyvips.enums.BlendMode.ATOP" title="Permalink to this definition">¶</a></dt>
+<dd><p>this leaves the first object mostly intact, but mixes both objects in the overlapping area</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BlendMode.DEST">
+<code class="sig-name descname">DEST</code><a class="headerlink" href="#pyvips.enums.BlendMode.DEST" title="Permalink to this definition">¶</a></dt>
+<dd><p>leaves the first object untouched, the second is discarded completely</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BlendMode.DEST_OVER">
+<code class="sig-name descname">DEST_OVER</code><a class="headerlink" href="#pyvips.enums.BlendMode.DEST_OVER" title="Permalink to this definition">¶</a></dt>
+<dd><p>like OVER, but swaps the arguments</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BlendMode.DEST_IN">
+<code class="sig-name descname">DEST_IN</code><a class="headerlink" href="#pyvips.enums.BlendMode.DEST_IN" title="Permalink to this definition">¶</a></dt>
+<dd><p>like IN, but swaps the arguments</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BlendMode.DEST_OUT">
+<code class="sig-name descname">DEST_OUT</code><a class="headerlink" href="#pyvips.enums.BlendMode.DEST_OUT" title="Permalink to this definition">¶</a></dt>
+<dd><p>like OUT, but swaps the arguments</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BlendMode.DEST_ATOP">
+<code class="sig-name descname">DEST_ATOP</code><a class="headerlink" href="#pyvips.enums.BlendMode.DEST_ATOP" title="Permalink to this definition">¶</a></dt>
+<dd><p>like ATOP, but swaps the arguments</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BlendMode.XOR">
+<code class="sig-name descname">XOR</code><a class="headerlink" href="#pyvips.enums.BlendMode.XOR" title="Permalink to this definition">¶</a></dt>
+<dd><p>something like a difference operator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BlendMode.ADD">
+<code class="sig-name descname">ADD</code><a class="headerlink" href="#pyvips.enums.BlendMode.ADD" title="Permalink to this definition">¶</a></dt>
+<dd><p>a bit like adding the two images</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BlendMode.SATURATE">
+<code class="sig-name descname">SATURATE</code><a class="headerlink" href="#pyvips.enums.BlendMode.SATURATE" title="Permalink to this definition">¶</a></dt>
+<dd><p>a bit like the darker of the two</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BlendMode.MULTIPLY">
+<code class="sig-name descname">MULTIPLY</code><a class="headerlink" href="#pyvips.enums.BlendMode.MULTIPLY" title="Permalink to this definition">¶</a></dt>
+<dd><p>at least as dark as the darker of the two inputs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BlendMode.SCREEN">
+<code class="sig-name descname">SCREEN</code><a class="headerlink" href="#pyvips.enums.BlendMode.SCREEN" title="Permalink to this definition">¶</a></dt>
+<dd><p>at least as light as the lighter of the inputs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BlendMode.OVERLAY">
+<code class="sig-name descname">OVERLAY</code><a class="headerlink" href="#pyvips.enums.BlendMode.OVERLAY" title="Permalink to this definition">¶</a></dt>
+<dd><p>multiplies or screens colors, depending on the lightness</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BlendMode.DARKEN">
+<code class="sig-name descname">DARKEN</code><a class="headerlink" href="#pyvips.enums.BlendMode.DARKEN" title="Permalink to this definition">¶</a></dt>
+<dd><p>the darker of each component</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BlendMode.LIGHTEN">
+<code class="sig-name descname">LIGHTEN</code><a class="headerlink" href="#pyvips.enums.BlendMode.LIGHTEN" title="Permalink to this definition">¶</a></dt>
+<dd><p>the lighter of each component</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BlendMode.COLOUR_DODGE">
+<code class="sig-name descname">COLOUR_DODGE</code><a class="headerlink" href="#pyvips.enums.BlendMode.COLOUR_DODGE" title="Permalink to this definition">¶</a></dt>
+<dd><p>brighten first by a factor second</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BlendMode.COLOUR_BURN">
+<code class="sig-name descname">COLOUR_BURN</code><a class="headerlink" href="#pyvips.enums.BlendMode.COLOUR_BURN" title="Permalink to this definition">¶</a></dt>
+<dd><p>darken first by a factor of second</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BlendMode.HARD_LIGHT">
+<code class="sig-name descname">HARD_LIGHT</code><a class="headerlink" href="#pyvips.enums.BlendMode.HARD_LIGHT" title="Permalink to this definition">¶</a></dt>
+<dd><p>multiply or screen, depending on lightness</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BlendMode.SOFT_LIGHT">
+<code class="sig-name descname">SOFT_LIGHT</code><a class="headerlink" href="#pyvips.enums.BlendMode.SOFT_LIGHT" title="Permalink to this definition">¶</a></dt>
+<dd><p>darken or lighten, depending on lightness</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BlendMode.DIFFERENCE">
+<code class="sig-name descname">DIFFERENCE</code><a class="headerlink" href="#pyvips.enums.BlendMode.DIFFERENCE" title="Permalink to this definition">¶</a></dt>
+<dd><p>difference of the two</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.BlendMode.EXCLUSION">
+<code class="sig-name descname">EXCLUSION</code><a class="headerlink" href="#pyvips.enums.BlendMode.EXCLUSION" title="Permalink to this definition">¶</a></dt>
+<dd><p>somewhat like DIFFERENCE, but lower-contrast</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="pyvips.enums.Coding">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Coding</code><a class="reference internal" href="_modules/pyvips/enums.html#Coding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Coding" title="Permalink to this definition">¶</a></dt>
 <dd><p>Coding.</p>
-<blockquote>
-<div><p>How pixels are coded.</p>
-</div></blockquote>
+<p>How pixels are coded.</p>
 <p>Normally, pixels are uncoded and can be manipulated as you would expect.
 However some file formats code pixels for compression, and sometimes it’s
 useful to be able to manipulate images in the coded format.</p>
 <p>The gaps in the numbering are historical and must be maintained. Allocate
 new numbers from the end.</p>
-<blockquote>
-<div><dl>
-<dt>Attributes:</dt><dd><p>NONE (str): pixels are not coded</p>
-<p>LABQ (str): pixels encode 3 float CIELAB values as 4 uchar</p>
-<p>RAD (str): pixels encode 3 float RGB as 4 uchar (Radiance coding)</p>
+<dl class="py attribute">
+<dt id="pyvips.enums.Coding.NONE">
+<code class="sig-name descname">NONE</code><a class="headerlink" href="#pyvips.enums.Coding.NONE" title="Permalink to this definition">¶</a></dt>
+<dd><p>pixels are not coded</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
-<dl class="class">
+<dl class="py attribute">
+<dt id="pyvips.enums.Coding.LABQ">
+<code class="sig-name descname">LABQ</code><a class="headerlink" href="#pyvips.enums.Coding.LABQ" title="Permalink to this definition">¶</a></dt>
+<dd><p>pixels encode 3 float CIELAB values as 4 uchar</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Coding.RAD">
+<code class="sig-name descname">RAD</code><a class="headerlink" href="#pyvips.enums.Coding.RAD" title="Permalink to this definition">¶</a></dt>
+<dd><p>pixels encode 3 float RGB as 4 uchar (Radiance coding)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="pyvips.enums.Interpretation">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Interpretation</code><a class="reference internal" href="_modules/pyvips/enums.html#Interpretation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Interpretation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Interpretation.</p>
-<blockquote>
-<div><p>How the values in an image should be interpreted. For example, a</p>
-</div></blockquote>
-<p>three-band float image of type #VIPS_INTERPRETATION_LAB should have its
+<p>How the values in an image should be interpreted. For example, a
+three-band float image of type #VIPS_INTERPRETATION_LAB should have its
 pixels interpreted as coordinates in CIE Lab space.</p>
 <p>RGB and sRGB are treated in the same way. Use the colourspace functions if
 you want some other behaviour.</p>
 <p>The gaps in numbering are historical and must be maintained. Allocate
 new numbers from the end.</p>
-<blockquote>
-<div><dl>
-<dt>Attributes:</dt><dd><p>MULTIBAND (str): generic many-band image</p>
-<p>B_W (str): some kind of single-band image</p>
-<p>HISTOGRAM (str): a 1D image, eg. histogram or lookup table</p>
-<p>XYZ (str): the first three bands are CIE XYZ</p>
-<p>LAB (str): pixels are in CIE Lab space</p>
-<p>CMYK (str): the first four bands are in CMYK space</p>
-<p>LABQ (str): implies #VIPS_CODING_LABQ</p>
-<p>RGB (str): generic RGB space</p>
-<p>CMC (str): a uniform colourspace based on CMC(1:1)</p>
-<p>LCH (str): pixels are in CIE LCh space</p>
-<p>LABS (str): CIE LAB coded as three signed 16-bit values</p>
-<p>SRGB (str): pixels are sRGB</p>
-<p>YXY (str): pixels are CIE Yxy</p>
-<p>FOURIER (str): image is in fourier space</p>
-<p>RGB16 (str): generic 16-bit RGB</p>
-<p>GREY16 (str): generic 16-bit mono</p>
-<p>MATRIX (str): a matrix</p>
-<p>SCRGB (str): pixels are scRGB</p>
-<p>HSV (str): pixels are HSV</p>
+<dl class="py attribute">
+<dt id="pyvips.enums.Interpretation.MULTIBAND">
+<code class="sig-name descname">MULTIBAND</code><a class="headerlink" href="#pyvips.enums.Interpretation.MULTIBAND" title="Permalink to this definition">¶</a></dt>
+<dd><p>generic many-band image</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
-<dl class="class">
+<dl class="py attribute">
+<dt id="pyvips.enums.Interpretation.B_W">
+<code class="sig-name descname">B_W</code><a class="headerlink" href="#pyvips.enums.Interpretation.B_W" title="Permalink to this definition">¶</a></dt>
+<dd><p>some kind of single-band image</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Interpretation.HISTOGRAM">
+<code class="sig-name descname">HISTOGRAM</code><a class="headerlink" href="#pyvips.enums.Interpretation.HISTOGRAM" title="Permalink to this definition">¶</a></dt>
+<dd><p>a 1D image, eg. histogram or lookup table</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Interpretation.XYZ">
+<code class="sig-name descname">XYZ</code><a class="headerlink" href="#pyvips.enums.Interpretation.XYZ" title="Permalink to this definition">¶</a></dt>
+<dd><p>the first three bands are CIE XYZ</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Interpretation.LAB">
+<code class="sig-name descname">LAB</code><a class="headerlink" href="#pyvips.enums.Interpretation.LAB" title="Permalink to this definition">¶</a></dt>
+<dd><p>pixels are in CIE Lab space</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Interpretation.CMYK">
+<code class="sig-name descname">CMYK</code><a class="headerlink" href="#pyvips.enums.Interpretation.CMYK" title="Permalink to this definition">¶</a></dt>
+<dd><p>the first four bands are in CMYK space</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Interpretation.LABQ">
+<code class="sig-name descname">LABQ</code><a class="headerlink" href="#pyvips.enums.Interpretation.LABQ" title="Permalink to this definition">¶</a></dt>
+<dd><p>implies #VIPS_CODING_LABQ</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Interpretation.RGB">
+<code class="sig-name descname">RGB</code><a class="headerlink" href="#pyvips.enums.Interpretation.RGB" title="Permalink to this definition">¶</a></dt>
+<dd><p>generic RGB space</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Interpretation.CMC">
+<code class="sig-name descname">CMC</code><a class="headerlink" href="#pyvips.enums.Interpretation.CMC" title="Permalink to this definition">¶</a></dt>
+<dd><p>a uniform colourspace based on CMC(1:1)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Interpretation.LCH">
+<code class="sig-name descname">LCH</code><a class="headerlink" href="#pyvips.enums.Interpretation.LCH" title="Permalink to this definition">¶</a></dt>
+<dd><p>pixels are in CIE LCh space</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Interpretation.LABS">
+<code class="sig-name descname">LABS</code><a class="headerlink" href="#pyvips.enums.Interpretation.LABS" title="Permalink to this definition">¶</a></dt>
+<dd><p>CIE LAB coded as three signed 16-bit values</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Interpretation.SRGB">
+<code class="sig-name descname">SRGB</code><a class="headerlink" href="#pyvips.enums.Interpretation.SRGB" title="Permalink to this definition">¶</a></dt>
+<dd><p>pixels are sRGB</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Interpretation.YXY">
+<code class="sig-name descname">YXY</code><a class="headerlink" href="#pyvips.enums.Interpretation.YXY" title="Permalink to this definition">¶</a></dt>
+<dd><p>pixels are CIE Yxy</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Interpretation.FOURIER">
+<code class="sig-name descname">FOURIER</code><a class="headerlink" href="#pyvips.enums.Interpretation.FOURIER" title="Permalink to this definition">¶</a></dt>
+<dd><p>image is in fourier space</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Interpretation.RGB16">
+<code class="sig-name descname">RGB16</code><a class="headerlink" href="#pyvips.enums.Interpretation.RGB16" title="Permalink to this definition">¶</a></dt>
+<dd><p>generic 16-bit RGB</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Interpretation.GREY16">
+<code class="sig-name descname">GREY16</code><a class="headerlink" href="#pyvips.enums.Interpretation.GREY16" title="Permalink to this definition">¶</a></dt>
+<dd><p>generic 16-bit mono</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Interpretation.MATRIX">
+<code class="sig-name descname">MATRIX</code><a class="headerlink" href="#pyvips.enums.Interpretation.MATRIX" title="Permalink to this definition">¶</a></dt>
+<dd><p>a matrix</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Interpretation.SCRGB">
+<code class="sig-name descname">SCRGB</code><a class="headerlink" href="#pyvips.enums.Interpretation.SCRGB" title="Permalink to this definition">¶</a></dt>
+<dd><p>pixels are scRGB</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Interpretation.HSV">
+<code class="sig-name descname">HSV</code><a class="headerlink" href="#pyvips.enums.Interpretation.HSV" title="Permalink to this definition">¶</a></dt>
+<dd><p>pixels are HSV</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="pyvips.enums.DemandStyle">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">DemandStyle</code><a class="reference internal" href="_modules/pyvips/enums.html#DemandStyle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.DemandStyle" title="Permalink to this definition">¶</a></dt>
 <dd><p>DemandStyle.</p>
-<blockquote>
-<div><p>See vips_image_pipelinev(). Operations can hint to the VIPS image IO</p>
-</div></blockquote>
-<p>system about the kind of demand geometry they prefer.</p>
+<p>See vips_image_pipelinev(). Operations can hint to the VIPS image IO
+system about the kind of demand geometry they prefer.</p>
 <p>These demand styles are given below in order of increasing
 restrictiveness.  When demanding output from a pipeline,
 vips_image_generate()
@@ -335,22 +887,47 @@ reasonably efficiently, even for bizzare operations like 45 degree rotate.</p>
 file (even indirectly) so any demand style is OK. It’s used for things like
 vips_black() where the pixels are calculated.</p>
 <p>See also: vips_image_pipelinev().</p>
-<blockquote>
-<div><dl>
-<dt>Attributes:</dt><dd><p>SMALLTILE (str): demand in small (typically 64x64 pixel) tiles</p>
-<p>FATSTRIP (str): demand in fat (typically 10 pixel high) strips</p>
-<p>THINSTRIP (str): demand in thin (typically 1 pixel high) strips</p>
+<dl class="py attribute">
+<dt id="pyvips.enums.DemandStyle.SMALLTILE">
+<code class="sig-name descname">SMALLTILE</code><a class="headerlink" href="#pyvips.enums.DemandStyle.SMALLTILE" title="Permalink to this definition">¶</a></dt>
+<dd><p>demand in small (typically 64x64 pixel) tiles</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
-<dl class="class">
+<dl class="py attribute">
+<dt id="pyvips.enums.DemandStyle.FATSTRIP">
+<code class="sig-name descname">FATSTRIP</code><a class="headerlink" href="#pyvips.enums.DemandStyle.FATSTRIP" title="Permalink to this definition">¶</a></dt>
+<dd><p>demand in fat (typically 10 pixel high) strips</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.DemandStyle.THINSTRIP">
+<code class="sig-name descname">THINSTRIP</code><a class="headerlink" href="#pyvips.enums.DemandStyle.THINSTRIP" title="Permalink to this definition">¶</a></dt>
+<dd><p>demand in thin (typically 1 pixel high) strips</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="pyvips.enums.OperationRelational">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">OperationRelational</code><a class="reference internal" href="_modules/pyvips/enums.html#OperationRelational"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.OperationRelational" title="Permalink to this definition">¶</a></dt>
 <dd><p>OperationRelational.</p>
 <p>See also: vips_relational().</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationRelational.EQUAL">
 <code class="sig-name descname">EQUAL</code><a class="headerlink" href="#pyvips.enums.OperationRelational.EQUAL" title="Permalink to this definition">¶</a></dt>
 <dd><p>==</p>
@@ -361,7 +938,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationRelational.NOTEQ">
 <code class="sig-name descname">NOTEQ</code><a class="headerlink" href="#pyvips.enums.OperationRelational.NOTEQ" title="Permalink to this definition">¶</a></dt>
 <dd><p>!=</p>
@@ -372,7 +949,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationRelational.LESS">
 <code class="sig-name descname">LESS</code><a class="headerlink" href="#pyvips.enums.OperationRelational.LESS" title="Permalink to this definition">¶</a></dt>
 <dd><p>&lt;</p>
@@ -383,7 +960,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationRelational.LESSEQ">
 <code class="sig-name descname">LESSEQ</code><a class="headerlink" href="#pyvips.enums.OperationRelational.LESSEQ" title="Permalink to this definition">¶</a></dt>
 <dd><p>&lt;=</p>
@@ -394,7 +971,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationRelational.MORE">
 <code class="sig-name descname">MORE</code><a class="headerlink" href="#pyvips.enums.OperationRelational.MORE" title="Permalink to this definition">¶</a></dt>
 <dd><p>&gt;</p>
@@ -405,7 +982,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationRelational.MOREEQ">
 <code class="sig-name descname">MOREEQ</code><a class="headerlink" href="#pyvips.enums.OperationRelational.MOREEQ" title="Permalink to this definition">¶</a></dt>
 <dd><p>&gt;=</p>
@@ -418,12 +995,12 @@ vips_black() where the pixels are calculated.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="pyvips.enums.OperationBoolean">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">OperationBoolean</code><a class="reference internal" href="_modules/pyvips/enums.html#OperationBoolean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.OperationBoolean" title="Permalink to this definition">¶</a></dt>
 <dd><p>OperationBoolean.</p>
 <p>See also: vips_boolean().</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationBoolean.AND">
 <code class="sig-name descname">AND</code><a class="headerlink" href="#pyvips.enums.OperationBoolean.AND" title="Permalink to this definition">¶</a></dt>
 <dd><p>&amp;</p>
@@ -434,7 +1011,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationBoolean.OR">
 <code class="sig-name descname">OR</code><a class="headerlink" href="#pyvips.enums.OperationBoolean.OR" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
@@ -447,7 +1024,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationBoolean.EOR">
 <code class="sig-name descname">EOR</code><a class="headerlink" href="#pyvips.enums.OperationBoolean.EOR" title="Permalink to this definition">¶</a></dt>
 <dd><p>^</p>
@@ -458,7 +1035,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationBoolean.LSHIFT">
 <code class="sig-name descname">LSHIFT</code><a class="headerlink" href="#pyvips.enums.OperationBoolean.LSHIFT" title="Permalink to this definition">¶</a></dt>
 <dd><p>&gt;&gt;</p>
@@ -469,7 +1046,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationBoolean.RSHIFT">
 <code class="sig-name descname">RSHIFT</code><a class="headerlink" href="#pyvips.enums.OperationBoolean.RSHIFT" title="Permalink to this definition">¶</a></dt>
 <dd><p>&lt;&lt;</p>
@@ -482,12 +1059,12 @@ vips_black() where the pixels are calculated.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="pyvips.enums.OperationMath2">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">OperationMath2</code><a class="reference internal" href="_modules/pyvips/enums.html#OperationMath2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.OperationMath2" title="Permalink to this definition">¶</a></dt>
 <dd><p>OperationMath2.</p>
 <p>See also: vips_math().</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationMath2.POW">
 <code class="sig-name descname">POW</code><a class="headerlink" href="#pyvips.enums.OperationMath2.POW" title="Permalink to this definition">¶</a></dt>
 <dd><p>pow( left, right )</p>
@@ -498,7 +1075,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationMath2.WOP">
 <code class="sig-name descname">WOP</code><a class="headerlink" href="#pyvips.enums.OperationMath2.WOP" title="Permalink to this definition">¶</a></dt>
 <dd><p>pow( right, left )</p>
@@ -511,12 +1088,12 @@ vips_black() where the pixels are calculated.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="pyvips.enums.OperationComplex2">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">OperationComplex2</code><a class="reference internal" href="_modules/pyvips/enums.html#OperationComplex2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.OperationComplex2" title="Permalink to this definition">¶</a></dt>
 <dd><p>OperationComplex2.</p>
 <p>See also: vips_complex2().</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationComplex2.CROSS_PHASE">
 <code class="sig-name descname">CROSS_PHASE</code><a class="headerlink" href="#pyvips.enums.OperationComplex2.CROSS_PHASE" title="Permalink to this definition">¶</a></dt>
 <dd><p>convert to polar coordinates</p>
@@ -529,12 +1106,12 @@ vips_black() where the pixels are calculated.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="pyvips.enums.OperationMath">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">OperationMath</code><a class="reference internal" href="_modules/pyvips/enums.html#OperationMath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.OperationMath" title="Permalink to this definition">¶</a></dt>
 <dd><p>OperationMath.</p>
 <p>See also: vips_math().</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationMath.SIN">
 <code class="sig-name descname">SIN</code><a class="headerlink" href="#pyvips.enums.OperationMath.SIN" title="Permalink to this definition">¶</a></dt>
 <dd><p>sin(), angles in degrees</p>
@@ -545,7 +1122,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationMath.COS">
 <code class="sig-name descname">COS</code><a class="headerlink" href="#pyvips.enums.OperationMath.COS" title="Permalink to this definition">¶</a></dt>
 <dd><p>cos(), angles in degrees</p>
@@ -556,7 +1133,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationMath.TAN">
 <code class="sig-name descname">TAN</code><a class="headerlink" href="#pyvips.enums.OperationMath.TAN" title="Permalink to this definition">¶</a></dt>
 <dd><p>tan(), angles in degrees</p>
@@ -567,7 +1144,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationMath.ASIN">
 <code class="sig-name descname">ASIN</code><a class="headerlink" href="#pyvips.enums.OperationMath.ASIN" title="Permalink to this definition">¶</a></dt>
 <dd><p>asin(), angles in degrees</p>
@@ -578,7 +1155,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationMath.ACOS">
 <code class="sig-name descname">ACOS</code><a class="headerlink" href="#pyvips.enums.OperationMath.ACOS" title="Permalink to this definition">¶</a></dt>
 <dd><p>acos(), angles in degrees</p>
@@ -589,7 +1166,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationMath.ATAN">
 <code class="sig-name descname">ATAN</code><a class="headerlink" href="#pyvips.enums.OperationMath.ATAN" title="Permalink to this definition">¶</a></dt>
 <dd><p>atan(), angles in degrees</p>
@@ -600,7 +1177,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationMath.LOG">
 <code class="sig-name descname">LOG</code><a class="headerlink" href="#pyvips.enums.OperationMath.LOG" title="Permalink to this definition">¶</a></dt>
 <dd><p>log base e</p>
@@ -611,7 +1188,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationMath.LOG10">
 <code class="sig-name descname">LOG10</code><a class="headerlink" href="#pyvips.enums.OperationMath.LOG10" title="Permalink to this definition">¶</a></dt>
 <dd><p>log base 10</p>
@@ -622,7 +1199,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationMath.EXP">
 <code class="sig-name descname">EXP</code><a class="headerlink" href="#pyvips.enums.OperationMath.EXP" title="Permalink to this definition">¶</a></dt>
 <dd><p>e to the something</p>
@@ -633,7 +1210,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationMath.EXP10">
 <code class="sig-name descname">EXP10</code><a class="headerlink" href="#pyvips.enums.OperationMath.EXP10" title="Permalink to this definition">¶</a></dt>
 <dd><p>10 to the something</p>
@@ -646,12 +1223,12 @@ vips_black() where the pixels are calculated.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="pyvips.enums.OperationRound">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">OperationRound</code><a class="reference internal" href="_modules/pyvips/enums.html#OperationRound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.OperationRound" title="Permalink to this definition">¶</a></dt>
 <dd><p>OperationRound.</p>
 <p>See also: vips_round().</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationRound.RINT">
 <code class="sig-name descname">RINT</code><a class="headerlink" href="#pyvips.enums.OperationRound.RINT" title="Permalink to this definition">¶</a></dt>
 <dd><p>round to nearest</p>
@@ -662,7 +1239,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationRound.CEIL">
 <code class="sig-name descname">CEIL</code><a class="headerlink" href="#pyvips.enums.OperationRound.CEIL" title="Permalink to this definition">¶</a></dt>
 <dd><p>the smallest integral value not less than</p>
@@ -673,7 +1250,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationRound.FLOOR">
 <code class="sig-name descname">FLOOR</code><a class="headerlink" href="#pyvips.enums.OperationRound.FLOOR" title="Permalink to this definition">¶</a></dt>
 <dd><p>largest integral value not greater than</p>
@@ -686,12 +1263,12 @@ vips_black() where the pixels are calculated.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="pyvips.enums.OperationComplex">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">OperationComplex</code><a class="reference internal" href="_modules/pyvips/enums.html#OperationComplex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.OperationComplex" title="Permalink to this definition">¶</a></dt>
 <dd><p>OperationComplex.</p>
 <p>See also: vips_complex().</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationComplex.POLAR">
 <code class="sig-name descname">POLAR</code><a class="headerlink" href="#pyvips.enums.OperationComplex.POLAR" title="Permalink to this definition">¶</a></dt>
 <dd><p>convert to polar coordinates</p>
@@ -702,7 +1279,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationComplex.RECT">
 <code class="sig-name descname">RECT</code><a class="headerlink" href="#pyvips.enums.OperationComplex.RECT" title="Permalink to this definition">¶</a></dt>
 <dd><p>convert to rectangular coordinates</p>
@@ -713,7 +1290,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationComplex.CONJ">
 <code class="sig-name descname">CONJ</code><a class="headerlink" href="#pyvips.enums.OperationComplex.CONJ" title="Permalink to this definition">¶</a></dt>
 <dd><p>complex conjugate</p>
@@ -726,12 +1303,12 @@ vips_black() where the pixels are calculated.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="pyvips.enums.OperationComplexget">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">OperationComplexget</code><a class="reference internal" href="_modules/pyvips/enums.html#OperationComplexget"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.OperationComplexget" title="Permalink to this definition">¶</a></dt>
 <dd><p>OperationComplexget.</p>
 <p>See also: vips_complexget().</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationComplexget.REAL">
 <code class="sig-name descname">REAL</code><a class="headerlink" href="#pyvips.enums.OperationComplexget.REAL" title="Permalink to this definition">¶</a></dt>
 <dd><p>get real component</p>
@@ -742,7 +1319,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.OperationComplexget.IMAG">
 <code class="sig-name descname">IMAG</code><a class="headerlink" href="#pyvips.enums.OperationComplexget.IMAG" title="Permalink to this definition">¶</a></dt>
 <dd><p>get imaginary component</p>
@@ -755,12 +1332,12 @@ vips_black() where the pixels are calculated.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="pyvips.enums.Combine">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Combine</code><a class="reference internal" href="_modules/pyvips/enums.html#Combine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Combine" title="Permalink to this definition">¶</a></dt>
 <dd><p>Combine.</p>
 <p>How to combine values. See vips_compass(), for example.</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.Combine.MAX">
 <code class="sig-name descname">MAX</code><a class="headerlink" href="#pyvips.enums.Combine.MAX" title="Permalink to this definition">¶</a></dt>
 <dd><p>take the maximum of the possible values</p>
@@ -771,7 +1348,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.Combine.SUM">
 <code class="sig-name descname">SUM</code><a class="headerlink" href="#pyvips.enums.Combine.SUM" title="Permalink to this definition">¶</a></dt>
 <dd><p>sum all the values</p>
@@ -782,7 +1359,7 @@ vips_black() where the pixels are calculated.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.Combine.MIN">
 <code class="sig-name descname">MIN</code><a class="headerlink" href="#pyvips.enums.Combine.MIN" title="Permalink to this definition">¶</a></dt>
 <dd><p>take the minimum value</p>
@@ -795,33 +1372,44 @@ vips_black() where the pixels are calculated.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="pyvips.enums.Access">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Access</code><a class="reference internal" href="_modules/pyvips/enums.html#Access"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Access" title="Permalink to this definition">¶</a></dt>
 <dd><p>Access.</p>
-<blockquote>
-<div><p>The type of access an operation has to supply. See vips_tilecache()</p>
-</div></blockquote>
-<p>and #VipsForeign.</p>
+<p>The type of access an operation has to supply. See vips_tilecache()
+and #VipsForeign.</p>
 <p>&#64;VIPS_ACCESS_RANDOM means requests can come in any order.</p>
 <p>&#64;VIPS_ACCESS_SEQUENTIAL means requests will be top-to-bottom, but with some
 amount of buffering behind the read point for small non-local accesses.</p>
-<blockquote>
-<div><dl>
-<dt>Attributes:</dt><dd><p>RANDOM (str): can read anywhere</p>
-<p>SEQUENTIAL (str): top-to-bottom reading only, but with a small buffer</p>
+<dl class="py attribute">
+<dt id="pyvips.enums.Access.RANDOM">
+<code class="sig-name descname">RANDOM</code><a class="headerlink" href="#pyvips.enums.Access.RANDOM" title="Permalink to this definition">¶</a></dt>
+<dd><p>can read anywhere</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
-<dl class="class">
+<dl class="py attribute">
+<dt id="pyvips.enums.Access.SEQUENTIAL">
+<code class="sig-name descname">SEQUENTIAL</code><a class="headerlink" href="#pyvips.enums.Access.SEQUENTIAL" title="Permalink to this definition">¶</a></dt>
+<dd><p>top-to-bottom reading only, but with a small buffer</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="pyvips.enums.Extend">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Extend</code><a class="reference internal" href="_modules/pyvips/enums.html#Extend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Extend" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extend.</p>
-<blockquote>
-<div><p>See vips_embed(), vips_conv(), vips_affine() and so on.</p>
-</div></blockquote>
+<p>See vips_embed(), vips_conv(), vips_affine() and so on.</p>
 <p>When the edges of an image are extended, you can specify
 how you want the extension done.</p>
 <p>#VIPS_EXTEND_BLACK — new pixels are black, ie. all bits are zero.</p>
@@ -835,25 +1423,80 @@ edges</p>
 <p>We have to specify the exact value of each enum member since we have to
 keep these frozen for back compat with vips7.</p>
 <p>See also: vips_embed().</p>
-<blockquote>
-<div><dl>
-<dt>Attributes:</dt><dd><p>BLACK (str): extend with black (all 0) pixels</p>
-<p>COPY (str): copy the image edges</p>
-<p>REPEAT (str): repeat the whole image</p>
-<p>MIRROR (str): mirror the whole image</p>
-<p>WHITE (str): extend with white (all bits set) pixels</p>
-<p>BACKGROUND (str): extend with colour from the &#64;background property</p>
+<dl class="py attribute">
+<dt id="pyvips.enums.Extend.BLACK">
+<code class="sig-name descname">BLACK</code><a class="headerlink" href="#pyvips.enums.Extend.BLACK" title="Permalink to this definition">¶</a></dt>
+<dd><p>extend with black (all 0) pixels</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
-<dl class="class">
+<dl class="py attribute">
+<dt id="pyvips.enums.Extend.COPY">
+<code class="sig-name descname">COPY</code><a class="headerlink" href="#pyvips.enums.Extend.COPY" title="Permalink to this definition">¶</a></dt>
+<dd><p>copy the image edges</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Extend.REPEAT">
+<code class="sig-name descname">REPEAT</code><a class="headerlink" href="#pyvips.enums.Extend.REPEAT" title="Permalink to this definition">¶</a></dt>
+<dd><p>repeat the whole image</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Extend.MIRROR">
+<code class="sig-name descname">MIRROR</code><a class="headerlink" href="#pyvips.enums.Extend.MIRROR" title="Permalink to this definition">¶</a></dt>
+<dd><p>mirror the whole image</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Extend.WHITE">
+<code class="sig-name descname">WHITE</code><a class="headerlink" href="#pyvips.enums.Extend.WHITE" title="Permalink to this definition">¶</a></dt>
+<dd><p>extend with white (all bits set) pixels</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Extend.BACKGROUND">
+<code class="sig-name descname">BACKGROUND</code><a class="headerlink" href="#pyvips.enums.Extend.BACKGROUND" title="Permalink to this definition">¶</a></dt>
+<dd><p>extend with colour from the &#64;background property</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="pyvips.enums.CompassDirection">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">CompassDirection</code><a class="reference internal" href="_modules/pyvips/enums.html#CompassDirection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.CompassDirection" title="Permalink to this definition">¶</a></dt>
 <dd><p>CompassDirection.</p>
 <p>A direction on a compass. Used for vips_gravity(), for example.</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.CompassDirection.CENTRE">
 <code class="sig-name descname">CENTRE</code><a class="headerlink" href="#pyvips.enums.CompassDirection.CENTRE" title="Permalink to this definition">¶</a></dt>
 <dd><p>centre</p>
@@ -864,7 +1507,7 @@ keep these frozen for back compat with vips7.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.CompassDirection.NORTH">
 <code class="sig-name descname">NORTH</code><a class="headerlink" href="#pyvips.enums.CompassDirection.NORTH" title="Permalink to this definition">¶</a></dt>
 <dd><p>north</p>
@@ -875,7 +1518,7 @@ keep these frozen for back compat with vips7.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.CompassDirection.EAST">
 <code class="sig-name descname">EAST</code><a class="headerlink" href="#pyvips.enums.CompassDirection.EAST" title="Permalink to this definition">¶</a></dt>
 <dd><p>east</p>
@@ -886,7 +1529,7 @@ keep these frozen for back compat with vips7.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.CompassDirection.SOUTH">
 <code class="sig-name descname">SOUTH</code><a class="headerlink" href="#pyvips.enums.CompassDirection.SOUTH" title="Permalink to this definition">¶</a></dt>
 <dd><p>south</p>
@@ -897,7 +1540,7 @@ keep these frozen for back compat with vips7.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.CompassDirection.WEST">
 <code class="sig-name descname">WEST</code><a class="headerlink" href="#pyvips.enums.CompassDirection.WEST" title="Permalink to this definition">¶</a></dt>
 <dd><p>west</p>
@@ -908,7 +1551,7 @@ keep these frozen for back compat with vips7.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.CompassDirection.NORTH_EAST">
 <code class="sig-name descname">NORTH_EAST</code><a class="headerlink" href="#pyvips.enums.CompassDirection.NORTH_EAST" title="Permalink to this definition">¶</a></dt>
 <dd><p>north-east</p>
@@ -919,7 +1562,7 @@ keep these frozen for back compat with vips7.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.CompassDirection.SOUTH_EAST">
 <code class="sig-name descname">SOUTH_EAST</code><a class="headerlink" href="#pyvips.enums.CompassDirection.SOUTH_EAST" title="Permalink to this definition">¶</a></dt>
 <dd><p>south-east</p>
@@ -930,7 +1573,7 @@ keep these frozen for back compat with vips7.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.CompassDirection.SOUTH_WEST">
 <code class="sig-name descname">SOUTH_WEST</code><a class="headerlink" href="#pyvips.enums.CompassDirection.SOUTH_WEST" title="Permalink to this definition">¶</a></dt>
 <dd><p>south-west</p>
@@ -941,7 +1584,7 @@ keep these frozen for back compat with vips7.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.CompassDirection.NORTH_WEST">
 <code class="sig-name descname">NORTH_WEST</code><a class="headerlink" href="#pyvips.enums.CompassDirection.NORTH_WEST" title="Permalink to this definition">¶</a></dt>
 <dd><p>north-west</p>
@@ -954,121 +1597,327 @@ keep these frozen for back compat with vips7.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="pyvips.enums.Direction">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Direction</code><a class="reference internal" href="_modules/pyvips/enums.html#Direction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Direction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Direction.</p>
-<blockquote>
-<div><p>See vips_flip(), vips_join() and so on.</p>
-</div></blockquote>
+<p>See vips_flip(), vips_join() and so on.</p>
 <p>Operations like vips_flip() need to be told whether to flip left-right or
 top-bottom.</p>
 <p>See also: vips_flip(), vips_join().</p>
-<blockquote>
-<div><dl>
-<dt>Attributes:</dt><dd><p>HORIZONTAL (str): left-right</p>
-<p>VERTICAL (str): top-bottom</p>
+<dl class="py attribute">
+<dt id="pyvips.enums.Direction.HORIZONTAL">
+<code class="sig-name descname">HORIZONTAL</code><a class="headerlink" href="#pyvips.enums.Direction.HORIZONTAL" title="Permalink to this definition">¶</a></dt>
+<dd><p>left-right</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
-<dl class="class">
+<dl class="py attribute">
+<dt id="pyvips.enums.Direction.VERTICAL">
+<code class="sig-name descname">VERTICAL</code><a class="headerlink" href="#pyvips.enums.Direction.VERTICAL" title="Permalink to this definition">¶</a></dt>
+<dd><p>top-bottom</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="pyvips.enums.Align">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Align</code><a class="reference internal" href="_modules/pyvips/enums.html#Align"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Align" title="Permalink to this definition">¶</a></dt>
 <dd><p>Align.</p>
-<blockquote>
-<div><p>See vips_join() and so on.</p>
-</div></blockquote>
+<p>See vips_join() and so on.</p>
 <p>Operations like vips_join() need to be told whether to align images on the
 low or high coordinate edge, or centre.</p>
 <p>See also: vips_join().</p>
-<blockquote>
-<div><dl>
-<dt>Attributes:</dt><dd><p>LOW (str): align low coordinate edge</p>
-<p>CENTRE (str): align centre</p>
-<p>HIGH (str): align high coordinate edge</p>
+<dl class="py attribute">
+<dt id="pyvips.enums.Align.LOW">
+<code class="sig-name descname">LOW</code><a class="headerlink" href="#pyvips.enums.Align.LOW" title="Permalink to this definition">¶</a></dt>
+<dd><p>align low coordinate edge</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
-<dl class="class">
+<dl class="py attribute">
+<dt id="pyvips.enums.Align.CENTRE">
+<code class="sig-name descname">CENTRE</code><a class="headerlink" href="#pyvips.enums.Align.CENTRE" title="Permalink to this definition">¶</a></dt>
+<dd><p>align centre</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Align.HIGH">
+<code class="sig-name descname">HIGH</code><a class="headerlink" href="#pyvips.enums.Align.HIGH" title="Permalink to this definition">¶</a></dt>
+<dd><p>align high coordinate edge</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="pyvips.enums.Interesting">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Interesting</code><a class="reference internal" href="_modules/pyvips/enums.html#Interesting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Interesting" title="Permalink to this definition">¶</a></dt>
 <dd><p>Interesting.</p>
-<blockquote>
-<div><p>Pick the algorithm vips uses to decide image “interestingness”. This is used</p>
-</div></blockquote>
-<p>by vips_smartcrop(), for example, to decide what parts of the image to
+<p>Pick the algorithm vips uses to decide image “interestingness”. This is used
+by vips_smartcrop(), for example, to decide what parts of the image to
 keep.</p>
 <p>#VIPS_INTERESTING_NONE and #VIPS_INTERESTING_LOW mean the same – the
 crop is positioned at the top or left. #VIPS_INTERESTING_HIGH positions at
 the bottom or right.</p>
 <p>See also: vips_smartcrop().</p>
-<blockquote>
-<div><dl>
-<dt>Attributes:</dt><dd><p>NONE (str): do nothing</p>
-<p>CENTRE (str): just take the centre</p>
-<p>ENTROPY (str): use an entropy measure</p>
-<p>ATTENTION (str): look for features likely to draw human attention</p>
-<p>LOW (str): position the crop towards the low coordinate</p>
-<p>HIGH (str): position the crop towards the high coordinate</p>
+<dl class="py attribute">
+<dt id="pyvips.enums.Interesting.NONE">
+<code class="sig-name descname">NONE</code><a class="headerlink" href="#pyvips.enums.Interesting.NONE" title="Permalink to this definition">¶</a></dt>
+<dd><p>do nothing</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
-<dl class="class">
+<dl class="py attribute">
+<dt id="pyvips.enums.Interesting.CENTRE">
+<code class="sig-name descname">CENTRE</code><a class="headerlink" href="#pyvips.enums.Interesting.CENTRE" title="Permalink to this definition">¶</a></dt>
+<dd><p>just take the centre</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Interesting.ENTROPY">
+<code class="sig-name descname">ENTROPY</code><a class="headerlink" href="#pyvips.enums.Interesting.ENTROPY" title="Permalink to this definition">¶</a></dt>
+<dd><p>use an entropy measure</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Interesting.ATTENTION">
+<code class="sig-name descname">ATTENTION</code><a class="headerlink" href="#pyvips.enums.Interesting.ATTENTION" title="Permalink to this definition">¶</a></dt>
+<dd><p>look for features likely to draw human attention</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Interesting.LOW">
+<code class="sig-name descname">LOW</code><a class="headerlink" href="#pyvips.enums.Interesting.LOW" title="Permalink to this definition">¶</a></dt>
+<dd><p>position the crop towards the low coordinate</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Interesting.HIGH">
+<code class="sig-name descname">HIGH</code><a class="headerlink" href="#pyvips.enums.Interesting.HIGH" title="Permalink to this definition">¶</a></dt>
+<dd><p>position the crop towards the high coordinate</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Interesting.ALL">
+<code class="sig-name descname">ALL</code><a class="headerlink" href="#pyvips.enums.Interesting.ALL" title="Permalink to this definition">¶</a></dt>
+<dd><p>everything is interesting</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="pyvips.enums.Angle">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Angle</code><a class="reference internal" href="_modules/pyvips/enums.html#Angle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Angle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Angle.</p>
-<blockquote>
-<div><p>See vips_rot() and so on.</p>
-</div></blockquote>
+<p>See vips_rot() and so on.</p>
 <p>Fixed rotate angles.</p>
 <p>See also: vips_rot().</p>
-<blockquote>
-<div><dl>
-<dt>Attributes:</dt><dd><p>D0 (str): no rotate</p>
-<p>D90 (str): 90 degrees clockwise</p>
-<p>D180 (str): 180 degree rotate</p>
-<p>D270 (str): 90 degrees anti-clockwise</p>
+<dl class="py attribute">
+<dt id="pyvips.enums.Angle.D0">
+<code class="sig-name descname">D0</code><a class="headerlink" href="#pyvips.enums.Angle.D0" title="Permalink to this definition">¶</a></dt>
+<dd><p>no rotate</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
-<dl class="class">
+<dl class="py attribute">
+<dt id="pyvips.enums.Angle.D90">
+<code class="sig-name descname">D90</code><a class="headerlink" href="#pyvips.enums.Angle.D90" title="Permalink to this definition">¶</a></dt>
+<dd><p>90 degrees clockwise</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Angle.D180">
+<code class="sig-name descname">D180</code><a class="headerlink" href="#pyvips.enums.Angle.D180" title="Permalink to this definition">¶</a></dt>
+<dd><p>180 degree rotate</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Angle.D270">
+<code class="sig-name descname">D270</code><a class="headerlink" href="#pyvips.enums.Angle.D270" title="Permalink to this definition">¶</a></dt>
+<dd><p>90 degrees anti-clockwise</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="pyvips.enums.Angle45">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Angle45</code><a class="reference internal" href="_modules/pyvips/enums.html#Angle45"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Angle45" title="Permalink to this definition">¶</a></dt>
 <dd><p>Angle45.</p>
-<blockquote>
-<div><p>See vips_rot45() and so on.</p>
-</div></blockquote>
+<p>See vips_rot45() and so on.</p>
 <p>Fixed rotate angles.</p>
 <p>See also: vips_rot45().</p>
-<blockquote>
-<div><dl>
-<dt>Attributes:</dt><dd><p>D0 (str): no rotate</p>
-<p>D45 (str): 45 degrees clockwise</p>
-<p>D90 (str): 90 degrees clockwise</p>
-<p>D135 (str): 135 degrees clockwise</p>
-<p>D180 (str): 180 degrees</p>
-<p>D225 (str): 135 degrees anti-clockwise</p>
-<p>D270 (str): 90 degrees anti-clockwise</p>
-<p>D315 (str): 45 degrees anti-clockwise</p>
+<dl class="py attribute">
+<dt id="pyvips.enums.Angle45.D0">
+<code class="sig-name descname">D0</code><a class="headerlink" href="#pyvips.enums.Angle45.D0" title="Permalink to this definition">¶</a></dt>
+<dd><p>no rotate</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
-<dl class="class">
+<dl class="py attribute">
+<dt id="pyvips.enums.Angle45.D45">
+<code class="sig-name descname">D45</code><a class="headerlink" href="#pyvips.enums.Angle45.D45" title="Permalink to this definition">¶</a></dt>
+<dd><p>45 degrees clockwise</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Angle45.D90">
+<code class="sig-name descname">D90</code><a class="headerlink" href="#pyvips.enums.Angle45.D90" title="Permalink to this definition">¶</a></dt>
+<dd><p>90 degrees clockwise</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Angle45.D135">
+<code class="sig-name descname">D135</code><a class="headerlink" href="#pyvips.enums.Angle45.D135" title="Permalink to this definition">¶</a></dt>
+<dd><p>135 degrees clockwise</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Angle45.D180">
+<code class="sig-name descname">D180</code><a class="headerlink" href="#pyvips.enums.Angle45.D180" title="Permalink to this definition">¶</a></dt>
+<dd><p>180 degrees</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Angle45.D225">
+<code class="sig-name descname">D225</code><a class="headerlink" href="#pyvips.enums.Angle45.D225" title="Permalink to this definition">¶</a></dt>
+<dd><p>135 degrees anti-clockwise</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Angle45.D270">
+<code class="sig-name descname">D270</code><a class="headerlink" href="#pyvips.enums.Angle45.D270" title="Permalink to this definition">¶</a></dt>
+<dd><p>90 degrees anti-clockwise</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Angle45.D315">
+<code class="sig-name descname">D315</code><a class="headerlink" href="#pyvips.enums.Angle45.D315" title="Permalink to this definition">¶</a></dt>
+<dd><p>45 degrees anti-clockwise</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="pyvips.enums.Precision">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Precision</code><a class="reference internal" href="_modules/pyvips/enums.html#Precision"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Precision" title="Permalink to this definition">¶</a></dt>
 <dd><p>Precision.</p>
 <p>How accurate an operation should be.</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.Precision.INTEGER">
 <code class="sig-name descname">INTEGER</code><a class="headerlink" href="#pyvips.enums.Precision.INTEGER" title="Permalink to this definition">¶</a></dt>
 <dd><p>int everywhere</p>
@@ -1079,7 +1928,7 @@ the bottom or right.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.Precision.FLOAT">
 <code class="sig-name descname">FLOAT</code><a class="headerlink" href="#pyvips.enums.Precision.FLOAT" title="Permalink to this definition">¶</a></dt>
 <dd><p>float everywhere</p>
@@ -1090,7 +1939,7 @@ the bottom or right.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.Precision.APPROXIMATE">
 <code class="sig-name descname">APPROXIMATE</code><a class="headerlink" href="#pyvips.enums.Precision.APPROXIMATE" title="Permalink to this definition">¶</a></dt>
 <dd><p>approximate integer output</p>
@@ -1103,12 +1952,12 @@ the bottom or right.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="pyvips.enums.ForeignDzLayout">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">ForeignDzLayout</code><a class="reference internal" href="_modules/pyvips/enums.html#ForeignDzLayout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.ForeignDzLayout" title="Permalink to this definition">¶</a></dt>
 <dd><p>ForeignDzLayout.</p>
 <p>What directory layout and metadata standard to use.</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.ForeignDzLayout.DZ">
 <code class="sig-name descname">DZ</code><a class="headerlink" href="#pyvips.enums.ForeignDzLayout.DZ" title="Permalink to this definition">¶</a></dt>
 <dd><p>use DeepZoom directory layout</p>
@@ -1119,7 +1968,7 @@ the bottom or right.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.ForeignDzLayout.ZOOMIFY">
 <code class="sig-name descname">ZOOMIFY</code><a class="headerlink" href="#pyvips.enums.ForeignDzLayout.ZOOMIFY" title="Permalink to this definition">¶</a></dt>
 <dd><p>use Zoomify directory layout</p>
@@ -1130,7 +1979,7 @@ the bottom or right.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.ForeignDzLayout.GOOGLE">
 <code class="sig-name descname">GOOGLE</code><a class="headerlink" href="#pyvips.enums.ForeignDzLayout.GOOGLE" title="Permalink to this definition">¶</a></dt>
 <dd><p>use Google maps directory layout</p>
@@ -1141,7 +1990,7 @@ the bottom or right.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.ForeignDzLayout.IIIF">
 <code class="sig-name descname">IIIF</code><a class="headerlink" href="#pyvips.enums.ForeignDzLayout.IIIF" title="Permalink to this definition">¶</a></dt>
 <dd><p>use IIIF directory layout</p>
@@ -1154,12 +2003,12 @@ the bottom or right.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="pyvips.enums.ForeignDzDepth">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">ForeignDzDepth</code><a class="reference internal" href="_modules/pyvips/enums.html#ForeignDzDepth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.ForeignDzDepth" title="Permalink to this definition">¶</a></dt>
 <dd><p>ForeignDzDepth.</p>
 <p>How many pyramid layers to create.</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.ForeignDzDepth.ONEPIXEL">
 <code class="sig-name descname">ONEPIXEL</code><a class="headerlink" href="#pyvips.enums.ForeignDzDepth.ONEPIXEL" title="Permalink to this definition">¶</a></dt>
 <dd><p>create layers down to 1x1 pixel</p>
@@ -1170,7 +2019,7 @@ the bottom or right.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.ForeignDzDepth.ONETILE">
 <code class="sig-name descname">ONETILE</code><a class="headerlink" href="#pyvips.enums.ForeignDzDepth.ONETILE" title="Permalink to this definition">¶</a></dt>
 <dd><p>create layers down to 1x1 tile</p>
@@ -1181,7 +2030,7 @@ the bottom or right.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.ForeignDzDepth.ONE">
 <code class="sig-name descname">ONE</code><a class="headerlink" href="#pyvips.enums.ForeignDzDepth.ONE" title="Permalink to this definition">¶</a></dt>
 <dd><p>only create a single layer</p>
@@ -1194,12 +2043,12 @@ the bottom or right.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="pyvips.enums.ForeignDzContainer">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">ForeignDzContainer</code><a class="reference internal" href="_modules/pyvips/enums.html#ForeignDzContainer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.ForeignDzContainer" title="Permalink to this definition">¶</a></dt>
 <dd><p>ForeignDzContainer.</p>
 <p>How many pyramid layers to create.</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.ForeignDzContainer.FS">
 <code class="sig-name descname">FS</code><a class="headerlink" href="#pyvips.enums.ForeignDzContainer.FS" title="Permalink to this definition">¶</a></dt>
 <dd><p>write tiles to the filesystem</p>
@@ -1210,7 +2059,7 @@ the bottom or right.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.ForeignDzContainer.ZIP">
 <code class="sig-name descname">ZIP</code><a class="headerlink" href="#pyvips.enums.ForeignDzContainer.ZIP" title="Permalink to this definition">¶</a></dt>
 <dd><p>write tiles to a zip file</p>
@@ -1221,7 +2070,7 @@ the bottom or right.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.ForeignDzContainer.SZI">
 <code class="sig-name descname">SZI</code><a class="headerlink" href="#pyvips.enums.ForeignDzContainer.SZI" title="Permalink to this definition">¶</a></dt>
 <dd><p>write to a szi file</p>
@@ -1234,12 +2083,12 @@ the bottom or right.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="pyvips.enums.RegionShrink">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">RegionShrink</code><a class="reference internal" href="_modules/pyvips/enums.html#RegionShrink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.RegionShrink" title="Permalink to this definition">¶</a></dt>
 <dd><p>RegionShrink.</p>
 <p>How to calculate the output pixels when shrinking a 2x2 region.</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.RegionShrink.MEAN">
 <code class="sig-name descname">MEAN</code><a class="headerlink" href="#pyvips.enums.RegionShrink.MEAN" title="Permalink to this definition">¶</a></dt>
 <dd><p>use the average</p>
@@ -1250,7 +2099,7 @@ the bottom or right.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.RegionShrink.MEDIAN">
 <code class="sig-name descname">MEDIAN</code><a class="headerlink" href="#pyvips.enums.RegionShrink.MEDIAN" title="Permalink to this definition">¶</a></dt>
 <dd><p>use the median</p>
@@ -1261,7 +2110,7 @@ the bottom or right.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.RegionShrink.MODE">
 <code class="sig-name descname">MODE</code><a class="headerlink" href="#pyvips.enums.RegionShrink.MODE" title="Permalink to this definition">¶</a></dt>
 <dd><p>use the mode</p>
@@ -1272,7 +2121,7 @@ the bottom or right.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.RegionShrink.MAX">
 <code class="sig-name descname">MAX</code><a class="headerlink" href="#pyvips.enums.RegionShrink.MAX" title="Permalink to this definition">¶</a></dt>
 <dd><p>use the maximum</p>
@@ -1283,7 +2132,7 @@ the bottom or right.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.RegionShrink.MIN">
 <code class="sig-name descname">MIN</code><a class="headerlink" href="#pyvips.enums.RegionShrink.MIN" title="Permalink to this definition">¶</a></dt>
 <dd><p>use the minimum</p>
@@ -1294,7 +2143,7 @@ the bottom or right.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.RegionShrink.NEAREST">
 <code class="sig-name descname">NEAREST</code><a class="headerlink" href="#pyvips.enums.RegionShrink.NEAREST" title="Permalink to this definition">¶</a></dt>
 <dd><p>use the top-left pixel</p>
@@ -1307,12 +2156,12 @@ the bottom or right.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="pyvips.enums.ForeignJpegSubsample">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">ForeignJpegSubsample</code><a class="reference internal" href="_modules/pyvips/enums.html#ForeignJpegSubsample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.ForeignJpegSubsample" title="Permalink to this definition">¶</a></dt>
 <dd><p>ForeignJpegSubsample.</p>
 <p>Set jpeg subsampling mode.</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.ForeignJpegSubsample.AUTO">
 <code class="sig-name descname">AUTO</code><a class="headerlink" href="#pyvips.enums.ForeignJpegSubsample.AUTO" title="Permalink to this definition">¶</a></dt>
 <dd><p>default preset</p>
@@ -1323,7 +2172,7 @@ the bottom or right.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.ForeignJpegSubsample.ON">
 <code class="sig-name descname">ON</code><a class="headerlink" href="#pyvips.enums.ForeignJpegSubsample.ON" title="Permalink to this definition">¶</a></dt>
 <dd><p>always perform subsampling</p>
@@ -1334,7 +2183,7 @@ the bottom or right.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.ForeignJpegSubsample.OFF">
 <code class="sig-name descname">OFF</code><a class="headerlink" href="#pyvips.enums.ForeignJpegSubsample.OFF" title="Permalink to this definition">¶</a></dt>
 <dd><p>never perform subsampling</p>
@@ -1347,12 +2196,12 @@ the bottom or right.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="pyvips.enums.ForeignWebpPreset">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">ForeignWebpPreset</code><a class="reference internal" href="_modules/pyvips/enums.html#ForeignWebpPreset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.ForeignWebpPreset" title="Permalink to this definition">¶</a></dt>
 <dd><p>ForeignWebpPreset.</p>
 <p>Tune lossy encoder settings for different image types.</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.ForeignWebpPreset.DEFAULT">
 <code class="sig-name descname">DEFAULT</code><a class="headerlink" href="#pyvips.enums.ForeignWebpPreset.DEFAULT" title="Permalink to this definition">¶</a></dt>
 <dd><p>default preset</p>
@@ -1363,7 +2212,7 @@ the bottom or right.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.ForeignWebpPreset.PICTURE">
 <code class="sig-name descname">PICTURE</code><a class="headerlink" href="#pyvips.enums.ForeignWebpPreset.PICTURE" title="Permalink to this definition">¶</a></dt>
 <dd><p>digital picture, like portrait, inner shot</p>
@@ -1374,7 +2223,7 @@ the bottom or right.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.ForeignWebpPreset.PHOTO">
 <code class="sig-name descname">PHOTO</code><a class="headerlink" href="#pyvips.enums.ForeignWebpPreset.PHOTO" title="Permalink to this definition">¶</a></dt>
 <dd><p>outdoor photograph, with natural lighting</p>
@@ -1385,7 +2234,7 @@ the bottom or right.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.ForeignWebpPreset.DRAWING">
 <code class="sig-name descname">DRAWING</code><a class="headerlink" href="#pyvips.enums.ForeignWebpPreset.DRAWING" title="Permalink to this definition">¶</a></dt>
 <dd><p>hand or line drawing, with high-contrast details</p>
@@ -1396,7 +2245,7 @@ the bottom or right.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.ForeignWebpPreset.ICON">
 <code class="sig-name descname">ICON</code><a class="headerlink" href="#pyvips.enums.ForeignWebpPreset.ICON" title="Permalink to this definition">¶</a></dt>
 <dd><p>small-sized colorful images</p>
@@ -1407,7 +2256,7 @@ the bottom or right.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.ForeignWebpPreset.TEXT">
 <code class="sig-name descname">TEXT</code><a class="headerlink" href="#pyvips.enums.ForeignWebpPreset.TEXT" title="Permalink to this definition">¶</a></dt>
 <dd><p>text-like</p>
@@ -1420,56 +2269,118 @@ the bottom or right.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="pyvips.enums.ForeignTiffCompression">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">ForeignTiffCompression</code><a class="reference internal" href="_modules/pyvips/enums.html#ForeignTiffCompression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.ForeignTiffCompression" title="Permalink to this definition">¶</a></dt>
 <dd><p>ForeignTiffCompression.</p>
-<blockquote>
-<div><p>The compression types supported by the tiff writer.</p>
-</div></blockquote>
+<p>The compression types supported by the tiff writer.</p>
 <p>Use &#64;Q to set the jpeg compression level, default 75.</p>
-<p>Use &#64;prediction to set the lzw or deflate prediction, default none.</p>
+<p>Use &#64;predictor to set the lzw or deflate prediction, default horizontal.</p>
 <p>Use &#64;lossless to set WEBP lossless compression.</p>
 <p>Use &#64;level to set webp and zstd compression level.</p>
-<blockquote>
-<div><dl>
-<dt>Attributes:</dt><dd><p>NONE (str): no compression</p>
-<p>JPEG (str): jpeg compression</p>
-<p>DEFLATE (str): deflate (zip) compression</p>
-<p>PACKBITS (str): packbits compression</p>
-<p>CCITTFAX4 (str): fax4 compression</p>
-<p>LZW (str): LZW compression</p>
-<p>WEBP (str): WEBP compression</p>
-<p>ZSTD (str): ZSTD compression</p>
+<dl class="py attribute">
+<dt id="pyvips.enums.ForeignTiffCompression.NONE">
+<code class="sig-name descname">NONE</code><a class="headerlink" href="#pyvips.enums.ForeignTiffCompression.NONE" title="Permalink to this definition">¶</a></dt>
+<dd><p>no compression</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
-<dl class="class">
+<dl class="py attribute">
+<dt id="pyvips.enums.ForeignTiffCompression.JPEG">
+<code class="sig-name descname">JPEG</code><a class="headerlink" href="#pyvips.enums.ForeignTiffCompression.JPEG" title="Permalink to this definition">¶</a></dt>
+<dd><p>jpeg compression</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.ForeignTiffCompression.DEFLATE">
+<code class="sig-name descname">DEFLATE</code><a class="headerlink" href="#pyvips.enums.ForeignTiffCompression.DEFLATE" title="Permalink to this definition">¶</a></dt>
+<dd><p>deflate (zip) compression</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.ForeignTiffCompression.PACKBITS">
+<code class="sig-name descname">PACKBITS</code><a class="headerlink" href="#pyvips.enums.ForeignTiffCompression.PACKBITS" title="Permalink to this definition">¶</a></dt>
+<dd><p>packbits compression</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.ForeignTiffCompression.CCITTFAX4">
+<code class="sig-name descname">CCITTFAX4</code><a class="headerlink" href="#pyvips.enums.ForeignTiffCompression.CCITTFAX4" title="Permalink to this definition">¶</a></dt>
+<dd><p>fax4 compression</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.ForeignTiffCompression.LZW">
+<code class="sig-name descname">LZW</code><a class="headerlink" href="#pyvips.enums.ForeignTiffCompression.LZW" title="Permalink to this definition">¶</a></dt>
+<dd><p>LZW compression</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.ForeignTiffCompression.WEBP">
+<code class="sig-name descname">WEBP</code><a class="headerlink" href="#pyvips.enums.ForeignTiffCompression.WEBP" title="Permalink to this definition">¶</a></dt>
+<dd><p>WEBP compression</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.ForeignTiffCompression.ZSTD">
+<code class="sig-name descname">ZSTD</code><a class="headerlink" href="#pyvips.enums.ForeignTiffCompression.ZSTD" title="Permalink to this definition">¶</a></dt>
+<dd><p>ZSTD compression</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="pyvips.enums.ForeignTiffPredictor">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">ForeignTiffPredictor</code><a class="reference internal" href="_modules/pyvips/enums.html#ForeignTiffPredictor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.ForeignTiffPredictor" title="Permalink to this definition">¶</a></dt>
 <dd><p>ForeignTiffPredictor.</p>
-<blockquote>
-<div><p>The predictor can help deflate and lzw compression. The values are fixed by</p>
-</div></blockquote>
-<p>the tiff library.</p>
-<blockquote>
-<div><dl>
-<dt>Attributes:</dt><dd><p>NONE (str): no prediction</p>
-<p>HORIZONTAL (str): horizontal differencing</p>
-<p>FLOAT (str): float predictor</p>
-</dd>
-</dl>
-</div></blockquote>
+<p>Attributes:</p>
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="pyvips.enums.ForeignTiffResunit">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">ForeignTiffResunit</code><a class="reference internal" href="_modules/pyvips/enums.html#ForeignTiffResunit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.ForeignTiffResunit" title="Permalink to this definition">¶</a></dt>
 <dd><p>ForeignTiffResunit.</p>
 <p>Use inches or centimeters as the resolution unit for a tiff file.</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.ForeignTiffResunit.CM">
 <code class="sig-name descname">CM</code><a class="headerlink" href="#pyvips.enums.ForeignTiffResunit.CM" title="Permalink to this definition">¶</a></dt>
 <dd><p>use centimeters</p>
@@ -1480,7 +2391,7 @@ the bottom or right.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.ForeignTiffResunit.INCH">
 <code class="sig-name descname">INCH</code><a class="headerlink" href="#pyvips.enums.ForeignTiffResunit.INCH" title="Permalink to this definition">¶</a></dt>
 <dd><p>use inches</p>
@@ -1493,71 +2404,170 @@ the bottom or right.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="pyvips.enums.ForeignHeifCompression">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">ForeignHeifCompression</code><a class="reference internal" href="_modules/pyvips/enums.html#ForeignHeifCompression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.ForeignHeifCompression" title="Permalink to this definition">¶</a></dt>
 <dd><p>ForeignHeifCompression.</p>
-<blockquote>
-<div><p>The compression format to use inside a HEIF container.</p>
-</div></blockquote>
+<p>The compression format to use inside a HEIF container.</p>
 <p>This is assumed to use the same numbering as %heif_compression_format.</p>
-<blockquote>
-<div><dl>
-<dt>Attributes:</dt><dd><p>HEVC (str): x265</p>
-<p>AVC (str): x264</p>
-<p>JPEG (str): jpeg</p>
-<p>AV1 (str): aom</p>
+<dl class="py attribute">
+<dt id="pyvips.enums.ForeignHeifCompression.HEVC">
+<code class="sig-name descname">HEVC</code><a class="headerlink" href="#pyvips.enums.ForeignHeifCompression.HEVC" title="Permalink to this definition">¶</a></dt>
+<dd><p>x265</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
-<dl class="class">
+<dl class="py attribute">
+<dt id="pyvips.enums.ForeignHeifCompression.AVC">
+<code class="sig-name descname">AVC</code><a class="headerlink" href="#pyvips.enums.ForeignHeifCompression.AVC" title="Permalink to this definition">¶</a></dt>
+<dd><p>x264</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.ForeignHeifCompression.JPEG">
+<code class="sig-name descname">JPEG</code><a class="headerlink" href="#pyvips.enums.ForeignHeifCompression.JPEG" title="Permalink to this definition">¶</a></dt>
+<dd><p>jpeg</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.ForeignHeifCompression.AV1">
+<code class="sig-name descname">AV1</code><a class="headerlink" href="#pyvips.enums.ForeignHeifCompression.AV1" title="Permalink to this definition">¶</a></dt>
+<dd><p>aom</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="pyvips.enums.Size">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Size</code><a class="reference internal" href="_modules/pyvips/enums.html#Size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Size" title="Permalink to this definition">¶</a></dt>
 <dd><p>Size.</p>
-<blockquote>
-<div><p>Controls whether an operation should upsize, downsize, both up and</p>
-</div></blockquote>
-<p>downsize, or force a size.</p>
+<p>Controls whether an operation should upsize, downsize, both up and
+downsize, or force a size.</p>
 <p>See also: vips_thumbnail().</p>
-<blockquote>
-<div><dl>
-<dt>Attributes:</dt><dd><p>BOTH (str): size both up and down</p>
-<p>UP (str): only upsize</p>
-<p>DOWN (str): only downsize</p>
-<p>FORCE (str): force size, that is, break aspect ratio</p>
+<dl class="py attribute">
+<dt id="pyvips.enums.Size.BOTH">
+<code class="sig-name descname">BOTH</code><a class="headerlink" href="#pyvips.enums.Size.BOTH" title="Permalink to this definition">¶</a></dt>
+<dd><p>size both up and down</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
-<dl class="class">
+<dl class="py attribute">
+<dt id="pyvips.enums.Size.UP">
+<code class="sig-name descname">UP</code><a class="headerlink" href="#pyvips.enums.Size.UP" title="Permalink to this definition">¶</a></dt>
+<dd><p>only upsize</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Size.DOWN">
+<code class="sig-name descname">DOWN</code><a class="headerlink" href="#pyvips.enums.Size.DOWN" title="Permalink to this definition">¶</a></dt>
+<dd><p>only downsize</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Size.FORCE">
+<code class="sig-name descname">FORCE</code><a class="headerlink" href="#pyvips.enums.Size.FORCE" title="Permalink to this definition">¶</a></dt>
+<dd><p>force size, that is, break aspect ratio</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="pyvips.enums.Intent">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Intent</code><a class="reference internal" href="_modules/pyvips/enums.html#Intent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Intent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Intent.</p>
-<blockquote>
-<div><p>The rendering intent. #VIPS_INTENT_ABSOLUTE is best for</p>
-</div></blockquote>
-<p>scientific work, #VIPS_INTENT_RELATIVE is usually best for
+<p>The rendering intent. #VIPS_INTENT_ABSOLUTE is best for
+scientific work, #VIPS_INTENT_RELATIVE is usually best for
 accurate communication with other imaging libraries.</p>
-<blockquote>
-<div><dl>
-<dt>Attributes:</dt><dd><p>PERCEPTUAL (str): perceptual rendering intent</p>
-<p>RELATIVE (str): relative colorimetric rendering intent</p>
-<p>SATURATION (str): saturation rendering intent</p>
-<p>ABSOLUTE (str): absolute colorimetric rendering intent</p>
+<dl class="py attribute">
+<dt id="pyvips.enums.Intent.PERCEPTUAL">
+<code class="sig-name descname">PERCEPTUAL</code><a class="headerlink" href="#pyvips.enums.Intent.PERCEPTUAL" title="Permalink to this definition">¶</a></dt>
+<dd><p>perceptual rendering intent</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
-<dl class="class">
+<dl class="py attribute">
+<dt id="pyvips.enums.Intent.RELATIVE">
+<code class="sig-name descname">RELATIVE</code><a class="headerlink" href="#pyvips.enums.Intent.RELATIVE" title="Permalink to this definition">¶</a></dt>
+<dd><p>relative colorimetric rendering intent</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Intent.SATURATION">
+<code class="sig-name descname">SATURATION</code><a class="headerlink" href="#pyvips.enums.Intent.SATURATION" title="Permalink to this definition">¶</a></dt>
+<dd><p>saturation rendering intent</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyvips.enums.Intent.ABSOLUTE">
+<code class="sig-name descname">ABSOLUTE</code><a class="headerlink" href="#pyvips.enums.Intent.ABSOLUTE" title="Permalink to this definition">¶</a></dt>
+<dd><p>absolute colorimetric rendering intent</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="pyvips.enums.Kernel">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Kernel</code><a class="reference internal" href="_modules/pyvips/enums.html#Kernel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Kernel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Kernel.</p>
 <p>The resampling kernels vips supports. See vips_reduce(), for example.</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.Kernel.NEAREST">
 <code class="sig-name descname">NEAREST</code><a class="headerlink" href="#pyvips.enums.Kernel.NEAREST" title="Permalink to this definition">¶</a></dt>
 <dd><p>The nearest pixel to the point.</p>
@@ -1568,7 +2578,7 @@ accurate communication with other imaging libraries.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.Kernel.LINEAR">
 <code class="sig-name descname">LINEAR</code><a class="headerlink" href="#pyvips.enums.Kernel.LINEAR" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convolve with a triangle filter.</p>
@@ -1579,7 +2589,7 @@ accurate communication with other imaging libraries.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.Kernel.CUBIC">
 <code class="sig-name descname">CUBIC</code><a class="headerlink" href="#pyvips.enums.Kernel.CUBIC" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convolve with a cubic filter.</p>
@@ -1590,7 +2600,7 @@ accurate communication with other imaging libraries.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.Kernel.LANCZOS2">
 <code class="sig-name descname">LANCZOS2</code><a class="headerlink" href="#pyvips.enums.Kernel.LANCZOS2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convolve with a two-lobe Lanczos kernel.</p>
@@ -1601,7 +2611,7 @@ accurate communication with other imaging libraries.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.Kernel.LANCZOS3">
 <code class="sig-name descname">LANCZOS3</code><a class="headerlink" href="#pyvips.enums.Kernel.LANCZOS3" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convolve with a three-lobe Lanczos kernel.</p>
@@ -1614,73 +2624,112 @@ accurate communication with other imaging libraries.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="pyvips.enums.PCS">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">PCS</code><a class="reference internal" href="_modules/pyvips/enums.html#PCS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.PCS" title="Permalink to this definition">¶</a></dt>
 <dd><p>PCS.</p>
-<blockquote>
-<div><p>Pick a Profile Connection Space for vips_icc_import() and</p>
-</div></blockquote>
-<p>vips_icc_export(). LAB is usually best, XYZ can be more convenient in some
+<p>Pick a Profile Connection Space for vips_icc_import() and
+vips_icc_export(). LAB is usually best, XYZ can be more convenient in some
 cases.</p>
-<blockquote>
-<div><dl>
-<dt>Attributes:</dt><dd><p>LAB (str): use CIELAB D65 as the Profile Connection Space</p>
-<p>XYZ (str): use XYZ as the Profile Connection Space</p>
+<dl class="py attribute">
+<dt id="pyvips.enums.PCS.LAB">
+<code class="sig-name descname">LAB</code><a class="headerlink" href="#pyvips.enums.PCS.LAB" title="Permalink to this definition">¶</a></dt>
+<dd><p>use CIELAB D65 as the Profile Connection Space</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
-<dl class="class">
+<dl class="py attribute">
+<dt id="pyvips.enums.PCS.XYZ">
+<code class="sig-name descname">XYZ</code><a class="headerlink" href="#pyvips.enums.PCS.XYZ" title="Permalink to this definition">¶</a></dt>
+<dd><p>use XYZ as the Profile Connection Space</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="pyvips.enums.OperationMorphology">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">OperationMorphology</code><a class="reference internal" href="_modules/pyvips/enums.html#OperationMorphology"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.OperationMorphology" title="Permalink to this definition">¶</a></dt>
 <dd><p>OperationMorphology.</p>
-<blockquote>
-<div><p>More like hit-miss, really.</p>
-</div></blockquote>
+<p>More like hit-miss, really.</p>
 <p>See also: vips_morph().</p>
-<blockquote>
-<div><dl>
-<dt>Attributes:</dt><dd><p>ERODE (str): true if all set</p>
-<p>DILATE (str): true if one set</p>
+<dl class="py attribute">
+<dt id="pyvips.enums.OperationMorphology.ERODE">
+<code class="sig-name descname">ERODE</code><a class="headerlink" href="#pyvips.enums.OperationMorphology.ERODE" title="Permalink to this definition">¶</a></dt>
+<dd><p>true if all set</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
-<dl class="class">
+<dl class="py attribute">
+<dt id="pyvips.enums.OperationMorphology.DILATE">
+<code class="sig-name descname">DILATE</code><a class="headerlink" href="#pyvips.enums.OperationMorphology.DILATE" title="Permalink to this definition">¶</a></dt>
+<dd><p>true if one set</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="pyvips.enums.CombineMode">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">CombineMode</code><a class="reference internal" href="_modules/pyvips/enums.html#CombineMode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.CombineMode" title="Permalink to this definition">¶</a></dt>
 <dd><p>CombineMode.</p>
-<blockquote>
-<div><p>See vips_draw_image() and so on.</p>
-</div></blockquote>
+<p>See vips_draw_image() and so on.</p>
 <p>Operations like vips_draw_image() need to be told how to combine images
 from two sources.</p>
 <p>See also: vips_join().</p>
-<blockquote>
-<div><dl>
-<dt>Attributes:</dt><dd><p>SET (str): set pixels to the new value</p>
-<p>ADD (str): add pixels</p>
+<dl class="py attribute">
+<dt id="pyvips.enums.CombineMode.SET">
+<code class="sig-name descname">SET</code><a class="headerlink" href="#pyvips.enums.CombineMode.SET" title="Permalink to this definition">¶</a></dt>
+<dd><p>set pixels to the new value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
-<dl class="class">
+<dl class="py attribute">
+<dt id="pyvips.enums.CombineMode.ADD">
+<code class="sig-name descname">ADD</code><a class="headerlink" href="#pyvips.enums.CombineMode.ADD" title="Permalink to this definition">¶</a></dt>
+<dd><p>add pixels</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="pyvips.enums.Token">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Token</code><a class="reference internal" href="_modules/pyvips/enums.html#Token"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Token" title="Permalink to this definition">¶</a></dt>
 <dd><p>Token.</p>
 <p>Attributes:</p>
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="pyvips.enums.Saveable">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">Saveable</code><a class="reference internal" href="_modules/pyvips/enums.html#Saveable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.Saveable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saveable.</p>
 <p>See also: #VipsForeignSave.</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.Saveable.MONO">
 <code class="sig-name descname">MONO</code><a class="headerlink" href="#pyvips.enums.Saveable.MONO" title="Permalink to this definition">¶</a></dt>
 <dd><p>1 band (eg. CSV)</p>
@@ -1691,7 +2740,7 @@ from two sources.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.Saveable.RGB">
 <code class="sig-name descname">RGB</code><a class="headerlink" href="#pyvips.enums.Saveable.RGB" title="Permalink to this definition">¶</a></dt>
 <dd><p>1 or 3 bands (eg. PPM)</p>
@@ -1702,7 +2751,7 @@ from two sources.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.Saveable.RGBA">
 <code class="sig-name descname">RGBA</code><a class="headerlink" href="#pyvips.enums.Saveable.RGBA" title="Permalink to this definition">¶</a></dt>
 <dd><p>1, 2, 3 or 4 bands (eg. PNG)</p>
@@ -1713,7 +2762,7 @@ from two sources.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.Saveable.RGBA_ONLY">
 <code class="sig-name descname">RGBA_ONLY</code><a class="headerlink" href="#pyvips.enums.Saveable.RGBA_ONLY" title="Permalink to this definition">¶</a></dt>
 <dd><p>3 or 4 bands (eg. WEBP)</p>
@@ -1724,7 +2773,7 @@ from two sources.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.Saveable.RGB_CMYK">
 <code class="sig-name descname">RGB_CMYK</code><a class="headerlink" href="#pyvips.enums.Saveable.RGB_CMYK" title="Permalink to this definition">¶</a></dt>
 <dd><p>1, 3 or 4 bands (eg. JPEG)</p>
@@ -1735,7 +2784,7 @@ from two sources.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyvips.enums.Saveable.ANY">
 <code class="sig-name descname">ANY</code><a class="headerlink" href="#pyvips.enums.Saveable.ANY" title="Permalink to this definition">¶</a></dt>
 <dd><p>any number of bands (eg. TIFF)</p>
@@ -1748,7 +2797,7 @@ from two sources.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="pyvips.enums.ImageType">
 <em class="property">class </em><code class="sig-prename descclassname">pyvips.enums.</code><code class="sig-name descname">ImageType</code><a class="reference internal" href="_modules/pyvips/enums.html#ImageType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.enums.ImageType" title="Permalink to this definition">¶</a></dt>
 <dd><p>ImageType.</p>
@@ -1777,11 +2826,19 @@ from two sources.</p>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2019, John Cupitt
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -1792,7 +2849,6 @@ from two sources.</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

@@ -29,27 +29,35 @@ Reading this example line by line, we have::
 
     image = pyvips.Image.new_from_file('some-image.jpg', access='sequential')
 
-:meth:`.Image.new_from_file` can load any image file supported by libvips. In
-this example, we will be accessing pixels top-to-bottom as we sweep through
-the image reading and writing, so `sequential` access mode is best for us.
+:meth:`.Image.new_from_file` can load any image file supported by libvips.
+When you load an image, only the header is fetched from the file. Pixels will
+not be read until you have built a pipeline of operations and connected it
+to an output. 
 
+When you load, you can hint what type of access you will need.  In this
+example, we will be accessing pixels top-to-bottom as we sweep through
+the image reading and writing, so `sequential` access mode is best for us.
 The default mode is ``random`` which allows for full random access to image
 pixels, but is slower and needs more memory. See :class:`.enums.Access`
-for full details on the various modes available.
+for details on the various modes available.
 
-You can also load formatted images from memory, create images that
-wrap C-style memory arrays held as Python buffers, or make images from 
-constants.
+You can also load formatted images from memory with
+:meth:`.Image.new_from_buffer`, create images that wrap C-style memory arrays
+held as Python buffers with :meth:`.Image.new_from_memory`, or make images
+from constants with :meth:`.Image.new_from_array`. You can also create custom
+sources and targets that link image processing pipelines to your own code,
+see `Custom sources and targets`_.
 
 The next line::
 
     image *= [1, 2, 1]
 
-Multiplying the image by an array constant uses one array element for each
+Multiplies the image by an array constant using one array element for each
 image band. This line assumes that the input image has three bands and will
 double the middle band. For RGB images, that's doubling green.
 
-There are the usual range of arithmetic operator overloads.
+There is a full set arithmetic operator `Overloads`_, so you can compute with
+entire images just as you would with single numbers.
 
 Next we have::
 
@@ -98,11 +106,10 @@ friends. For example::
 Use :meth:`.get_fields` to get a list of all the field names you can use with
 :meth:`.Image.get`.
 
-libvips caches and shares images behind your back, so you can't change an image
-unless you are certain you have the only reference to it. 
-
-Set image properties, like :attr:`.xres` with :meth:`.Image.copy`. For
-example::
+libvips caches and shares images between different parts of your program. This
+means that you can't modify an image unless you are certain that you have
+the only reference to it. You can make a private copy of an image with
+``copy``, for example:
 
         new_image = image.copy(xres=12, yres=13)
 
@@ -181,11 +188,12 @@ image is set to the value of ``self``. Operations which do not take an input
 image, such as :meth:`.Image.black`, appear as class methods. The
 remainder of the arguments you supply in the function call are used to set
 the other required input arguments. Any trailing keyword arguments are used
-to set options on the operation.
+to set options on the underlying libvips operation.
 
 The result is the required output argument if there is only one result,
-or an array of values if the operation produces several results. If the
-operation has optional output objects, they are returned as a final hash.
+or a list of values if the operation produces several results. If the
+operation has optional output objects, they are returned as a final
+Python dictionary.
 
 For example, :meth:`.Image.min`, the vips operation that searches an
 image for the minimum value, has a large number of optional arguments. You
@@ -216,7 +224,7 @@ chain them. For example, you can write::
     result_image = image.real().cos()
 
 to calculate the cosine of the real part of a complex image.  There is
-also a full set of arithmetic operator overloads, see below.
+also a full set of arithmetic `Overloads`_.
 
 libvips types are automatically wrapped. The binding looks at the type
 of argument required by the operation and converts the value you supply,

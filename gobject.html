@@ -1,15 +1,18 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>GObject &mdash; pyvips 2.1.12 documentation</title>
+  <title>GObject &mdash; pyvips 2.1.14 documentation</title>
   
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
 
   
   
@@ -17,23 +20,20 @@
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
         <script src="_static/collapse.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Operation" href="voperation.html" />
@@ -53,7 +53,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> pyvips
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> pyvips
           
 
           
@@ -80,6 +80,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -109,6 +110,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -147,7 +149,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li><code class="docutils literal notranslate"><span class="pre">GObject</span></code></li>
     
@@ -172,21 +174,21 @@
             
   <div class="section" id="module-pyvips.gobject">
 <span id="gobject"></span><h1><code class="docutils literal notranslate"><span class="pre">GObject</span></code><a class="headerlink" href="#module-pyvips.gobject" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="pyvips.gobject.GObject">
-<em class="property">class </em><code class="sig-prename descclassname">pyvips.gobject.</code><code class="sig-name descname">GObject</code><span class="sig-paren">(</span><em class="sig-param">pointer</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/gobject.html#GObject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gobject.GObject" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyvips.gobject.</code><code class="sig-name descname">GObject</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pointer</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/gobject.html#GObject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gobject.GObject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Manage GObject lifetime.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="pyvips.gobject.GObject.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">pointer</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/gobject.html#GObject.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gobject.GObject.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pointer</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/gobject.html#GObject.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gobject.GObject.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrap around a pointer.</p>
 <p>Wraps a GObject instance around an underlying pointer. When the
 instance is garbage-collected, the underlying object is unreferenced.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyvips.gobject.GObject.new_pointer_from_gtype">
-<em class="property">static </em><code class="sig-name descname">new_pointer_from_gtype</code><span class="sig-paren">(</span><em class="sig-param">gtype</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/gobject.html#GObject.new_pointer_from_gtype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gobject.GObject.new_pointer_from_gtype" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">new_pointer_from_gtype</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gtype</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/gobject.html#GObject.new_pointer_from_gtype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gobject.GObject.new_pointer_from_gtype" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make a new GObject pointer from a gtype.</p>
 <p>This is useful for subclasses which need to control the construction
 process.</p>
@@ -203,9 +205,9 @@ finish construction.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyvips.gobject.GObject.signal_connect">
-<code class="sig-name descname">signal_connect</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">callback</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/gobject.html#GObject.signal_connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gobject.GObject.signal_connect" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">signal_connect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">callback</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/gobject.html#GObject.signal_connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyvips.gobject.GObject.signal_connect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Connect to a signal on this object.</p>
 <p>The callback will be triggered every time this signal is issued on this
 instance. It will be passed the image (‘self’ here), and a single
@@ -238,11 +240,19 @@ example, ::eval passes a pointer to a <cite>VipsProgress</cite> struct.</p>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2019, John Cupitt
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -253,7 +263,6 @@ example, ::eval passes a pointer to a <cite>VipsProgress</cite> struct.</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

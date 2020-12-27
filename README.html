@@ -1,15 +1,18 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>README &mdash; pyvips 2.1.12 documentation</title>
+  <title>README &mdash; pyvips 2.1.14 documentation</title>
   
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
 
   
   
@@ -17,23 +20,20 @@
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
         <script src="_static/collapse.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Introduction" href="intro.html" />
@@ -53,7 +53,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> pyvips
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> pyvips
           
 
           
@@ -80,6 +80,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -116,6 +117,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -154,7 +156,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li>README</li>
     
@@ -227,9 +229,9 @@ which gives some more background.</p>
 <div class="section" id="non-conda-install">
 <h2>Non-conda install<a class="headerlink" href="#non-conda-install" title="Permalink to this headline">¶</a></h2>
 <p>First, you need the libvips shared library on your library search path, version
-8.2 or later. On Linux and macOS, you can just install via your package
-manager; on Windows you can download a pre-compiled binary from the libvips
-website.</p>
+8.2 or later, though at least version 8.9 is required for all features to work.
+On Linux and macOS, you can just install via your package manager; on Windows you
+can download a pre-compiled binary from the libvips website.</p>
 <p><a class="reference external" href="https://libvips.github.io/libvips/install.html">https://libvips.github.io/libvips/install.html</a></p>
 <p>Next, install this package, perhaps:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pip install --user pyvips
@@ -272,8 +274,7 @@ sharpens, and then writes the image back to the filesystem again:</p>
 <div class="section" id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
 <p>Local user install:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pip install --user -e .
-$ pip3 install -e .
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pip3 install -e .
 $ pypy -m pip --user -e .
 </pre></div>
 </div>
@@ -286,7 +287,7 @@ $ pypy -m pip --user -e .
 </pre></div>
 </div>
 <p>Run a specific test:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pytest tests/test_saveload.py
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pytest-3 tests/test_saveload.py
 </pre></div>
 </div>
 <p>Run perf tests:</p>
@@ -304,7 +305,7 @@ $ ./run.sh
 </div>
 <p>Regenerate autodocs:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> doc<span class="p">;</span> <span class="se">\</span>
-  python -c <span class="s2">&quot;import pyvips; pyvips.Operation.generate_sphinx_all()&quot;</span> &gt; x
+  python3 -c <span class="s2">&quot;import pyvips; pyvips.Operation.generate_sphinx_all()&quot;</span> &gt; x
 </pre></div>
 </div>
 <p>And copy-paste <code class="docutils literal notranslate"><span class="pre">x</span></code> into the obvious place in <code class="docutils literal notranslate"><span class="pre">doc/vimage.rst</span></code>.</p>
@@ -314,8 +315,10 @@ $ vi doc/conf.py
 </pre></div>
 </div>
 <p>Update pypi package:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ python setup.py sdist
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ python3 setup.py sdist
 $ twine upload dist/*
+$ git tag -a v2.1.12 -m <span class="s2">&quot;as uploaded to pypi&quot;</span>
+$ git push origin v2.1.12
 </pre></div>
 </div>
 </div>
@@ -341,11 +344,19 @@ $ twine upload dist/*
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2019, John Cupitt
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -356,7 +367,6 @@ $ twine upload dist/*
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {
