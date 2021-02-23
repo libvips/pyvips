@@ -271,13 +271,13 @@ class Operation(pyvips.VipsObject):
 
         # set any optional args
         for name in kwargs:
-            value = kwargs[name]
-            details = intro.details[name]
-
             if (name not in intro.optional_input and
                     name not in intro.optional_output):
                 raise Error('{0} does not support optional argument {1}'
                             .format(operation_name, name))
+
+            value = kwargs[name]
+            details = intro.details[name]
 
             if (details['flags'] & _DEPRECATED) != 0:
                 logger.info('{0} argument {1} is deprecated',
@@ -289,6 +289,7 @@ class Operation(pyvips.VipsObject):
         # build operation
         vop = vips_lib.vips_cache_operation_build(op.pointer)
         if vop == ffi.NULL:
+            vips_lib.vips_object_unref_outputs(op.vobject)
             raise Error('unable to call {0}'.format(operation_name))
         op = Operation(vop)
 
