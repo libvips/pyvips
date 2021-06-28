@@ -280,7 +280,7 @@ class Operation(pyvips.VipsObject):
             details = intro.details[name]
 
             if (details['flags'] & _DEPRECATED) != 0:
-                logger.info('{0} argument {1} is deprecated',
+                logger.info('%s argument %s is deprecated',
                             operation_name, name)
 
             _find_inside(add_reference, value)
