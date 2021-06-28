@@ -2,7 +2,8 @@
 
 ## Version 2.1.15 (27 Dec 2020)
 
-* better sutodocs for enums [int-ua]
+* better autodocs for enums [int-ua]
+* better unreffing if operators fail [kleisauke]
 
 ## Version 2.1.14 (18 Dec 2020)
 
