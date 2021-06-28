@@ -1,5 +1,9 @@
 # master 
 
+## Version 2.1.16 (28 Jun 2021)
+
+* fix logging of deprecated args [manthey]
+
 ## Version 2.1.15 (27 Dec 2020)
 
 * better autodocs for enums [int-ua]
