@@ -243,8 +243,8 @@ class Operation(pyvips.VipsObject):
 
         logger.debug('VipsOperation.call: match_image = %s', match_image)
 
-        # collect a list of all input references here 
-        # we can't use a set because set elements are unique under "==", and 
+        # collect a list of all input references here
+        # we can't use a set because set elements are unique under "==", and
         # Python checks memoryview equality with hash functions, not pointer
         # equality
         references = []

@@ -60,16 +60,16 @@ def generate_enums():
         node = xml_enums[python_name]
         enum_doc = node.find("goi:doc", namespace)
 
-        print(f'')
-        print(f'')
+        print('')
+        print('')
         print(f'class {python_name}(object):')
         print(f'    """{python_name}.')
         if enum_doc is not None:
-            print(f'')
+            print('')
             print(f'{enum_doc.text}')
-        print(f'')
-        print(f'Attributes:')
-        print(f'')
+        print('')
+        print('Attributes:')
+        print('')
         for value in values_for_enum(gtype):
             python_name = value.replace('-', '_')
             member = node.find(f"goi:member[@name='{python_name}']", namespace)
@@ -77,9 +77,9 @@ def generate_enums():
             if member_doc is not None:
                 text = member_doc.text
                 print(f'    {python_name.upper()} (str): {text}')
-                print(f'')
-        print(f'    """')
-        print(f'')
+                print('')
+        print('    """')
+        print('')
 
         for value in values_for_enum(gtype):
             python_name = value.replace('-', '_').upper()
@@ -87,5 +87,5 @@ def generate_enums():
 
 
 if __name__ == "__main__":
-    print(f'# libvips enums -- this file is generated automatically')
+    print('# libvips enums -- this file is generated automatically')
     generate_enums()
