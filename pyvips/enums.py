@@ -786,6 +786,26 @@ Attributes:
     APPROXIMATE = 'approximate'
 
 
+class ForeignSubsample(object):
+    """ForeignSubsample.
+
+Set subsampling mode.
+
+Attributes:
+
+    AUTO (str): prevent subsampling when quality >= 90
+
+    ON (str): always perform subsampling
+
+    OFF (str): never perform subsampling
+
+    """
+
+    AUTO = 'auto'
+    ON = 'on'
+    OFF = 'off'
+
+
 class ForeignDzLayout(object):
     """ForeignDzLayout.
 
@@ -878,26 +898,6 @@ Attributes:
     NEAREST = 'nearest'
 
 
-class ForeignJpegSubsample(object):
-    """ForeignJpegSubsample.
-
-Set jpeg subsampling mode.
-
-Attributes:
-
-    AUTO (str): default preset
-
-    ON (str): always perform subsampling
-
-    OFF (str): never perform subsampling
-
-    """
-
-    AUTO = 'auto'
-    ON = 'on'
-    OFF = 'off'
-
-
 class ForeignWebpPreset(object):
     """ForeignWebpPreset.
 
@@ -958,6 +958,8 @@ Attributes:
 
     ZSTD (str): ZSTD compression
 
+    JP2K (str): JP2K compression
+
     """
 
     NONE = 'none'
@@ -968,6 +970,7 @@ Attributes:
     LZW = 'lzw'
     WEBP = 'webp'
     ZSTD = 'zstd'
+    JP2K = 'jp2k'
 
 
 class ForeignTiffPredictor(object):

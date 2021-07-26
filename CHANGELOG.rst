@@ -4,6 +4,7 @@
 
 * fix logging of deprecated args [manthey]
 * add shepards example [tourtiere]
+* update docs for 8.11 [jcupitt]
 
 ## Version 2.1.15 (27 Dec 2020)
 
