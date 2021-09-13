@@ -413,6 +413,8 @@ def cdefs(features):
                 size_t* length);
             int vips_region_width (VipsRegion*);
             int vips_region_height (VipsRegion*);
+            int vips_image_get_page_height (VipsImage*);
+            int vips_image_get_n_pages (VipsImage*);
 
         '''
 

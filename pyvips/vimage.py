@@ -1180,6 +1180,62 @@ class Image(pyvips.VipsObject):
         else:
             return pyvips.Operation.call('bandjoin', [self] + other)
 
+    def get_n_pages(self):
+        """Get the number of pages in an image file, or 1.
+
+        This is the number of pages in the file the image was loaded from, not
+        the number of pages in the image.
+
+        To get the number of pages in an image, divide the image height by
+        the page height.
+        """
+        if at_least_libvips(8, 8):
+            return vips_lib.vips_image_get_n_pages(self.pointer)
+        else:
+            return self.get("n-pages") \
+                if self.get_typeof("n-pages") != 0 else 1
+
+    def get_page_height(self):
+        """Get the page height in a many-page image, or height.
+        """
+        if at_least_libvips(8, 8):
+            return vips_lib.vips_image_get_page_height(self.pointer)
+        else:
+            if self.get_typeof("page-height") != 0:
+                page_height = self.get("page-height")
+            else:
+                page_height = self.height
+
+            if page_height > 0 and \
+                page_height <= self.height and \
+                    self.height % page_height == 0:
+                return page_height
+            else:
+                return self.height
+
+    def pagesplit(self):
+        """Split an N-page image into a list of N separate images.
+        """
+        page_height = self.get_page_height()
+        return [self.crop(0, y, self.width, page_height)
+                for y in range(0, self.height, page_height)]
+
+    def pagejoin(self, other):
+        """Join a set of pages vertically to make a multipage image.
+
+        Also sets the page-height property on the result.
+        """
+        if not isinstance(other, list):
+            other = [other]
+
+        n_pages = 1 + len(other)
+
+        image = Image.arrayjoin([self] + other, across=1)
+        image = image.copy()
+        image.set_type(GValue.gint_type, 'page-height', image.height / n_pages)
+
+        return image
+
     def composite(self, other, mode, **kwargs):
         """Composite a set of images with a set of modes."""
         if not isinstance(other, list):
