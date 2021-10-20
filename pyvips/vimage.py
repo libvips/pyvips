@@ -1180,6 +1180,9 @@ class Image(pyvips.VipsObject):
         else:
             return pyvips.Operation.call('bandjoin', [self] + other)
 
+    def atan2(self, other):
+        return _call_enum(self, other, 'math2', 'atan2')
+
     def get_n_pages(self):
         """Get the number of pages in an image file, or 1.
 
