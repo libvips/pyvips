@@ -591,37 +591,11 @@ class Image(pyvips.VipsObject):
             raise Error('unable to write to buffer')
         name = _to_string(pointer)
 
-        return pyvips.Operation.call(name, self,
+        image = self.copy()
+        image.set_type(GValue.refstr_type, 'format_string', format_string)
+
+        return pyvips.Operation.call(name, image,
                                      string_options=options, **kwargs)
-
-    def write_to_memory(self):
-        """Write the image to a large memory array.
-
-        A large area of memory is allocated, the image is rendered to that
-        memory array, and the array is returned as a buffer.
-
-        For example, if you have a 2x2 uchar image containing the bytes 1, 2,
-        3, 4, read left-to-right, top-to-bottom, then::
-
-            buf = image.write_to_memory()
-
-        will return a four byte buffer containing the values 1, 2, 3, 4.
-
-        Returns:
-            buffer
-
-        Raises:
-            :class:`.Error`
-
-        """
-
-        psize = ffi.new('size_t *')
-        pointer = vips_lib.vips_image_write_to_memory(self.pointer, psize)
-        if pointer == ffi.NULL:
-            raise Error('unable to write to memory')
-        pointer = ffi.gc(pointer, glib_lib.g_free)
-
-        return ffi.buffer(pointer, psize[0])
 
     def write_to_target(self, target, format_string, **kwargs):
         """Write an image to a target.
@@ -669,8 +643,40 @@ class Image(pyvips.VipsObject):
             raise Error('unable to write to target')
         name = _to_string(pointer)
 
-        return pyvips.Operation.call(name, self, target,
+        image = self.copy()
+        image.set_type(GValue.refstr_type, 'format_string', format_string)
+
+        return pyvips.Operation.call(name, image, target,
                                      string_options=options, **kwargs)
+
+    def write_to_memory(self):
+        """Write the image to a large memory array.
+
+        A large area of memory is allocated, the image is rendered to that
+        memory array, and the array is returned as a buffer.
+
+        For example, if you have a 2x2 uchar image containing the bytes 1, 2,
+        3, 4, read left-to-right, top-to-bottom, then::
+
+            buf = image.write_to_memory()
+
+        will return a four byte buffer containing the values 1, 2, 3, 4.
+
+        Returns:
+            buffer
+
+        Raises:
+            :class:`.Error`
+
+        """
+
+        psize = ffi.new('size_t *')
+        pointer = vips_lib.vips_image_write_to_memory(self.pointer, psize)
+        if pointer == ffi.NULL:
+            raise Error('unable to write to memory')
+        pointer = ffi.gc(pointer, glib_lib.g_free)
+
+        return ffi.buffer(pointer, psize[0])
 
     def write(self, other):
         """Write an image to another image.

@@ -7,6 +7,8 @@
 * update docs for 8.11 [jcupitt]
 * add pagesplit(), pagejoin(), get_page_height(), get_n_pages() [jcupitt]
 * add atan2() [jcupitt]
+* add support for `format_string`, so buffer and target savers are better at
+  writing the correct format [jcupitt]
 
 ## Version 2.1.15 (27 Dec 2020)
 
