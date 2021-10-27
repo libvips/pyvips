@@ -592,7 +592,7 @@ class Image(pyvips.VipsObject):
         name = _to_string(pointer)
 
         image = self.copy()
-        image.set_type(GValue.refstr_type, 'format_string', format_string)
+        image.set_type(GValue.refstr_type, 'format-string', format_string)
 
         return pyvips.Operation.call(name, image,
                                      string_options=options, **kwargs)
@@ -644,7 +644,7 @@ class Image(pyvips.VipsObject):
         name = _to_string(pointer)
 
         image = self.copy()
-        image.set_type(GValue.refstr_type, 'format_string', format_string)
+        image.set_type(GValue.refstr_type, 'format-string', format_string)
 
         return pyvips.Operation.call(name, image, target,
                                      string_options=options, **kwargs)
