@@ -8,6 +8,7 @@
 * add pagesplit(), pagejoin(), get_page_height(), get_n_pages() [jcupitt]
 * add atan2() [jcupitt]
 * don't generate docs for deprecated arguments [jcupitt]
+* buffer save tries with the target API first [jcupitt]
 
 ## Version 2.1.15 (27 Dec 2020)
 
