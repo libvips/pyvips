@@ -7,6 +7,8 @@
 * update docs for 8.12 [jcupitt]
 * add pagesplit(), pagejoin(), get_page_height(), get_n_pages() [jcupitt]
 * add atan2() [jcupitt]
+* add `cache_get_max()`, `cache_get_max_mem()`, `cache_get_max_files()`, 
+  `cache_get_size()` [hroskes]
 * don't generate docs for deprecated arguments [jcupitt]
 * buffer save tries with the target API first [jcupitt]
 

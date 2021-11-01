@@ -564,8 +564,30 @@ def cache_set_trace(trace):
     vips_lib.vips_cache_set_trace(trace)
 
 
+def cache_get_max():
+    """Get the maximum number of operations libvips will cache."""
+    return vips_lib.vips_cache_get_max()
+
+
+def cache_get_size():
+    """Get the current size of the operations cache."""
+    return vips_lib.vips_cache_get_size()
+
+
+def cache_get_max_mem():
+    """Get the operation cache limit by memory use."""
+    return vips_lib.vips_cache_get_max_mem()
+
+
+def cache_get_max_files():
+    """Get the operation cache limit by number of open files."""
+    return vips_lib.vips_cache_get_max_files()
+
+
 __all__ = [
     'Introspect', 'Operation',
     'cache_set_max', 'cache_set_max_mem', 'cache_set_max_files',
-    'cache_set_trace'
+    'cache_set_trace',
+    'cache_get_max', 'cache_get_max_mem', 'cache_get_max_files',
+    'cache_get_size',
 ]
