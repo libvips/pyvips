@@ -362,10 +362,13 @@ Attributes:
 
     WOP (str): pow( right, left )
 
+    ATAN2 (str): atan2( left, right )
+
     """
 
     POW = 'pow'
     WOP = 'wop'
+    ATAN2 = 'atan2'
 
 
 class OperationComplex2(object):
@@ -786,6 +789,64 @@ Attributes:
     APPROXIMATE = 'approximate'
 
 
+class FailOn(object):
+    """FailOn.
+
+How sensitive loaders are to errors, from never stop (very insensitive), to
+stop on the smallest warning (very sensitive).
+
+Each one implies the ones before it, so #VIPS_FAIL_ON_ERROR implies
+#VIPS_FAIL_ON_TRUNCATED.
+
+Attributes:
+
+    NONE (str): never stop
+
+    TRUNCATED (str): stop on image truncated, nothing else
+
+    ERROR (str): stop on serious error or truncation
+
+    WARNING (str): stop on anything, even warnings
+
+    """
+
+    NONE = 'none'
+    TRUNCATED = 'truncated'
+    ERROR = 'error'
+    WARNING = 'warning'
+
+
+class ForeignPpmFormat(object):
+    """ForeignPpmFormat.
+
+The netpbm file format to save as.
+
+#VIPS_FOREIGN_PPM_FORMAT_PBM images are single bit.
+
+#VIPS_FOREIGN_PPM_FORMAT_PGM images are 8, 16, or 32-bits, one band.
+
+#VIPS_FOREIGN_PPM_FORMAT_PPM images are 8, 16, or 32-bits, three bands.
+
+#VIPS_FOREIGN_PPM_FORMAT_PFM images are 32-bit float pixels.
+
+Attributes:
+
+    PBM (str): portable bitmap
+
+    PGM (str): portable greymap
+
+    PPM (str): portable pixmap
+
+    PFM (str): portable float map
+
+    """
+
+    PBM = 'pbm'
+    PGM = 'pgm'
+    PPM = 'ppm'
+    PFM = 'pfm'
+
+
 class ForeignSubsample(object):
     """ForeignSubsample.
 
@@ -819,7 +880,9 @@ Attributes:
 
     GOOGLE (str): use Google maps directory layout
 
-    IIIF (str): use IIIF directory layout
+    IIIF (str): use IIIF v2 directory layout
+
+    IIIF3 (str): use IIIF v3 directory layout
 
     """
 
@@ -827,6 +890,7 @@ Attributes:
     ZOOMIFY = 'zoomify'
     GOOGLE = 'google'
     IIIF = 'iiif'
+    IIIF3 = 'iiif3'
 
 
 class ForeignDzDepth(object):
@@ -976,7 +1040,16 @@ Attributes:
 class ForeignTiffPredictor(object):
     """ForeignTiffPredictor.
 
+The predictor can help deflate and lzw compression. The values are fixed by
+the tiff library.
+
 Attributes:
+
+    NONE (str): no prediction
+
+    HORIZONTAL (str): horizontal differencing
+
+    FLOAT (str): float predictor
 
     """
 
@@ -1090,6 +1163,8 @@ Attributes:
     LINEAR (str): Convolve with a triangle filter.
 
     CUBIC (str): Convolve with a cubic filter.
+
+    MITCHELL (str): Convolve with a Mitchell kernel.
 
     LANCZOS2 (str): Convolve with a two-lobe Lanczos kernel.
 

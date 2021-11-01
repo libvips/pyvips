@@ -81,6 +81,8 @@ def cdefs(features):
 
         const char* vips_error_buffer (void);
         void vips_error_clear (void);
+        void vips_error_freeze (void);
+        void vips_error_thaw (void);
 
         typedef struct _GValue {
             GType g_type;
