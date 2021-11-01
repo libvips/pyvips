@@ -181,7 +181,8 @@ Regenerate autodocs:
     $ cd doc; \
       python3 -c "import pyvips; pyvips.Operation.generate_sphinx_all()" > x 
 
-And copy-paste ``x`` into the obvious place in ``doc/vimage.rst``.
+And copy-paste ``x`` into the obvious place in ``doc/vimage.rst``. See
+`examples/gen-enums.py` to regenerate all enums.
 
 Update version number:
 

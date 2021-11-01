@@ -4,9 +4,10 @@
 
 * fix logging of deprecated args [manthey]
 * add shepards example [tourtiere]
-* update docs for 8.11 [jcupitt]
+* update docs for 8.12 [jcupitt]
 * add pagesplit(), pagejoin(), get_page_height(), get_n_pages() [jcupitt]
 * add atan2() [jcupitt]
+* don't generate docs for deprecated arguments [jcupitt]
 
 ## Version 2.1.15 (27 Dec 2020)
 
