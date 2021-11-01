@@ -404,6 +404,18 @@ Attributes:
 
     ATAN (str): atan(), angles in degrees
 
+    SINH (str): sinh(), angles in degrees
+
+    COSH (str): cosh(), angles in degrees
+
+    TANH (str): tanh(), angles in degrees
+
+    ASINH (str): asinh(), angles in degrees
+
+    ACOSH (str): acosh(), angles in degrees
+
+    ATANH (str): atanh(), angles in degrees
+
     LOG (str): log base e
 
     LOG10 (str): log base 10
@@ -420,6 +432,12 @@ Attributes:
     ASIN = 'asin'
     ACOS = 'acos'
     ATAN = 'atan'
+    SINH = 'sinh'
+    COSH = 'cosh'
+    TANH = 'tanh'
+    ASINH = 'asinh'
+    ACOSH = 'acosh'
+    ATANH = 'atanh'
     LOG = 'log'
     LOG10 = 'log10'
     EXP = 'exp'
