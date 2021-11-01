@@ -381,6 +381,10 @@ def cdefs(features):
         void vips_cache_set_max_files (int max_files);
         void vips_cache_set_trace (int trace);
 
+        int vips_cache_get_max();
+        int vips_cache_get_size();
+        size_t vips_cache_get_max_mem();
+        int vips_cache_get_max_files();
     '''
 
     if _at_least(features, 8, 5):
