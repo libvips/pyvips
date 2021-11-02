@@ -1336,27 +1336,27 @@ class Image(pyvips.VipsObject):
         return self.math('atan')
 
     def sinh(self):
-        """Return the hyperbolic sine of an image."""
+        """Return the hyperbolic sine of an image in radians."""
         return self.math('sinh')
 
     def cosh(self):
-        """Return the hyperbolic cosine of an image."""
+        """Return the hyperbolic cosine of an image in radians."""
         return self.math('cosh')
 
     def tanh(self):
-        """Return the hyperbolic tangent of an image."""
+        """Return the hyperbolic tangent of an image in radians."""
         return self.math('tanh')
 
     def asinh(self):
-        """Return the inverse hyperbolic sine of an image."""
+        """Return the inverse hyperbolic sine of an image in radians."""
         return self.math('asinh')
 
     def acosh(self):
-        """Return the inverse hyperbolic cosine of an image."""
+        """Return the inverse hyperbolic cosine of an image in radians."""
         return self.math('acosh')
 
     def atanh(self):
-        """Return the inverse hyperbolic tangent of an image."""
+        """Return the inverse hyperbolic tangent of an image in radians."""
         return self.math('atanh')
 
     def log(self):

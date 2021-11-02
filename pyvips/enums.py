@@ -404,17 +404,17 @@ Attributes:
 
     ATAN (str): atan(), angles in degrees
 
-    SINH (str): sinh(), angles in degrees
+    SINH (str): sinh(), angles in radians
 
-    COSH (str): cosh(), angles in degrees
+    COSH (str): cosh(), angles in radians
 
-    TANH (str): tanh(), angles in degrees
+    TANH (str): tanh(), angles in radians
 
-    ASINH (str): asinh(), angles in degrees
+    ASINH (str): asinh(), angles in radians
 
-    ACOSH (str): acosh(), angles in degrees
+    ACOSH (str): acosh(), angles in radians
 
-    ATANH (str): atanh(), angles in degrees
+    ATANH (str): atanh(), angles in radians
 
     LOG (str): log base e
 
