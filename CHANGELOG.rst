@@ -11,6 +11,7 @@
   `cache_get_size()` [hroskes]
 * don't generate docs for deprecated arguments [jcupitt]
 * buffer save tries with the target API first [jcupitt]
+* add hyperbolic functions `sinh`, `cosh`, `tanh`, `asinh`, `acosh`, `atanh`
 
 ## Version 2.1.15 (27 Dec 2020)
 
