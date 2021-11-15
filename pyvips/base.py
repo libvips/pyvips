@@ -129,6 +129,19 @@ def values_for_enum(gtype):
 
     return values
 
+def values_for_flag(gtype):
+    """Get all values for a flag (gtype)."""
+
+    g_type_class = gobject_lib.g_type_class_ref(gtype)
+    g_flags_class = ffi.cast('GFlagsClass *', g_type_class)
+
+    values = []
+
+    for i in range(0, g_flags_class.n_values):
+        value = _to_string(g_flags_class.values[i].value_nick)
+        values.append(value)
+
+    return values
 
 __all__ = [
     'leak_set',
@@ -142,5 +155,6 @@ __all__ = [
     'type_name',
     'type_map',
     'type_from_name',
-    'values_for_enum'
+    'values_for_enum',
+    'values_for_flag'
 ]
