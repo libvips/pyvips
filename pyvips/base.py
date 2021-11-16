@@ -122,7 +122,7 @@ def values_for_enum(gtype):
 
     # -1 since we always have a "last" member.
     return [_to_string(g_enum_class.values[i].value_nick)
-            for i in range(g_enum_class.n_values - 1))]
+            for i in range(g_enum_class.n_values - 1)]
 
 def values_for_flag(gtype):
     """Get all values for a flag (gtype)."""
