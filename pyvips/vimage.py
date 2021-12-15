@@ -880,10 +880,29 @@ class Image(pyvips.VipsObject):
 
         return vips_lib.vips_image_remove(self.pointer, _to_bytes(name)) != 0
 
+    def toarray(self):
+        """Return an image as an array.
+
+        This is extremely slow and only useful for very small images.
+
+        """
+
+        return [[self(x, y) for x in range(self.width)] 
+                for y in range(self.height)]
+
     def __repr__(self):
-        return ('<pyvips.Image {0}x{1} {2}, {3} bands, {4}>'.
-                format(self.width, self.height, self.format, self.bands,
-                       self.interpretation))
+        if self.interpretation == 'matrix' and \
+                self.width < 20 and \
+                self.height < 20 and \
+                self.bands == 1:
+            array = self.toarray()
+            # remove innermost dimension, since bands == 0
+            array = [[x[0] for x in row] for row in array]
+            return(repr(array))
+        else:
+            return ('<pyvips.Image {0}x{1} {2}, {3} bands, {4}>'.
+                    format(self.width, self.height, self.format, self.bands,
+                           self.interpretation))
 
     def __getattr__(self, name):
         """Divert unknown names to libvips.

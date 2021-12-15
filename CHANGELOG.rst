@@ -1,5 +1,10 @@
 # master 
 
+## Version 2.1.17 (15 Dec 2021)
+
+* add `to_array()` [jcupitt]
+* `repr()` will print matrix images as matrices [jcupitt]
+
 ## Version 2.1.16 (28 Jun 2021)
 
 * fix logging of deprecated args [manthey]
