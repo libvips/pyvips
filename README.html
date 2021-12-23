@@ -1,39 +1,22 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>README &mdash; pyvips 2.1.14 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>README &mdash; pyvips 2.1.17 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/collapse.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Introduction" href="intro.html" />
@@ -42,33 +25,16 @@
 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> pyvips
-          
-
-          
+            <a href="index.html" class="icon icon-home"> pyvips
           </a>
-
-          
-            
-            
               <div class="version">
                 2.1
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -76,18 +42,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">README</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#how-it-works">How it works</a></li>
@@ -114,72 +69,31 @@
 <li class="toctree-l1"><a class="reference internal" href="vobject.html"><code class="docutils literal notranslate"><span class="pre">VipsObject</span></code></a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">pyvips</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>README</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
-            
               <a href="https://github.com/libvips/pyvips/blob/master/doc/README.rst" class="fa fa-github"> Edit on GitHub</a>
-            
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="readme">
+             
+  <section id="readme">
 <h1>README<a class="headerlink" href="#readme" title="Permalink to this headline">¶</a></h1>
 <a class="reference external image-reference" href="https://travis-ci.org/libvips/pyvips"><img alt="Build Status" src="https://travis-ci.org/libvips/pyvips.svg?branch=master" /></a>
 <p>PyPI package:</p>
@@ -201,7 +115,7 @@ start up and is typically ~20% slower in execution.  You can find out how
 pyvips installed with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">show</span> <span class="pre">pyvips</span></code>.</p>
 <p>This binding passes the vips test suite cleanly and with no leaks under
 python2.7 - python3.6, pypy and pypy3 on Windows, macOS and Linux.</p>
-<div class="section" id="how-it-works">
+<section id="how-it-works">
 <h2>How it works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h2>
 <p>Programs that use <code class="docutils literal notranslate"><span class="pre">pyvips</span></code> don’t manipulate images directly, instead
 they create pipelines of image processing operations building on a source
@@ -218,15 +132,15 @@ memory.</p>
 <p>There’s a handy chapter in the docs explaining how libvips opens files,
 which gives some more background.</p>
 <p><a class="reference external" href="http://libvips.github.io/libvips/API/current/How-it-opens-files.md.html">http://libvips.github.io/libvips/API/current/How-it-opens-files.md.html</a></p>
-</div>
-<div class="section" id="conda-install">
+</section>
+<section id="conda-install">
 <h2>conda Install<a class="headerlink" href="#conda-install" title="Permalink to this headline">¶</a></h2>
 <p>The conda package includes a matching libvips binary, so just enter:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ conda install --channel conda-forge pyvips
 </pre></div>
 </div>
-</div>
-<div class="section" id="non-conda-install">
+</section>
+<section id="non-conda-install">
 <h2>Non-conda install<a class="headerlink" href="#non-conda-install" title="Permalink to this headline">¶</a></h2>
 <p>First, you need the libvips shared library on your library search path, version
 8.2 or later, though at least version 8.9 is required for all features to work.
@@ -253,8 +167,8 @@ programs, so it’s usually safer just to set <code class="docutils literal notr
 </pre></div>
 </div>
 <p>Now when you import pyvips, it should be able to find the DLLs.</p>
-</div>
-<div class="section" id="example">
+</section>
+<section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
 <p>This sample program loads a JPG image, doubles the value of every green pixel,
 sharpens, and then writes the image back to the filesystem again:</p>
@@ -270,8 +184,8 @@ sharpens, and then writes the image back to the filesystem again:</p>
 <span class="n">image</span><span class="o">.</span><span class="n">write_to_file</span><span class="p">(</span><span class="s1">&#39;x.jpg&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="notes">
+</section>
+<section id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
 <p>Local user install:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pip3 install -e .
@@ -308,7 +222,8 @@ $ ./run.sh
   python3 -c <span class="s2">&quot;import pyvips; pyvips.Operation.generate_sphinx_all()&quot;</span> &gt; x
 </pre></div>
 </div>
-<p>And copy-paste <code class="docutils literal notranslate"><span class="pre">x</span></code> into the obvious place in <code class="docutils literal notranslate"><span class="pre">doc/vimage.rst</span></code>.</p>
+<p>And copy-paste <code class="docutils literal notranslate"><span class="pre">x</span></code> into the obvious place in <code class="docutils literal notranslate"><span class="pre">doc/vimage.rst</span></code>. See
+<cite>examples/gen-enums.py</cite> to regenerate all enums.</p>
 <p>Update version number:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ vi pyvips/version.py
 $ vi doc/conf.py
@@ -321,63 +236,38 @@ $ git tag -a v2.1.12 -m <span class="s2">&quot;as uploaded to pypi&quot;</span>
 $ git push origin v2.1.12
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="intro.html" class="btn btn-neutral float-right" title="Introduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="index.html" class="btn btn-neutral float-left" title="pyvips – Image processing with libvips" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="pyvips – Image processing with libvips" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="intro.html" class="btn btn-neutral float-right" title="Introduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2019, John Cupitt
-
-    </p>
+    <p>&#169; Copyright 2019, John Cupitt.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
