@@ -2,6 +2,7 @@
 
 from __future__ import division
 
+import functools
 import numbers
 
 import pyvips
@@ -1002,6 +1003,10 @@ class Image(pyvips.VipsObject):
         """
 
         if isinstance(arg, slice):
+            if arg.step is not None: # fancy slicing, though this would work for any slice
+                bands = [ self.extract_band(i) for i in range(self.bands)[arg] ]
+                return functools.reduce(lambda u, v: u.bandjoin(v), bands)
+
             i = 0
             if arg.start is not None:
                 i = arg.start
