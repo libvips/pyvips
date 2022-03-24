@@ -999,6 +999,9 @@ class Image(pyvips.VipsObject):
             last_two = rgb_image[1:]
             last_band = rgb_image[-1]
             middle_few = multiband[1:-2]
+            reversed  = multiband[::-1]
+            every_other = multiband[::2]
+            other_every_other = multiband[1::2]
 
         """
 
