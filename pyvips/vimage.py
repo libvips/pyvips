@@ -998,33 +998,35 @@ class Image(pyvips.VipsObject):
             last_two = rgb_image[1:]
             last_band = rgb_image[-1]
             middle_few = multiband[1:-2]
+            reversed  = multiband[::-1]
+            every_other = multiband[::2]
+            other_every_other = multiband[1::2]
+
+        In all cases, the semantics of slicing exactly match those of slicing 
+        `range(self.bands)`.
 
         """
 
+        band_range = range(self.bands)[arg] # raises IndexError for bad integer indices
+
         if isinstance(arg, slice):
-            i = 0
-            if arg.start is not None:
-                i = arg.start
+            if len(band_range) == 0:
+                raise IndexError('empty slice')
 
-            n = self.bands - i
-            if arg.stop is not None:
-                if arg.stop < 0:
-                    n = self.bands + arg.stop - i
-                else:
-                    n = arg.stop - i
+            i = band_range[0]
+            n = len(band_range)
+
         elif isinstance(arg, int):
-            i = arg
+            i = band_range
             n = 1
-        else:
-            raise TypeError
 
-        if i < 0:
-            i = self.bands + i
-
-        if i < 0 or i >= self.bands:
-            raise IndexError
-
-        return self.extract_band(i, n=n)
+        if n == 1: # int or 1-element slice
+            return self.extract_band(i)
+        elif arg.step == 1: # sequential slice
+            return self.extract_band(i, n=n)
+        else: # nonsequential slice
+            bands = [self.extract_band(x) for x in band_range]
+            return bands[0].bandjoin(bands[1:])
 
     # overload () to mean fetch pixel
     def __call__(self, x, y):

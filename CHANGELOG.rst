@@ -1,5 +1,7 @@
 # master 
 
+* more robust bandwise index/slice; added fancy slicing (step != 1) [erdmann]
+ 
 ## Version 2.1.17 (15 Dec 2021)
 
 * add `to_array()` [jcupitt]

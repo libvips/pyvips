@@ -15,12 +15,10 @@ class TestConstants:
         assert im.height == 1
 
     def test_array_const_args(self):
-        r = pyvips.Image.black(16, 16)
-        r = r.draw_rect(255, 10, 12, 1, 1)
-        g = pyvips.Image.black(16, 16)
-        g = g.draw_rect(255, 10, 11, 1, 1)
-        b = pyvips.Image.black(16, 16)
-        b = b.draw_rect(255, 10, 10, 1, 1)
+        black = pyvips.Image.black(16, 16)
+        r = black.draw_rect(255, 10, 12, 1, 1)
+        g = black.draw_rect(255, 10, 11, 1, 1)
+        b = black.draw_rect(255, 10, 10, 1, 1)
         im = r.bandjoin([g, b])
 
         assert im.width == 16
