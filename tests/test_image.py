@@ -29,6 +29,9 @@ class TestImage:
         assert im.height == 16
         assert im.bands == 9
 
+        x = im.bandjoin([])
+        assert x.bands == 9
+
     def test_bandslice(self):
         black = pyvips.Image.black(16, 16)
         a = black.draw_rect(1, 0, 0, 1, 1)

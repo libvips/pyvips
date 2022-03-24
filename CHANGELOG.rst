@@ -5,6 +5,7 @@
 * add `to_array()` [jcupitt]
 * `repr()` will print matrix images as matrices [jcupitt]
 * more robust bandwise index/slice; added fancy slicing (step != 1) [erdmann]
+* fig segfault for `im.bandjoin([])`.  Now returns `im` [erdmann]
 
 ## Version 2.1.16 (28 Jun 2021)
 
