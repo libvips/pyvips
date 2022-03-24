@@ -1,11 +1,10 @@
 # master 
-
-* more robust bandwise index/slice; added fancy slicing (step != 1) [erdmann]
  
 ## Version 2.1.17 (15 Dec 2021)
 
 * add `to_array()` [jcupitt]
 * `repr()` will print matrix images as matrices [jcupitt]
+* more robust bandwise index/slice; added fancy slicing (step != 1) [erdmann]
 
 ## Version 2.1.16 (28 Jun 2021)
 
@@ -18,7 +17,8 @@
   `cache_get_size()` [hroskes]
 * don't generate docs for deprecated arguments [jcupitt]
 * buffer save tries with the target API first [jcupitt]
-* add hyperbolic functions `sinh`, `cosh`, `tanh`, `asinh`, `acosh`, `atanh`
+* add hyperbolic functions `sinh`, `cosh`, `tanh`, `asinh`, `acosh`, 
+  `atanh` [jcupitt]
 * add `values_for_flag` [kleisauke]
 
 ## Version 2.1.15 (27 Dec 2020)
