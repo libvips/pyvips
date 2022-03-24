@@ -1012,14 +1012,9 @@ class Image(pyvips.VipsObject):
                     n = self.bands + arg.stop - i
                 else:
                     n = arg.stop - i
-
-            s = 1
-            if arg.step is not None:
-                s = arg.step
         elif isinstance(arg, int):
             i = arg
             n = 1
-            s = 1
         else:
             raise TypeError
 
@@ -1029,17 +1024,7 @@ class Image(pyvips.VipsObject):
         if i < 0 or i >= self.bands:
             raise IndexError
 
-        if s == 1:
-            return self.extract_band(i, n=n)
-        else:
-            bands = [self.extract_band(x) for x in range(i, i + n, s)]
-
-            if len(bands) == 0:
-                return []
-            elif len(bands) == 1:
-                return bands[0]
-            else:
-                return bands[0].bandjoin(bands[1:])
+        return self.extract_band(i, n=n)
 
     # overload () to mean fetch pixel
     def __call__(self, x, y):

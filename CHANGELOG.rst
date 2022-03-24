@@ -4,7 +4,6 @@
 
 * add `to_array()` [jcupitt]
 * `repr()` will print matrix images as matrices [jcupitt]
-* support step in band indexing [erdmann]
 
 ## Version 2.1.16 (28 Jun 2021)
 
