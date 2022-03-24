@@ -1208,6 +1208,9 @@ class Image(pyvips.VipsObject):
         if not isinstance(other, list):
             other = [other]
 
+        if not other: # guard against empty list
+            return self
+
         # if [other] is all numbers, we can use bandjoin_const
         non_number = next((x for x in other
                            if not isinstance(x, numbers.Number)),
