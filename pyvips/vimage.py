@@ -985,15 +985,17 @@ class Image(pyvips.VipsObject):
         pass
 
     def __getitem__(self, arg):
-        """Overload []
-
-        Use [] to pull out band elements from an image. You can use all the
-        usual slicing syntax, for example::
+        """Overload [] to pull out band elements from an image. 
+        
+        The following arguments types are accepted:
+        
+        * int::
 
             green = rgb_image[1]
 
-        Will make a new one-band image from band 1 (the middle band). You can
-        also write::
+          Will make a new one-band image from band 1 (the middle band).
+        
+        * slice::
 
             last_two = rgb_image[1:]
             last_band = rgb_image[-1]
@@ -1002,30 +1004,69 @@ class Image(pyvips.VipsObject):
             every_other = multiband[::2]
             other_every_other = multiband[1::2]
 
-        In all cases, the semantics of slicing exactly match those of slicing 
-        `range(self.bands)`.
+        * list of int::
+
+            # list of integers
+            desired_bands = [1, 2, 2, -1]
+            four_band = multiband[desired_bands]
+
+        * list of bool::
+
+            wanted_bands = [True, False, True, True, False]
+            three_band = five_band[wanted_bands]
+
+        In the case of integer or slice arguments, the semantics of slicing
+        exactly match those of slicing `range(self.bands)`.  
+        
+        In the case of list arguments, the semantics match those of numpy's
+        extended slicing syntax. Thus, lists of booleans must have as many 
+        elements as there are bands in the image.
 
         """
-
-        band_range = range(self.bands)[arg] # raises IndexError for bad integer indices
-
-        if isinstance(arg, slice):
-            if len(band_range) == 0:
+        if isinstance(arg, int):
+            i = range(self.bands)[arg] # raises IndexError for bad integer indices
+            n = 1
+        elif isinstance(arg, slice):
+            band_seq = range(self.bands)[arg] 
+            if len(band_seq) == 0:
                 raise IndexError('empty slice')
 
-            i = band_range[0]
-            n = len(band_range)
+            i = band_seq[0]
+            n = len(band_seq)
+        elif isinstance(arg, list):
+            if not arg:
+                raise IndexError('empty list')
 
-        elif isinstance(arg, int):
-            i = band_range
-            n = 1
+            # n.b. We don't use isinstance because isinstance(True, int) is True!
+            if not (all(type(x)==int for x in arg) or all(type(x)==bool for x in arg)):
+                raise IndexError('list must contain only ints or only bools')
 
-        if n == 1: # int or 1-element slice
+            if isinstance(arg[0], bool):
+                if len(arg) != self.bands:
+                    raise IndexError('boolean index must have same length as bands')
+
+                band_seq = [ i for i, x in enumerate(arg) if x ]
+                n = len(band_seq)
+                if n == 0:
+                    raise IndexError('empty boolean index')
+                if n == 1:
+                    i = band_seq[0]
+            else:
+                all_bands = range(self.bands)
+                band_seq = [ all_bands[i] for i in arg ] # raises IndexError for bad int indices
+
+                n = len(band_seq)
+                if n == 1:
+                    i = band_seq[0]
+        else:
+            raise IndexError('argument must be an int, slice, list of ints, or list of bools')
+
+        if n == 1: # int or 1-element selection
             return self.extract_band(i)
-        elif arg.step == 1: # sequential slice
+        elif isinstance(arg, slice) and arg.step == 1: # sequential multi-band slice
             return self.extract_band(i, n=n)
-        else: # nonsequential slice
-            bands = [self.extract_band(x) for x in band_range]
+        else: # nonsequential slice, list of ints, or list of bools
+            bands = [self.extract_band(x) for x in band_seq]
             return bands[0].bandjoin(bands[1:])
 
     # overload () to mean fetch pixel
