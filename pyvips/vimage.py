@@ -6,7 +6,7 @@ import numbers
 
 import pyvips
 from pyvips import ffi, glib_lib, vips_lib, Error, _to_bytes, \
-    _to_string, _to_string_copy, GValue, at_least_libvips
+    _to_string, _to_string_copy, GValue, at_least_libvips, Introspect
 
 
 # either a single number, or a table of numbers
@@ -129,6 +129,15 @@ def _deprecated(note):
 class ImageType(type):
     def __getattr__(cls, name):
         # logger.debug('ImageType.__getattr__ %s', name)
+
+        # does the method exist in libvips? 
+        try:
+            # this will throw an exception if not
+            intro = Introspect.get(name)
+        except: 
+            # we need to throw this exception for missing methods, eg. numpy
+            # checks for this
+            raise AttributeError
 
         @_add_doc(name)
         def call_function(*args, **kwargs):
@@ -951,6 +960,15 @@ class Image(pyvips.VipsObject):
         # look up in props first (but not metadata)
         if super(Image, self).get_typeof(name) != 0:
             return super(Image, self).get(name)
+
+        # does the method exist in libvips? 
+        try:
+            # this will throw an exception if not
+            intro = Introspect.get(name)
+        except: 
+            # we need to throw this exception for missing methods, eg. numpy
+            # checks for this
+            raise AttributeError
 
         @_add_doc(name)
         def call_function(*args, **kwargs):
