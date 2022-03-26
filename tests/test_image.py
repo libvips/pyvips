@@ -29,6 +29,9 @@ class TestImage:
         assert im.height == 16
         assert im.bands == 9
 
+        x = im.bandjoin([])
+        assert x.bands == 9
+
     def test_bandslice(self):
         black = pyvips.Image.black(16, 16)
         a = black.draw_rect(1, 0, 0, 1, 1)
@@ -100,11 +103,68 @@ class TestImage:
 
         assert x(0, 0) == seq[-10:10]
 
+        indices = [1, 2, 5]
+        x = im[indices]
+
+        assert x(0, 0) == [seq[i] for i in indices]
+
+        indices = [1, 2, -7]
+        x = im[indices]
+
+        assert x(0, 0) == [seq[i] for i in indices]
+
+        indices = [1]
+        x = im[indices]
+
+        assert x(0, 0) == [seq[1]]
+
+        indices = [-1]
+        x = im[indices]
+
+        assert x(0, 0) == [seq[-1]]
+
+        boolslice = [True, True, False, False, True, True, False]
+        x = im[boolslice]
+        assert x(0, 0) == [seq[i] for i,b in enumerate(boolslice) if b]
+
         with pytest.raises(IndexError):
             x = im[4:1]
 
         with pytest.raises(IndexError):
-            x = im[-8]
+            x = im[-(im.bands + 1)]
 
         with pytest.raises(IndexError):
-            x = im[7]
+            x = im[im.bands]
+
+        with pytest.raises(IndexError):
+            empty = [False] * im.bands
+            x = im[empty]
+
+        with pytest.raises(IndexError):
+            notenough = [True] * (im.bands - 1)
+            x = im[notenough]
+
+        with pytest.raises(IndexError):
+            toomany = [True] * (im.bands + 1)
+            x = im[toomany]
+
+        with pytest.raises(IndexError):
+            empty = []
+            x = im[empty]
+
+        with pytest.raises(IndexError):
+            oob = [2, 3, -8]
+            x = im[oob]
+
+        with pytest.raises(IndexError):
+            mixed = [True, 1, True, 2, True, 3, True]
+            x = im[mixed]
+
+        with pytest.raises(IndexError):
+            wrongtypelist = ['a', 'b', 'c']
+            x = im[wrongtypelist]
+
+        with pytest.raises(IndexError):
+            wrongargtype = dict(a=1, b=2)
+            x = im[wrongargtype]
+
