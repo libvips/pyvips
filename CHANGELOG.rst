@@ -9,6 +9,10 @@
 * add numpy-style extended indexing (index with list of ints or bools) [erdmann]
 * earlier detection of unknown methods and class methods [jcupitt]
 * add `invalidate()` [jcupitt]
+* add conversion from Image to numpy array via 'Image.__array__` [erdmann]
+* add `Image.fromarray()` for conversion from numpy-ish arrays [erdmann]
+* add `Image.numpy()` (convenient for method chaining) [erdmann]
+* rename `toarray()` to `tolist()`, rewrite for efficiency [erdmann]
 
 ## Version 2.1.16 (28 Jun 2021)
 
