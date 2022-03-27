@@ -125,6 +125,109 @@ def _deprecated(note):
     return _dep
 
 
+# Rules for the mapping betweeen numpy typestrings and libvips formats 
+# NOTE! bool is intentionally omitted due to ambiguity with uint8 since pyvips
+# maps the results of boolean operators to uchar arrays with False->0 and
+# True->255, not True->1.
+TYPESTR_TO_FORMAT = {'|u1': 'uchar',
+                     '|i1': 'char',
+                     '<u2': 'ushort',
+                     '<i2': 'short',
+                     '<u4': 'uint',
+                     '<i4': 'int',
+                     '<f4': 'float',
+                     '<c8': 'complex',
+                     '<f8': 'double',
+                     '<c16': 'dpcomplex'}
+
+# Rules for the mapping between libvips formats and numpy typestrings
+FORMAT_TO_TYPESTR = dict((v,k) for k, v in TYPESTR_TO_FORMAT.items())
+
+def _guess_interpretation(bands, format):
+    '''Return a best-guess format string based on bands and libvips format.
+
+    Parameters
+    ----------
+    bands : int
+        the number of bands
+    format : str
+        the libvips format of the image
+
+    Returns
+    -------
+    interpretation : str
+        the best guess for the appropriate libvips format.
+
+
+    This function is a helper for `Image` creation from arrays when the user
+    specifies 'auto' for `interpretation`.
+
+    The heuristic used here can be defined in the following table:
+
+    | bands | format    | interpretation | reason       |
+    | ----- | --------- | -------------- | ------------ |
+    | 1     | uchar     | b-w            | L            |
+    | 2     | uchar     | b-w            | LA           |
+    | 3     | uchar     | rgb            | RGB          |
+    | 4     | uchar     | rgb            | RGBA         |
+    | 5+    | uchar     | multiband      | spectral     |
+    | 1     | char      | matrix         | conv. kernel |
+    | 2+    | char      | multiband      |              |
+    | 1     | ushort    | grey16         | L            |
+    | 2     | ushort    | grey16         | LA           |
+    | 3     | ushort    | rgb16          | RGB          |
+    | 4     | ushort    | rgb16          | RGBA         |
+    | 5+    | ushort    | multiband      | spectral     |
+    | any   | short     | multiband      |              |
+    | 1     | float     | b-w            | L            |
+    | 2     | float     | b-w            | LA           |
+    | 3     | float     | scrgb          | RGB          |
+    | 4     | float     | scrgb          | RGBA         |
+    | 5+    | float     | multiband      | spectral     |
+    | 1     | double    | b-w            | L            |
+    | 2     | double    | b-w            | LA           |
+    | 3     | double    | scrgb          | RGB          |
+    | 4     | double    | scrgb          | RGBA         |
+    | 5+    | double    | multiband      | spectral     |
+    | any   | complex   | fourier        | FFT          |
+    | any   | dpcomplex | fourier        | FFT          |
+
+    '''
+
+    if format not in FORMAT_TO_TYPESTR:
+        raise ValueError('Unknown format: {}'.format(format))
+    if not isinstance(bands, int) or bands < 1:
+        raise ValueError('Number of bands must be a positive integer.')
+
+    interp = 'multiband' # the default
+
+    if format == 'uchar':
+        if bands in [1, 2]:
+            interp = 'b-w'
+        elif bands in [3, 4]:
+            interp = 'rgb'
+    elif format == 'char':
+        if bands == 1:
+            interp = 'matrix'
+    elif format == 'ushort':
+        if bands in [1, 2]:
+            interp = 'grey16'
+        elif bands in [3, 4]:
+            interp = 'rgb16'
+    elif format == 'short':
+        if bands == 1:
+            interp = 'matrix'
+    elif format in ['float', 'double']:
+        if bands in [1, 2]:
+            interp = 'b-w'
+        elif bands in [3, 4]:
+            interp = 'scrgb'
+    elif format in ['complex', 'dpcomplex']:
+        interp = 'fourier'
+
+    return interp
+
+
 # metaclass for Image ... getattr on this implements the class methods
 class ImageType(type):
     def __getattr__(cls, name):
@@ -890,7 +993,7 @@ class Image(pyvips.VipsObject):
         return vips_lib.vips_image_remove(self.pointer, _to_bytes(name)) != 0
 
     def toarray(self):
-        """Return an image as an array.
+        """Return an image as a list of lists.
 
         This is extremely slow and only useful for very small images.
 
@@ -898,6 +1001,206 @@ class Image(pyvips.VipsObject):
 
         return [[self(x, y) for x in range(self.width)] 
                 for y in range(self.height)]
+
+
+    # # Following will be relevant if we expose the buffer interface:
+    # @property
+    # def __array_interface__(self):
+    #     '''Return a numpy-standard __array_interface__ dictionary.
+    #    
+    #     This is used by some libraries (PIL, e.g.) to interpret the image as an array.
+    #    
+    #     See https://numpy.org/doc/stable/reference/arrays.interface.html for more info.
+    # 
+    #     '''
+    #   
+    #     if self.bands == 1:
+    #         shape = (self.height, self.width)
+    #     else:
+    #         shape = (self.height, self.width, self.bands)
+    # 
+    #     typestr = FORMAT_TO_TYPESTR[self.format]
+    #     
+    #     interface = {
+    #         'shape': shape,
+    #         'strides': None,
+    #         'descr': [('', typestr)],
+    #         'typestr': typestr,
+    #         'version': 3
+    #     }
+    # 
+    #     return interface
+
+
+    def __array__(self, dtype=None):
+        '''Conversion to a NumPy array.
+        
+        Parameters
+        ----------
+        dtype : str or numpy dtype
+            The dtype to use for the numpy array.  If None, the default dtype of
+            the image is used as defined the global `FORMAT_TO_TYPESTR` dictionary.
+        
+        Returns
+        -------
+        numpy.ndarray
+            The array representation of the image.
+            - Single-band images lose their channel axis.
+            - Single-pixel single-band images are converted to a 0D array.
+            
+
+
+        See https://numpy.org/devdocs/user/basics.dispatch.html for more details.
+
+        This enables a `pyvips.Image` to be used where a numpy array is expected,
+        including in plotting and conversion to other array container types (pytorch, 
+        JAX, dask, etc.), for example.
+
+        `numpy` is a runtime dependency of this function.
+
+        See Also
+        --------
+        `Image.fromarray` for the inverse operation.
+        '''
+        import numpy as np
+
+        arr = (
+            np.frombuffer(self.write_to_memory(), dtype=FORMAT_TO_TYPESTR[self.format])
+            .reshape(self.height, self.width, self.bands)
+        )
+
+        if self.bands == 1:
+            arr = arr.squeeze(axis=-1) # flatten single-band images
+
+            if self.width == 1 and self.height == 1:
+                arr = arr.squeeze(axis=(0, 1)) # flatten single-pixel single-band images
+
+        if dtype is not None:
+            arr = arr.astype(dtype)
+
+        return arr
+
+
+    def numpy(self, dtype=None):
+        '''Convenience function to allow numpy conversion to be at the end of a method chain.
+
+        This mimics the behavior of pytorch: `arr = im.op1().op2().numpy()`
+
+        numpy is a runtime dependency of this function.
+
+        Parameters
+        ----------
+        dtype : str or numpy dtype
+            The dtype to use for the numpy array.  If None, the default dtype of
+            the image is used.
+        
+        Returns
+        -------
+        numpy.ndarray
+            The image as a numpy array.
+
+        See Also
+        --------
+        - `Image.__array__`
+        - `FORMAT_TO_TYPESTR`: Global dictionary mapping libvips format strings to numpy dtype strings.
+        '''
+        return self.__array__(dtype=dtype)
+
+
+    @classmethod
+    def fromarray(cls, obj, interpretation='auto'):
+        '''Create a new Image from an array-like object.
+
+        Parameters
+        ----------
+        obj : Object supporting `__array_interface__` or `__array__`
+            The array to be converted to an Image.
+        interpretation : str
+            The libvips interpretation to use for the image.  Defaults to
+            'auto'. If 'auto', a heuristic is used to determine a best-guess
+            interpretation as defined in the `_guess_interpretation` function.
+
+            One of auto, error, multiband, b-w, histogram, xyz, lab, cmyk, labq,
+            rgb, cmc, lch, labs, srgb, yxy, fourier, rgb16, grey16, matrix,
+            scrgb, hsv
+
+        The behavior for input objects with different dimensions is summarized
+        as
+
+        | array ndim | array shape | Image width | Image height | Image bands |
+        |------------|-------------|-------------|--------------|-------------|
+        | 0          | ()          | 1           | 1            | 1           |
+        | 1          | (W,)        | W           | 1            | 1           |
+        | 2          | (H, W)      | W           | H            | 1           |
+        | 3          | (H, W, C)   | W           | H            | C           |
+
+        For details about the array interface, see [The Array
+        Interface](https://numpy.org/doc/stable/reference/arrays.interface.html)
+
+        If `__array_interface__` is not available, `__array__` is used as a
+        fallback.
+
+        Returns
+        -------
+        Image
+            The new image.
+
+
+        See Also
+        --------
+        :func:`_guess_interpretation`
+        '''
+        if hasattr(obj, '__array_interface__'):
+            a = obj.__array_interface__
+            shape = a['shape']
+            typestr = a['typestr']
+            ndim = len(shape)
+            strides = a['strides']
+
+            if ndim > 3:
+                raise ValueError('array has more than 3 dimensions')
+            if typestr not in TYPESTR_TO_FORMAT:
+                raise ValueError('conversion from arrays of type {0} not supported'.format(typestr))
+
+            if ndim == 0:
+                width = 1
+                height = 1
+                bands = 1
+            elif ndim == 1:
+                width = shape[0]
+                height = 1
+                bands = 1
+            elif ndim == 2:
+                height, width = shape
+                bands = 1
+            elif ndim == 3:
+                height, width, bands = shape
+
+            format = TYPESTR_TO_FORMAT[typestr]
+
+            if interpretation == 'auto':
+                interpretation = _guess_interpretation(bands, format)
+
+            if strides is None:
+                data = obj.data
+            else:
+                # To obtain something with a contiguous memory layout
+                data = obj.tobytes() if hasattr(obj, 'tobytes') else obj.tostring()
+
+            return cls.new_from_memory(
+                data, 
+                width, 
+                height, 
+                bands, 
+                format
+            ).copy(interpretation=interpretation)
+
+        elif hasattr(obj, '__array__'):
+            # make it into something that *does* define __array_interface__
+            return cls.fromarray(obj.__array__()) 
+        else:
+            raise ValueError('object does not define __array_interface__ or __array__')
+
 
     def __repr__(self):
         if self.interpretation == 'matrix' and \
