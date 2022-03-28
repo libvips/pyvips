@@ -718,6 +718,23 @@ class Image(pyvips.VipsObject):
         if result != 0:
             raise Error('unable to write to image')
 
+    def invalidate(self):
+        """Drop caches on an image, and any downstream images.
+
+        This method drops all pixel caches on an image and on all downstream
+        images. Any operations which depend on this image, directly or
+        indirectly, are also dropped from the libvips operation cache.
+
+        This method can be useful if you wrap a libvips image around an area
+        of memory with :meth:`.new_from_memory` and then change some bytes
+        without libvips knowing.
+
+        Returns:
+            None
+
+        """
+        vips_lib.vips_image_invalidate_all(self.pointer)
+
     def set_progress(self, progress):
         """Enable progress reporting on an image.
 
