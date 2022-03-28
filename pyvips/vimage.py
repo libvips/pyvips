@@ -126,10 +126,8 @@ def _deprecated(note):
 
 
 # Rules for the mapping betweeen numpy typestrings and libvips formats 
-# NOTE! bool is intentionally omitted due to ambiguity with uint8 since pyvips
-# maps the results of boolean operators to uchar arrays with False->0 and
-# True->255, not True->1.
-TYPESTR_TO_FORMAT = {'|u1': 'uchar',
+TYPESTR_TO_FORMAT = {'|b1': 'uchar', # bool. Above u1 so that rev. map is uchar->u1
+                     '|u1': 'uchar',
                      '|i1': 'char',
                      '<u2': 'ushort',
                      '<i2': 'short',
@@ -1108,21 +1106,36 @@ class Image(pyvips.VipsObject):
 
 
     @classmethod
-    def fromarray(cls, obj, interpretation='auto'):
+    def fromarray(cls, obj, interpretation=None):
         '''Create a new Image from an array-like object.
 
         Parameters
         ----------
         obj : Object supporting `__array_interface__` or `__array__`
-            The array to be converted to an Image.
-        interpretation : str
-            The libvips interpretation to use for the image.  Defaults to
-            'auto'. If 'auto', a heuristic is used to determine a best-guess
+            The array to be converted to an Image.  
+            
+            Memory is shared except in the following cases: 
+            
+            - The object's memory is not contiguous.  In this case, a copy is
+              made by attempting to call the object's `tobytes()` method or its
+              `tostring()` method. 
+            
+            - The object is an array of bools, in which case it is converted to
+              a pyvips uchar image with True values becoming 255 and False
+              values becoming 0.
+
+        interpretation : str or None
+            The libvips interpretation to use for the image.  Defaults to None.
+            If None, the interpretation defaults to the pyvips one for
+            `Image.new_from_memory`.
+            
+            If 'auto', a heuristic is used to determine a best-guess
             interpretation as defined in the `_guess_interpretation` function.
 
-            One of auto, error, multiband, b-w, histogram, xyz, lab, cmyk, labq,
-            rgb, cmc, lch, labs, srgb, yxy, fourier, rgb16, grey16, matrix,
-            scrgb, hsv
+            Must be one of None, 'auto', 'error', 'multiband', 'b-w',
+            'histogram', 'xyz', 'lab', 'cmyk', 'labq', 'rgb', 'cmc', 'lch',
+            'labs', 'srgb', 'yxy', 'fourier', 'rgb16', 'grey16', 'matrix',
+            'scrgb', or 'hsv'
 
         The behavior for input objects with different dimensions is summarized
         as
@@ -1178,22 +1191,31 @@ class Image(pyvips.VipsObject):
 
             format = TYPESTR_TO_FORMAT[typestr]
 
-            if interpretation == 'auto':
-                interpretation = _guess_interpretation(bands, format)
-
             if strides is None:
                 data = obj.data
             else:
                 # To obtain something with a contiguous memory layout
                 data = obj.tobytes() if hasattr(obj, 'tobytes') else obj.tostring()
 
-            return cls.new_from_memory(
+            im = cls.new_from_memory(
                 data, 
                 width, 
                 height, 
                 bands, 
                 format
-            ).copy(interpretation=interpretation)
+            )
+            
+            if typestr == '|b1': # special case for bool
+                im = im.ifthenelse(255, 0) # True in vips is uchar(255)
+
+
+            if interpretation is not None:
+                if interpretation == 'auto':
+                    interpretation = _guess_interpretation(bands, format)
+                
+                im = im.copy(interpretation=interpretation)
+
+            return im
 
         elif hasattr(obj, '__array__'):
             # make it into something that *does* define __array_interface__

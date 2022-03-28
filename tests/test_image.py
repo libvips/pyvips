@@ -181,10 +181,14 @@ class TestImage:
         from pyvips.vimage import TYPESTR_TO_FORMAT
         for typestr, format in TYPESTR_TO_FORMAT.items():
             this_xy = xy.cast(format)
-            yx = np.array(this_xy)
+            if typestr == '|b1':
+                yx = np.asarray(this_xy, dtype=typestr)
+            else:
+                yx = np.array(this_xy)
+
             assert yx.dtype == np.dtype(typestr)
             assert yx.shape == (5, 4, 2)
-            assert all(yx.max(axis=(0, 1)) == np.array([3, 4]))
+            assert all(yx.max(axis=(0, 1)) == np.array([3, 4], dtype=typestr))
 
         x, y = xy
         x_iy = pyvips.Image.complexform(x, y)
@@ -298,6 +302,8 @@ class TestImage:
         from pyvips.vimage import TYPESTR_TO_FORMAT
 
         for typestr, format in TYPESTR_TO_FORMAT.items():
+            if typestr == '|b1':
+                continue
             a = np.indices((5, 4), dtype=typestr).transpose(1, 2, 0)
             yx = pyvips.Image.fromarray(a)
             assert yx.format == format
@@ -308,8 +314,8 @@ class TestImage:
             im = pyvips.Image.fromarray(a) # too many dimensions
 
         a = np.ones((2,2,2), dtype=bool)
-        with pytest.raises(ValueError):
-            im = pyvips.Image.fromarray(a) # bool not supported due to ambiguity (255 or 1?)
+        im = pyvips.Image.fromarray(a)
+        assert im.max() == 255
 
         a = np.ones((2,2,2), dtype='S8')
         with pytest.raises(ValueError):
@@ -329,7 +335,7 @@ class TestImage:
 
         im = pyvips.Image.fromarray(pim)
         assert im.format == 'uchar'
-        assert im.interpretation == 'rgb'
+        assert im.interpretation == 'srgb'
         assert im.width == pim.width
         assert im.height == pim.height
         assert im.min() == 0
