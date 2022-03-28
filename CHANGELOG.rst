@@ -2,12 +2,13 @@
  
 ## Version 2.1.17 (15 Dec 2021)
 
-* add `to_array()` [jcupitt]
+* add `toarray()` [jcupitt]
 * `repr()` will print matrix images as matrices [jcupitt]
 * more robust bandwise index/slice; added fancy slicing (step != 1) [erdmann]
 * fig segfault for `im.bandjoin([])`.  Now returns `im` [erdmann]
 * add numpy-style extended indexing (index with list of ints or bools) [erdmann]
 * earlier detection of unknown methods and class methods [jcupitt]
+* add `invalidate()` [jcupitt]
 
 ## Version 2.1.16 (28 Jun 2021)
 
