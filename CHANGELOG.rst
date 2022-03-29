@@ -10,7 +10,8 @@
 * earlier detection of unknown methods and class methods [jcupitt]
 * add `invalidate()` [jcupitt]
 * add conversion from Image to numpy array via 'Image.__array__` [erdmann]
-* add `Image.fromarray()` for conversion from numpy-ish arrays [erdmann]
+* add array-like functionality to `Image.new_from_array()` for conversion from
+  numpy-ish arrays [erdmann]
 * add `Image.numpy()` (convenient for method chaining) [erdmann]
 * rename `toarray()` to `tolist()`, rewrite for efficiency [erdmann]
 

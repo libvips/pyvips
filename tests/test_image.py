@@ -290,11 +290,11 @@ class TestImage:
         # torch to Image:
         x = torch.outer(torch.arange(10), torch.arange(5))
         with pytest.raises(ValueError): # no vips format for int64
-            im = pyvips.Image.fromarray(x)
+            im = pyvips.Image.new_from_array(x)
 
         x = x.float()
 
-        im = pyvips.Image.fromarray(x)
+        im = pyvips.Image.new_from_array(x)
         assert im.width == 5
         assert im.height == 10
         assert im(4, 9) == [36]
@@ -314,7 +314,7 @@ class TestImage:
         a = np.indices((5, 4)).transpose(1, 2, 0)  # (5, 4, 2)
 
         with pytest.raises(ValueError):
-            yx = pyvips.Image.fromarray(a)  # no way in for int64
+            yx = pyvips.Image.new_from_array(a)  # no way in for int64
 
         from pyvips.vimage import TYPESTR_TO_FORMAT
 
@@ -322,25 +322,45 @@ class TestImage:
             if typestr == '|b1':
                 continue
             a = np.indices((5, 4), dtype=typestr).transpose(1, 2, 0)
-            yx = pyvips.Image.fromarray(a)
+            yx = pyvips.Image.new_from_array(a)
             assert yx.format == format
 
         a = np.zeros((2,2,2,2))
 
         with pytest.raises(ValueError):
-            im = pyvips.Image.fromarray(a) # too many dimensions
+            im = pyvips.Image.new_from_array(a) # too many dimensions
 
         a = np.ones((2,2,2), dtype=bool)
-        im = pyvips.Image.fromarray(a)
+        im = pyvips.Image.new_from_array(a)
         assert im.max() == 255
 
         a = np.ones((2,2,2), dtype='S8')
         with pytest.raises(ValueError):
-            im = pyvips.Image.fromarray(a) # no way in for strings
+            im = pyvips.Image.new_from_array(a) # no way in for strings
 
         l = [[1., 2.],[3., 4.]]
         with pytest.raises(ValueError):
-            im = pyvips.Image.fromarray(a) # no way in for lists
+            im = pyvips.Image.new_from_array(a) # no way in for lists
+
+    def test_tolist(self):
+        im = pyvips.Image.complexform(*pyvips.Image.xyz(3, 4))
+
+        assert im.tolist()[-1][-1] == 2+3j
+
+        im = im.cast('dpcomplex')
+
+        assert im.tolist()[-1][-1] == 2+3j
+
+        lst = [[1, 2, 3], [4, 5, 6]]
+
+        im = pyvips.Image.new_from_array(lst)
+
+        assert im.tolist() == lst
+
+        assert im.cast('float').tolist() == lst
+        assert im.cast('complex').tolist() == lst
+
+
 
     def test_from_PIL(self):
         try:
@@ -350,7 +370,7 @@ class TestImage:
 
         pim = PIL.Image.new('RGB', (42, 23))
 
-        im = pyvips.Image.fromarray(pim)
+        im = pyvips.Image.new_from_array(pim)
         assert im.format == 'uchar'
         assert im.interpretation == 'srgb'
         assert im.width == pim.width
