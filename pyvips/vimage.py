@@ -1168,7 +1168,7 @@ class Image(pyvips.VipsObject):
         lst = [ list(row) for row in struct.iter_unpack(rowfmt, buf) ]
 
         if is_complex:
-            lst = [ [ r[i] +1j*r[i+1] for i in range(0, row_els, 2) ] for r in lst ]
+            lst = [ [ r[i] + 1j*r[i+1] for i in range(0, row_els, 2) ] for r in lst ]
 
         return lst
 
