@@ -211,6 +211,8 @@ def cdefs(features):
         void g_object_get_property (GObject* object,
             const char* name, GValue* value);
 
+        void vips_image_invalidate_all (VipsImage* image);
+
         typedef void (*GCallback)(void);
         typedef void (*GClosureNotify)(void* data, struct _GClosure *);
         long g_signal_connect_data (GObject* object,

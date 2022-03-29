@@ -340,3 +340,20 @@ class TestImage:
         assert im.height == pim.height
         assert im.min() == 0
         assert im.max() == 0
+
+    def test_invalidate(self):
+        try:
+            import numpy as np
+        except ImportError:
+            pytest.skip('numpy not available')
+
+        a = np.zeros((1,1))
+        p = pyvips.Image.new_from_memory(a.data, 1, 1, 1, 'double')
+        v = p(0, 0)
+        assert v == [0]
+        a[0,0] = 1
+        v = p(0, 0)
+        assert v == [0]
+        p.invalidate()
+        v = p(0, 0)
+        assert v == [1]

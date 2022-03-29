@@ -2,7 +2,7 @@
  
 ## Version 2.1.17 (15 Dec 2021)
 
-* add `to_array()` [jcupitt]
+* add `toarray()` [jcupitt]
 * `repr()` will print matrix images as matrices [jcupitt]
 * more robust bandwise index/slice; added fancy slicing (step != 1) [erdmann]
 * fig segfault for `im.bandjoin([])`.  Now returns `im` [erdmann]
@@ -11,6 +11,7 @@
 * add conversion from Image to numpy array via 'Image.__array__` [erdmann]
 * add `Image.fromarray()` for conversion from numpy-ish arrays [erdmann]
 * add `Image.numpy()` (convenient for method chaining) [erdmann]
+* add `invalidate()` [jcupitt]
 
 ## Version 2.1.16 (28 Jun 2021)
 
