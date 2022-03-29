@@ -1266,6 +1266,230 @@ class Image(pyvips.VipsObject):
         return self.__array__(dtype=dtype)
 
 
+
+    # # Following will be relevant if we expose the buffer interface:
+    # @property
+    # def __array_interface__(self):
+    #     '''Return a numpy-standard __array_interface__ dictionary.
+    #    
+    #     This is used by some libraries (PIL, e.g.) to interpret the image as an array.
+    #    
+    #     See https://numpy.org/doc/stable/reference/arrays.interface.html for more info.
+    # 
+    #     '''
+    #   
+    #     if self.bands == 1:
+    #         shape = (self.height, self.width)
+    #     else:
+    #         shape = (self.height, self.width, self.bands)
+    # 
+    #     typestr = FORMAT_TO_TYPESTR[self.format]
+    #     
+    #     interface = {
+    #         'shape': shape,
+    #         'strides': None,
+    #         'descr': [('', typestr)],
+    #         'typestr': typestr,
+    #         'version': 3
+    #     }
+    # 
+    #     return interface
+
+
+    def __array__(self, dtype=None):
+        '''Conversion to a NumPy array.
+        
+        Parameters
+        ----------
+        dtype : str or numpy dtype
+            The dtype to use for the numpy array.  If None, the default dtype of
+            the image is used as defined the global `FORMAT_TO_TYPESTR` dictionary.
+        
+        Returns
+        -------
+        numpy.ndarray
+            The array representation of the image.
+            - Single-band images lose their channel axis.
+            - Single-pixel single-band images are converted to a 0D array.
+            
+
+
+        See https://numpy.org/devdocs/user/basics.dispatch.html for more details.
+
+        This enables a `pyvips.Image` to be used where a numpy array is expected,
+        including in plotting and conversion to other array container types (pytorch, 
+        JAX, dask, etc.), for example.
+
+        `numpy` is a runtime dependency of this function.
+
+        See Also
+        --------
+        `Image.fromarray` for the inverse operation.
+        '''
+        import numpy as np
+
+        arr = (
+            np.frombuffer(self.write_to_memory(), dtype=FORMAT_TO_TYPESTR[self.format])
+            .reshape(self.height, self.width, self.bands)
+        )
+
+        if self.bands == 1:
+            arr = arr.squeeze(axis=-1) # flatten single-band images
+
+            if self.width == 1 and self.height == 1:
+                arr = arr.squeeze(axis=(0, 1)) # flatten single-pixel single-band images
+
+        if dtype is not None:
+            arr = arr.astype(dtype)
+
+        return arr
+
+
+    def numpy(self, dtype=None):
+        '''Convenience function to allow numpy conversion to be at the end of a method chain.
+
+        This mimics the behavior of pytorch: `arr = im.op1().op2().numpy()`
+
+        numpy is a runtime dependency of this function.
+
+        Parameters
+        ----------
+        dtype : str or numpy dtype
+            The dtype to use for the numpy array.  If None, the default dtype of
+            the image is used.
+        
+        Returns
+        -------
+        numpy.ndarray
+            The image as a numpy array.
+
+        See Also
+        --------
+        - `Image.__array__`
+        - `FORMAT_TO_TYPESTR`: Global dictionary mapping libvips format strings to numpy dtype strings.
+        '''
+        return self.__array__(dtype=dtype)
+
+
+    @classmethod
+    def fromarray(cls, obj, interpretation=None):
+        '''Create a new Image from an array-like object.
+
+        Parameters
+        ----------
+        obj : Object supporting `__array_interface__` or `__array__`
+            The array to be converted to an Image.  
+            
+            Memory is shared except in the following cases: 
+            
+            - The object's memory is not contiguous.  In this case, a copy is
+              made by attempting to call the object's `tobytes()` method or its
+              `tostring()` method. 
+            
+            - The object is an array of bools, in which case it is converted to
+              a pyvips uchar image with True values becoming 255 and False
+              values becoming 0.
+
+        interpretation : str or None
+            The libvips interpretation to use for the image.  Defaults to None.
+            If None, the interpretation defaults to the pyvips one for
+            `Image.new_from_memory`.
+            
+            If 'auto', a heuristic is used to determine a best-guess
+            interpretation as defined in the `_guess_interpretation` function.
+
+            Must be one of None, 'auto', 'error', 'multiband', 'b-w',
+            'histogram', 'xyz', 'lab', 'cmyk', 'labq', 'rgb', 'cmc', 'lch',
+            'labs', 'srgb', 'yxy', 'fourier', 'rgb16', 'grey16', 'matrix',
+            'scrgb', or 'hsv'
+
+        The behavior for input objects with different dimensions is summarized
+        as
+
+        | array ndim | array shape | Image width | Image height | Image bands |
+        |------------|-------------|-------------|--------------|-------------|
+        | 0          | ()          | 1           | 1            | 1           |
+        | 1          | (W,)        | W           | 1            | 1           |
+        | 2          | (H, W)      | W           | H            | 1           |
+        | 3          | (H, W, C)   | W           | H            | C           |
+
+        For details about the array interface, see [The Array
+        Interface](https://numpy.org/doc/stable/reference/arrays.interface.html)
+
+        If `__array_interface__` is not available, `__array__` is used as a
+        fallback.
+
+        Returns
+        -------
+        Image
+            The new image.
+
+
+        See Also
+        --------
+        :func:`_guess_interpretation`
+        '''
+        if hasattr(obj, '__array_interface__'):
+            a = obj.__array_interface__
+            shape = a['shape']
+            typestr = a['typestr']
+            ndim = len(shape)
+            strides = a['strides']
+
+            if ndim > 3:
+                raise ValueError('array has more than 3 dimensions')
+            if typestr not in TYPESTR_TO_FORMAT:
+                raise ValueError('conversion from arrays of type {0} not supported'.format(typestr))
+
+            if ndim == 0:
+                width = 1
+                height = 1
+                bands = 1
+            elif ndim == 1:
+                width = shape[0]
+                height = 1
+                bands = 1
+            elif ndim == 2:
+                height, width = shape
+                bands = 1
+            elif ndim == 3:
+                height, width, bands = shape
+
+            format = TYPESTR_TO_FORMAT[typestr]
+
+            if strides is None:
+                data = obj.data
+            else:
+                # To obtain something with a contiguous memory layout
+                data = obj.tobytes() if hasattr(obj, 'tobytes') else obj.tostring()
+
+            im = cls.new_from_memory(
+                data, 
+                width, 
+                height, 
+                bands, 
+                format
+            )
+            
+            if typestr == '|b1': # special case for bool
+                im = im.ifthenelse(255, 0) # True in vips is uchar(255)
+
+
+            if interpretation is not None:
+                if interpretation == 'auto':
+                    interpretation = _guess_interpretation(bands, format)
+                
+                im = im.copy(interpretation=interpretation)
+
+            return im
+
+        elif hasattr(obj, '__array__'):
+            # make it into something that *does* define __array_interface__
+            return cls.fromarray(obj.__array__()) 
+        else:
+            raise ValueError('object does not define __array_interface__ or __array__')
+
+
     def __repr__(self):
         if (
             self.interpretation == "matrix"

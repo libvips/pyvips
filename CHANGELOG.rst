@@ -8,6 +8,9 @@
 * fig segfault for `im.bandjoin([])`.  Now returns `im` [erdmann]
 * add numpy-style extended indexing (index with list of ints or bools) [erdmann]
 * earlier detection of unknown methods and class methods [jcupitt]
+* add conversion from Image to numpy array via 'Image.__array__` [erdmann]
+* add `Image.fromarray()` for conversion from numpy-ish arrays [erdmann]
+* add `Image.numpy()` (convenient for method chaining) [erdmann]
 * add `invalidate()` [jcupitt]
 * add conversion from Image to numpy array via 'Image.__array__` [erdmann]
 * add array-like functionality to `Image.new_from_array()` for conversion from
