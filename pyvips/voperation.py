@@ -32,6 +32,7 @@ class Introspect(object):
     __slots__ = ('description', 'flags', 'details',
                  'required_input', 'optional_input',
                  'required_output', 'optional_output',
+                 'doc_optional_input', 'doc_optional_output',
                  'member_x', 'method_args')
 
     def __init__(self, operation_name):
@@ -91,6 +92,11 @@ class Introspect(object):
         self.required_output = []
         self.optional_output = []
 
+        # same, but with deprecated args filtered out ... this is the set we
+        # show in documentation
+        self.doc_optional_input = []
+        self.doc_optional_output = []
+
         for name, flags in arguments:
             if ((flags & _INPUT) != 0 and
                     (flags & _REQUIRED) != 0 and
@@ -106,15 +112,21 @@ class Introspect(object):
                     (flags & _DEPRECATED) == 0):
                 self.required_output.append(name)
 
-            # we let deprecated optional args through, but warn about them
-            # if they get used, see below
+            # deprecated optional args get on to the main arg lists, but are
+            # filtered from the documented set
             if ((flags & _INPUT) != 0 and
                     (flags & _REQUIRED) == 0):
                 self.optional_input.append(name)
 
+                if (flags & _DEPRECATED) == 0:
+                    self.doc_optional_input.append(name)
+
             if ((flags & _OUTPUT) != 0 and
                     (flags & _REQUIRED) == 0):
                 self.optional_output.append(name)
+
+                if (flags & _DEPRECATED) == 0:
+                    self.doc_optional_output.append(name)
 
         # find the first required input image arg, if any ... that will be self
         self.member_x = None
@@ -243,8 +255,8 @@ class Operation(pyvips.VipsObject):
 
         logger.debug('VipsOperation.call: match_image = %s', match_image)
 
-        # collect a list of all input references here 
-        # we can't use a set because set elements are unique under "==", and 
+        # collect a list of all input references here
+        # we can't use a set because set elements are unique under "==", and
         # Python checks memoryview equality with hash functions, not pointer
         # equality
         references = []
@@ -271,16 +283,16 @@ class Operation(pyvips.VipsObject):
 
         # set any optional args
         for name in kwargs:
-            value = kwargs[name]
-            details = intro.details[name]
-
             if (name not in intro.optional_input and
                     name not in intro.optional_output):
                 raise Error('{0} does not support optional argument {1}'
                             .format(operation_name, name))
 
+            value = kwargs[name]
+            details = intro.details[name]
+
             if (details['flags'] & _DEPRECATED) != 0:
-                logger.info('{0} argument {1} is deprecated',
+                logger.info('%s argument %s is deprecated',
                             operation_name, name)
 
             _find_inside(add_reference, value)
@@ -289,6 +301,7 @@ class Operation(pyvips.VipsObject):
         # build operation
         vop = vips_lib.vips_cache_operation_build(op.pointer)
         if vop == ffi.NULL:
+            vips_lib.vips_object_unref_outputs(op.vobject)
             raise Error('unable to call {0}'.format(operation_name))
         op = Operation(vop)
 
@@ -356,9 +369,9 @@ class Operation(pyvips.VipsObject):
         args = []
         args += intro.method_args
         args += [x + '=' + GValue.gtype_to_python(intro.details[x]['type'])
-                 for x in intro.optional_input]
+                 for x in intro.doc_optional_input]
         args += [x + '=bool'
-                 for x in intro.optional_output]
+                 for x in intro.doc_optional_output]
         result += ", ".join(args) + ')\n'
 
         def argstr(name):
@@ -378,14 +391,14 @@ class Operation(pyvips.VipsObject):
         for name in intro.method_args:
             result += argstr(name)
 
-        if len(intro.optional_input) > 0:
+        if len(intro.doc_optional_input) > 0:
             result += '\nKeyword args:\n'
-            for name in intro.optional_input:
+            for name in intro.doc_optional_input:
                 result += argstr(name)
 
-        if len(intro.optional_output) > 0:
+        if len(intro.doc_optional_output) > 0:
             result += '\nOther Parameters:\n'
-            for name in intro.optional_output:
+            for name in intro.doc_optional_output:
                 result += argstr(name)
 
         result += '\nRaises:\n    :class:`.Error`\n'
@@ -415,16 +428,18 @@ class Operation(pyvips.VipsObject):
         args = []
         args += intro.method_args
         args += [x + '=' + GValue.gtype_to_python(intro.details[x]['type'])
-                 for x in intro.optional_input]
+                 for x in intro.doc_optional_input]
         args += [x + '=bool'
-                 for x in intro.optional_output]
+                 for x in intro.doc_optional_output]
         result += operation_name + '(' + ", ".join(args) + ')\n\n'
 
         result += intro.description[0].upper() + \
             intro.description[1:] + '.\n\n'
 
         result += 'Example:\n'
-        result += '    ' + ', '.join(intro.required_output) + ' = '
+        result += '    '
+        if len(intro.required_output) > 0:
+            result += ', '.join(intro.required_output) + ' = '
         if intro.member_x is not None:
             result += intro.member_x + "." + operation_name + '('
         else:
@@ -432,17 +447,17 @@ class Operation(pyvips.VipsObject):
         args = []
         args += intro.method_args
         args += [x + '=' + GValue.gtype_to_python(intro.details[x]['type'])
-                 for x in intro.optional_input]
+                 for x in intro.doc_optional_input]
         result += ', '.join(args)
         result += ')\n\n'
 
-        for name in intro.method_args + intro.optional_input:
+        for name in intro.method_args + intro.doc_optional_input:
             details = intro.details[name]
             result += (':param {0}: {1}\n'.
                        format(name, details['blurb']))
             result += (':type {0}: {1}\n'.
                        format(name, GValue.gtype_to_python(details['type'])))
-        for name in intro.optional_output:
+        for name in intro.doc_optional_output:
             result += (':param {0}: enable output: {1}\n'.
                        format(name, intro.details[name]['blurb']))
             result += (':type {0}: bool\n'.format(name))
@@ -454,7 +469,7 @@ class Operation(pyvips.VipsObject):
         else:
             output_type = 'list[' + ', '.join(output_types) + ']'
 
-        if len(intro.optional_output) > 0:
+        if len(intro.doc_optional_output) > 0:
             output_types += ['Dict[str, mixed]']
             output_type += ' or list[' + ', '.join(output_types) + ']'
 
@@ -549,8 +564,30 @@ def cache_set_trace(trace):
     vips_lib.vips_cache_set_trace(trace)
 
 
+def cache_get_max():
+    """Get the maximum number of operations libvips will cache."""
+    return vips_lib.vips_cache_get_max()
+
+
+def cache_get_size():
+    """Get the current size of the operations cache."""
+    return vips_lib.vips_cache_get_size()
+
+
+def cache_get_max_mem():
+    """Get the operation cache limit by memory use."""
+    return vips_lib.vips_cache_get_max_mem()
+
+
+def cache_get_max_files():
+    """Get the operation cache limit by number of open files."""
+    return vips_lib.vips_cache_get_max_files()
+
+
 __all__ = [
     'Introspect', 'Operation',
     'cache_set_max', 'cache_set_max_mem', 'cache_set_max_files',
-    'cache_set_trace'
+    'cache_set_trace',
+    'cache_get_max', 'cache_get_max_mem', 'cache_get_max_files',
+    'cache_get_size',
 ]

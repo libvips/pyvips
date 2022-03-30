@@ -81,6 +81,8 @@ def cdefs(features):
 
         const char* vips_error_buffer (void);
         void vips_error_clear (void);
+        void vips_error_freeze (void);
+        void vips_error_thaw (void);
 
         typedef struct _GValue {
             GType g_type;
@@ -175,13 +177,28 @@ def cdefs(features):
         } GEnumValue;
 
         typedef struct _GEnumClass {
-          GTypeClass *g_type_class;
+            GTypeClass *g_type_class;
 
-          int minimum;
-          int maximum;
-          unsigned int n_values;
-          GEnumValue *values;
+            int minimum;
+            int maximum;
+            unsigned int n_values;
+            GEnumValue *values;
         } GEnumClass;
+
+        typedef struct _GFlagsValue {
+            unsigned int value;
+
+            const char *value_name;
+            const char *value_nick;
+        } GFlagsValue;
+
+        typedef struct _GFlagsClass {
+            GTypeClass *g_type_class;
+
+            unsigned int mask;
+            unsigned int n_values;
+            GFlagsValue *values;
+        } GFlagsClass;
 
         void* g_type_class_ref (GType type);
 
@@ -193,6 +210,8 @@ def cdefs(features):
             const char *name, GValue* value);
         void g_object_get_property (GObject* object,
             const char* name, GValue* value);
+
+        void vips_image_invalidate_all (VipsImage* image);
 
         typedef void (*GCallback)(void);
         typedef void (*GClosureNotify)(void* data, struct _GClosure *);
@@ -381,6 +400,10 @@ def cdefs(features):
         void vips_cache_set_max_files (int max_files);
         void vips_cache_set_trace (int trace);
 
+        int vips_cache_get_max();
+        int vips_cache_get_size();
+        size_t vips_cache_get_max_mem();
+        int vips_cache_get_max_files();
     '''
 
     if _at_least(features, 8, 5):
@@ -413,6 +436,8 @@ def cdefs(features):
                 size_t* length);
             int vips_region_width (VipsRegion*);
             int vips_region_height (VipsRegion*);
+            int vips_image_get_page_height (VipsImage*);
+            int vips_image_get_n_pages (VipsImage*);
 
         '''
 

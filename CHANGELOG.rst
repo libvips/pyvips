@@ -1,8 +1,34 @@
 # master 
+ 
+## Version 2.1.17 (15 Dec 2021)
+
+* add `toarray()` [jcupitt]
+* `repr()` will print matrix images as matrices [jcupitt]
+* more robust bandwise index/slice; added fancy slicing (step != 1) [erdmann]
+* fig segfault for `im.bandjoin([])`.  Now returns `im` [erdmann]
+* add numpy-style extended indexing (index with list of ints or bools) [erdmann]
+* earlier detection of unknown methods and class methods [jcupitt]
+* add `invalidate()` [jcupitt]
+
+## Version 2.1.16 (28 Jun 2021)
+
+* fix logging of deprecated args [manthey]
+* add shepards example [tourtiere]
+* update docs for 8.12 [jcupitt]
+* add pagesplit(), pagejoin(), get_page_height(), get_n_pages() [jcupitt]
+* add atan2() [jcupitt]
+* add `cache_get_max()`, `cache_get_max_mem()`, `cache_get_max_files()`, 
+  `cache_get_size()` [hroskes]
+* don't generate docs for deprecated arguments [jcupitt]
+* buffer save tries with the target API first [jcupitt]
+* add hyperbolic functions `sinh`, `cosh`, `tanh`, `asinh`, `acosh`, 
+  `atanh` [jcupitt]
+* add `values_for_flag` [kleisauke]
 
 ## Version 2.1.15 (27 Dec 2020)
 
-* better sutodocs for enums [int-ua]
+* better autodocs for enums [int-ua]
+* better unreffing if operators fail [kleisauke]
 
 ## Version 2.1.14 (18 Dec 2020)
 

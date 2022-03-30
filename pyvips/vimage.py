@@ -6,7 +6,7 @@ import numbers
 
 import pyvips
 from pyvips import ffi, glib_lib, vips_lib, Error, _to_bytes, \
-    _to_string, _to_string_copy, GValue, at_least_libvips
+    _to_string, _to_string_copy, GValue, at_least_libvips, Introspect
 
 
 # either a single number, or a table of numbers
@@ -129,6 +129,15 @@ def _deprecated(note):
 class ImageType(type):
     def __getattr__(cls, name):
         # logger.debug('ImageType.__getattr__ %s', name)
+
+        # does the method exist in libvips? 
+        try:
+            # this will throw an exception if not
+            intro = Introspect.get(name)
+        except: 
+            # we need to throw this exception for missing methods, eg. numpy
+            # checks for this
+            raise AttributeError
 
         @_add_doc(name)
         def call_function(*args, **kwargs):
@@ -583,45 +592,33 @@ class Image(pyvips.VipsObject):
         """
         format_string = _to_bytes(format_string)
 
+        filename = vips_lib.vips_filename_get_filename(format_string)
+
         pointer = vips_lib.vips_filename_get_options(format_string)
         options = _to_string_copy(pointer)
 
-        pointer = vips_lib.vips_foreign_find_save_buffer(format_string)
-        if pointer == ffi.NULL:
-            raise Error('unable to write to buffer')
-        name = _to_string(pointer)
+        pointer = ffi.NULL
+        if at_least_libvips(8, 9):
+            vips_lib.vips_error_freeze()
+            pointer = vips_lib.vips_foreign_find_save_target(filename)
+            vips_lib.vips_error_thaw()
 
-        return pyvips.Operation.call(name, self,
-                                     string_options=options, **kwargs)
+        if pointer != ffi.NULL:
+            name = _to_string(pointer)
+            target = pyvips.Target.new_to_memory()
+            pyvips.Operation.call(name, self, target,
+                                  string_options=options, **kwargs)
+            buffer = target.get("blob")
+        else:
+            pointer = vips_lib.vips_foreign_find_save_buffer(filename)
+            if pointer == ffi.NULL:
+                raise Error('unable to write to buffer')
 
-    def write_to_memory(self):
-        """Write the image to a large memory array.
+            name = _to_string(pointer)
+            buffer = pyvips.Operation.call(name, self,
+                                           string_options=options, **kwargs)
 
-        A large area of memory is allocated, the image is rendered to that
-        memory array, and the array is returned as a buffer.
-
-        For example, if you have a 2x2 uchar image containing the bytes 1, 2,
-        3, 4, read left-to-right, top-to-bottom, then::
-
-            buf = image.write_to_memory()
-
-        will return a four byte buffer containing the values 1, 2, 3, 4.
-
-        Returns:
-            buffer
-
-        Raises:
-            :class:`.Error`
-
-        """
-
-        psize = ffi.new('size_t *')
-        pointer = vips_lib.vips_image_write_to_memory(self.pointer, psize)
-        if pointer == ffi.NULL:
-            raise Error('unable to write to memory')
-        pointer = ffi.gc(pointer, glib_lib.g_free)
-
-        return ffi.buffer(pointer, psize[0])
+        return buffer
 
     def write_to_target(self, target, format_string, **kwargs):
         """Write an image to a target.
@@ -672,6 +669,35 @@ class Image(pyvips.VipsObject):
         return pyvips.Operation.call(name, self, target,
                                      string_options=options, **kwargs)
 
+    def write_to_memory(self):
+        """Write the image to a large memory array.
+
+        A large area of memory is allocated, the image is rendered to that
+        memory array, and the array is returned as a buffer.
+
+        For example, if you have a 2x2 uchar image containing the bytes 1, 2,
+        3, 4, read left-to-right, top-to-bottom, then::
+
+            buf = image.write_to_memory()
+
+        will return a four byte buffer containing the values 1, 2, 3, 4.
+
+        Returns:
+            buffer
+
+        Raises:
+            :class:`.Error`
+
+        """
+
+        psize = ffi.new('size_t *')
+        pointer = vips_lib.vips_image_write_to_memory(self.pointer, psize)
+        if pointer == ffi.NULL:
+            raise Error('unable to write to memory')
+        pointer = ffi.gc(pointer, glib_lib.g_free)
+
+        return ffi.buffer(pointer, psize[0])
+
     def write(self, other):
         """Write an image to another image.
 
@@ -691,6 +717,23 @@ class Image(pyvips.VipsObject):
         result = vips_lib.vips_image_write(self.pointer, other.pointer)
         if result != 0:
             raise Error('unable to write to image')
+
+    def invalidate(self):
+        """Drop caches on an image, and any downstream images.
+
+        This method drops all pixel caches on an image and on all downstream
+        images. Any operations which depend on this image, directly or
+        indirectly, are also dropped from the libvips operation cache.
+
+        This method can be useful if you wrap a libvips image around an area
+        of memory with :meth:`.new_from_memory` and then change some bytes
+        without libvips knowing.
+
+        Returns:
+            None
+
+        """
+        vips_lib.vips_image_invalidate_all(self.pointer)
 
     def set_progress(self, progress):
         """Enable progress reporting on an image.
@@ -863,10 +906,29 @@ class Image(pyvips.VipsObject):
 
         return vips_lib.vips_image_remove(self.pointer, _to_bytes(name)) != 0
 
+    def toarray(self):
+        """Return an image as an array.
+
+        This is extremely slow and only useful for very small images.
+
+        """
+
+        return [[self(x, y) for x in range(self.width)] 
+                for y in range(self.height)]
+
     def __repr__(self):
-        return ('<pyvips.Image {0}x{1} {2}, {3} bands, {4}>'.
-                format(self.width, self.height, self.format, self.bands,
-                       self.interpretation))
+        if self.interpretation == 'matrix' and \
+                self.width < 20 and \
+                self.height < 20 and \
+                self.bands == 1:
+            array = self.toarray()
+            # remove innermost dimension, since bands == 0
+            array = [[x[0] for x in row] for row in array]
+            return(repr(array))
+        else:
+            return ('<pyvips.Image {0}x{1} {2}, {3} bands, {4}>'.
+                    format(self.width, self.height, self.format, self.bands,
+                           self.interpretation))
 
     def __getattr__(self, name):
         """Divert unknown names to libvips.
@@ -916,6 +978,15 @@ class Image(pyvips.VipsObject):
         if super(Image, self).get_typeof(name) != 0:
             return super(Image, self).get(name)
 
+        # does the method exist in libvips? 
+        try:
+            # this will throw an exception if not
+            intro = Introspect.get(name)
+        except: 
+            # we need to throw this exception for missing methods, eg. numpy
+            # checks for this
+            raise AttributeError
+
         @_add_doc(name)
         def call_function(*args, **kwargs):
             return pyvips.Operation.call(name, self, *args, **kwargs)
@@ -949,46 +1020,89 @@ class Image(pyvips.VipsObject):
         pass
 
     def __getitem__(self, arg):
-        """Overload []
-
-        Use [] to pull out band elements from an image. You can use all the
-        usual slicing syntax, for example::
+        """Overload [] to pull out band elements from an image. 
+        
+        The following arguments types are accepted:
+        
+        * int::
 
             green = rgb_image[1]
 
-        Will make a new one-band image from band 1 (the middle band). You can
-        also write::
+          Will make a new one-band image from band 1 (the middle band).
+        
+        * slice::
 
             last_two = rgb_image[1:]
             last_band = rgb_image[-1]
             middle_few = multiband[1:-2]
+            reversed  = multiband[::-1]
+            every_other = multiband[::2]
+            other_every_other = multiband[1::2]
+
+        * list of int::
+
+            # list of integers
+            desired_bands = [1, 2, 2, -1]
+            four_band = multiband[desired_bands]
+
+        * list of bool::
+
+            wanted_bands = [True, False, True, True, False]
+            three_band = five_band[wanted_bands]
+
+        In the case of integer or slice arguments, the semantics of slicing
+        exactly match those of slicing `range(self.bands)`.  
+        
+        In the case of list arguments, the semantics match those of numpy's
+        extended slicing syntax. Thus, lists of booleans must have as many 
+        elements as there are bands in the image.
 
         """
-
-        if isinstance(arg, slice):
-            i = 0
-            if arg.start is not None:
-                i = arg.start
-
-            n = self.bands - i
-            if arg.stop is not None:
-                if arg.stop < 0:
-                    n = self.bands + arg.stop - i
-                else:
-                    n = arg.stop - i
-        elif isinstance(arg, int):
-            i = arg
+        if isinstance(arg, int):
+            i = range(self.bands)[arg] # raises IndexError for bad integer indices
             n = 1
+        elif isinstance(arg, slice):
+            band_seq = range(self.bands)[arg] 
+            if len(band_seq) == 0:
+                raise IndexError('empty slice')
+
+            i = band_seq[0]
+            n = len(band_seq)
+        elif isinstance(arg, list):
+            if not arg:
+                raise IndexError('empty list')
+
+            # n.b. We don't use isinstance because isinstance(True, int) is True!
+            if not (all(type(x)==int for x in arg) or all(type(x)==bool for x in arg)):
+                raise IndexError('list must contain only ints or only bools')
+
+            if isinstance(arg[0], bool):
+                if len(arg) != self.bands:
+                    raise IndexError('boolean index must have same length as bands')
+
+                band_seq = [ i for i, x in enumerate(arg) if x ]
+                n = len(band_seq)
+                if n == 0:
+                    raise IndexError('empty boolean index')
+                if n == 1:
+                    i = band_seq[0]
+            else:
+                all_bands = range(self.bands)
+                band_seq = [ all_bands[i] for i in arg ] # raises IndexError for bad int indices
+
+                n = len(band_seq)
+                if n == 1:
+                    i = band_seq[0]
         else:
-            raise TypeError
+            raise IndexError('argument must be an int, slice, list of ints, or list of bools')
 
-        if i < 0:
-            i = self.bands + i
-
-        if i < 0 or i >= self.bands:
-            raise IndexError
-
-        return self.extract_band(i, n=n)
+        if n == 1: # int or 1-element selection
+            return self.extract_band(i)
+        elif isinstance(arg, slice) and arg.step == 1: # sequential multi-band slice
+            return self.extract_band(i, n=n)
+        else: # nonsequential slice, list of ints, or list of bools
+            bands = [self.extract_band(x) for x in band_seq]
+            return bands[0].bandjoin(bands[1:])
 
     # overload () to mean fetch pixel
     def __call__(self, x, y):
@@ -1170,6 +1284,9 @@ class Image(pyvips.VipsObject):
         if not isinstance(other, list):
             other = [other]
 
+        if not other: # guard against empty list
+            return self
+
         # if [other] is all numbers, we can use bandjoin_const
         non_number = next((x for x in other
                            if not isinstance(x, numbers.Number)),
@@ -1179,6 +1296,65 @@ class Image(pyvips.VipsObject):
             return self.bandjoin_const(other)
         else:
             return pyvips.Operation.call('bandjoin', [self] + other)
+
+    def atan2(self, other):
+        return _call_enum(self, other, 'math2', 'atan2')
+
+    def get_n_pages(self):
+        """Get the number of pages in an image file, or 1.
+
+        This is the number of pages in the file the image was loaded from, not
+        the number of pages in the image.
+
+        To get the number of pages in an image, divide the image height by
+        the page height.
+        """
+        if at_least_libvips(8, 8):
+            return vips_lib.vips_image_get_n_pages(self.pointer)
+        else:
+            return self.get("n-pages") \
+                if self.get_typeof("n-pages") != 0 else 1
+
+    def get_page_height(self):
+        """Get the page height in a many-page image, or height.
+        """
+        if at_least_libvips(8, 8):
+            return vips_lib.vips_image_get_page_height(self.pointer)
+        else:
+            if self.get_typeof("page-height") != 0:
+                page_height = self.get("page-height")
+            else:
+                page_height = self.height
+
+            if page_height > 0 and \
+                page_height <= self.height and \
+                    self.height % page_height == 0:
+                return page_height
+            else:
+                return self.height
+
+    def pagesplit(self):
+        """Split an N-page image into a list of N separate images.
+        """
+        page_height = self.get_page_height()
+        return [self.crop(0, y, self.width, page_height)
+                for y in range(0, self.height, page_height)]
+
+    def pagejoin(self, other):
+        """Join a set of pages vertically to make a multipage image.
+
+        Also sets the page-height property on the result.
+        """
+        if not isinstance(other, list):
+            other = [other]
+
+        n_pages = 1 + len(other)
+
+        image = Image.arrayjoin([self] + other, across=1)
+        image = image.copy()
+        image.set_type(GValue.gint_type, 'page-height', image.height / n_pages)
+
+        return image
 
     def composite(self, other, mode, **kwargs):
         """Composite a set of images with a set of modes."""
@@ -1258,6 +1434,30 @@ class Image(pyvips.VipsObject):
     def atan(self):
         """Return the inverse tangent of an image in degrees."""
         return self.math('atan')
+
+    def sinh(self):
+        """Return the hyperbolic sine of an image in radians."""
+        return self.math('sinh')
+
+    def cosh(self):
+        """Return the hyperbolic cosine of an image in radians."""
+        return self.math('cosh')
+
+    def tanh(self):
+        """Return the hyperbolic tangent of an image in radians."""
+        return self.math('tanh')
+
+    def asinh(self):
+        """Return the inverse hyperbolic sine of an image in radians."""
+        return self.math('asinh')
+
+    def acosh(self):
+        """Return the inverse hyperbolic cosine of an image in radians."""
+        return self.math('acosh')
+
+    def atanh(self):
+        """Return the inverse hyperbolic tangent of an image in radians."""
+        return self.math('atanh')
 
     def log(self):
         """Return the natural log of an image."""
