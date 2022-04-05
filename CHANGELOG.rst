@@ -16,6 +16,7 @@
   numpy-ish arrays [erdmann]
 * add `Image.numpy()` (convenient for method chaining) [erdmann]
 * rename `toarray()` to `tolist()`, rewrite for efficiency [erdmann]
+* accept `pathlib.Path` objects for filenames (py3 only) [erdmann]
 
 ## Version 2.1.16 (28 Jun 2021)
 

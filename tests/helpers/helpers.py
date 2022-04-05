@@ -1,6 +1,7 @@
 # vim: set fileencoding=utf-8 :
 # test helpers
 import os
+import sys
 import tempfile
 import pytest
 
@@ -9,6 +10,8 @@ import pyvips
 IMAGES = os.path.join(os.path.dirname(__file__), os.pardir, 'images')
 JPEG_FILE = os.path.join(IMAGES, "sample.jpg")
 WEBP_FILE = os.path.join(IMAGES, "sample.webp")
+
+_is_PY3 = sys.version_info[0] == 3
 
 
 # an expanding zip ... if either of the args is a scalar or a one-element list,
