@@ -10,7 +10,9 @@ logger = logging.getLogger(__name__)
 _is_PY3 = sys.version_info[0] == 3
 
 if _is_PY3:
-    text_type = str
+    # pathlib is not part of Python 2 stdlib
+    from pathlib import Path
+    text_type = str, Path
     byte_type = bytes
 else:
     text_type = unicode
@@ -20,12 +22,13 @@ else:
 def _to_bytes(x):
     """Convert to a byte string.
 
-    Convert a Python unicode string to a utf-8-encoded byte string. You must
-    call this on strings you pass to libvips.
+    Convert a Python unicode string or a pathlib.Path to a utf-8-encoded
+    byte string. You must call this on strings you pass to libvips.
 
     """
     if isinstance(x, text_type):
-        x = x.encode('utf-8')
+        # n.b. str also converts pathlib.Path objects
+        x = str(x).encode('utf-8')
 
     return x
 
