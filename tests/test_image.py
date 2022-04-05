@@ -168,19 +168,212 @@ class TestImage:
             wrongargtype = dict(a=1, b=2)
             x = im[wrongargtype]
 
-        def test_invalidate(self):
-            try:
-                import numpy as np
-            except ImportError:
-                pytest.skip('numpy not available')
+    def test_invalidate(self):
+        try:
+            import numpy as np
+        except ImportError:
+            pytest.skip('numpy not available')
 
-            a = np.zeros((1,1))
-            p = pyvips.Image.new_from_memory(a.data, 1, 1, 1, 'double')
-            v = p(0, 0)
-            assert v == [0]
-            a[0,0] = 1
-            v = p(0, 0)
-            assert v == [0]
-            p.invalidate()
-            v = p(0, 0)
-            assert v == [1]
+        a = np.zeros((1,1))
+        p = pyvips.Image.new_from_memory(a.data, 1, 1, 1, 'double')
+        v = p(0, 0)
+        assert v == [0]
+        a[0,0] = 1
+        v = p(0, 0)
+        assert v == [0]
+        p.invalidate()
+        v = p(0, 0)
+        assert v == [1]
+        
+    def test_to_numpy(self):
+        try:
+            import numpy as np
+        except ImportError:
+            pytest.skip('numpy not available')
+
+        xy = pyvips.Image.xyz(4, 5)
+
+        # using __array__ interface:
+
+        from pyvips.vimage import TYPESTR_TO_FORMAT
+        for typestr, format in TYPESTR_TO_FORMAT.items():
+            this_xy = xy.cast(format)
+            if typestr == '|b1':
+                yx = np.asarray(this_xy, dtype=typestr)
+            else:
+                yx = np.array(this_xy)
+
+            assert yx.dtype == np.dtype(typestr)
+            assert yx.shape == (5, 4, 2)
+            assert all(yx.max(axis=(0, 1)) == np.array([3, 4], dtype=typestr))
+
+        x, y = xy
+        x_iy = pyvips.Image.complexform(x, y)
+        x_iy_dp = x_iy.cast('dpcomplex')
+
+        a = np.array(x_iy)
+        assert a.shape == (5, 4)
+        assert a.dtype == np.dtype('complex64')
+        assert a[4, 3].item() == 3+4j
+
+        a = np.array(x_iy_dp)
+        assert a.shape == (5, 4)
+        assert a.dtype == np.dtype('complex128')
+        assert a[4, 3].item() == 3+4j
+
+        xyxyxy = xy.bandjoin([xy, xy])
+        a = np.array(xyxyxy)
+        assert a.shape == (5, 4, 6)
+
+        # axes collapsing:
+        xyxyxy_col = xyxyxy.crop(3, 0, 1, 5)
+        assert xyxyxy_col.width == 1
+        assert xyxyxy_col.height == 5
+        a = np.array(xyxyxy_col)
+        assert a.shape == (5, 1, 6)
+
+        xyxyxy_row = xyxyxy.crop(0, 4, 4, 1)
+        assert xyxyxy_row.width == 4
+        assert xyxyxy_row.height == 1
+        a = np.array(xyxyxy_row)
+        assert a.shape == (1, 4, 6)
+
+        xyxyxy_px = xyxyxy.crop(3, 4, 1, 1)
+        assert xyxyxy_px.width == 1
+        assert xyxyxy_px.height == 1
+        a = np.array(xyxyxy_px)
+        assert a.shape == (1, 1, 6)
+
+        a = np.array(xyxyxy_px[0])
+        assert a.ndim == 0
+
+        # automatic conversion to array on ufunc application:
+
+        d = np.diff(xy.cast('short'), axis=1)
+        assert (d[..., 0] == 1).all()
+        assert (d[..., 1] == 0).all()
+
+        # tests of .numpy() method:
+
+        a = pyvips.Image.xyz(256,1)[0].numpy().squeeze()
+
+        assert all(a == np.arange(256))
+
+    def test_scipy(self):
+        try:
+            import numpy as np
+        except:
+            pytest.skip('numpy not available')
+
+        try:
+            from scipy import ndimage
+        except ImportError:
+            pytest.skip('scipy not available')
+
+        black = pyvips.Image.black(16, 16)
+        a = black.draw_rect(1, 0, 0, 1, 1)
+
+        d = ndimage.distance_transform_edt(a==0)
+        assert np.allclose(d[-1,-1], (2*15**2)**0.5)
+
+    def test_torch(self):
+        try:
+            import numpy as np
+        except:
+            pytest.skip('numpy not available')
+
+        try:
+            import torch
+        except ImportError:
+            pytest.skip('torch not available')
+
+        # torch to Image:
+        x = torch.outer(torch.arange(10), torch.arange(5))
+        with pytest.raises(ValueError): # no vips format for int64
+            im = pyvips.Image.new_from_array(x)
+
+        x = x.float()
+
+        im = pyvips.Image.new_from_array(x)
+        assert im.width == 5
+        assert im.height == 10
+        assert im(4, 9) == [36]
+        assert im.format == 'float'
+        
+        # Image to torch:
+        im = pyvips.Image.zone(5, 5)
+        t = torch.asarray(np.asarray(im))
+        assert t[2, 2] == 1.     
+        
+    def test_from_numpy(self):
+        try:
+            import numpy as np
+        except ImportError:
+            pytest.skip('numpy not available')
+
+        a = np.indices((5, 4)).transpose(1, 2, 0)  # (5, 4, 2)
+
+        with pytest.raises(ValueError):
+            yx = pyvips.Image.new_from_array(a)  # no way in for int64
+
+        from pyvips.vimage import TYPESTR_TO_FORMAT
+
+        for typestr, format in TYPESTR_TO_FORMAT.items():
+            if typestr == '|b1':
+                continue
+            a = np.indices((5, 4), dtype=typestr).transpose(1, 2, 0)
+            yx = pyvips.Image.new_from_array(a)
+            assert yx.format == format
+
+        a = np.zeros((2,2,2,2))
+
+        with pytest.raises(ValueError):
+            im = pyvips.Image.new_from_array(a) # too many dimensions
+
+        a = np.ones((2,2,2), dtype=bool)
+        im = pyvips.Image.new_from_array(a)
+        assert im.max() == 255
+
+        a = np.ones((2,2,2), dtype='S8')
+        with pytest.raises(ValueError):
+            im = pyvips.Image.new_from_array(a) # no way in for strings
+
+        l = [[1., 2.],[3., 4.]]
+        with pytest.raises(ValueError):
+            im = pyvips.Image.new_from_array(a) # no way in for lists
+
+    def test_tolist(self):
+        im = pyvips.Image.complexform(*pyvips.Image.xyz(3, 4))
+
+        assert im.tolist()[-1][-1] == 2+3j
+
+        im = im.cast('dpcomplex')
+
+        assert im.tolist()[-1][-1] == 2+3j
+
+        lst = [[1, 2, 3], [4, 5, 6]]
+
+        im = pyvips.Image.new_from_array(lst)
+
+        assert im.tolist() == lst
+
+        assert im.cast('float').tolist() == lst
+        assert im.cast('complex').tolist() == lst
+
+
+
+    def test_from_PIL(self):
+        try:
+            import PIL.Image
+        except ImportError:
+            pytest.skip('PIL not available')
+
+        pim = PIL.Image.new('RGB', (42, 23))
+
+        im = pyvips.Image.new_from_array(pim)
+        assert im.format == 'uchar'
+        assert im.interpretation == 'srgb'
+        assert im.width == pim.width
+        assert im.height == pim.height
+        assert im.min() == 0
+        assert im.max() == 0
