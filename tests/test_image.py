@@ -125,7 +125,7 @@ class TestImage:
 
         boolslice = [True, True, False, False, True, True, False]
         x = im[boolslice]
-        assert x(0, 0) == [seq[i] for i,b in enumerate(boolslice) if b]
+        assert x(0, 0) == [seq[i] for i, b in enumerate(boolslice) if b]
 
         with pytest.raises(IndexError):
             x = im[4:1]
@@ -174,17 +174,17 @@ class TestImage:
         except ImportError:
             pytest.skip('numpy not available')
 
-        a = np.zeros((1,1))
+        a = np.zeros((1, 1))
         p = pyvips.Image.new_from_memory(a.data, 1, 1, 1, 'double')
         v = p(0, 0)
         assert v == [0]
-        a[0,0] = 1
+        a[0, 0] = 1
         v = p(0, 0)
         assert v == [0]
         p.invalidate()
         v = p(0, 0)
         assert v == [1]
-        
+
     def test_to_numpy(self):
         try:
             import numpy as np
@@ -255,14 +255,14 @@ class TestImage:
 
         # tests of .numpy() method:
 
-        a = pyvips.Image.xyz(256,1)[0].numpy().squeeze()
+        a = pyvips.Image.xyz(256, 1)[0].numpy().squeeze()
 
         assert all(a == np.arange(256))
 
     def test_scipy(self):
         try:
             import numpy as np
-        except:
+        except ImportError:
             pytest.skip('numpy not available')
 
         try:
@@ -273,13 +273,13 @@ class TestImage:
         black = pyvips.Image.black(16, 16)
         a = black.draw_rect(1, 0, 0, 1, 1)
 
-        d = ndimage.distance_transform_edt(a==0)
-        assert np.allclose(d[-1,-1], (2*15**2)**0.5)
+        d = ndimage.distance_transform_edt(a == 0)
+        assert np.allclose(d[-1, -1], (2 * 15 ** 2) ** 0.5)
 
     def test_torch(self):
         try:
             import numpy as np
-        except:
+        except ImportError:
             pytest.skip('numpy not available')
 
         try:
@@ -289,7 +289,8 @@ class TestImage:
 
         # torch to Image:
         x = torch.outer(torch.arange(10), torch.arange(5))
-        with pytest.raises(ValueError): # no vips format for int64
+        with pytest.raises(ValueError):
+            # no vips format for int64
             im = pyvips.Image.new_from_array(x)
 
         x = x.float()
@@ -299,12 +300,12 @@ class TestImage:
         assert im.height == 10
         assert im(4, 9) == [36]
         assert im.format == 'float'
-        
+
         # Image to torch:
         im = pyvips.Image.zone(5, 5)
         t = torch.asarray(np.asarray(im))
-        assert t[2, 2] == 1.     
-        
+        assert t[2, 2] == 1.
+
     def test_from_numpy(self):
         try:
             import numpy as np
@@ -314,7 +315,8 @@ class TestImage:
         a = np.indices((5, 4)).transpose(1, 2, 0)  # (5, 4, 2)
 
         with pytest.raises(ValueError):
-            yx = pyvips.Image.new_from_array(a)  # no way in for int64
+            # no way in for int64
+            yx = pyvips.Image.new_from_array(a)
 
         from pyvips.vimage import TYPESTR_TO_FORMAT
 
@@ -325,22 +327,20 @@ class TestImage:
             yx = pyvips.Image.new_from_array(a)
             assert yx.format == format
 
-        a = np.zeros((2,2,2,2))
+        a = np.zeros((2, 2, 2, 2))
 
         with pytest.raises(ValueError):
-            im = pyvips.Image.new_from_array(a) # too many dimensions
+            # too many dimensions
+            im = pyvips.Image.new_from_array(a)
 
-        a = np.ones((2,2,2), dtype=bool)
+        a = np.ones((2, 2, 2), dtype=bool)
         im = pyvips.Image.new_from_array(a)
         assert im.max() == 255
 
-        a = np.ones((2,2,2), dtype='S8')
+        a = np.ones((2, 2, 2), dtype='S8')
         with pytest.raises(ValueError):
-            im = pyvips.Image.new_from_array(a) # no way in for strings
-
-        l = [[1., 2.],[3., 4.]]
-        with pytest.raises(ValueError):
-            im = pyvips.Image.new_from_array(a) # no way in for lists
+            # no way in for strings
+            im = pyvips.Image.new_from_array(a)
 
     def test_tolist(self):
         im = pyvips.Image.complexform(*pyvips.Image.xyz(3, 4))
@@ -359,8 +359,6 @@ class TestImage:
 
         assert im.cast('float').tolist() == lst
         assert im.cast('complex').tolist() == lst
-
-
 
     def test_from_PIL(self):
         try:

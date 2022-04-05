@@ -126,8 +126,9 @@ def _deprecated(note):
     return _dep
 
 
-# Rules for the mapping betweeen numpy typestrings and libvips formats 
-TYPESTR_TO_FORMAT = {'|b1': 'uchar', # bool. Above u1 so that rev. map is uchar->u1
+# Rules for the mapping betweeen numpy typestrings and libvips formats
+# b1: bool. Above u1 so that rev. map is uchar->u1
+TYPESTR_TO_FORMAT = {'|b1': 'uchar',
                      '|u1': 'uchar',
                      '|i1': 'char',
                      '<u2': 'ushort',
@@ -140,7 +141,7 @@ TYPESTR_TO_FORMAT = {'|b1': 'uchar', # bool. Above u1 so that rev. map is uchar-
                      '<c16': 'dpcomplex'}
 
 # Rules for the mapping between libvips formats and numpy typestrings
-FORMAT_TO_TYPESTR = dict((v,k) for k, v in TYPESTR_TO_FORMAT.items())
+FORMAT_TO_TYPESTR = dict((v, k) for k, v in TYPESTR_TO_FORMAT.items())
 
 # see https://docs.python.org/3/library/struct.html
 FORMAT_TO_PYFORMAT = {'uchar': 'B',
@@ -155,9 +156,9 @@ FORMAT_TO_PYFORMAT = {'uchar': 'B',
                       'dpcomplex': 'd'}
 
 
-
 def _guess_interpretation(bands, format):
-    '''Return a best-guess interpretation string based on bands and libvips format.
+    '''Return a best-guess interpretation string based on bands and libvips
+    format.
 
     Args:
         bands (int): Number of bands in the image.
@@ -166,7 +167,7 @@ def _guess_interpretation(bands, format):
     Returns:
         str: the best-guess libvips interpretation string.
 
-    This function is a helper for :class:`.Image` creation from arrays when the 
+    This function is a helper for :class:`.Image` creation from arrays when the
     user specifies 'auto' for `interpretation`.
 
     The heuristic used here can be defined in the following table::
@@ -206,7 +207,8 @@ def _guess_interpretation(bands, format):
     if not isinstance(bands, int) or bands < 1:
         raise ValueError('Number of bands must be a positive integer.')
 
-    interp = 'multiband' # the default
+    # the default
+    interp = 'multiband'
 
     if format == 'uchar':
         if bands in [1, 2]:
@@ -240,11 +242,11 @@ class ImageType(type):
     def __getattr__(cls, name):
         # logger.debug('ImageType.__getattr__ %s', name)
 
-        # does the method exist in libvips? 
+        # does the method exist in libvips?
         try:
             # this will throw an exception if not
-            intro = Introspect.get(name)
-        except: 
+            Introspect.get(name)
+        except Error:
             # we need to throw this exception for missing methods, eg. numpy
             # checks for this
             raise AttributeError
@@ -446,45 +448,47 @@ class Image(pyvips.VipsObject):
         The behavior for input objects with different dimensions is summarized
         as::
 
-            | array ndim | array shape | Image width | Image height | Image bands |
-            |------------|-------------|-------------|--------------|-------------|
-            | 0          | ()          | 1           | 1            | 1           |
-            | 1          | (W,)        | W           | 1            | 1           |
-            | 2          | (H, W)      | W           | H            | 1           |
-            | 3          | (H, W, C)   | W           | H            | C           |
+            | array ndim | array shape | Image w | Image h | Image bands |
+            |------------|-------------|---------|---------|-------------|
+            | 0          | ()          | 1       | 1       | 1           |
+            | 1          | (W,)        | W       | 1       | 1           |
+            | 2          | (H, W)      | W       | H       | 1           |
+            | 3          | (H, W, C)   | W       | H       | C           |
 
 
         Args:
-            obj (list or object supporting `__array_interface__` or `__array__`): 
+            obj (list or object width `__array_interface__` or `__array__`):
                 The object to convert to an image.
-                
+
                 If the input object is a list, `Image.new_from_list` is used
                 with the given `scale` and `offset`
 
                 If the input object is an array-like object, a new image is
                 created from the object's data and shape.  The memory is shared
-                except in the following cases: 
-                
+                except in the following cases:
+
                 - The object's memory is not contiguous.  In this case, a copy
                   is made by attempting to call the object's `tobytes()` method
-                  or its `tostring()` method. 
-                  
-                - The object is an array of bools, in which case it is converted
-                  to a pyvips uchar image with True values becoming 255 and
-                  False values becoming 0.
+                  or its `tostring()` method.
 
-            scale (float): Default to 1.0. **Ignored for non-list inputs**. What
-                to divide each pixel by after convolution.  Useful for integer 
-                convolution masks.
+                - The object is an array of bools, in which case it is
+                  converted to a pyvips uchar image with True values becoming
+                  255 and False values becoming 0.
+
+            scale (float): Default to 1.0. **Ignored for non-list inputs**.
+                What to divide each pixel by after convolution.  Useful for
+                integer convolution masks.
             offset (float): Default to 0.0.  **Ignored for non-list inputs**.
                 What to subtract from each pixel after convolution.  Useful for
                 integer convolution masks.
-            interpretation (str, optional): **Ignored for list inputs** The libvips 
-                interpretation of the array. If None, the interpretation
-                defaults to the pyvips one for `Image.new_from_memory`.
-                
+            interpretation (str, optional): **Ignored for list inputs** The
+                libvips interpretation of the array. If None, the
+                interpretation defaults to the pyvips one for
+                `Image.new_from_memory`.
+
                 If 'auto', a heuristic is used to determine a best-guess
-                interpretation as defined in the `_guess_interpretation` function.
+                interpretation as defined in the `_guess_interpretation`
+                function.
 
                 Must be one of None, 'auto', 'error', 'multiband', 'b-w',
                 'histogram', 'xyz', 'lab', 'cmyk', 'labq', 'rgb', 'cmc', 'lch',
@@ -510,7 +514,8 @@ class Image(pyvips.VipsObject):
             if ndim > 3:
                 raise ValueError('array has more than 3 dimensions')
             if typestr not in TYPESTR_TO_FORMAT:
-                raise ValueError('conversion from arrays of type {0} not supported'.format(typestr))
+                raise ValueError('conversion from {0} not supported'
+                                 .format(typestr))
 
             if ndim == 0:
                 width = 1
@@ -532,35 +537,35 @@ class Image(pyvips.VipsObject):
                 data = obj.data
             else:
                 # To obtain something with a contiguous memory layout
-                data = obj.tobytes() if hasattr(obj, 'tobytes') else obj.tostring()
+                data = obj.tobytes() if hasattr(obj, 'tobytes') else \
+                    obj.tostring()
 
             im = cls.new_from_memory(
-                data, 
-                width, 
-                height, 
-                bands, 
+                data,
+                width,
+                height,
+                bands,
                 format
             )
-            
-            if typestr == '|b1': # special case for bool
-                im = im.ifthenelse(255, 0) # True in vips is uchar(255)
 
+            if typestr == '|b1':
+                # special case for bool: true in vips is uchar(255)
+                im = im.ifthenelse(255, 0)
 
             if interpretation is not None:
                 if interpretation == 'auto':
                     interpretation = _guess_interpretation(bands, format)
-                
+
                 im = im.copy(interpretation=interpretation)
 
             return im
 
         elif hasattr(obj, '__array__'):
             # make it into something that *does* define __array_interface__
-            return cls.new_from_array(obj.__array__()) 
+            return cls.new_from_array(obj.__array__())
         else:
-            raise ValueError('object does not define __array_interface__ or __array__')
-
-
+            raise ValueError('does not define __array_interface__ ' +
+                             'or __array__')
 
     @staticmethod
     def new_from_memory(data, width, height, bands, format):
@@ -1156,41 +1161,44 @@ class Image(pyvips.VipsObject):
         """
 
         if not self.bands == 1:
-            raise NotImplemented('tolist only implemented for single-band images')
+            raise NotImplementedError('tolist only implemented for ' +
+                                      'single-band images')
 
         is_complex = self.format in ['complex', 'dpcomplex']
 
         row_els = self.width if not is_complex else 2 * self.width
-        
+
         rowfmt = '{0}{1}'.format(row_els, FORMAT_TO_PYFORMAT[self.format])
         buf = self.write_to_memory()
 
-        lst = [ list(row) for row in struct.iter_unpack(rowfmt, buf) ]
+        lst = [list(row) for row in struct.iter_unpack(rowfmt, buf)]
 
         if is_complex:
-            lst = [ [ r[i] + 1j*r[i+1] for i in range(0, row_els, 2) ] for r in lst ]
+            lst = [[r[i] + 1j*r[i+1] for i in range(0, row_els, 2)]
+                   for r in lst]
 
         return lst
 
-
-    # # Following will be relevant if we expose the buffer interface:
+    # Following will be relevant if we expose the buffer interface:
     # @property
     # def __array_interface__(self):
     #     '''Return a numpy-standard __array_interface__ dictionary.
-    #    
-    #     This is used by some libraries (PIL, e.g.) to interpret the image as an array.
-    #    
-    #     See https://numpy.org/doc/stable/reference/arrays.interface.html for more info.
-    # 
+    #
+    #     This is used by some libraries (PIL, e.g.) to interpret the image
+    #     as an array.
+    #
+    #     See https://numpy.org/doc/stable/reference/arrays.interface.html for
+    #     more info.
+    #
     #     '''
-    #   
+    #
     #     if self.bands == 1:
     #         shape = (self.height, self.width)
     #     else:
     #         shape = (self.height, self.width, self.bands)
-    # 
+    #
     #     typestr = FORMAT_TO_TYPESTR[self.format]
-    #     
+    #
     #     interface = {
     #         'shape': shape,
     #         'strides': None,
@@ -1198,28 +1206,28 @@ class Image(pyvips.VipsObject):
     #         'typestr': typestr,
     #         'version': 3
     #     }
-    # 
+    #
     #     return interface
-
 
     def __array__(self, dtype=None):
         '''Conversion to a NumPy array.
-        
+
         Args:
-            dtype (str or numpy dtype, optional) The dtype to use for the numpy array.  
-                If None, the default dtype of the image is used as defined the global 
-                `FORMAT_TO_TYPESTR` dictionary.
-        
+            dtype (str or numpy dtype, optional) The dtype to use for the
+                numpy array. If None, the default dtype of the image is used
+                as defined the global `FORMAT_TO_TYPESTR` dictionary.
+
         Returns:
             numpy.ndarray: The array representation of the image.
                 * Single-band images lose their channel axis.
                 * Single-pixel single-band images are converted to a 0D array.
-            
-        See https://numpy.org/devdocs/user/basics.dispatch.html for more details.
 
-        This enables a :class:`Image` to be used where a numpy array is expected,
-        including in plotting and conversion to other array container types (pytorch, 
-        JAX, dask, etc.), for example.
+        See https://numpy.org/devdocs/user/basics.dispatch.html for more
+        details.
+
+        This enables a :class:`Image` to be used where a numpy array is
+        expected, including in plotting and conversion to other array
+        container types (pytorch, JAX, dask, etc.), for example.
 
         `numpy` is a runtime dependency of this function.
 
@@ -1228,97 +1236,27 @@ class Image(pyvips.VipsObject):
         import numpy as np
 
         arr = (
-            np.frombuffer(self.write_to_memory(), dtype=FORMAT_TO_TYPESTR[self.format])
+            np.frombuffer(self.write_to_memory(),
+                          dtype=FORMAT_TO_TYPESTR[self.format])
             .reshape(self.height, self.width, self.bands)
         )
 
         if self.bands == 1:
-            arr = arr.squeeze(axis=-1) # flatten single-band images
+            # flatten single-band images
+            arr = arr.squeeze(axis=-1)
 
             if self.width == 1 and self.height == 1:
-                arr = arr.squeeze(axis=(0, 1)) # flatten single-pixel single-band images
+                # flatten single-pixel single-band images
+                arr = arr.squeeze(axis=(0, 1))
 
         if dtype is not None:
             arr = arr.astype(dtype)
 
         return arr
-
-
-    # # Following will be relevant if we expose the buffer interface:
-    # @property
-    # def __array_interface__(self):
-    #     '''Return a numpy-standard __array_interface__ dictionary.
-    #    
-    #     This is used by some libraries (PIL, e.g.) to interpret the image as an array.
-    #    
-    #     See https://numpy.org/doc/stable/reference/arrays.interface.html for more info.
-    # 
-    #     '''
-    #   
-    #     if self.bands == 1:
-    #         shape = (self.height, self.width)
-    #     else:
-    #         shape = (self.height, self.width, self.bands)
-    # 
-    #     typestr = FORMAT_TO_TYPESTR[self.format]
-    #     
-    #     interface = {
-    #         'shape': shape,
-    #         'strides': None,
-    #         'descr': [('', typestr)],
-    #         'typestr': typestr,
-    #         'version': 3
-    #     }
-    # 
-    #     return interface
-
-
-    def __array__(self, dtype=None):
-        '''Conversion to a NumPy array.
-
-        See https://numpy.org/devdocs/user/basics.dispatch.html for more details.
-
-        This enables a `pyvips.Image` to be used where a numpy array is expected,
-        including in plotting and conversion to other array container types (pytorch, 
-        JAX, dask, etc.), for example.
-
-        `numpy` is a runtime dependency of this function.
-
-        Args:
-            dtype (str or numpy dtype): The dtype to use for the numpy array.
-                If None, the default dtype of the image is used as defined the
-                global `FORMAT_TO_TYPESTR` dictionary.
-        
-        Returns:
-            numpy.ndarray: The array representation of the image.
-
-                - Single-band images lose their channel axis.
-                - Single-pixel single-band images are converted to a 0D array.
-
-        See Also:
-        `Image.fromarray` for the inverse operation.
-        '''
-        import numpy as np
-
-        arr = (
-            np.frombuffer(self.write_to_memory(), dtype=FORMAT_TO_TYPESTR[self.format])
-            .reshape(self.height, self.width, self.bands)
-        )
-
-        if self.bands == 1:
-            arr = arr.squeeze(axis=-1) # flatten single-band images
-
-            if self.width == 1 and self.height == 1:
-                arr = arr.squeeze(axis=(0, 1)) # flatten single-pixel single-band images
-
-        if dtype is not None:
-            arr = arr.astype(dtype)
-
-        return arr
-
 
     def numpy(self, dtype=None):
-        '''Convenience function to allow numpy conversion to be at the end of a method chain.
+        '''Convenience function to allow numpy conversion to be at the end
+        of a method chain.
 
         This mimics the behavior of pytorch: ``arr = im.op1().op2().numpy()``
 
@@ -1327,14 +1265,15 @@ class Image(pyvips.VipsObject):
         Args:
             dtype (str or numpy dtype): The dtype to use for the numpy array.
                 If None, the default dtype of the image is used.
-        
+
         Returns:
             numpy.ndarray: The image as a numpy array.
 
         See Also:
 
             - :meth:`.__array__`
-            - `FORMAT_TO_TYPESTR`: Global dictionary mapping libvips format strings to numpy dtype strings.
+            - `FORMAT_TO_TYPESTR`: Global dictionary mapping libvips format
+              strings to numpy dtype strings.
         '''
         return self.__array__(dtype=dtype)
 
@@ -1400,11 +1339,11 @@ class Image(pyvips.VipsObject):
         if super(Image, self).get_typeof(name) != 0:
             return super(Image, self).get(name)
 
-        # does the method exist in libvips? 
+        # does the method exist in libvips?
         try:
             # this will throw an exception if not
-            intro = Introspect.get(name)
-        except: 
+            Introspect.get(name)
+        except Error:
             # we need to throw this exception for missing methods, eg. numpy
             # checks for this
             raise AttributeError
@@ -1442,16 +1381,16 @@ class Image(pyvips.VipsObject):
         pass
 
     def __getitem__(self, arg):
-        """Overload [] to pull out band elements from an image. 
-        
+        """Overload [] to pull out band elements from an image.
+
         The following arguments types are accepted:
-        
+
         * int::
 
             green = rgb_image[1]
 
           Will make a new one-band image from band 1 (the middle band).
-        
+
         * slice::
 
             last_two = rgb_image[1:]
@@ -1473,18 +1412,19 @@ class Image(pyvips.VipsObject):
             three_band = five_band[wanted_bands]
 
         In the case of integer or slice arguments, the semantics of slicing
-        exactly match those of slicing `range(self.bands)`.  
-        
+        exactly match those of slicing `range(self.bands)`.
+
         In the case of list arguments, the semantics match those of numpy's
-        extended slicing syntax. Thus, lists of booleans must have as many 
+        extended slicing syntax. Thus, lists of booleans must have as many
         elements as there are bands in the image.
 
         """
         if isinstance(arg, int):
-            i = range(self.bands)[arg] # raises IndexError for bad integer indices
+            # raises IndexError for bad integer indices
+            i = range(self.bands)[arg]
             n = 1
         elif isinstance(arg, slice):
-            band_seq = range(self.bands)[arg] 
+            band_seq = range(self.bands)[arg]
             if len(band_seq) == 0:
                 raise IndexError('empty slice')
 
@@ -1494,15 +1434,18 @@ class Image(pyvips.VipsObject):
             if not arg:
                 raise IndexError('empty list')
 
-            # n.b. We don't use isinstance because isinstance(True, int) is True!
-            if not (all(type(x)==int for x in arg) or all(type(x)==bool for x in arg)):
+            # n.b. We don't use isinstance because isinstance(True, int)
+            # is True!
+            if not (all(type(x) == int for x in arg) or
+                    all(type(x) == bool for x in arg)):
                 raise IndexError('list must contain only ints or only bools')
 
             if isinstance(arg[0], bool):
                 if len(arg) != self.bands:
-                    raise IndexError('boolean index must have same length as bands')
+                    raise IndexError('boolean index must have same ' +
+                                     'length as bands')
 
-                band_seq = [ i for i, x in enumerate(arg) if x ]
+                band_seq = [i for i, x in enumerate(arg) if x]
                 n = len(band_seq)
                 if n == 0:
                     raise IndexError('empty boolean index')
@@ -1510,19 +1453,24 @@ class Image(pyvips.VipsObject):
                     i = band_seq[0]
             else:
                 all_bands = range(self.bands)
-                band_seq = [ all_bands[i] for i in arg ] # raises IndexError for bad int indices
+                # raises IndexError for bad int indices
+                band_seq = [all_bands[i] for i in arg]
 
                 n = len(band_seq)
                 if n == 1:
                     i = band_seq[0]
         else:
-            raise IndexError('argument must be an int, slice, list of ints, or list of bools')
+            raise IndexError('argument must be an int, slice, ' +
+                             'list of ints, or list of bools')
 
-        if n == 1: # int or 1-element selection
+        if n == 1:
+            # int or 1-element selection
             return self.extract_band(i)
-        elif isinstance(arg, slice) and arg.step == 1: # sequential multi-band slice
+        elif isinstance(arg, slice) and arg.step == 1:
+            # sequential multi-band slice
             return self.extract_band(i, n=n)
-        else: # nonsequential slice, list of ints, or list of bools
+        else:
+            # nonsequential slice, list of ints, or list of bools
             bands = [self.extract_band(x) for x in band_seq]
             return bands[0].bandjoin(bands[1:])
 
@@ -1706,7 +1654,8 @@ class Image(pyvips.VipsObject):
         if not isinstance(other, list):
             other = [other]
 
-        if not other: # guard against empty list
+        # guard against empty list
+        if not other:
             return self
 
         # if [other] is all numbers, we can use bandjoin_const

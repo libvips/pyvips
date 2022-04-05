@@ -6,7 +6,10 @@ import pyvips
 im = pyvips.Image.new_from_file(sys.argv[1], access="sequential")
 
 text = pyvips.Image.text(f"<span color=\"red\">{sys.argv[3]}</span>",
-    width=500, dpi=300, align="centre", rgba=True)
+                         width=500,
+                         dpi=300,
+                         align="centre",
+                         rgba=True)
 
 # scale the alpha down to make the text semi-transparent
 text = (text * [1, 1, 1, 0.3]).cast("uchar")

@@ -124,6 +124,7 @@ def values_for_enum(gtype):
     return [_to_string(g_enum_class.values[i].value_nick)
             for i in range(g_enum_class.n_values - 1)]
 
+
 def values_for_flag(gtype):
     """Get all values for a flag (gtype)."""
 
@@ -132,6 +133,7 @@ def values_for_flag(gtype):
 
     return [_to_string(g_flags_class.values[i].value_nick)
             for i in range(g_flags_class.n_values)]
+
 
 __all__ = [
     'leak_set',
