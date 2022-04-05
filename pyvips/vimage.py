@@ -157,7 +157,7 @@ FORMAT_TO_PYFORMAT = {'uchar': 'B',
 
 
 def _guess_interpretation(bands, format):
-    '''Return a best-guess interpretation string based on bands and libvips
+    """Return a best-guess interpretation string based on bands and libvips
     format.
 
     Args:
@@ -200,7 +200,7 @@ def _guess_interpretation(bands, format):
         | any   | complex   | fourier        | FFT          |
         | any   | dpcomplex | fourier        | FFT          |
 
-    '''
+    """
 
     if format not in FORMAT_TO_TYPESTR:
         raise ValueError('Unknown format: {}'.format(format))
@@ -435,7 +435,7 @@ class Image(pyvips.VipsObject):
 
     @classmethod
     def new_from_array(cls, obj, scale=1.0, offset=0.0, interpretation=None):
-        '''Create a new Image from a list or an array-like object.
+        """Create a new Image from a list or an array-like object.
 
         Array-like objects are those which define `__array_interface__` or
         `__array__`. For details about the array interface, see `The Array
@@ -500,7 +500,7 @@ class Image(pyvips.VipsObject):
 
         See Also:
             :func:`_guess_interpretation`
-        '''
+        """
         if isinstance(obj, list):
             return cls.new_from_list(obj, scale, offset)
 
@@ -602,7 +602,6 @@ class Image(pyvips.VipsObject):
             :class:`.Error`
 
         """
-
         format_value = GValue.to_enum(GValue.format_type, format)
         pointer = ffi.from_buffer(data)
         # py3:
@@ -691,7 +690,6 @@ class Image(pyvips.VipsObject):
             :class:`.Error`
 
         """
-
         vi = vips_lib.vips_image_new_temp_file(_to_bytes(format))
         if vi == ffi.NULL:
             raise Error('unable to make temp file')
@@ -716,7 +714,6 @@ class Image(pyvips.VipsObject):
             :class:`.Error`
 
         """
-
         pixel = (Image.black(1, 1) + value).cast(self.format)
         image = pixel.embed(0, 0, self.width, self.height,
                             extend='copy')
@@ -935,7 +932,6 @@ class Image(pyvips.VipsObject):
             :class:`.Error`
 
         """
-
         psize = ffi.new('size_t *')
         pointer = vips_lib.vips_image_write_to_memory(self.pointer, psize)
         if pointer == ffi.NULL:
@@ -1018,7 +1014,6 @@ class Image(pyvips.VipsObject):
             None
 
         """
-
         # on libvips before 8.5, property types must be fetched separately,
         # since built-in enums were reported as ints
         if not at_least_libvips(8, 5):
@@ -1047,7 +1042,6 @@ class Image(pyvips.VipsObject):
             :class:`.Error`
 
         """
-
         # with old libvips, we must fetch properties (as opposed to
         # metadata) via VipsObject
         if not at_least_libvips(8, 5):
@@ -1070,7 +1064,6 @@ class Image(pyvips.VipsObject):
             [string]
 
         """
-
         names = []
 
         if at_least_libvips(8, 5):
@@ -1104,7 +1097,6 @@ class Image(pyvips.VipsObject):
             None
 
         """
-
         gv = GValue()
         gv.set_type(gtype)
         gv.set(value)
@@ -1149,7 +1141,6 @@ class Image(pyvips.VipsObject):
             None
 
         """
-
         return vips_lib.vips_image_remove(self.pointer, _to_bytes(name)) != 0
 
     def tolist(self):
@@ -1159,7 +1150,6 @@ class Image(pyvips.VipsObject):
             list of lists of values
 
         """
-
         if not self.bands == 1:
             raise NotImplementedError('tolist only implemented for ' +
                                       'single-band images')
@@ -1182,7 +1172,7 @@ class Image(pyvips.VipsObject):
     # Following will be relevant if we expose the buffer interface:
     # @property
     # def __array_interface__(self):
-    #     '''Return a numpy-standard __array_interface__ dictionary.
+    #     """Return a numpy-standard __array_interface__ dictionary.
     #
     #     This is used by some libraries (PIL, e.g.) to interpret the image
     #     as an array.
@@ -1190,8 +1180,7 @@ class Image(pyvips.VipsObject):
     #     See https://numpy.org/doc/stable/reference/arrays.interface.html for
     #     more info.
     #
-    #     '''
-    #
+    #     """
     #     if self.bands == 1:
     #         shape = (self.height, self.width)
     #     else:
@@ -1210,7 +1199,7 @@ class Image(pyvips.VipsObject):
     #     return interface
 
     def __array__(self, dtype=None):
-        '''Conversion to a NumPy array.
+        """Conversion to a NumPy array.
 
         Args:
             dtype (str or numpy dtype, optional) The dtype to use for the
@@ -1232,7 +1221,7 @@ class Image(pyvips.VipsObject):
         `numpy` is a runtime dependency of this function.
 
         See Also `Image.new_from_array` for the inverse operation. #TODO
-        '''
+        """
         import numpy as np
 
         arr = (
@@ -1255,7 +1244,7 @@ class Image(pyvips.VipsObject):
         return arr
 
     def numpy(self, dtype=None):
-        '''Convenience function to allow numpy conversion to be at the end
+        """Convenience function to allow numpy conversion to be at the end
         of a method chain.
 
         This mimics the behavior of pytorch: ``arr = im.op1().op2().numpy()``
@@ -1274,7 +1263,7 @@ class Image(pyvips.VipsObject):
             - :meth:`.__array__`
             - `FORMAT_TO_TYPESTR`: Global dictionary mapping libvips format
               strings to numpy dtype strings.
-        '''
+        """
         return self.__array__(dtype=dtype)
 
     def __repr__(self):
@@ -1319,7 +1308,6 @@ class Image(pyvips.VipsObject):
             :class:`.Error`
 
         """
-
         # logger.debug('Image.__getattr__ %s', name)
 
         # scale and offset have default values
@@ -1489,7 +1477,6 @@ class Image(pyvips.VipsObject):
             :class:`.Error`
 
         """
-
         return self.getpoint(x, y)
 
     # operator overloads
@@ -1922,7 +1909,6 @@ class Image(pyvips.VipsObject):
             :class:`.Error`
 
         """
-
         return pyvips.Operation.call('scale', self, **kwargs)
 
 
