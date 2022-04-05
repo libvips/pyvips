@@ -509,7 +509,9 @@ class Image(pyvips.VipsObject):
             shape = a['shape']
             typestr = a['typestr']
             ndim = len(shape)
-            strides = a['strides']
+
+            # strides is optional
+            strides = a.get('strides', None)
 
             if ndim > 3:
                 raise ValueError('array has more than 3 dimensions')

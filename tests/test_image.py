@@ -303,7 +303,7 @@ class TestImage:
 
         # Image to torch:
         im = pyvips.Image.zone(5, 5)
-        t = torch.asarray(np.asarray(im))
+        t = torch.from_numpy(np.asarray(im))
         assert t[2, 2] == 1.
 
     def test_from_numpy(self):
