@@ -509,7 +509,9 @@ class Image(pyvips.VipsObject):
             shape = a['shape']
             typestr = a['typestr']
             ndim = len(shape)
-            strides = a['strides']
+
+            # strides is optional
+            strides = a.get('strides', None)
 
             if ndim > 3:
                 raise ValueError('array has more than 3 dimensions')
@@ -533,12 +535,16 @@ class Image(pyvips.VipsObject):
 
             format = TYPESTR_TO_FORMAT[typestr]
 
-            if strides is None:
+            if strides is None and hasattr(obj, 'data'):
                 data = obj.data
             else:
                 # To obtain something with a contiguous memory layout
-                data = obj.tobytes() if hasattr(obj, 'tobytes') else \
-                    obj.tostring()
+                if hasattr(obj, 'tobytes'):
+                    data = obj.tobytes()
+                elif hasattr(obj, 'tostring'):
+                    data = obj.tostring()
+                else:
+                    raise TypeError('object has no .tobytes or .tostring')
 
             im = cls.new_from_memory(
                 data,
@@ -564,8 +570,8 @@ class Image(pyvips.VipsObject):
             # make it into something that *does* define __array_interface__
             return cls.new_from_array(obj.__array__())
         else:
-            raise ValueError('does not define __array_interface__ ' +
-                             'or __array__')
+            raise TypeError('does not define __array_interface__ '
+                            'or __array__')
 
     @staticmethod
     def new_from_memory(data, width, height, bands, format):
