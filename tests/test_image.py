@@ -342,6 +342,24 @@ class TestImage:
             # no way in for strings
             im = pyvips.Image.new_from_array(a)
 
+        # test handling of strided data
+        a = np.ones((1000, 1000, 3), dtype='uint8')[::10, ::10]
+        im = pyvips.Image.new_from_array(a)
+        assert im.width == 100
+        assert im.height == 100
+        assert im.bands == 3
+
+        class FakeArray(object):
+            @property
+            def __array_interface__(self):
+                return {'shape': (1, 1, 1),
+                        'typestr': '|u1',
+                        'version': 3}
+
+        with pytest.raises(TypeError):
+            # Handle evil objects that don't behave like ndarrays
+            im = pyvips.Image.new_from_array(FakeArray())
+
     def test_tolist(self):
         im = pyvips.Image.complexform(*pyvips.Image.xyz(3, 4))
 
