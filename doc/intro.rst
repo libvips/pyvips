@@ -18,10 +18,10 @@ and saves it back to disc again::
 
     image = pyvips.Image.new_from_file('some-image.jpg', access='sequential')
     image *= [1, 2, 1]
-    mask = pyvips.Image.new_from_array([[-1, -1, -1],
-                                        [-1, 16, -1],
-                                        [-1, -1, -1]
-                                       ], scale=8)
+    mask = pyvips.Image.new_from_list([[-1, -1, -1],
+                                       [-1, 16, -1],
+                                       [-1, -1, -1]
+                                      ], scale=8)
     image = image.conv(mask, precision='integer')
     image.write_to_file('x.jpg')
 
@@ -44,7 +44,7 @@ for details on the various modes available.
 You can also load formatted images from memory with
 :meth:`.Image.new_from_buffer`, create images that wrap C-style memory arrays
 held as Python buffers with :meth:`.Image.new_from_memory`, or make images
-from constants with :meth:`.Image.new_from_array`. You can also create custom
+from constants with :meth:`.Image.new_from_list`. You can also create custom
 sources and targets that link image processing pipelines to your own code,
 see `Custom sources and targets`_.
 
@@ -61,13 +61,13 @@ entire images just as you would with single numbers.
 
 Next we have::
 
-    mask = pyvips.Image.new_from_array([[-1, -1, -1],
-                                        [-1, 16, -1],
-                                        [-1, -1, -1]
-                                       ], scale = 8)
+    mask = pyvips.Image.new_from_list([[-1, -1, -1],
+                                       [-1, 16, -1],
+                                       [-1, -1, -1]
+                                      ], scale = 8)
     image = image.conv(mask, precision = 'integer')
 
-:meth:`.new_from_array` creates an image from an array constant. The
+:meth:`.new_from_list` creates an image from a list of lists. The
 scale is the amount to divide the image by after integer convolution.
 
 See the libvips API docs for ``vips_conv()`` (the operation
@@ -127,54 +127,41 @@ it.
 NumPy and PIL
 -------------
 
-You can use :meth:`.write_to_memory` and :meth:`.Image.new_from_memory` to pass
-buffers of pixels between PIL, NumPy and pyvips. For example::
+You can use :meth:`.new_from_array` to create a pyvips image from a NumPy array
+or a PIL image. For example::
 
     import pyvips
     import numpy as np
 
-    format_to_dtype = {
-        'uchar': np.uint8,
-        'char': np.int8,
-        'ushort': np.uint16,
-        'short': np.int16,
-        'uint': np.uint32,
-        'int': np.int32,
-        'float': np.float32,
-        'double': np.float64,
-        'complex': np.complex64,
-        'dpcomplex': np.complex128,
-    }
+    a = (np.random.random((100, 100, 3)) * 255).astype(np.uint8)
+    image = pyvips.Image.new_from_array(a)
+
+    import PIL.Image
+    pil_image = PIL.Image.new('RGB', (60, 30), color = 'red')
+    image = pyvips.Image.new_from_array(pil_image)
+
+Going the other direction, a conversion from a pyvips image to a NumPy array can
+be obtained with the :meth:`.numpy()` method of the :class:`pyvips.Image` class
+or from the numpy side with :func:`numpy.asarray`.  This is a fast way to load
+many image formats::
+
+    import pyvips
+    import numpy as np
+
+    image = pyvips.Image.new_from_file('some-image.jpg')
+    a1 = image.numpy()
+    a2 = np.asarray(image)
+
+    assert np.array_equal(a1, a2)
     
-    img = pyvips.Image.new_from_file(sys.argv[1], access='sequential')
-    np_3d = np.ndarray(buffer=img.write_to_memory(), 
-                       dtype=format_to_dtype[img.format], 
-                       shape=[img.height, img.width, img.bands])
+The :meth:`PIL.Image.fromarray` method can be used to convert a pyvips image
+to a PIL image via a NumPy array::
 
-Will make a NumPy array from a vips image. This is a fast way to load many
-image formats. 
+    import pyvips
+    import PIL.Image
+    image = pyvips.Image.black(100, 100, bands=3)
+    pil_image = PIL.Image.fromarray(image.numpy())
 
-Going in the other direction, you can write::
-
-    dtype_to_format = {
-        'uint8': 'uchar',
-        'int8': 'char',
-        'uint16': 'ushort',
-        'int16': 'short',
-        'uint32': 'uint',
-        'int32': 'int',
-        'float32': 'float',
-        'float64': 'double',
-        'complex64': 'complex',
-        'complex128': 'dpcomplex',
-    }
-    
-    height, width, bands = np_3d.shape
-    linear = np_3d.reshape(width * height * bands)
-    vi = pyvips.Image.new_from_memory(linear.data, width, height, bands,
-                                      dtype_to_format[str(np_3d.dtype)])
-
-To make a vips image that represents a numpy array.
 
 Calling libvips operations
 --------------------------
