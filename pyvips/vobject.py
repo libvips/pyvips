@@ -13,12 +13,14 @@ logger = logging.getLogger(__name__)
 
 class VipsObject(pyvips.GObject):
     """Manage a VipsObject."""
-    __slots__ = ('vobject',)
+    __slots__ = ('vobject', 'gobject')
+    _pspec_cache = {}
 
     def __init__(self, pointer):
         # logger.debug('VipsObject.__init__: pointer = %s', pointer)
         super(VipsObject, self).__init__(pointer)
         self.vobject = ffi.cast('VipsObject*', pointer)
+        self.gobject = ffi.cast('GObject*', pointer)
 
     @staticmethod
     def print_all(msg):
@@ -33,23 +35,31 @@ class VipsObject(pyvips.GObject):
         vips_lib.vips_object_print_all()
         logger.debug()
 
-    # slow! eeeeew
     def _get_pspec(self, name):
         # logger.debug('VipsObject.get_typeof: self = %s, name = %s',
         #              str(self), name)
 
-        pspec = ffi.new('GParamSpec **')
-        argument_class = ffi.new('VipsArgumentClass **')
-        argument_instance = ffi.new('VipsArgumentInstance **')
-        result = vips_lib.vips_object_get_argument(self.vobject,
-                                                   _to_bytes(name),
-                                                   pspec, argument_class,
-                                                   argument_instance)
+        # this is pretty slow, and used a lot, so we cache results
+        # this cache makes the libvips test suite about 10% faster
+        class_pointer = self.gobject.g_type_instance.g_class
+        cache = VipsObject._pspec_cache
+        if not class_pointer in cache:
+            cache[class_pointer] = {}
+        if not name in cache[class_pointer]:
+            pspec = ffi.new('GParamSpec **')
+            argument_class = ffi.new('VipsArgumentClass **')
+            argument_instance = ffi.new('VipsArgumentInstance **')
+            result = vips_lib.vips_object_get_argument(self.vobject,
+                                                       _to_bytes(name),
+                                                       pspec, argument_class,
+                                                       argument_instance)
 
-        if result != 0:
-            return None
+            if result != 0:
+                return None
 
-        return pspec[0]
+            cache[class_pointer][name] = pspec[0]
+
+        return cache[class_pointer][name]
 
     def get_typeof(self, name):
         """Get the GType of a GObject property.

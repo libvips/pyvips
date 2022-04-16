@@ -147,13 +147,13 @@ Run test suite:
 
 .. code-block:: shell
 
-    $ tox test
+    $ pytest
 
 Run a specific test:
 
 .. code-block:: shell
 
-    $ pytest-3 tests/test_saveload.py
+    $ pytest tests/test_saveload.py
 
 Run perf tests:
 
@@ -166,7 +166,7 @@ Stylecheck:
 
 .. code-block:: shell
 
-    $ tox qa
+    $ pytest --flake8
 
 Generate HTML docs in ``doc/build/html``:
 
