@@ -1,25 +1,23 @@
 # master 
  
-## Version 2.1.17 (15 Dec 2021)
+## Version 2.2.0 (released 18 Apr 2022)
 
-* add `toarray()` [jcupitt]
 * `repr()` will print matrix images as matrices [jcupitt]
 * more robust bandwise index/slice; added fancy slicing (step != 1) [erdmann]
-* fig segfault for `im.bandjoin([])`.  Now returns `im` [erdmann]
+* fix `im.bandjoin([])`, now returns `im` [erdmann]
 * add numpy-style extended indexing (index with list of ints or bools) [erdmann]
 * earlier detection of unknown methods and class methods [jcupitt]
 * add conversion from Image to numpy array via 'Image.__array__` [erdmann]
 * add `Image.fromarray()` for conversion from numpy-ish arrays [erdmann]
 * add `invalidate()` [jcupitt]
-* add conversion from Image to numpy array via 'Image.__array__` [erdmann]
 * add array-like functionality to `Image.new_from_array()` for conversion from
   numpy-ish arrays [erdmann]
 * add `Image.numpy()` (convenient for method chaining) [erdmann]
-* rename `toarray()` to `tolist()`, rewrite for efficiency [erdmann]
+* add `tolist()` [erdmann]
 * accept `pathlib.Path` objects for filenames (py3 only) [erdmann]
 * cache pspec lookups for a 10% speed boost [jcupitt]
 
-## Version 2.1.16 (28 Jun 2021)
+## Version 2.1.16 (started 28 Jun 2021)
 
 * fix logging of deprecated args [manthey]
 * add shepards example [tourtiere]

@@ -197,6 +197,6 @@ Update pypi package:
 
     $ python3 setup.py sdist
     $ twine upload dist/*
-    $ git tag -a v2.1.12 -m "as uploaded to pypi"
-    $ git push origin v2.1.12
+    $ git tag -a v2.2.0 -m "as uploaded to pypi"
+    $ git push origin v2.2.0
 
