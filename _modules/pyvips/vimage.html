@@ -89,10 +89,11 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
 
 <span class="kn">import</span> <span class="nn">numbers</span>
+<span class="kn">import</span> <span class="nn">struct</span>
 
 <span class="kn">import</span> <span class="nn">pyvips</span>
 <span class="kn">from</span> <span class="nn">pyvips</span> <span class="kn">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">glib_lib</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">Error</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">,</span> \
-    <span class="n">_to_string</span><span class="p">,</span> <span class="n">_to_string_copy</span><span class="p">,</span> <span class="n">GValue</span><span class="p">,</span> <span class="n">at_least_libvips</span>
+    <span class="n">_to_string</span><span class="p">,</span> <span class="n">_to_string_copy</span><span class="p">,</span> <span class="n">GValue</span><span class="p">,</span> <span class="n">at_least_libvips</span><span class="p">,</span> <span class="n">Introspect</span>
 
 
 <span class="c1"># either a single number, or a table of numbers</span>
@@ -211,10 +212,130 @@
     <span class="k">return</span> <span class="n">_dep</span>
 
 
+<span class="c1"># Rules for the mapping betweeen numpy typestrings and libvips formats</span>
+<span class="c1"># b1: bool. Above u1 so that rev. map is uchar-&gt;u1</span>
+<span class="n">TYPESTR_TO_FORMAT</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;|b1&#39;</span><span class="p">:</span> <span class="s1">&#39;uchar&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;|u1&#39;</span><span class="p">:</span> <span class="s1">&#39;uchar&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;|i1&#39;</span><span class="p">:</span> <span class="s1">&#39;char&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;&lt;u2&#39;</span><span class="p">:</span> <span class="s1">&#39;ushort&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;&lt;i2&#39;</span><span class="p">:</span> <span class="s1">&#39;short&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;&lt;u4&#39;</span><span class="p">:</span> <span class="s1">&#39;uint&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;&lt;i4&#39;</span><span class="p">:</span> <span class="s1">&#39;int&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;&lt;f4&#39;</span><span class="p">:</span> <span class="s1">&#39;float&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;&lt;c8&#39;</span><span class="p">:</span> <span class="s1">&#39;complex&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;&lt;f8&#39;</span><span class="p">:</span> <span class="s1">&#39;double&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;&lt;c16&#39;</span><span class="p">:</span> <span class="s1">&#39;dpcomplex&#39;</span><span class="p">}</span>
+
+<span class="c1"># Rules for the mapping between libvips formats and numpy typestrings</span>
+<span class="n">FORMAT_TO_TYPESTR</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">v</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">TYPESTR_TO_FORMAT</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+
+<span class="c1"># see https://docs.python.org/3/library/struct.html</span>
+<span class="n">FORMAT_TO_PYFORMAT</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;uchar&#39;</span><span class="p">:</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;char&#39;</span><span class="p">:</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;ushort&#39;</span><span class="p">:</span> <span class="s1">&#39;H&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;short&#39;</span><span class="p">:</span> <span class="s1">&#39;h&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;uint&#39;</span><span class="p">:</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;int&#39;</span><span class="p">:</span> <span class="s1">&#39;i&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;float&#39;</span><span class="p">:</span> <span class="s1">&#39;f&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;double&#39;</span><span class="p">:</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;complex&#39;</span><span class="p">:</span> <span class="s1">&#39;f&#39;</span><span class="p">,</span>   <span class="c1"># n.b. no support for complex in C</span>
+                      <span class="s1">&#39;dpcomplex&#39;</span><span class="p">:</span> <span class="s1">&#39;d&#39;</span><span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">_guess_interpretation</span><span class="p">(</span><span class="n">bands</span><span class="p">,</span> <span class="nb">format</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return a best-guess interpretation string based on bands and libvips</span>
+<span class="sd">    format.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        bands (int): Number of bands in the image.</span>
+<span class="sd">        format (str): libvips format string.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: the best-guess libvips interpretation string.</span>
+
+<span class="sd">    This function is a helper for :class:`.Image` creation from arrays when the</span>
+<span class="sd">    user specifies &#39;auto&#39; for `interpretation`.</span>
+
+<span class="sd">    The heuristic used here can be defined in the following table::</span>
+
+<span class="sd">        | bands | format    | interpretation | reason       |</span>
+<span class="sd">        | ----- | --------- | -------------- | ------------ |</span>
+<span class="sd">        | 1     | uchar     | b-w            | L            |</span>
+<span class="sd">        | 2     | uchar     | b-w            | LA           |</span>
+<span class="sd">        | 3     | uchar     | rgb            | RGB          |</span>
+<span class="sd">        | 4     | uchar     | rgb            | RGBA         |</span>
+<span class="sd">        | 5+    | uchar     | multiband      | spectral     |</span>
+<span class="sd">        | 1     | char      | matrix         | conv. kernel |</span>
+<span class="sd">        | 2+    | char      | multiband      |              |</span>
+<span class="sd">        | 1     | ushort    | grey16         | L            |</span>
+<span class="sd">        | 2     | ushort    | grey16         | LA           |</span>
+<span class="sd">        | 3     | ushort    | rgb16          | RGB          |</span>
+<span class="sd">        | 4     | ushort    | rgb16          | RGBA         |</span>
+<span class="sd">        | 5+    | ushort    | multiband      | spectral     |</span>
+<span class="sd">        | any   | short     | multiband      |              |</span>
+<span class="sd">        | 1     | float     | b-w            | L            |</span>
+<span class="sd">        | 2     | float     | b-w            | LA           |</span>
+<span class="sd">        | 3     | float     | scrgb          | RGB          |</span>
+<span class="sd">        | 4     | float     | scrgb          | RGBA         |</span>
+<span class="sd">        | 5+    | float     | multiband      | spectral     |</span>
+<span class="sd">        | 1     | double    | b-w            | L            |</span>
+<span class="sd">        | 2     | double    | b-w            | LA           |</span>
+<span class="sd">        | 3     | double    | scrgb          | RGB          |</span>
+<span class="sd">        | 4     | double    | scrgb          | RGBA         |</span>
+<span class="sd">        | 5+    | double    | multiband      | spectral     |</span>
+<span class="sd">        | any   | complex   | fourier        | FFT          |</span>
+<span class="sd">        | any   | dpcomplex | fourier        | FFT          |</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">format</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">FORMAT_TO_TYPESTR</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unknown format: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">format</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bands</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">bands</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Number of bands must be a positive integer.&#39;</span><span class="p">)</span>
+
+    <span class="c1"># the default</span>
+    <span class="n">interp</span> <span class="o">=</span> <span class="s1">&#39;multiband&#39;</span>
+
+    <span class="k">if</span> <span class="nb">format</span> <span class="o">==</span> <span class="s1">&#39;uchar&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">bands</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]:</span>
+            <span class="n">interp</span> <span class="o">=</span> <span class="s1">&#39;b-w&#39;</span>
+        <span class="k">elif</span> <span class="n">bands</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]:</span>
+            <span class="n">interp</span> <span class="o">=</span> <span class="s1">&#39;rgb&#39;</span>
+    <span class="k">elif</span> <span class="nb">format</span> <span class="o">==</span> <span class="s1">&#39;char&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">bands</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">interp</span> <span class="o">=</span> <span class="s1">&#39;matrix&#39;</span>
+    <span class="k">elif</span> <span class="nb">format</span> <span class="o">==</span> <span class="s1">&#39;ushort&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">bands</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]:</span>
+            <span class="n">interp</span> <span class="o">=</span> <span class="s1">&#39;grey16&#39;</span>
+        <span class="k">elif</span> <span class="n">bands</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]:</span>
+            <span class="n">interp</span> <span class="o">=</span> <span class="s1">&#39;rgb16&#39;</span>
+    <span class="k">elif</span> <span class="nb">format</span> <span class="o">==</span> <span class="s1">&#39;short&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">bands</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">interp</span> <span class="o">=</span> <span class="s1">&#39;matrix&#39;</span>
+    <span class="k">elif</span> <span class="nb">format</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="s1">&#39;double&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">bands</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]:</span>
+            <span class="n">interp</span> <span class="o">=</span> <span class="s1">&#39;b-w&#39;</span>
+        <span class="k">elif</span> <span class="n">bands</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]:</span>
+            <span class="n">interp</span> <span class="o">=</span> <span class="s1">&#39;scrgb&#39;</span>
+    <span class="k">elif</span> <span class="nb">format</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;complex&#39;</span><span class="p">,</span> <span class="s1">&#39;dpcomplex&#39;</span><span class="p">]:</span>
+        <span class="n">interp</span> <span class="o">=</span> <span class="s1">&#39;fourier&#39;</span>
+
+    <span class="k">return</span> <span class="n">interp</span>
+
+
 <span class="c1"># metaclass for Image ... getattr on this implements the class methods</span>
 <span class="k">class</span> <span class="nc">ImageType</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="c1"># logger.debug(&#39;ImageType.__getattr__ %s&#39;, name)</span>
+
+        <span class="c1"># does the method exist in libvips?</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># this will throw an exception if not</span>
+            <span class="n">Introspect</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">Error</span><span class="p">:</span>
+            <span class="c1"># we need to throw this exception for missing methods, eg. numpy</span>
+            <span class="c1"># checks for this</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span>
 
         <span class="nd">@_add_doc</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">def</span> <span class="nf">call_function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -353,9 +474,9 @@
         <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span>
                                      <span class="n">string_options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Image.new_from_array"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.new_from_array">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">new_from_array</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create an image from a 1D or 2D array.</span>
+<div class="viewcode-block" id="Image.new_from_list"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.new_from_list">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">new_from_list</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create an image from a list or list of lists.</span>
 
 <span class="sd">        A new one-band image with :class:`BandFormat` ``&#39;double&#39;`` pixels is</span>
 <span class="sd">        created from the array. These image are useful with the libvips</span>
@@ -398,6 +519,146 @@
 
         <span class="k">return</span> <span class="n">image</span></div>
 
+<div class="viewcode-block" id="Image.new_from_array"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.new_from_array">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">new_from_array</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">interpretation</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a new Image from a list or an array-like object.</span>
+
+<span class="sd">        Array-like objects are those which define `__array_interface__` or</span>
+<span class="sd">        `__array__`. For details about the array interface, see `The Array</span>
+<span class="sd">        Interface</span>
+<span class="sd">        &lt;https://numpy.org/doc/stable/reference/arrays.interface.html&gt;`_.</span>
+
+<span class="sd">        If `__array_interface__` is not available, `__array__` is used as a</span>
+<span class="sd">        fallback.</span>
+
+<span class="sd">        The behavior for input objects with different dimensions is summarized</span>
+<span class="sd">        as::</span>
+
+<span class="sd">            | array ndim | array shape | Image w | Image h | Image bands |</span>
+<span class="sd">            |------------|-------------|---------|---------|-------------|</span>
+<span class="sd">            | 0          | ()          | 1       | 1       | 1           |</span>
+<span class="sd">            | 1          | (W,)        | W       | 1       | 1           |</span>
+<span class="sd">            | 2          | (H, W)      | W       | H       | 1           |</span>
+<span class="sd">            | 3          | (H, W, C)   | W       | H       | C           |</span>
+
+
+<span class="sd">        Args:</span>
+<span class="sd">            obj (list or object width `__array_interface__` or `__array__`):</span>
+<span class="sd">                The object to convert to an image.</span>
+
+<span class="sd">                If the input object is a list, `Image.new_from_list` is used</span>
+<span class="sd">                with the given `scale` and `offset`</span>
+
+<span class="sd">                If the input object is an array-like object, a new image is</span>
+<span class="sd">                created from the object&#39;s data and shape.  The memory is shared</span>
+<span class="sd">                except in the following cases:</span>
+
+<span class="sd">                - The object&#39;s memory is not contiguous.  In this case, a copy</span>
+<span class="sd">                  is made by attempting to call the object&#39;s `tobytes()` method</span>
+<span class="sd">                  or its `tostring()` method.</span>
+
+<span class="sd">                - The object is an array of bools, in which case it is</span>
+<span class="sd">                  converted to a pyvips uchar image with True values becoming</span>
+<span class="sd">                  255 and False values becoming 0.</span>
+
+<span class="sd">            scale (float): Default to 1.0. **Ignored for non-list inputs**.</span>
+<span class="sd">                What to divide each pixel by after convolution.  Useful for</span>
+<span class="sd">                integer convolution masks.</span>
+<span class="sd">            offset (float): Default to 0.0.  **Ignored for non-list inputs**.</span>
+<span class="sd">                What to subtract from each pixel after convolution.  Useful for</span>
+<span class="sd">                integer convolution masks.</span>
+<span class="sd">            interpretation (str, optional): **Ignored for list inputs** The</span>
+<span class="sd">                libvips interpretation of the array. If None, the</span>
+<span class="sd">                interpretation defaults to the pyvips one for</span>
+<span class="sd">                `Image.new_from_memory`.</span>
+
+<span class="sd">                If &#39;auto&#39;, a heuristic is used to determine a best-guess</span>
+<span class="sd">                interpretation as defined in the `_guess_interpretation`</span>
+<span class="sd">                function.</span>
+
+<span class="sd">                Must be one of None, &#39;auto&#39;, &#39;error&#39;, &#39;multiband&#39;, &#39;b-w&#39;,</span>
+<span class="sd">                &#39;histogram&#39;, &#39;xyz&#39;, &#39;lab&#39;, &#39;cmyk&#39;, &#39;labq&#39;, &#39;rgb&#39;, &#39;cmc&#39;, &#39;lch&#39;,</span>
+<span class="sd">                &#39;labs&#39;, &#39;srgb&#39;, &#39;yxy&#39;, &#39;fourier&#39;, &#39;rgb16&#39;, &#39;grey16&#39;, &#39;matrix&#39;,</span>
+<span class="sd">                &#39;scrgb&#39;, or &#39;hsv&#39;</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The new image.</span>
+
+<span class="sd">        See Also:</span>
+<span class="sd">            :func:`_guess_interpretation`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">new_from_list</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">offset</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;__array_interface__&#39;</span><span class="p">):</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">__array_interface__</span>
+            <span class="n">shape</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="s1">&#39;shape&#39;</span><span class="p">]</span>
+            <span class="n">typestr</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="s1">&#39;typestr&#39;</span><span class="p">]</span>
+            <span class="n">ndim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+
+            <span class="c1"># strides is optional</span>
+            <span class="n">strides</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;strides&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;array has more than 3 dimensions&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">typestr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">TYPESTR_TO_FORMAT</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;conversion from </span><span class="si">{0}</span><span class="s1"> not supported&#39;</span>
+                                 <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">typestr</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">ndim</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">width</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">height</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">bands</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">width</span> <span class="o">=</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">height</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">bands</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">shape</span>
+                <span class="n">bands</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">bands</span> <span class="o">=</span> <span class="n">shape</span>
+
+            <span class="nb">format</span> <span class="o">=</span> <span class="n">TYPESTR_TO_FORMAT</span><span class="p">[</span><span class="n">typestr</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">strides</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">):</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">data</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># To obtain something with a contiguous memory layout</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;tobytes&#39;</span><span class="p">):</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">tobytes</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;tostring&#39;</span><span class="p">):</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">tostring</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;object has no .tobytes or .tostring&#39;</span><span class="p">)</span>
+
+            <span class="n">im</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">new_from_memory</span><span class="p">(</span>
+                <span class="n">data</span><span class="p">,</span>
+                <span class="n">width</span><span class="p">,</span>
+                <span class="n">height</span><span class="p">,</span>
+                <span class="n">bands</span><span class="p">,</span>
+                <span class="nb">format</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">typestr</span> <span class="o">==</span> <span class="s1">&#39;|b1&#39;</span><span class="p">:</span>
+                <span class="c1"># special case for bool: true in vips is uchar(255)</span>
+                <span class="n">im</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">ifthenelse</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">interpretation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">interpretation</span> <span class="o">==</span> <span class="s1">&#39;auto&#39;</span><span class="p">:</span>
+                    <span class="n">interpretation</span> <span class="o">=</span> <span class="n">_guess_interpretation</span><span class="p">(</span><span class="n">bands</span><span class="p">,</span> <span class="nb">format</span><span class="p">)</span>
+
+                <span class="n">im</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">interpretation</span><span class="o">=</span><span class="n">interpretation</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">im</span>
+
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;__array__&#39;</span><span class="p">):</span>
+            <span class="c1"># make it into something that *does* define __array_interface__</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">new_from_array</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">__array__</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;does not define __array_interface__ &#39;</span>
+                            <span class="s1">&#39;or __array__&#39;</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Image.new_from_memory"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.new_from_memory">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">new_from_memory</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">bands</span><span class="p">,</span> <span class="nb">format</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Wrap an image around a memory array.</span>
@@ -433,7 +694,6 @@
 <span class="sd">            :class:`.Error`</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="n">format_value</span> <span class="o">=</span> <span class="n">GValue</span><span class="o">.</span><span class="n">to_enum</span><span class="p">(</span><span class="n">GValue</span><span class="o">.</span><span class="n">format_type</span><span class="p">,</span> <span class="nb">format</span><span class="p">)</span>
         <span class="n">pointer</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="c1"># py3:</span>
@@ -522,7 +782,6 @@
 <span class="sd">            :class:`.Error`</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="n">vi</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_new_temp_file</span><span class="p">(</span><span class="n">_to_bytes</span><span class="p">(</span><span class="nb">format</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">vi</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to make temp file&#39;</span><span class="p">)</span>
@@ -547,7 +806,6 @@
 <span class="sd">            :class:`.Error`</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="n">pixel</span> <span class="o">=</span> <span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">black</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">)</span>
         <span class="n">image</span> <span class="o">=</span> <span class="n">pixel</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
                             <span class="n">extend</span><span class="o">=</span><span class="s1">&#39;copy&#39;</span><span class="p">)</span>
@@ -766,7 +1024,6 @@
 <span class="sd">            :class:`.Error`</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="n">psize</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;size_t *&#39;</span><span class="p">)</span>
         <span class="n">pointer</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_write_to_memory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span> <span class="n">psize</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">pointer</span> <span class="o">==</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
@@ -794,6 +1051,23 @@
         <span class="n">result</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unable to write to image&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.invalidate"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.invalidate">[docs]</a>    <span class="k">def</span> <span class="nf">invalidate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Drop caches on an image, and any downstream images.</span>
+
+<span class="sd">        This method drops all pixel caches on an image and on all downstream</span>
+<span class="sd">        images. Any operations which depend on this image, directly or</span>
+<span class="sd">        indirectly, are also dropped from the libvips operation cache.</span>
+
+<span class="sd">        This method can be useful if you wrap a libvips image around an area</span>
+<span class="sd">        of memory with :meth:`.new_from_memory` and then change some bytes</span>
+<span class="sd">        without libvips knowing.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_invalidate_all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Image.set_progress"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.set_progress">[docs]</a>    <span class="k">def</span> <span class="nf">set_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">progress</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Enable progress reporting on an image.</span>
@@ -832,7 +1106,6 @@
 <span class="sd">            None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="c1"># on libvips before 8.5, property types must be fetched separately,</span>
         <span class="c1"># since built-in enums were reported as ints</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">at_least_libvips</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
@@ -861,7 +1134,6 @@
 <span class="sd">            :class:`.Error`</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="c1"># with old libvips, we must fetch properties (as opposed to</span>
         <span class="c1"># metadata) via VipsObject</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">at_least_libvips</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
@@ -884,7 +1156,6 @@
 <span class="sd">            [string]</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">if</span> <span class="n">at_least_libvips</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
@@ -918,7 +1189,6 @@
 <span class="sd">            None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="n">gv</span> <span class="o">=</span> <span class="n">GValue</span><span class="p">()</span>
         <span class="n">gv</span><span class="o">.</span><span class="n">set_type</span><span class="p">(</span><span class="n">gtype</span><span class="p">)</span>
         <span class="n">gv</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
@@ -963,28 +1233,140 @@
 <span class="sd">            None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="k">return</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_image_remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="Image.toarray"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.toarray">[docs]</a>    <span class="k">def</span> <span class="nf">toarray</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return an image as an array.</span>
+<div class="viewcode-block" id="Image.tolist"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.tolist">[docs]</a>    <span class="k">def</span> <span class="nf">tolist</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a single-band image as a list of lists.</span>
 
-<span class="sd">        This is extremely slow and only useful for very small images.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            list of lists of values</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">bands</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;tolist only implemented for &#39;</span> <span class="o">+</span>
+                                      <span class="s1">&#39;single-band images&#39;</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="p">[[</span><span class="bp">self</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)]</span> 
-                <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)]</span></div>
+        <span class="n">is_complex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;complex&#39;</span><span class="p">,</span> <span class="s1">&#39;dpcomplex&#39;</span><span class="p">]</span>
+
+        <span class="n">row_els</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">is_complex</span> <span class="k">else</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
+
+        <span class="n">rowfmt</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0}{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">row_els</span><span class="p">,</span> <span class="n">FORMAT_TO_PYFORMAT</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">])</span>
+        <span class="n">buf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_to_memory</span><span class="p">()</span>
+
+        <span class="n">lst</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">struct</span><span class="o">.</span><span class="n">iter_unpack</span><span class="p">(</span><span class="n">rowfmt</span><span class="p">,</span> <span class="n">buf</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="n">is_complex</span><span class="p">:</span>
+            <span class="n">lst</span> <span class="o">=</span> <span class="p">[[</span><span class="n">r</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">r</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">row_els</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span>
+                   <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">lst</span></div>
+
+    <span class="c1"># Following will be relevant if we expose the buffer interface:</span>
+    <span class="c1"># @property</span>
+    <span class="c1"># def __array_interface__(self):</span>
+    <span class="c1">#     &quot;&quot;&quot;Return a numpy-standard __array_interface__ dictionary.</span>
+    <span class="c1">#</span>
+    <span class="c1">#     This is used by some libraries (PIL, e.g.) to interpret the image</span>
+    <span class="c1">#     as an array.</span>
+    <span class="c1">#</span>
+    <span class="c1">#     See https://numpy.org/doc/stable/reference/arrays.interface.html for</span>
+    <span class="c1">#     more info.</span>
+    <span class="c1">#</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     if self.bands == 1:</span>
+    <span class="c1">#         shape = (self.height, self.width)</span>
+    <span class="c1">#     else:</span>
+    <span class="c1">#         shape = (self.height, self.width, self.bands)</span>
+    <span class="c1">#</span>
+    <span class="c1">#     typestr = FORMAT_TO_TYPESTR[self.format]</span>
+    <span class="c1">#</span>
+    <span class="c1">#     interface = {</span>
+    <span class="c1">#         &#39;shape&#39;: shape,</span>
+    <span class="c1">#         &#39;strides&#39;: None,</span>
+    <span class="c1">#         &#39;descr&#39;: [(&#39;&#39;, typestr)],</span>
+    <span class="c1">#         &#39;typestr&#39;: typestr,</span>
+    <span class="c1">#         &#39;version&#39;: 3</span>
+    <span class="c1">#     }</span>
+    <span class="c1">#</span>
+    <span class="c1">#     return interface</span>
+
+<div class="viewcode-block" id="Image.__array__"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.__array__">[docs]</a>    <span class="k">def</span> <span class="nf">__array__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Conversion to a NumPy array.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dtype (str or numpy dtype, optional) The dtype to use for the</span>
+<span class="sd">                numpy array. If None, the default dtype of the image is used</span>
+<span class="sd">                as defined the global `FORMAT_TO_TYPESTR` dictionary.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: The array representation of the image.</span>
+<span class="sd">                * Single-band images lose their channel axis.</span>
+<span class="sd">                * Single-pixel single-band images are converted to a 0D array.</span>
+
+<span class="sd">        See https://numpy.org/devdocs/user/basics.dispatch.html for more</span>
+<span class="sd">        details.</span>
+
+<span class="sd">        This enables a :class:`Image` to be used where a numpy array is</span>
+<span class="sd">        expected, including in plotting and conversion to other array</span>
+<span class="sd">        container types (pytorch, JAX, dask, etc.), for example.</span>
+
+<span class="sd">        `numpy` is a runtime dependency of this function.</span>
+
+<span class="sd">        See Also `Image.new_from_array` for the inverse operation. #TODO</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+        <span class="n">arr</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">write_to_memory</span><span class="p">(),</span>
+                          <span class="n">dtype</span><span class="o">=</span><span class="n">FORMAT_TO_TYPESTR</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bands</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bands</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># flatten single-band images</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># flatten single-pixel single-band images</span>
+                <span class="n">arr</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">dtype</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">arr</span></div>
+
+<div class="viewcode-block" id="Image.numpy"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.numpy">[docs]</a>    <span class="k">def</span> <span class="nf">numpy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Convenience function to allow numpy conversion to be at the end</span>
+<span class="sd">        of a method chain.</span>
+
+<span class="sd">        This mimics the behavior of pytorch: ``arr = im.op1().op2().numpy()``</span>
+
+<span class="sd">        numpy is a runtime dependency of this function.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dtype (str or numpy dtype): The dtype to use for the numpy array.</span>
+<span class="sd">                If None, the default dtype of the image is used.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: The image as a numpy array.</span>
+
+<span class="sd">        See Also:</span>
+
+<span class="sd">            - :meth:`.__array__`</span>
+<span class="sd">            - `FORMAT_TO_TYPESTR`: Global dictionary mapping libvips format</span>
+<span class="sd">              strings to numpy dtype strings.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__array__</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Image.__repr__"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.__repr__">[docs]</a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpretation</span> <span class="o">==</span> <span class="s1">&#39;matrix&#39;</span> <span class="ow">and</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">&lt;</span> <span class="mi">20</span> <span class="ow">and</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">&lt;</span> <span class="mi">20</span> <span class="ow">and</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">bands</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
-            <span class="c1"># remove innermost dimension, since bands == 0</span>
-            <span class="n">array</span> <span class="o">=</span> <span class="p">[[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">row</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">array</span><span class="p">]</span>
-            <span class="k">return</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">array</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">interpretation</span> <span class="o">==</span> <span class="s2">&quot;matrix&quot;</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">&lt;</span> <span class="mi">20</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">&lt;</span> <span class="mi">20</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bands</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="p">):</span>
+            <span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;&lt;pyvips.Image </span><span class="si">{0}</span><span class="s1">x</span><span class="si">{1}</span><span class="s1"> </span><span class="si">{2}</span><span class="s1">, </span><span class="si">{3}</span><span class="s1"> bands, </span><span class="si">{4}</span><span class="s1">&gt;&#39;</span><span class="o">.</span>
                     <span class="nb">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bands</span><span class="p">,</span>
@@ -1018,7 +1400,6 @@
 <span class="sd">            :class:`.Error`</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="c1"># logger.debug(&#39;Image.__getattr__ %s&#39;, name)</span>
 
         <span class="c1"># scale and offset have default values</span>
@@ -1037,6 +1418,15 @@
         <span class="c1"># look up in props first (but not metadata)</span>
         <span class="k">if</span> <span class="nb">super</span><span class="p">(</span><span class="n">Image</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_typeof</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">Image</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="c1"># does the method exist in libvips?</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># this will throw an exception if not</span>
+            <span class="n">Introspect</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">Error</span><span class="p">:</span>
+            <span class="c1"># we need to throw this exception for missing methods, eg. numpy</span>
+            <span class="c1"># checks for this</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span>
 
         <span class="nd">@_add_doc</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">def</span> <span class="nf">call_function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -1071,46 +1461,98 @@
         <span class="k">pass</span>
 
 <div class="viewcode-block" id="Image.__getitem__"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Overload []</span>
+        <span class="sd">&quot;&quot;&quot;Overload [] to pull out band elements from an image.</span>
 
-<span class="sd">        Use [] to pull out band elements from an image. You can use all the</span>
-<span class="sd">        usual slicing syntax, for example::</span>
+<span class="sd">        The following arguments types are accepted:</span>
+
+<span class="sd">        * int::</span>
 
 <span class="sd">            green = rgb_image[1]</span>
 
-<span class="sd">        Will make a new one-band image from band 1 (the middle band). You can</span>
-<span class="sd">        also write::</span>
+<span class="sd">          Will make a new one-band image from band 1 (the middle band).</span>
+
+<span class="sd">        * slice::</span>
 
 <span class="sd">            last_two = rgb_image[1:]</span>
 <span class="sd">            last_band = rgb_image[-1]</span>
 <span class="sd">            middle_few = multiband[1:-2]</span>
+<span class="sd">            reversed  = multiband[::-1]</span>
+<span class="sd">            every_other = multiband[::2]</span>
+<span class="sd">            other_every_other = multiband[1::2]</span>
+
+<span class="sd">        * list of int::</span>
+
+<span class="sd">            # list of integers</span>
+<span class="sd">            desired_bands = [1, 2, 2, -1]</span>
+<span class="sd">            four_band = multiband[desired_bands]</span>
+
+<span class="sd">        * list of bool::</span>
+
+<span class="sd">            wanted_bands = [True, False, True, True, False]</span>
+<span class="sd">            three_band = five_band[wanted_bands]</span>
+
+<span class="sd">        In the case of integer or slice arguments, the semantics of slicing</span>
+<span class="sd">        exactly match those of slicing `range(self.bands)`.</span>
+
+<span class="sd">        In the case of list arguments, the semantics match those of numpy&#39;s</span>
+<span class="sd">        extended slicing syntax. Thus, lists of booleans must have as many</span>
+<span class="sd">        elements as there are bands in the image.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
-            <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="k">if</span> <span class="n">arg</span><span class="o">.</span><span class="n">start</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">i</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">start</span>
-
-            <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bands</span> <span class="o">-</span> <span class="n">i</span>
-            <span class="k">if</span> <span class="n">arg</span><span class="o">.</span><span class="n">stop</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">arg</span><span class="o">.</span><span class="n">stop</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bands</span> <span class="o">+</span> <span class="n">arg</span><span class="o">.</span><span class="n">stop</span> <span class="o">-</span> <span class="n">i</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">n</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">stop</span> <span class="o">-</span> <span class="n">i</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-            <span class="n">i</span> <span class="o">=</span> <span class="n">arg</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="c1"># raises IndexError for bad integer indices</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bands</span><span class="p">)[</span><span class="n">arg</span><span class="p">]</span>
             <span class="n">n</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+            <span class="n">band_seq</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bands</span><span class="p">)[</span><span class="n">arg</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">band_seq</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;empty slice&#39;</span><span class="p">)</span>
+
+            <span class="n">i</span> <span class="o">=</span> <span class="n">band_seq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">band_seq</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">arg</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;empty list&#39;</span><span class="p">)</span>
+
+            <span class="c1"># n.b. We don&#39;t use isinstance because isinstance(True, int)</span>
+            <span class="c1"># is True!</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">all</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">arg</span><span class="p">)</span> <span class="ow">or</span>
+                    <span class="nb">all</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="nb">bool</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">arg</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;list must contain only ints or only bools&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">bool</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bands</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;boolean index must have same &#39;</span> <span class="o">+</span>
+                                     <span class="s1">&#39;length as bands&#39;</span><span class="p">)</span>
+
+                <span class="n">band_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span><span class="p">]</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">band_seq</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;empty boolean index&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">i</span> <span class="o">=</span> <span class="n">band_seq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">all_bands</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bands</span><span class="p">)</span>
+                <span class="c1"># raises IndexError for bad int indices</span>
+                <span class="n">band_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">all_bands</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">arg</span><span class="p">]</span>
+
+                <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">band_seq</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">i</span> <span class="o">=</span> <span class="n">band_seq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;argument must be an int, slice, &#39;</span> <span class="o">+</span>
+                             <span class="s1">&#39;list of ints, or list of bools&#39;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bands</span> <span class="o">+</span> <span class="n">i</span>
-
-        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bands</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">IndexError</span>
-
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_band</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># int or 1-element selection</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_band</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">slice</span><span class="p">)</span> <span class="ow">and</span> <span class="n">arg</span><span class="o">.</span><span class="n">step</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># sequential multi-band slice</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_band</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># nonsequential slice, list of ints, or list of bools</span>
+            <span class="n">bands</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">extract_band</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">band_seq</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">bands</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bandjoin</span><span class="p">(</span><span class="n">bands</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span></div>
 
     <span class="c1"># overload () to mean fetch pixel</span>
 <div class="viewcode-block" id="Image.__call__"><a class="viewcode-back" href="../../vimage.html#pyvips.Image.__call__">[docs]</a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
@@ -1127,7 +1569,6 @@
 <span class="sd">            :class:`.Error`</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getpoint</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
 
     <span class="c1"># operator overloads</span>
@@ -1291,6 +1732,10 @@
         <span class="sd">&quot;&quot;&quot;Append a set of images or constants bandwise.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="n">other</span> <span class="o">=</span> <span class="p">[</span><span class="n">other</span><span class="p">]</span>
+
+        <span class="c1"># guard against empty list</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">other</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
 
         <span class="c1"># if [other] is all numbers, we can use bandjoin_const</span>
         <span class="n">non_number</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">other</span>
@@ -1556,7 +2001,6 @@
 <span class="sd">            :class:`.Error`</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="k">return</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 
 

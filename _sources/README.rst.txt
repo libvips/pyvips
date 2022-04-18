@@ -147,13 +147,13 @@ Run test suite:
 
 .. code-block:: shell
 
-    $ tox test
+    $ pytest
 
 Run a specific test:
 
 .. code-block:: shell
 
-    $ pytest-3 tests/test_saveload.py
+    $ pytest tests/test_saveload.py
 
 Run perf tests:
 
@@ -166,7 +166,7 @@ Stylecheck:
 
 .. code-block:: shell
 
-    $ tox qa
+    $ pytest --flake8
 
 Generate HTML docs in ``doc/build/html``:
 
@@ -197,6 +197,6 @@ Update pypi package:
 
     $ python3 setup.py sdist
     $ twine upload dist/*
-    $ git tag -a v2.1.12 -m "as uploaded to pypi"
-    $ git push origin v2.1.12
+    $ git tag -a v2.2.0 -m "as uploaded to pypi"
+    $ git push origin v2.2.0
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyvips.vobject &mdash; pyvips 2.1.17 documentation</title>
+  <title>pyvips.vobject &mdash; pyvips 2.2.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -30,7 +30,7 @@
             <a href="../../index.html" class="icon icon-home"> pyvips
           </a>
               <div class="version">
-                2.1
+                2.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -99,12 +99,14 @@
 
 <div class="viewcode-block" id="VipsObject"><a class="viewcode-back" href="../../vobject.html#pyvips.vobject.VipsObject">[docs]</a><span class="k">class</span> <span class="nc">VipsObject</span><span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">GObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Manage a VipsObject.&quot;&quot;&quot;</span>
-    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;vobject&#39;</span><span class="p">,)</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;vobject&#39;</span><span class="p">,</span> <span class="s1">&#39;gobject&#39;</span><span class="p">)</span>
+    <span class="n">_pspec_cache</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointer</span><span class="p">):</span>
         <span class="c1"># logger.debug(&#39;VipsObject.__init__: pointer = %s&#39;, pointer)</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">VipsObject</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vobject</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;VipsObject*&#39;</span><span class="p">,</span> <span class="n">pointer</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gobject</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GObject*&#39;</span><span class="p">,</span> <span class="n">pointer</span><span class="p">)</span>
 
 <div class="viewcode-block" id="VipsObject.print_all"><a class="viewcode-back" href="../../vobject.html#pyvips.vobject.VipsObject.print_all">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">print_all</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
@@ -119,23 +121,31 @@
         <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_object_print_all</span><span class="p">()</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">()</span></div>
 
-    <span class="c1"># slow! eeeeew</span>
     <span class="k">def</span> <span class="nf">_get_pspec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="c1"># logger.debug(&#39;VipsObject.get_typeof: self = %s, name = %s&#39;,</span>
         <span class="c1">#              str(self), name)</span>
 
-        <span class="n">pspec</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;GParamSpec **&#39;</span><span class="p">)</span>
-        <span class="n">argument_class</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;VipsArgumentClass **&#39;</span><span class="p">)</span>
-        <span class="n">argument_instance</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;VipsArgumentInstance **&#39;</span><span class="p">)</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_object_get_argument</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vobject</span><span class="p">,</span>
-                                                   <span class="n">_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
-                                                   <span class="n">pspec</span><span class="p">,</span> <span class="n">argument_class</span><span class="p">,</span>
-                                                   <span class="n">argument_instance</span><span class="p">)</span>
+        <span class="c1"># this is pretty slow, and used a lot, so we cache results</span>
+        <span class="c1"># this cache makes the libvips test suite about 10% faster</span>
+        <span class="n">class_pointer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gobject</span><span class="o">.</span><span class="n">g_type_instance</span><span class="o">.</span><span class="n">g_class</span>
+        <span class="n">cache</span> <span class="o">=</span> <span class="n">VipsObject</span><span class="o">.</span><span class="n">_pspec_cache</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">class_pointer</span> <span class="ow">in</span> <span class="n">cache</span><span class="p">:</span>
+            <span class="n">cache</span><span class="p">[</span><span class="n">class_pointer</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">cache</span><span class="p">[</span><span class="n">class_pointer</span><span class="p">]:</span>
+            <span class="n">pspec</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;GParamSpec **&#39;</span><span class="p">)</span>
+            <span class="n">argument_class</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;VipsArgumentClass **&#39;</span><span class="p">)</span>
+            <span class="n">argument_instance</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;VipsArgumentInstance **&#39;</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_object_get_argument</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vobject</span><span class="p">,</span>
+                                                       <span class="n">_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
+                                                       <span class="n">pspec</span><span class="p">,</span> <span class="n">argument_class</span><span class="p">,</span>
+                                                       <span class="n">argument_instance</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="k">return</span> <span class="n">pspec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">cache</span><span class="p">[</span><span class="n">class_pointer</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">pspec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">cache</span><span class="p">[</span><span class="n">class_pointer</span><span class="p">][</span><span class="n">name</span><span class="p">]</span>
 
 <div class="viewcode-block" id="VipsObject.get_typeof"><a class="viewcode-back" href="../../vobject.html#pyvips.vobject.VipsObject.get_typeof">[docs]</a>    <span class="k">def</span> <span class="nf">get_typeof</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the GType of a GObject property.</span>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Introduction &mdash; pyvips 2.1.17 documentation</title>
+  <title>Introduction &mdash; pyvips 2.2.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -33,7 +33,7 @@
             <a href="index.html" class="icon icon-home"> pyvips
           </a>
               <div class="version">
-                2.1
+                2.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -115,10 +115,10 @@ and saves it back to disc again:</p>
 
 <span class="n">image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_file</span><span class="p">(</span><span class="s1">&#39;some-image.jpg&#39;</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="s1">&#39;sequential&#39;</span><span class="p">)</span>
 <span class="n">image</span> <span class="o">*=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-<span class="n">mask</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_array</span><span class="p">([[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-                                    <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-                                    <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-                                   <span class="p">],</span> <span class="n">scale</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_list</span><span class="p">([[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                   <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                   <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                                  <span class="p">],</span> <span class="n">scale</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
 <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="s1">&#39;integer&#39;</span><span class="p">)</span>
 <span class="n">image</span><span class="o">.</span><span class="n">write_to_file</span><span class="p">(</span><span class="s1">&#39;x.jpg&#39;</span><span class="p">)</span>
 </pre></div>
@@ -140,7 +140,7 @@ for details on the various modes available.</p>
 <p>You can also load formatted images from memory with
 <a class="reference internal" href="vimage.html#pyvips.Image.new_from_buffer" title="pyvips.Image.new_from_buffer"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Image.new_from_buffer()</span></code></a>, create images that wrap C-style memory arrays
 held as Python buffers with <a class="reference internal" href="vimage.html#pyvips.Image.new_from_memory" title="pyvips.Image.new_from_memory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Image.new_from_memory()</span></code></a>, or make images
-from constants with <a class="reference internal" href="vimage.html#pyvips.Image.new_from_array" title="pyvips.Image.new_from_array"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Image.new_from_array()</span></code></a>. You can also create custom
+from constants with <a class="reference internal" href="vimage.html#pyvips.Image.new_from_list" title="pyvips.Image.new_from_list"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Image.new_from_list()</span></code></a>. You can also create custom
 sources and targets that link image processing pipelines to your own code,
 see <a class="reference internal" href="#custom-sources-and-targets">Custom sources and targets</a>.</p>
 <p>The next line:</p>
@@ -153,14 +153,14 @@ double the middle band. For RGB images, that’s doubling green.</p>
 <p>There is a full set arithmetic operator <a class="reference internal" href="#overloads">Overloads</a>, so you can compute with
 entire images just as you would with single numbers.</p>
 <p>Next we have:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mask</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_array</span><span class="p">([[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-                                    <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-                                    <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-                                   <span class="p">],</span> <span class="n">scale</span> <span class="o">=</span> <span class="mi">8</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mask</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_list</span><span class="p">([[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                   <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                   <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                                  <span class="p">],</span> <span class="n">scale</span> <span class="o">=</span> <span class="mi">8</span><span class="p">)</span>
 <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">precision</span> <span class="o">=</span> <span class="s1">&#39;integer&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><a class="reference internal" href="vimage.html#pyvips.Image.new_from_array" title="pyvips.Image.new_from_array"><code class="xref py py-meth docutils literal notranslate"><span class="pre">new_from_array()</span></code></a> creates an image from an array constant. The
+<p><a class="reference internal" href="vimage.html#pyvips.Image.new_from_list" title="pyvips.Image.new_from_list"><code class="xref py py-meth docutils literal notranslate"><span class="pre">new_from_list()</span></code></a> creates an image from a list of lists. The
 scale is the amount to divide the image by after integer convolution.</p>
 <p>See the libvips API docs for <code class="docutils literal notranslate"><span class="pre">vips_conv()</span></code> (the operation
 invoked by <a class="reference internal" href="vimage.html#pyvips.Image.conv" title="pyvips.Image.conv"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Image.conv()</span></code></a>) for details on the convolution operator. By
@@ -212,53 +212,41 @@ it.</p>
 </section>
 <section id="numpy-and-pil">
 <h2>NumPy and PIL<a class="headerlink" href="#numpy-and-pil" title="Permalink to this headline">¶</a></h2>
-<p>You can use <a class="reference internal" href="vimage.html#pyvips.Image.write_to_memory" title="pyvips.Image.write_to_memory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">write_to_memory()</span></code></a> and <a class="reference internal" href="vimage.html#pyvips.Image.new_from_memory" title="pyvips.Image.new_from_memory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Image.new_from_memory()</span></code></a> to pass
-buffers of pixels between PIL, NumPy and pyvips. For example:</p>
+<p>You can use <a class="reference internal" href="vimage.html#pyvips.Image.new_from_array" title="pyvips.Image.new_from_array"><code class="xref py py-meth docutils literal notranslate"><span class="pre">new_from_array()</span></code></a> to create a pyvips image from a NumPy array
+or a PIL image. For example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyvips</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="n">format_to_dtype</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;uchar&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span>
-    <span class="s1">&#39;char&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">,</span>
-    <span class="s1">&#39;ushort&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">,</span>
-    <span class="s1">&#39;short&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">,</span>
-    <span class="s1">&#39;uint&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">,</span>
-    <span class="s1">&#39;int&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span>
-    <span class="s1">&#39;float&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
-    <span class="s1">&#39;double&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span>
-    <span class="s1">&#39;complex&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">complex64</span><span class="p">,</span>
-    <span class="s1">&#39;dpcomplex&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">,</span>
-<span class="p">}</span>
+<span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_array</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 
-<span class="n">img</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_file</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">access</span><span class="o">=</span><span class="s1">&#39;sequential&#39;</span><span class="p">)</span>
-<span class="n">np_3d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">buffer</span><span class="o">=</span><span class="n">img</span><span class="o">.</span><span class="n">write_to_memory</span><span class="p">(),</span>
-                   <span class="n">dtype</span><span class="o">=</span><span class="n">format_to_dtype</span><span class="p">[</span><span class="n">img</span><span class="o">.</span><span class="n">format</span><span class="p">],</span>
-                   <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">img</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">bands</span><span class="p">])</span>
+<span class="kn">import</span> <span class="nn">PIL.Image</span>
+<span class="n">pil_image</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_array</span><span class="p">(</span><span class="n">pil_image</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Will make a NumPy array from a vips image. This is a fast way to load many
-image formats.</p>
-<p>Going in the other direction, you can write:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dtype_to_format</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;uint8&#39;</span><span class="p">:</span> <span class="s1">&#39;uchar&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;int8&#39;</span><span class="p">:</span> <span class="s1">&#39;char&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;uint16&#39;</span><span class="p">:</span> <span class="s1">&#39;ushort&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;int16&#39;</span><span class="p">:</span> <span class="s1">&#39;short&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;uint32&#39;</span><span class="p">:</span> <span class="s1">&#39;uint&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;int32&#39;</span><span class="p">:</span> <span class="s1">&#39;int&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;float32&#39;</span><span class="p">:</span> <span class="s1">&#39;float&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;float64&#39;</span><span class="p">:</span> <span class="s1">&#39;double&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;complex64&#39;</span><span class="p">:</span> <span class="s1">&#39;complex&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;complex128&#39;</span><span class="p">:</span> <span class="s1">&#39;dpcomplex&#39;</span><span class="p">,</span>
-<span class="p">}</span>
+<p>Going the other direction, a conversion from a pyvips image to a NumPy array can
+be obtained with the <a class="reference internal" href="vimage.html#pyvips.Image.numpy" title="pyvips.Image.numpy"><code class="xref py py-meth docutils literal notranslate"><span class="pre">numpy()</span></code></a> method of the <a class="reference internal" href="vimage.html#id1" title="pyvips.Image"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyvips.Image</span></code></a> class
+or from the numpy side with <code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.asarray()</span></code>.  This is a fast way to load
+many image formats:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyvips</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">bands</span> <span class="o">=</span> <span class="n">np_3d</span><span class="o">.</span><span class="n">shape</span>
-<span class="n">linear</span> <span class="o">=</span> <span class="n">np_3d</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">width</span> <span class="o">*</span> <span class="n">height</span> <span class="o">*</span> <span class="n">bands</span><span class="p">)</span>
-<span class="n">vi</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_memory</span><span class="p">(</span><span class="n">linear</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">bands</span><span class="p">,</span>
-                                  <span class="n">dtype_to_format</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">np_3d</span><span class="o">.</span><span class="n">dtype</span><span class="p">)])</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_file</span><span class="p">(</span><span class="s1">&#39;some-image.jpg&#39;</span><span class="p">)</span>
+<span class="n">a1</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">a2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>To make a vips image that represents a numpy array.</p>
+<p>The <code class="xref py py-meth docutils literal notranslate"><span class="pre">PIL.Image.fromarray()</span></code> method can be used to convert a pyvips image
+to a PIL image via a NumPy array:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyvips</span>
+<span class="kn">import</span> <span class="nn">PIL.Image</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">black</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">bands</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">pil_image</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+</pre></div>
+</div>
 </section>
 <section id="calling-libvips-operations">
 <h2>Calling libvips operations<a class="headerlink" href="#calling-libvips-operations" title="Permalink to this headline">¶</a></h2>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>README &mdash; pyvips 2.1.17 documentation</title>
+  <title>README &mdash; pyvips 2.2.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -33,7 +33,7 @@
             <a href="index.html" class="icon icon-home"> pyvips
           </a>
               <div class="version">
-                2.1
+                2.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -197,11 +197,11 @@ $ pypy -m pip --user -e .
 </pre></div>
 </div>
 <p>Run test suite:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ tox <span class="nb">test</span>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pytest
 </pre></div>
 </div>
 <p>Run a specific test:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pytest-3 tests/test_saveload.py
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pytest tests/test_saveload.py
 </pre></div>
 </div>
 <p>Run perf tests:</p>
@@ -210,7 +210,7 @@ $ ./run.sh
 </pre></div>
 </div>
 <p>Stylecheck:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ tox qa
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pytest --flake8
 </pre></div>
 </div>
 <p>Generate HTML docs in <code class="docutils literal notranslate"><span class="pre">doc/build/html</span></code>:</p>
@@ -232,8 +232,8 @@ $ vi doc/conf.py
 <p>Update pypi package:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ python3 setup.py sdist
 $ twine upload dist/*
-$ git tag -a v2.1.12 -m <span class="s2">&quot;as uploaded to pypi&quot;</span>
-$ git push origin v2.1.12
+$ git tag -a v2.2.0 -m <span class="s2">&quot;as uploaded to pypi&quot;</span>
+$ git push origin v2.2.0
 </pre></div>
 </div>
 </section>

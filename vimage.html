@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Image &mdash; pyvips 2.1.17 documentation</title>
+  <title>Image &mdash; pyvips 2.2.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -33,7 +33,7 @@
             <a href="index.html" class="icon icon-home"> pyvips
           </a>
               <div class="version">
-                2.1
+                2.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -204,9 +204,9 @@ attempt to read everything it can from a damaged image.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyvips.Image.new_from_array">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">new_from_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vimage.html#Image.new_from_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.Image.new_from_array" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create an image from a 1D or 2D array.</p>
+<dt class="sig sig-object py" id="pyvips.Image.new_from_list">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">new_from_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vimage.html#Image.new_from_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.Image.new_from_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an image from a list or list of lists.</p>
 <p>A new one-band image with <code class="xref py py-class docutils literal notranslate"><span class="pre">BandFormat</span></code> <code class="docutils literal notranslate"><span class="pre">'double'</span></code> pixels is
 created from the array. These image are useful with the libvips
 convolution operator <a class="reference internal" href="#pyvips.Image.conv" title="pyvips.Image.conv"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Image.conv()</span></code></a>.</p>
@@ -228,6 +228,73 @@ after convolution.  Useful for integer convolution masks.</p></li>
 <dd class="field-odd"><p><a class="reference internal" href="error.html#pyvips.error.Error" title="pyvips.error.Error"><strong>Error</strong></a> – </p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyvips.Image.new_from_array">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">new_from_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpretation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vimage.html#Image.new_from_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.Image.new_from_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new Image from a list or an array-like object.</p>
+<p>Array-like objects are those which define <cite>__array_interface__</cite> or
+<cite>__array__</cite>. For details about the array interface, see <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.interface.html">The Array
+Interface</a>.</p>
+<p>If <cite>__array_interface__</cite> is not available, <cite>__array__</cite> is used as a
+fallback.</p>
+<p>The behavior for input objects with different dimensions is summarized
+as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">|</span> <span class="n">array</span> <span class="n">ndim</span> <span class="o">|</span> <span class="n">array</span> <span class="n">shape</span> <span class="o">|</span> <span class="n">Image</span> <span class="n">w</span> <span class="o">|</span> <span class="n">Image</span> <span class="n">h</span> <span class="o">|</span> <span class="n">Image</span> <span class="n">bands</span> <span class="o">|</span>
+<span class="o">|------------|-------------|---------|---------|-------------|</span>
+<span class="o">|</span> <span class="mi">0</span>          <span class="o">|</span> <span class="p">()</span>          <span class="o">|</span> <span class="mi">1</span>       <span class="o">|</span> <span class="mi">1</span>       <span class="o">|</span> <span class="mi">1</span>           <span class="o">|</span>
+<span class="o">|</span> <span class="mi">1</span>          <span class="o">|</span> <span class="p">(</span><span class="n">W</span><span class="p">,)</span>        <span class="o">|</span> <span class="n">W</span>       <span class="o">|</span> <span class="mi">1</span>       <span class="o">|</span> <span class="mi">1</span>           <span class="o">|</span>
+<span class="o">|</span> <span class="mi">2</span>          <span class="o">|</span> <span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">W</span><span class="p">)</span>      <span class="o">|</span> <span class="n">W</span>       <span class="o">|</span> <span class="n">H</span>       <span class="o">|</span> <span class="mi">1</span>           <span class="o">|</span>
+<span class="o">|</span> <span class="mi">3</span>          <span class="o">|</span> <span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">C</span><span class="p">)</span>   <span class="o">|</span> <span class="n">W</span>       <span class="o">|</span> <span class="n">H</span>       <span class="o">|</span> <span class="n">C</span>           <span class="o">|</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> (list or object width <cite>__array_interface__</cite> or <cite>__array__</cite>) – <p>The object to convert to an image.</p>
+<p>If the input object is a list, <cite>Image.new_from_list</cite> is used
+with the given <cite>scale</cite> and <cite>offset</cite></p>
+<p>If the input object is an array-like object, a new image is
+created from the object’s data and shape.  The memory is shared
+except in the following cases:</p>
+<ul>
+<li><p>The object’s memory is not contiguous.  In this case, a copy
+is made by attempting to call the object’s <cite>tobytes()</cite> method
+or its <cite>tostring()</cite> method.</p></li>
+<li><p>The object is an array of bools, in which case it is
+converted to a pyvips uchar image with True values becoming
+255 and False values becoming 0.</p></li>
+</ul>
+</p></li>
+<li><p><strong>scale</strong> (<em>float</em>) – Default to 1.0. <strong>Ignored for non-list inputs</strong>.
+What to divide each pixel by after convolution.  Useful for
+integer convolution masks.</p></li>
+<li><p><strong>offset</strong> (<em>float</em>) – Default to 0.0.  <strong>Ignored for non-list inputs</strong>.
+What to subtract from each pixel after convolution.  Useful for
+integer convolution masks.</p></li>
+<li><p><strong>interpretation</strong> (<em>str</em><em>, </em><em>optional</em>) – <p><strong>Ignored for list inputs</strong> The
+libvips interpretation of the array. If None, the
+interpretation defaults to the pyvips one for
+<cite>Image.new_from_memory</cite>.</p>
+<p>If ‘auto’, a heuristic is used to determine a best-guess
+interpretation as defined in the <cite>_guess_interpretation</cite>
+function.</p>
+<p>Must be one of None, ‘auto’, ‘error’, ‘multiband’, ‘b-w’,
+‘histogram’, ‘xyz’, ‘lab’, ‘cmyk’, ‘labq’, ‘rgb’, ‘cmc’, ‘lch’,
+‘labs’, ‘srgb’, ‘yxy’, ‘fourier’, ‘rgb16’, ‘grey16’, ‘matrix’,
+‘scrgb’, or ‘hsv’</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The new image.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">_guess_interpretation()</span></code></p>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -526,6 +593,23 @@ memory array, and the array is returned as a buffer.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pyvips.Image.invalidate">
+<span class="sig-name descname"><span class="pre">invalidate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vimage.html#Image.invalidate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.Image.invalidate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drop caches on an image, and any downstream images.</p>
+<p>This method drops all pixel caches on an image and on all downstream
+images. Any operations which depend on this image, directly or
+indirectly, are also dropped from the libvips operation cache.</p>
+<p>This method can be useful if you wrap a libvips image around an area
+of memory with <a class="reference internal" href="#pyvips.Image.new_from_memory" title="pyvips.Image.new_from_memory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">new_from_memory()</span></code></a> and then change some bytes
+without libvips knowing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pyvips.Image.set_progress">
 <span class="sig-name descname"><span class="pre">set_progress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">progress</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vimage.html#Image.set_progress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.Image.set_progress" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enable progress reporting on an image.</p>
@@ -660,10 +744,75 @@ converted to the type of the metadata item, if possible.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyvips.Image.toarray">
-<span class="sig-name descname"><span class="pre">toarray</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vimage.html#Image.toarray"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.Image.toarray" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return an image as an array.</p>
-<p>This is extremely slow and only useful for very small images.</p>
+<dt class="sig sig-object py" id="pyvips.Image.tolist">
+<span class="sig-name descname"><span class="pre">tolist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vimage.html#Image.tolist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.Image.tolist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a single-band image as a list of lists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>list of lists of values</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyvips.Image.__array__">
+<span class="sig-name descname"><span class="pre">__array__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vimage.html#Image.__array__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.Image.__array__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conversion to a NumPy array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dtype</strong> (<em>str</em><em> or </em><em>numpy dtype</em><em>, </em><em>optional</em>) – numpy array. If None, the default dtype of the image is used
+as defined the global <cite>FORMAT_TO_TYPESTR</cite> dictionary.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>The array representation of the image.</dt><dd><ul class="simple">
+<li><p>Single-band images lose their channel axis.</p></li>
+<li><p>Single-pixel single-band images are converted to a 0D array.</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+<p>See <a class="reference external" href="https://numpy.org/devdocs/user/basics.dispatch.html">https://numpy.org/devdocs/user/basics.dispatch.html</a> for more
+details.</p>
+<p>This enables a <a class="reference internal" href="#id1" title="pyvips.Image"><code class="xref py py-class docutils literal notranslate"><span class="pre">Image</span></code></a> to be used where a numpy array is
+expected, including in plotting and conversion to other array
+container types (pytorch, JAX, dask, etc.), for example.</p>
+<p><cite>numpy</cite> is a runtime dependency of this function.</p>
+<p>See Also <cite>Image.new_from_array</cite> for the inverse operation. #TODO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyvips.Image.numpy">
+<span class="sig-name descname"><span class="pre">numpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vimage.html#Image.numpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.Image.numpy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience function to allow numpy conversion to be at the end
+of a method chain.</p>
+<p>This mimics the behavior of pytorch: <code class="docutils literal notranslate"><span class="pre">arr</span> <span class="pre">=</span> <span class="pre">im.op1().op2().numpy()</span></code></p>
+<p>numpy is a runtime dependency of this function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dtype</strong> (<em>str</em><em> or </em><em>numpy dtype</em>) – The dtype to use for the numpy array.
+If None, the default dtype of the image is used.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The image as a numpy array.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pyvips.Image.__array__" title="pyvips.Image.__array__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__array__()</span></code></a></p></li>
+<li><p><cite>FORMAT_TO_TYPESTR</cite>: Global dictionary mapping libvips format
+strings to numpy dtype strings.</p></li>
+</ul>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -705,19 +854,44 @@ same way.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyvips.Image.__getitem__">
 <span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vimage.html#Image.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.Image.__getitem__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overload []</p>
-<p>Use [] to pull out band elements from an image. You can use all the
-usual slicing syntax, for example:</p>
+<dd><p>Overload [] to pull out band elements from an image.</p>
+<p>The following arguments types are accepted:</p>
+<ul>
+<li><p>int:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">green</span> <span class="o">=</span> <span class="n">rgb_image</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>Will make a new one-band image from band 1 (the middle band). You can
-also write:</p>
+<p>Will make a new one-band image from band 1 (the middle band).</p>
+</li>
+<li><p>slice:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">last_two</span> <span class="o">=</span> <span class="n">rgb_image</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
 <span class="n">last_band</span> <span class="o">=</span> <span class="n">rgb_image</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 <span class="n">middle_few</span> <span class="o">=</span> <span class="n">multiband</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+<span class="nb">reversed</span>  <span class="o">=</span> <span class="n">multiband</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">every_other</span> <span class="o">=</span> <span class="n">multiband</span><span class="p">[::</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">other_every_other</span> <span class="o">=</span> <span class="n">multiband</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span>
 </pre></div>
 </div>
+</li>
+<li><p>list of int:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># list of integers</span>
+<span class="n">desired_bands</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">four_band</span> <span class="o">=</span> <span class="n">multiband</span><span class="p">[</span><span class="n">desired_bands</span><span class="p">]</span>
+</pre></div>
+</div>
+</li>
+<li><p>list of bool:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wanted_bands</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]</span>
+<span class="n">three_band</span> <span class="o">=</span> <span class="n">five_band</span><span class="p">[</span><span class="n">wanted_bands</span><span class="p">]</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>In the case of integer or slice arguments, the semantics of slicing
+exactly match those of slicing <cite>range(self.bands)</cite>.</p>
+<p>In the case of list arguments, the semantics match those of numpy’s
+extended slicing syntax. Thus, lists of booleans must have as many
+elements as there are bands in the image.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1130,44 +1304,8 @@ the <code class="docutils literal notranslate"><span class="pre">scale</span></c
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pyvips.Image.bands" title="pyvips.Image.bands"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bands</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pyvips.Image.coding" title="pyvips.Image.coding"><code class="xref py py-obj docutils literal notranslate"><span class="pre">coding</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pyvips.Image.filename" title="pyvips.Image.filename"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filename</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pyvips.Image.format" title="pyvips.Image.format"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pyvips.Image.height" title="pyvips.Image.height"><code class="xref py py-obj docutils literal notranslate"><span class="pre">height</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pyvips.Image.interpretation" title="pyvips.Image.interpretation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interpretation</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pyvips.Image.offset" title="pyvips.Image.offset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">offset</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pyvips.Image.scale" title="pyvips.Image.scale"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scale</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyvips.Image.scale" title="pyvips.Image.scale"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scale</span></code></a></p></td>
 <td><p>Scale an image to uchar.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pyvips.Image.width" title="pyvips.Image.width"><code class="xref py py-obj docutils literal notranslate"><span class="pre">width</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pyvips.Image.xoffset" title="pyvips.Image.xoffset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">xoffset</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pyvips.Image.xres" title="pyvips.Image.xres"><code class="xref py py-obj docutils literal notranslate"><span class="pre">xres</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pyvips.Image.yoffset" title="pyvips.Image.yoffset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">yoffset</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pyvips.Image.yres" title="pyvips.Image.yres"><code class="xref py py-obj docutils literal notranslate"><span class="pre">yres</span></code></a></p></td>
-<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -1674,22 +1812,22 @@ image pixel values.</p>
 <td><p>Join a pair of images.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pyvips.Image.jp2kload" title="pyvips.Image.jp2kload"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jp2kload</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Load JPEG2000 image.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyvips.Image.jp2kload_buffer" title="pyvips.Image.jp2kload_buffer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jp2kload_buffer</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Load JPEG2000 image.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pyvips.Image.jp2kload_source" title="pyvips.Image.jp2kload_source"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jp2kload_source</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Load JPEG2000 image.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyvips.Image.jp2ksave" title="pyvips.Image.jp2ksave"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jp2ksave</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Save image in JPEG2000 format.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pyvips.Image.jp2ksave_buffer" title="pyvips.Image.jp2ksave_buffer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jp2ksave_buffer</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Save image in JPEG2000 format.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyvips.Image.jp2ksave_target" title="pyvips.Image.jp2ksave_target"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jp2ksave_target</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Save image in JPEG2000 format.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pyvips.Image.jpegload" title="pyvips.Image.jpegload"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jpegload</span></code></a></p></td>
 <td><p>Load jpeg from file.</p></td>
@@ -1713,22 +1851,22 @@ image pixel values.</p>
 <td><p>Save image to jpeg target.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyvips.Image.jxlload" title="pyvips.Image.jxlload"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jxlload</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Load JPEG-XL image.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pyvips.Image.jxlload_buffer" title="pyvips.Image.jxlload_buffer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jxlload_buffer</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Load JPEG-XL image.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyvips.Image.jxlload_source" title="pyvips.Image.jxlload_source"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jxlload_source</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Load JPEG-XL image.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pyvips.Image.jxlsave" title="pyvips.Image.jxlsave"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jxlsave</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Save image in JPEG-XL format.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyvips.Image.jxlsave_buffer" title="pyvips.Image.jxlsave_buffer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jxlsave_buffer</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Save image in JPEG-XL format.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pyvips.Image.jxlsave_target" title="pyvips.Image.jxlsave_target"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jxlsave_target</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Save image in JPEG-XL format.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyvips.Image.labelregions" title="pyvips.Image.labelregions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">labelregions</span></code></a></p></td>
 <td><p>Label regions in an image.</p></td>
@@ -1896,10 +2034,10 @@ image pixel values.</p>
 <td><p>Load png from source.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pyvips.Image.pngsave" title="pyvips.Image.pngsave"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pngsave</span></code></a></p></td>
-<td><p>Save image to png file.</p></td>
+<td><p>Save image to file as PNG.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyvips.Image.pngsave_buffer" title="pyvips.Image.pngsave_buffer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pngsave_buffer</span></code></a></p></td>
-<td><p>Save image to png buffer.</p></td>
+<td><p>Save image to buffer as PNG.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pyvips.Image.pngsave_target" title="pyvips.Image.pngsave_target"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pngsave_target</span></code></a></p></td>
 <td><p>Save image to target as PNG.</p></td>
@@ -3828,10 +3966,10 @@ image pixel values.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyvips.Image.dzsave">
-<span class="sig-name descname"><span class="pre">dzsave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">ForeignDzLayout]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tile_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centre</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">ForeignDzDepth]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">Angle]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">container</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">ForeignDzContainer]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_shrink</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">RegionShrink]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_blanks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_strip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list[float]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.dzsave" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">dzsave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">ForeignDzLayout]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tile_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centre</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">ForeignDzDepth]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">Angle]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">container</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">ForeignDzContainer]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_shrink</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">RegionShrink]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_blanks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_strip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list[float]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.dzsave" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save image to deepzoom file.</p>
 <dl class="simple">
-<dt>Example:</dt><dd><p>in.dzsave(filename, basename=str, layout=Union[str, ForeignDzLayout], suffix=str, overlap=int, tile_size=int, centre=bool, depth=Union[str, ForeignDzDepth], angle=Union[str, Angle], container=Union[str, ForeignDzContainer], properties=bool, compression=int, region_shrink=Union[str, RegionShrink], skip_blanks=int, no_strip=bool, id=str, strip=bool, background=list[float], page_height=int)</p>
+<dt>Example:</dt><dd><p>in.dzsave(filename, basename=str, layout=Union[str, ForeignDzLayout], suffix=str, overlap=int, tile_size=int, centre=bool, depth=Union[str, ForeignDzDepth], angle=Union[str, Angle], container=Union[str, ForeignDzContainer], compression=int, region_shrink=Union[str, RegionShrink], skip_blanks=int, no_strip=bool, id=str, strip=bool, background=list[float], page_height=int)</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -3847,7 +3985,6 @@ image pixel values.</p>
 <li><p><strong>depth</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="enums.html#pyvips.enums.ForeignDzDepth" title="pyvips.enums.ForeignDzDepth"><em>ForeignDzDepth</em></a><em>]</em>) – Pyramid depth</p></li>
 <li><p><strong>angle</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="enums.html#pyvips.enums.Angle" title="pyvips.enums.Angle"><em>Angle</em></a><em>]</em>) – Rotate image during save</p></li>
 <li><p><strong>container</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="enums.html#pyvips.enums.ForeignDzContainer" title="pyvips.enums.ForeignDzContainer"><em>ForeignDzContainer</em></a><em>]</em>) – Pyramid container type</p></li>
-<li><p><strong>properties</strong> (<em>bool</em>) – Write a properties file to the output directory</p></li>
 <li><p><strong>compression</strong> (<em>int</em>) – ZIP deflate compression level</p></li>
 <li><p><strong>region_shrink</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="enums.html#pyvips.enums.RegionShrink" title="pyvips.enums.RegionShrink"><em>RegionShrink</em></a><em>]</em>) – Method to shrink regions</p></li>
 <li><p><strong>skip_blanks</strong> (<em>int</em>) – Skip tiles which are nearly equal to the background</p></li>
@@ -3869,10 +4006,10 @@ image pixel values.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyvips.Image.dzsave_buffer">
-<span class="sig-name descname"><span class="pre">dzsave_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">basename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">ForeignDzLayout]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tile_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centre</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">ForeignDzDepth]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">Angle]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">container</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">ForeignDzContainer]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_shrink</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">RegionShrink]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_blanks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_strip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list[float]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.dzsave_buffer" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">dzsave_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">basename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">ForeignDzLayout]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tile_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centre</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">ForeignDzDepth]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">Angle]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">container</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">ForeignDzContainer]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_shrink</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">RegionShrink]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_blanks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_strip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list[float]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.dzsave_buffer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save image to dz buffer.</p>
 <dl class="simple">
-<dt>Example:</dt><dd><p>buffer = in.dzsave_buffer(basename=str, layout=Union[str, ForeignDzLayout], suffix=str, overlap=int, tile_size=int, centre=bool, depth=Union[str, ForeignDzDepth], angle=Union[str, Angle], container=Union[str, ForeignDzContainer], properties=bool, compression=int, region_shrink=Union[str, RegionShrink], skip_blanks=int, no_strip=bool, id=str, strip=bool, background=list[float], page_height=int)</p>
+<dt>Example:</dt><dd><p>buffer = in.dzsave_buffer(basename=str, layout=Union[str, ForeignDzLayout], suffix=str, overlap=int, tile_size=int, centre=bool, depth=Union[str, ForeignDzDepth], angle=Union[str, Angle], container=Union[str, ForeignDzContainer], compression=int, region_shrink=Union[str, RegionShrink], skip_blanks=int, no_strip=bool, id=str, strip=bool, background=list[float], page_height=int)</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -3887,7 +4024,6 @@ image pixel values.</p>
 <li><p><strong>depth</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="enums.html#pyvips.enums.ForeignDzDepth" title="pyvips.enums.ForeignDzDepth"><em>ForeignDzDepth</em></a><em>]</em>) – Pyramid depth</p></li>
 <li><p><strong>angle</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="enums.html#pyvips.enums.Angle" title="pyvips.enums.Angle"><em>Angle</em></a><em>]</em>) – Rotate image during save</p></li>
 <li><p><strong>container</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="enums.html#pyvips.enums.ForeignDzContainer" title="pyvips.enums.ForeignDzContainer"><em>ForeignDzContainer</em></a><em>]</em>) – Pyramid container type</p></li>
-<li><p><strong>properties</strong> (<em>bool</em>) – Write a properties file to the output directory</p></li>
 <li><p><strong>compression</strong> (<em>int</em>) – ZIP deflate compression level</p></li>
 <li><p><strong>region_shrink</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="enums.html#pyvips.enums.RegionShrink" title="pyvips.enums.RegionShrink"><em>RegionShrink</em></a><em>]</em>) – Method to shrink regions</p></li>
 <li><p><strong>skip_blanks</strong> (<em>int</em>) – Skip tiles which are nearly equal to the background</p></li>
@@ -4514,10 +4650,10 @@ image pixel values.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyvips.Image.gifsave">
-<span class="sig-name descname"><span class="pre">gifsave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dither</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">effort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bitdepth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list[float]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.gifsave" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">gifsave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dither</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">effort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bitdepth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxerror</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list[float]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.gifsave" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save as gif.</p>
 <dl class="simple">
-<dt>Example:</dt><dd><p>in.gifsave(filename, dither=float, effort=int, bitdepth=int, strip=bool, background=list[float], page_height=int)</p>
+<dt>Example:</dt><dd><p>in.gifsave(filename, dither=float, effort=int, bitdepth=int, maxerror=float, strip=bool, background=list[float], page_height=int)</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -4527,6 +4663,7 @@ image pixel values.</p>
 <li><p><strong>dither</strong> (<em>float</em>) – Amount of dithering</p></li>
 <li><p><strong>effort</strong> (<em>int</em>) – Quantisation effort</p></li>
 <li><p><strong>bitdepth</strong> (<em>int</em>) – Number of bits per pixel</p></li>
+<li><p><strong>maxerror</strong> (<em>float</em>) – Maximum inter-frame error for transparency</p></li>
 <li><p><strong>strip</strong> (<em>bool</em>) – Strip all metadata from image</p></li>
 <li><p><strong>background</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Background value</p></li>
 <li><p><strong>page_height</strong> (<em>int</em>) – Set page height for multipage save</p></li>
@@ -4543,10 +4680,10 @@ image pixel values.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyvips.Image.gifsave_buffer">
-<span class="sig-name descname"><span class="pre">gifsave_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dither</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">effort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bitdepth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list[float]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.gifsave_buffer" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">gifsave_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dither</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">effort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bitdepth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxerror</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list[float]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.gifsave_buffer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save as gif.</p>
 <dl class="simple">
-<dt>Example:</dt><dd><p>buffer = in.gifsave_buffer(dither=float, effort=int, bitdepth=int, strip=bool, background=list[float], page_height=int)</p>
+<dt>Example:</dt><dd><p>buffer = in.gifsave_buffer(dither=float, effort=int, bitdepth=int, maxerror=float, strip=bool, background=list[float], page_height=int)</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -4555,6 +4692,7 @@ image pixel values.</p>
 <li><p><strong>dither</strong> (<em>float</em>) – Amount of dithering</p></li>
 <li><p><strong>effort</strong> (<em>int</em>) – Quantisation effort</p></li>
 <li><p><strong>bitdepth</strong> (<em>int</em>) – Number of bits per pixel</p></li>
+<li><p><strong>maxerror</strong> (<em>float</em>) – Maximum inter-frame error for transparency</p></li>
 <li><p><strong>strip</strong> (<em>bool</em>) – Strip all metadata from image</p></li>
 <li><p><strong>background</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Background value</p></li>
 <li><p><strong>page_height</strong> (<em>int</em>) – Set page height for multipage save</p></li>
@@ -4571,10 +4709,10 @@ image pixel values.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyvips.Image.gifsave_target">
-<span class="sig-name descname"><span class="pre">gifsave_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dither</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">effort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bitdepth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list[float]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.gifsave_target" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">gifsave_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dither</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">effort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bitdepth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxerror</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list[float]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.gifsave_target" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save as gif.</p>
 <dl class="simple">
-<dt>Example:</dt><dd><p>in.gifsave_target(target, dither=float, effort=int, bitdepth=int, strip=bool, background=list[float], page_height=int)</p>
+<dt>Example:</dt><dd><p>in.gifsave_target(target, dither=float, effort=int, bitdepth=int, maxerror=float, strip=bool, background=list[float], page_height=int)</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -4584,6 +4722,7 @@ image pixel values.</p>
 <li><p><strong>dither</strong> (<em>float</em>) – Amount of dithering</p></li>
 <li><p><strong>effort</strong> (<em>int</em>) – Quantisation effort</p></li>
 <li><p><strong>bitdepth</strong> (<em>int</em>) – Number of bits per pixel</p></li>
+<li><p><strong>maxerror</strong> (<em>float</em>) – Maximum inter-frame error for transparency</p></li>
 <li><p><strong>strip</strong> (<em>bool</em>) – Strip all metadata from image</p></li>
 <li><p><strong>background</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Background value</p></li>
 <li><p><strong>page_height</strong> (<em>int</em>) – Set page height for multipage save</p></li>
@@ -4701,10 +4840,10 @@ image pixel values.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyvips.Image.heifload">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">heifload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thumbnail</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">Access]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_on</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">FailOn]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.heifload" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">heifload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thumbnail</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unlimited</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">Access]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_on</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">FailOn]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.heifload" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load a HEIF image.</p>
 <dl class="simple">
-<dt>Example:</dt><dd><p>out = pyvips.Image.heifload(filename, page=int, n=int, thumbnail=bool, memory=bool, access=Union[str, Access], fail_on=Union[str, FailOn])</p>
+<dt>Example:</dt><dd><p>out = pyvips.Image.heifload(filename, page=int, n=int, thumbnail=bool, unlimited=bool, memory=bool, access=Union[str, Access], fail_on=Union[str, FailOn])</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -4714,6 +4853,7 @@ image pixel values.</p>
 <li><p><strong>page</strong> (<em>int</em>) – Load this page from the file</p></li>
 <li><p><strong>n</strong> (<em>int</em>) – Load this many pages</p></li>
 <li><p><strong>thumbnail</strong> (<em>bool</em>) – Fetch thumbnail image</p></li>
+<li><p><strong>unlimited</strong> (<em>bool</em>) – Remove all denial of service limits</p></li>
 <li><p><strong>memory</strong> (<em>bool</em>) – Force open via memory</p></li>
 <li><p><strong>access</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="enums.html#pyvips.enums.Access" title="pyvips.enums.Access"><em>Access</em></a><em>]</em>) – Required access pattern for this file</p></li>
 <li><p><strong>fail_on</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="enums.html#pyvips.enums.FailOn" title="pyvips.enums.FailOn"><em>FailOn</em></a><em>]</em>) – Error level to fail on</p></li>
@@ -4731,10 +4871,10 @@ image pixel values.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyvips.Image.heifload_buffer">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">heifload_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buffer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thumbnail</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">Access]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_on</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">FailOn]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.heifload_buffer" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">heifload_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buffer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thumbnail</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unlimited</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">Access]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_on</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">FailOn]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.heifload_buffer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load a HEIF image.</p>
 <dl class="simple">
-<dt>Example:</dt><dd><p>out = pyvips.Image.heifload_buffer(buffer, page=int, n=int, thumbnail=bool, memory=bool, access=Union[str, Access], fail_on=Union[str, FailOn])</p>
+<dt>Example:</dt><dd><p>out = pyvips.Image.heifload_buffer(buffer, page=int, n=int, thumbnail=bool, unlimited=bool, memory=bool, access=Union[str, Access], fail_on=Union[str, FailOn])</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -4744,6 +4884,7 @@ image pixel values.</p>
 <li><p><strong>page</strong> (<em>int</em>) – Load this page from the file</p></li>
 <li><p><strong>n</strong> (<em>int</em>) – Load this many pages</p></li>
 <li><p><strong>thumbnail</strong> (<em>bool</em>) – Fetch thumbnail image</p></li>
+<li><p><strong>unlimited</strong> (<em>bool</em>) – Remove all denial of service limits</p></li>
 <li><p><strong>memory</strong> (<em>bool</em>) – Force open via memory</p></li>
 <li><p><strong>access</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="enums.html#pyvips.enums.Access" title="pyvips.enums.Access"><em>Access</em></a><em>]</em>) – Required access pattern for this file</p></li>
 <li><p><strong>fail_on</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="enums.html#pyvips.enums.FailOn" title="pyvips.enums.FailOn"><em>FailOn</em></a><em>]</em>) – Error level to fail on</p></li>
@@ -4761,10 +4902,10 @@ image pixel values.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyvips.Image.heifload_source">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">heifload_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thumbnail</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">Access]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_on</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">FailOn]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.heifload_source" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">heifload_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thumbnail</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unlimited</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">Access]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_on</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">FailOn]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.heifload_source" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load a HEIF image.</p>
 <dl class="simple">
-<dt>Example:</dt><dd><p>out = pyvips.Image.heifload_source(source, page=int, n=int, thumbnail=bool, memory=bool, access=Union[str, Access], fail_on=Union[str, FailOn])</p>
+<dt>Example:</dt><dd><p>out = pyvips.Image.heifload_source(source, page=int, n=int, thumbnail=bool, unlimited=bool, memory=bool, access=Union[str, Access], fail_on=Union[str, FailOn])</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -4774,6 +4915,7 @@ image pixel values.</p>
 <li><p><strong>page</strong> (<em>int</em>) – Load this page from the file</p></li>
 <li><p><strong>n</strong> (<em>int</em>) – Load this many pages</p></li>
 <li><p><strong>thumbnail</strong> (<em>bool</em>) – Fetch thumbnail image</p></li>
+<li><p><strong>unlimited</strong> (<em>bool</em>) – Remove all denial of service limits</p></li>
 <li><p><strong>memory</strong> (<em>bool</em>) – Force open via memory</p></li>
 <li><p><strong>access</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="enums.html#pyvips.enums.Access" title="pyvips.enums.Access"><em>Access</em></a><em>]</em>) – Required access pattern for this file</p></li>
 <li><p><strong>fail_on</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="enums.html#pyvips.enums.FailOn" title="pyvips.enums.FailOn"><em>FailOn</em></a><em>]</em>) – Error level to fail on</p></li>
@@ -4791,10 +4933,10 @@ image pixel values.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyvips.Image.heifsave">
-<span class="sig-name descname"><span class="pre">heifsave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lossless</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">ForeignHeifCompression]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">effort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsample_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">ForeignSubsample]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list[float]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.heifsave" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">heifsave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bitdepth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lossless</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">ForeignHeifCompression]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">effort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsample_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">ForeignSubsample]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list[float]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.heifsave" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save image in HEIF format.</p>
 <dl class="simple">
-<dt>Example:</dt><dd><p>in.heifsave(filename, Q=int, lossless=bool, compression=Union[str, ForeignHeifCompression], effort=int, subsample_mode=Union[str, ForeignSubsample], strip=bool, background=list[float], page_height=int)</p>
+<dt>Example:</dt><dd><p>in.heifsave(filename, Q=int, bitdepth=int, lossless=bool, compression=Union[str, ForeignHeifCompression], effort=int, subsample_mode=Union[str, ForeignSubsample], strip=bool, background=list[float], page_height=int)</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -4802,6 +4944,7 @@ image pixel values.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filename</strong> (<em>str</em>) – Filename to save to</p></li>
 <li><p><strong>Q</strong> (<em>int</em>) – Q factor</p></li>
+<li><p><strong>bitdepth</strong> (<em>int</em>) – Number of bits per pixel</p></li>
 <li><p><strong>lossless</strong> (<em>bool</em>) – Enable lossless compression</p></li>
 <li><p><strong>compression</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="enums.html#pyvips.enums.ForeignHeifCompression" title="pyvips.enums.ForeignHeifCompression"><em>ForeignHeifCompression</em></a><em>]</em>) – Compression format</p></li>
 <li><p><strong>effort</strong> (<em>int</em>) – CPU effort</p></li>
@@ -4822,16 +4965,17 @@ image pixel values.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyvips.Image.heifsave_buffer">
-<span class="sig-name descname"><span class="pre">heifsave_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lossless</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">ForeignHeifCompression]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">effort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsample_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">ForeignSubsample]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list[float]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.heifsave_buffer" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">heifsave_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bitdepth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lossless</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">ForeignHeifCompression]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">effort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsample_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">ForeignSubsample]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list[float]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.heifsave_buffer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save image in HEIF format.</p>
 <dl class="simple">
-<dt>Example:</dt><dd><p>buffer = in.heifsave_buffer(Q=int, lossless=bool, compression=Union[str, ForeignHeifCompression], effort=int, subsample_mode=Union[str, ForeignSubsample], strip=bool, background=list[float], page_height=int)</p>
+<dt>Example:</dt><dd><p>buffer = in.heifsave_buffer(Q=int, bitdepth=int, lossless=bool, compression=Union[str, ForeignHeifCompression], effort=int, subsample_mode=Union[str, ForeignSubsample], strip=bool, background=list[float], page_height=int)</p>
 </dd>
 </dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>Q</strong> (<em>int</em>) – Q factor</p></li>
+<li><p><strong>bitdepth</strong> (<em>int</em>) – Number of bits per pixel</p></li>
 <li><p><strong>lossless</strong> (<em>bool</em>) – Enable lossless compression</p></li>
 <li><p><strong>compression</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="enums.html#pyvips.enums.ForeignHeifCompression" title="pyvips.enums.ForeignHeifCompression"><em>ForeignHeifCompression</em></a><em>]</em>) – Compression format</p></li>
 <li><p><strong>effort</strong> (<em>int</em>) – CPU effort</p></li>
@@ -4852,10 +4996,10 @@ image pixel values.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyvips.Image.heifsave_target">
-<span class="sig-name descname"><span class="pre">heifsave_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lossless</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">ForeignHeifCompression]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">effort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsample_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">ForeignSubsample]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list[float]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.heifsave_target" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">heifsave_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bitdepth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lossless</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">ForeignHeifCompression]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">effort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsample_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">ForeignSubsample]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list[float]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.heifsave_target" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save image in HEIF format.</p>
 <dl class="simple">
-<dt>Example:</dt><dd><p>in.heifsave_target(target, Q=int, lossless=bool, compression=Union[str, ForeignHeifCompression], effort=int, subsample_mode=Union[str, ForeignSubsample], strip=bool, background=list[float], page_height=int)</p>
+<dt>Example:</dt><dd><p>in.heifsave_target(target, Q=int, bitdepth=int, lossless=bool, compression=Union[str, ForeignHeifCompression], effort=int, subsample_mode=Union[str, ForeignSubsample], strip=bool, background=list[float], page_height=int)</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -4863,6 +5007,7 @@ image pixel values.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>target</strong> (<a class="reference internal" href="vtarget.html#pyvips.vtarget.Target" title="pyvips.vtarget.Target"><em>Target</em></a>) – Target to save to</p></li>
 <li><p><strong>Q</strong> (<em>int</em>) – Q factor</p></li>
+<li><p><strong>bitdepth</strong> (<em>int</em>) – Number of bits per pixel</p></li>
 <li><p><strong>lossless</strong> (<em>bool</em>) – Enable lossless compression</p></li>
 <li><p><strong>compression</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="enums.html#pyvips.enums.ForeignHeifCompression" title="pyvips.enums.ForeignHeifCompression"><em>ForeignHeifCompression</em></a><em>]</em>) – Compression format</p></li>
 <li><p><strong>effort</strong> (<em>int</em>) – CPU effort</p></li>
@@ -6029,7 +6174,7 @@ image pixel values.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyvips.Image.logmat">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">logmat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_ampl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">Precision]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.logmat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make a laplacian of gaussian image.</p>
+<dd><p>Make a Laplacian of Gaussian image.</p>
 <dl class="simple">
 <dt>Example:</dt><dd><p>out = pyvips.Image.logmat(sigma, min_ampl, separable=bool, precision=Union[str, Precision])</p>
 </dd>
@@ -6037,9 +6182,9 @@ image pixel values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>sigma</strong> (<em>float</em>) – Radius of Logmatian</p></li>
-<li><p><strong>min_ampl</strong> (<em>float</em>) – Minimum amplitude of Logmatian</p></li>
-<li><p><strong>separable</strong> (<em>bool</em>) – Generate separable Logmatian</p></li>
+<li><p><strong>sigma</strong> (<em>float</em>) – Radius of Gaussian</p></li>
+<li><p><strong>min_ampl</strong> (<em>float</em>) – Minimum amplitude of Gaussian</p></li>
+<li><p><strong>separable</strong> (<em>bool</em>) – Generate separable Gaussian</p></li>
 <li><p><strong>precision</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="enums.html#pyvips.enums.Precision" title="pyvips.enums.Precision"><em>Precision</em></a><em>]</em>) – Generate with this precision</p></li>
 </ul>
 </dd>
@@ -6173,10 +6318,10 @@ image pixel values.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyvips.Image.mapim">
-<span class="sig-name descname"><span class="pre">mapim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">GObject</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.mapim" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">mapim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">GObject</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list[float]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">premultiplied</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">Extend]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.mapim" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resample with a map image.</p>
 <dl class="simple">
-<dt>Example:</dt><dd><p>out = in.mapim(index, interpolate=GObject)</p>
+<dt>Example:</dt><dd><p>out = in.mapim(index, interpolate=GObject, background=list[float], premultiplied=bool, extend=Union[str, Extend])</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -6184,6 +6329,9 @@ image pixel values.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>index</strong> (<a class="reference internal" href="#id1" title="pyvips.Image"><em>Image</em></a>) – Index pixels with this</p></li>
 <li><p><strong>interpolate</strong> (<a class="reference internal" href="gobject.html#pyvips.gobject.GObject" title="pyvips.gobject.GObject"><em>GObject</em></a>) – Interpolate pixels with this</p></li>
+<li><p><strong>background</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Background value</p></li>
+<li><p><strong>premultiplied</strong> (<em>bool</em>) – Images have premultiplied alpha</p></li>
+<li><p><strong>extend</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="enums.html#pyvips.enums.Extend" title="pyvips.enums.Extend"><em>Extend</em></a><em>]</em>) – How to generate the extra pixels</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
@@ -6982,10 +7130,10 @@ image pixel values.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyvips.Image.mosaic1">
-<span class="sig-name descname"><span class="pre">mosaic1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xr1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yr1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xr2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yr2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hwindow</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">harea</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">GObject</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mblend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bandno</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.mosaic1" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">mosaic1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xr1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yr1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xr2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yr2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hwindow</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">harea</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">GObject</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mblend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.mosaic1" title="Permalink to this definition">¶</a></dt>
 <dd><p>First-order mosaic of two images.</p>
 <dl class="simple">
-<dt>Example:</dt><dd><p>out = ref.mosaic1(sec, direction, xr1, yr1, xs1, ys1, xr2, yr2, xs2, ys2, hwindow=int, harea=int, search=bool, interpolate=GObject, mblend=int, bandno=int)</p>
+<dt>Example:</dt><dd><p>out = ref.mosaic1(sec, direction, xr1, yr1, xs1, ys1, xr2, yr2, xs2, ys2, hwindow=int, harea=int, search=bool, interpolate=GObject, mblend=int)</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -7006,7 +7154,6 @@ image pixel values.</p>
 <li><p><strong>search</strong> (<em>bool</em>) – Search to improve tie-points</p></li>
 <li><p><strong>interpolate</strong> (<a class="reference internal" href="gobject.html#pyvips.gobject.GObject" title="pyvips.gobject.GObject"><em>GObject</em></a>) – Interpolate pixels with this</p></li>
 <li><p><strong>mblend</strong> (<em>int</em>) – Maximum blend size</p></li>
-<li><p><strong>bandno</strong> (<em>int</em>) – Band to search for features on</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
@@ -7231,10 +7378,10 @@ image pixel values.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyvips.Image.pdfload">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pdfload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list[float]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">Access]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_on</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">FailOn]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.pdfload" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pdfload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list[float]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">Access]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_on</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">FailOn]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.pdfload" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load PDF from file.</p>
 <dl class="simple">
-<dt>Example:</dt><dd><p>out = pyvips.Image.pdfload(filename, page=int, n=int, dpi=float, scale=float, background=list[float], memory=bool, access=Union[str, Access], fail_on=Union[str, FailOn])</p>
+<dt>Example:</dt><dd><p>out = pyvips.Image.pdfload(filename, page=int, n=int, dpi=float, scale=float, background=list[float], password=str, memory=bool, access=Union[str, Access], fail_on=Union[str, FailOn])</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -7246,6 +7393,7 @@ image pixel values.</p>
 <li><p><strong>dpi</strong> (<em>float</em>) – Render at this DPI</p></li>
 <li><p><strong>scale</strong> (<em>float</em>) – Scale output by this factor</p></li>
 <li><p><strong>background</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Background value</p></li>
+<li><p><strong>password</strong> (<em>str</em>) – Decrypt with this password</p></li>
 <li><p><strong>memory</strong> (<em>bool</em>) – Force open via memory</p></li>
 <li><p><strong>access</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="enums.html#pyvips.enums.Access" title="pyvips.enums.Access"><em>Access</em></a><em>]</em>) – Required access pattern for this file</p></li>
 <li><p><strong>fail_on</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="enums.html#pyvips.enums.FailOn" title="pyvips.enums.FailOn"><em>FailOn</em></a><em>]</em>) – Error level to fail on</p></li>
@@ -7263,10 +7411,10 @@ image pixel values.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyvips.Image.pdfload_buffer">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pdfload_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buffer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list[float]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">Access]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_on</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">FailOn]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.pdfload_buffer" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pdfload_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buffer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list[float]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">Access]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_on</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">FailOn]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.pdfload_buffer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load PDF from buffer.</p>
 <dl class="simple">
-<dt>Example:</dt><dd><p>out = pyvips.Image.pdfload_buffer(buffer, page=int, n=int, dpi=float, scale=float, background=list[float], memory=bool, access=Union[str, Access], fail_on=Union[str, FailOn])</p>
+<dt>Example:</dt><dd><p>out = pyvips.Image.pdfload_buffer(buffer, page=int, n=int, dpi=float, scale=float, background=list[float], password=str, memory=bool, access=Union[str, Access], fail_on=Union[str, FailOn])</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -7278,6 +7426,7 @@ image pixel values.</p>
 <li><p><strong>dpi</strong> (<em>float</em>) – Render at this DPI</p></li>
 <li><p><strong>scale</strong> (<em>float</em>) – Scale output by this factor</p></li>
 <li><p><strong>background</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Background value</p></li>
+<li><p><strong>password</strong> (<em>str</em>) – Decrypt with this password</p></li>
 <li><p><strong>memory</strong> (<em>bool</em>) – Force open via memory</p></li>
 <li><p><strong>access</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="enums.html#pyvips.enums.Access" title="pyvips.enums.Access"><em>Access</em></a><em>]</em>) – Required access pattern for this file</p></li>
 <li><p><strong>fail_on</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="enums.html#pyvips.enums.FailOn" title="pyvips.enums.FailOn"><em>FailOn</em></a><em>]</em>) – Error level to fail on</p></li>
@@ -7295,10 +7444,10 @@ image pixel values.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyvips.Image.pdfload_source">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pdfload_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list[float]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">Access]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_on</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">FailOn]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.pdfload_source" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pdfload_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list[float]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">Access]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_on</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Union[str,</span> <span class="pre">FailOn]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.pdfload_source" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load PDF from source.</p>
 <dl class="simple">
-<dt>Example:</dt><dd><p>out = pyvips.Image.pdfload_source(source, page=int, n=int, dpi=float, scale=float, background=list[float], memory=bool, access=Union[str, Access], fail_on=Union[str, FailOn])</p>
+<dt>Example:</dt><dd><p>out = pyvips.Image.pdfload_source(source, page=int, n=int, dpi=float, scale=float, background=list[float], password=str, memory=bool, access=Union[str, Access], fail_on=Union[str, FailOn])</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -7310,6 +7459,7 @@ image pixel values.</p>
 <li><p><strong>dpi</strong> (<em>float</em>) – Render at this DPI</p></li>
 <li><p><strong>scale</strong> (<em>float</em>) – Scale output by this factor</p></li>
 <li><p><strong>background</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Background value</p></li>
+<li><p><strong>password</strong> (<em>str</em>) – Decrypt with this password</p></li>
 <li><p><strong>memory</strong> (<em>bool</em>) – Force open via memory</p></li>
 <li><p><strong>access</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="enums.html#pyvips.enums.Access" title="pyvips.enums.Access"><em>Access</em></a><em>]</em>) – Required access pattern for this file</p></li>
 <li><p><strong>fail_on</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="enums.html#pyvips.enums.FailOn" title="pyvips.enums.FailOn"><em>FailOn</em></a><em>]</em>) – Error level to fail on</p></li>
@@ -7481,7 +7631,7 @@ image pixel values.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyvips.Image.pngsave">
 <span class="sig-name descname"><span class="pre">pngsave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interlace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">palette</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dither</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bitdepth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">effort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list[float]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.pngsave" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save image to png file.</p>
+<dd><p>Save image to file as PNG.</p>
 <dl class="simple">
 <dt>Example:</dt><dd><p>in.pngsave(filename, compression=int, interlace=bool, profile=str, filter=int, palette=bool, Q=int, dither=float, bitdepth=int, effort=int, strip=bool, background=list[float], page_height=int)</p>
 </dd>
@@ -7493,11 +7643,11 @@ image pixel values.</p>
 <li><p><strong>compression</strong> (<em>int</em>) – Compression factor</p></li>
 <li><p><strong>interlace</strong> (<em>bool</em>) – Interlace image</p></li>
 <li><p><strong>profile</strong> (<em>str</em>) – ICC profile to embed</p></li>
-<li><p><strong>filter</strong> (<em>int</em>) – libpng row filter flag(s)</p></li>
+<li><p><strong>filter</strong> (<em>int</em>) – libspng row filter flag(s)</p></li>
 <li><p><strong>palette</strong> (<em>bool</em>) – Quantise to 8bpp palette</p></li>
 <li><p><strong>Q</strong> (<em>int</em>) – Quantisation quality</p></li>
 <li><p><strong>dither</strong> (<em>float</em>) – Amount of dithering</p></li>
-<li><p><strong>bitdepth</strong> (<em>int</em>) – Write as a 1, 2, 4 or 8 bit image</p></li>
+<li><p><strong>bitdepth</strong> (<em>int</em>) – Write as a 1, 2, 4, 8 or 16 bit image</p></li>
 <li><p><strong>effort</strong> (<em>int</em>) – Quantisation CPU effort</p></li>
 <li><p><strong>strip</strong> (<em>bool</em>) – Strip all metadata from image</p></li>
 <li><p><strong>background</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Background value</p></li>
@@ -7516,7 +7666,7 @@ image pixel values.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyvips.Image.pngsave_buffer">
 <span class="sig-name descname"><span class="pre">pngsave_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interlace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">palette</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dither</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bitdepth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">effort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list[float]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyvips.Image.pngsave_buffer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save image to png buffer.</p>
+<dd><p>Save image to buffer as PNG.</p>
 <dl class="simple">
 <dt>Example:</dt><dd><p>buffer = in.pngsave_buffer(compression=int, interlace=bool, profile=str, filter=int, palette=bool, Q=int, dither=float, bitdepth=int, effort=int, strip=bool, background=list[float], page_height=int)</p>
 </dd>
@@ -7527,11 +7677,11 @@ image pixel values.</p>
 <li><p><strong>compression</strong> (<em>int</em>) – Compression factor</p></li>
 <li><p><strong>interlace</strong> (<em>bool</em>) – Interlace image</p></li>
 <li><p><strong>profile</strong> (<em>str</em>) – ICC profile to embed</p></li>
-<li><p><strong>filter</strong> (<em>int</em>) – libpng row filter flag(s)</p></li>
+<li><p><strong>filter</strong> (<em>int</em>) – libspng row filter flag(s)</p></li>
 <li><p><strong>palette</strong> (<em>bool</em>) – Quantise to 8bpp palette</p></li>
 <li><p><strong>Q</strong> (<em>int</em>) – Quantisation quality</p></li>
 <li><p><strong>dither</strong> (<em>float</em>) – Amount of dithering</p></li>
-<li><p><strong>bitdepth</strong> (<em>int</em>) – Write as a 1, 2, 4 or 8 bit image</p></li>
+<li><p><strong>bitdepth</strong> (<em>int</em>) – Write as a 1, 2, 4, 8 or 16 bit image</p></li>
 <li><p><strong>effort</strong> (<em>int</em>) – Quantisation CPU effort</p></li>
 <li><p><strong>strip</strong> (<em>bool</em>) – Strip all metadata from image</p></li>
 <li><p><strong>background</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Background value</p></li>
@@ -7562,11 +7712,11 @@ image pixel values.</p>
 <li><p><strong>compression</strong> (<em>int</em>) – Compression factor</p></li>
 <li><p><strong>interlace</strong> (<em>bool</em>) – Interlace image</p></li>
 <li><p><strong>profile</strong> (<em>str</em>) – ICC profile to embed</p></li>
-<li><p><strong>filter</strong> (<em>int</em>) – libpng row filter flag(s)</p></li>
+<li><p><strong>filter</strong> (<em>int</em>) – libspng row filter flag(s)</p></li>
 <li><p><strong>palette</strong> (<em>bool</em>) – Quantise to 8bpp palette</p></li>
 <li><p><strong>Q</strong> (<em>int</em>) – Quantisation quality</p></li>
 <li><p><strong>dither</strong> (<em>float</em>) – Amount of dithering</p></li>
-<li><p><strong>bitdepth</strong> (<em>int</em>) – Write as a 1, 2, 4 or 8 bit image</p></li>
+<li><p><strong>bitdepth</strong> (<em>int</em>) – Write as a 1, 2, 4, 8 or 16 bit image</p></li>
 <li><p><strong>effort</strong> (<em>int</em>) – Quantisation CPU effort</p></li>
 <li><p><strong>strip</strong> (<em>bool</em>) – Strip all metadata from image</p></li>
 <li><p><strong>background</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Background value</p></li>

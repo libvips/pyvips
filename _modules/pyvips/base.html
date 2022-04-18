@@ -210,6 +210,7 @@
     <span class="k">return</span> <span class="p">[</span><span class="n">_to_string</span><span class="p">(</span><span class="n">g_enum_class</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value_nick</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">g_enum_class</span><span class="o">.</span><span class="n">n_values</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span></div>
 
+
 <div class="viewcode-block" id="values_for_flag"><a class="viewcode-back" href="../../base.html#pyvips.base.values_for_flag">[docs]</a><span class="k">def</span> <span class="nf">values_for_flag</span><span class="p">(</span><span class="n">gtype</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Get all values for a flag (gtype).&quot;&quot;&quot;</span>
 
@@ -218,6 +219,7 @@
 
     <span class="k">return</span> <span class="p">[</span><span class="n">_to_string</span><span class="p">(</span><span class="n">g_flags_class</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value_nick</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">g_flags_class</span><span class="o">.</span><span class="n">n_values</span><span class="p">)]</span></div>
+
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;leak_set&#39;</span><span class="p">,</span>
