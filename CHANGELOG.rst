@@ -1,4 +1,6 @@
 # master 
+
+* add seek and end handlers for TargetCustom [jcupitt]
  
 ## Version 2.2.0 (released 18 Apr 2022)
 

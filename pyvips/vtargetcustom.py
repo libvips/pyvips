@@ -3,7 +3,7 @@ from __future__ import division
 import logging
 
 import pyvips
-from pyvips import ffi, vips_lib
+from pyvips import ffi, vips_lib, at_least_libvips
 
 logger = logging.getLogger(__name__)
 
@@ -44,11 +44,68 @@ class TargetCustom(pyvips.Target):
 
         self.signal_connect("write", interface_handler)
 
+    def on_read(self, handler):
+        """Attach a read handler.
+
+        The interface is exactly as io.read(). The handler is given a number
+        of bytes to fetch, and should return a bytes-like object containing up
+        to that number of bytes. If there is no more data available, it should
+        return None.
+
+        Read handlers are optional for targets. If you do not set one, your 
+        target will be treated as unreadable and libvips will be unable to 
+        write some file types (just TIFF, as of the time of writing).
+
+        """
+
+        def interface_handler(buf):
+            chunk = handler(len(buf))
+            if chunk is None:
+                return 0
+
+            bytes_read = len(chunk)
+            buf[:bytes_read] = chunk
+
+            return bytes_read
+
+        self.signal_connect("read", interface_handler)
+
+    def on_seek(self, handler):
+        """Attach a seek handler.
+
+        The interface is the same as io.seek(), so the handler is passed
+        parameters for offset and whence with the same meanings.
+
+        However, the handler MUST return the new seek position. A simple way
+        to do this is to call io.tell() and return that result.
+
+        Seek handlers are optional. If you do not set one, your target will be
+        treated as unseekable and libvips will be unable to write some file
+        types (just TIFF, as of the time of writing).
+
+        """
+
+        self.signal_connect("seek", handler)
+
+    def on_end(self, handler):
+        """Attach an end handler.
+
+        This optional handler is called at the end of write. It should do any
+        cleaning up necessary, and return 0 on success and -1 on error. 
+
+        """
+
+        if not at_least_libvips(8, 13):
+            # fall back for older libvips
+            self.on_finish(handler)
+        else:
+            self.signal_connect("end", handler)
+
     def on_finish(self, handler):
         """Attach a finish handler.
 
-        This optional handler is called at the end of write. It should do any
-        cleaning up necessary.
+        For libvips 8.13 and later, this method is deprecated in favour of
+        :meth:`on_end`.
 
         """
 

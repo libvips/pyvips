@@ -42,14 +42,14 @@ _marshalers = {
 if at_least_libvips(8, 9):
     if pyvips.API_mode:
         @ffi.def_extern()
-        def _marshal_read(source_custom, pointer, length, handle):
+        def _marshal_read(gobject, pointer, length, handle):
             buf = ffi.buffer(pointer, length)
             callback = ffi.from_handle(handle)
             return callback(buf)
         _marshal_read_cb = ffi.cast('GCallback', gobject_lib._marshal_read)
     else:
         @ffi.callback('gint64(VipsSourceCustom*, void*, gint64, void*)')
-        def _marshal_read(source_custom, pointer, length, handle):
+        def _marshal_read(gobject, pointer, length, handle):
             buf = ffi.buffer(pointer, length)
             callback = ffi.from_handle(handle)
             return callback(buf)
@@ -58,14 +58,14 @@ if at_least_libvips(8, 9):
 
     if pyvips.API_mode:
         @ffi.def_extern()
-        def _marshal_seek(source_custom, offset, whence, handle):
+        def _marshal_seek(gobject, offset, whence, handle):
             callback = ffi.from_handle(handle)
             return callback(offset, whence)
         _marshal_seek_cb = \
             ffi.cast('GCallback', gobject_lib._marshal_seek)
     else:
         @ffi.callback('gint64(VipsSourceCustom*, gint64, int, void*)')
-        def _marshal_seek(source_custom, offset, whence, handle):
+        def _marshal_seek(gobject, offset, whence, handle):
             callback = ffi.from_handle(handle)
             return callback(offset, whence)
         _marshal_seek_cb = ffi.cast('GCallback', _marshal_seek)
@@ -73,15 +73,14 @@ if at_least_libvips(8, 9):
 
     if pyvips.API_mode:
         @ffi.def_extern()
-        def _marshal_write(source_custom, pointer, length, handle):
+        def _marshal_write(gobject, pointer, length, handle):
             buf = ffi.buffer(pointer, length)
             callback = ffi.from_handle(handle)
-            result = callback(buf)
-            return result
+            return callback(buf)
         _marshal_write_cb = ffi.cast('GCallback', gobject_lib._marshal_write)
     else:
         @ffi.callback('gint64(VipsTargetCustom*, void*, gint64, void*)')
-        def _marshal_write(source_custom, pointer, length, handle):
+        def _marshal_write(gobject, pointer, length, handle):
             buf = ffi.buffer(pointer, length)
             callback = ffi.from_handle(handle)
             return callback(buf)
@@ -90,17 +89,32 @@ if at_least_libvips(8, 9):
 
     if pyvips.API_mode:
         @ffi.def_extern()
-        def _marshal_finish(source_custom, handle):
+        def _marshal_finish(gobject, handle):
             callback = ffi.from_handle(handle)
             callback()
         _marshal_finish_cb = ffi.cast('GCallback', gobject_lib._marshal_finish)
     else:
         @ffi.callback('void(VipsTargetCustom*, void*)')
-        def _marshal_finish(source_custom, handle):
+        def _marshal_finish(gobject, handle):
             callback = ffi.from_handle(handle)
             callback()
         _marshal_finish_cb = ffi.cast('GCallback', _marshal_finish)
     _marshalers['finish'] = _marshal_finish_cb
+
+if at_least_libvips(8, 13):
+    if pyvips.API_mode:
+        @ffi.def_extern()
+        def _marshal_end(gobject, handle):
+            callback = ffi.from_handle(handle)
+            return callback()
+        _marshal_end_cb = ffi.cast('GCallback', gobject_lib._marshal_end)
+    else:
+        @ffi.callback('int(VipsTargetCustom*, void*)')
+        def _marshal_end(gobject, handle):
+            callback = ffi.from_handle(handle)
+            return callback()
+        _marshal_end_cb = ffi.cast('GCallback', _marshal_end)
+    _marshalers['end'] = _marshal_end_cb
 
 
 class GObject(object):

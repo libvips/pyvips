@@ -504,6 +504,13 @@ def cdefs(features):
 
         '''
 
+    if _at_least(features, 8, 13):
+        code += '''
+            extern "Python" int _marshal_end (VipsTarget*,
+                void*);
+
+        '''
+
     # we must only define these in API mode ... in ABI mode we need to call
     # these things earlier
     if features['api']:
