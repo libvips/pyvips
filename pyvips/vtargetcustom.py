@@ -68,7 +68,8 @@ class TargetCustom(pyvips.Target):
 
             return bytes_read
 
-        self.signal_connect("read", interface_handler)
+        if at_least_libvips(8, 13):
+            self.signal_connect("read", interface_handler)
 
     def on_seek(self, handler):
         """Attach a seek handler.
@@ -85,7 +86,8 @@ class TargetCustom(pyvips.Target):
 
         """
 
-        self.signal_connect("seek", handler)
+        if at_least_libvips(8, 13):
+            self.signal_connect("seek", handler)
 
     def on_end(self, handler):
         """Attach an end handler.
