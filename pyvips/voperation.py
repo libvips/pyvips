@@ -584,10 +584,23 @@ def cache_get_max_files():
     return vips_lib.vips_cache_get_max_files()
 
 
+def block_untrusted_set(state):
+    """Set the block state for all untrusted operations."""
+    if at_least_libvips(8, 13):
+        vips_lib.vips_block_untrusted_set(state)
+
+
+def operation_block_set(name, state):
+    """Set the block state for a named operation."""
+    if at_least_libvips(8, 13):
+        vips_lib.vips_operation_block_set(_to_bytes(name), state)
+
+
 __all__ = [
     'Introspect', 'Operation',
     'cache_set_max', 'cache_set_max_mem', 'cache_set_max_files',
     'cache_set_trace',
     'cache_get_max', 'cache_get_max_mem', 'cache_get_max_files',
     'cache_get_size',
+    'block_untrusted_set', 'operation_block_set',
 ]

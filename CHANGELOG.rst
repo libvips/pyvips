@@ -1,6 +1,7 @@
 # master 
 
 * add seek and end handlers for TargetCustom [jcupitt]
+* add `block_untrusted_set`, `operation_block_set` [jcupitt]
  
 ## Version 2.2.0 (released 18 Apr 2022)
 

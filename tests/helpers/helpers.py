@@ -10,6 +10,7 @@ import pyvips
 IMAGES = os.path.join(os.path.dirname(__file__), os.pardir, 'images')
 JPEG_FILE = os.path.join(IMAGES, "sample.jpg")
 WEBP_FILE = os.path.join(IMAGES, "sample.webp")
+SVG_FILE = os.path.join(IMAGES, "logo.svg")
 
 _is_PY3 = sys.version_info[0] == 3
 

@@ -166,7 +166,7 @@ Stylecheck:
 
 .. code-block:: shell
 
-    $ pytest --flake8
+    $ flake8
 
 Generate HTML docs in ``doc/build/html``:
 

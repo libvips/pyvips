@@ -8,6 +8,7 @@ if len(sys.argv) != 4:
     print(f"   eg.: {sys.argv[0]} ~/pics/k2.jpg x .tif[tile]")
     sys.exit(1)
 
+
 def source_custom(filename):
     input_file = open(sys.argv[1], "rb")
 
@@ -24,6 +25,7 @@ def source_custom(filename):
     source.on_seek(seek_handler)
 
     return source
+
 
 def target_custom(filename):
     # w+ means read and write ... we need to be able to read from our output
@@ -42,8 +44,8 @@ def target_custom(filename):
         return output_file.tell()
 
     def end_handler():
-        # you can't throw exceptions over on_ handlers, you must return an error
-        # code
+        # you can't throw exceptions over on_ handlers, you must return an 
+        # error code
         try:
             output_file.close()
         except IOError:
@@ -58,6 +60,7 @@ def target_custom(filename):
     target.on_end(end_handler)
 
     return target
+
 
 source = source_custom(sys.argv[1])
 target = target_custom(sys.argv[2])

@@ -43,9 +43,9 @@ class VipsObject(pyvips.GObject):
         # this cache makes the libvips test suite about 10% faster
         class_pointer = self.gobject.g_type_instance.g_class
         cache = VipsObject._pspec_cache
-        if not class_pointer in cache:
+        if class_pointer not in cache:
             cache[class_pointer] = {}
-        if not name in cache[class_pointer]:
+        if name not in cache[class_pointer]:
             pspec = ffi.new('GParamSpec **')
             argument_class = ffi.new('VipsArgumentClass **')
             argument_instance = ffi.new('VipsArgumentInstance **')

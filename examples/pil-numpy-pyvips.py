@@ -21,7 +21,7 @@ print('pil shape', pillow_img.shape)
 # load with vips to a memory array
 start_vips = time.time()
 img = pyvips.Image.new_from_file(sys.argv[1])
-np_3d = np.asarray(img) # or img.numpy()
+np_3d = np.asarray(img)     # or img.numpy()
 
 print('Vips Time:', time.time() - start_vips)
 print('vips shape', np_3d.shape)

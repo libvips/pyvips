@@ -509,6 +509,9 @@ def cdefs(features):
             extern "Python" int _marshal_end (VipsTarget*,
                 void*);
 
+            void vips_block_untrusted_set (int state);
+            void vips_operation_block_set (const char *name, int state);
+
         '''
 
     # we must only define these in API mode ... in ABI mode we need to call

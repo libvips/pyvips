@@ -52,8 +52,8 @@ class TargetCustom(pyvips.Target):
         to that number of bytes. If there is no more data available, it should
         return None.
 
-        Read handlers are optional for targets. If you do not set one, your 
-        target will be treated as unreadable and libvips will be unable to 
+        Read handlers are optional for targets. If you do not set one, your
+        target will be treated as unreadable and libvips will be unable to
         write some file types (just TIFF, as of the time of writing).
 
         """
@@ -93,7 +93,7 @@ class TargetCustom(pyvips.Target):
         """Attach an end handler.
 
         This optional handler is called at the end of write. It should do any
-        cleaning up necessary, and return 0 on success and -1 on error. 
+        cleaning up necessary, and return 0 on success and -1 on error.
 
         """
 
