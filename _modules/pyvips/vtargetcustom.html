@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyvips.vtargetcustom &mdash; pyvips 2.1.17 documentation</title>
+  <title>pyvips.vtargetcustom &mdash; pyvips 2.2.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -13,6 +13,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../../../_static/collapse.js"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -30,7 +31,7 @@
             <a href="../../index.html" class="icon icon-home"> pyvips
           </a>
               <div class="version">
-                2.1
+                2.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -89,7 +90,7 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="kn">import</span> <span class="nn">pyvips</span>
-<span class="kn">from</span> <span class="nn">pyvips</span> <span class="kn">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">vips_lib</span>
+<span class="kn">from</span> <span class="nn">pyvips</span> <span class="kn">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">at_least_libvips</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -130,11 +131,70 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">signal_connect</span><span class="p">(</span><span class="s2">&quot;write&quot;</span><span class="p">,</span> <span class="n">interface_handler</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="TargetCustom.on_read"><a class="viewcode-back" href="../../vtargetcustom.html#pyvips.vtargetcustom.TargetCustom.on_read">[docs]</a>    <span class="k">def</span> <span class="nf">on_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Attach a read handler.</span>
+
+<span class="sd">        The interface is exactly as io.read(). The handler is given a number</span>
+<span class="sd">        of bytes to fetch, and should return a bytes-like object containing up</span>
+<span class="sd">        to that number of bytes. If there is no more data available, it should</span>
+<span class="sd">        return None.</span>
+
+<span class="sd">        Read handlers are optional for targets. If you do not set one, your</span>
+<span class="sd">        target will be treated as unreadable and libvips will be unable to</span>
+<span class="sd">        write some file types (just TIFF, as of the time of writing).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">interface_handler</span><span class="p">(</span><span class="n">buf</span><span class="p">):</span>
+            <span class="n">chunk</span> <span class="o">=</span> <span class="n">handler</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">buf</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">chunk</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">0</span>
+
+            <span class="n">bytes_read</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+            <span class="n">buf</span><span class="p">[:</span><span class="n">bytes_read</span><span class="p">]</span> <span class="o">=</span> <span class="n">chunk</span>
+
+            <span class="k">return</span> <span class="n">bytes_read</span>
+
+        <span class="k">if</span> <span class="n">at_least_libvips</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">13</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">signal_connect</span><span class="p">(</span><span class="s2">&quot;read&quot;</span><span class="p">,</span> <span class="n">interface_handler</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TargetCustom.on_seek"><a class="viewcode-back" href="../../vtargetcustom.html#pyvips.vtargetcustom.TargetCustom.on_seek">[docs]</a>    <span class="k">def</span> <span class="nf">on_seek</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Attach a seek handler.</span>
+
+<span class="sd">        The interface is the same as io.seek(), so the handler is passed</span>
+<span class="sd">        parameters for offset and whence with the same meanings.</span>
+
+<span class="sd">        However, the handler MUST return the new seek position. A simple way</span>
+<span class="sd">        to do this is to call io.tell() and return that result.</span>
+
+<span class="sd">        Seek handlers are optional. If you do not set one, your target will be</span>
+<span class="sd">        treated as unseekable and libvips will be unable to write some file</span>
+<span class="sd">        types (just TIFF, as of the time of writing).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">at_least_libvips</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">13</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">signal_connect</span><span class="p">(</span><span class="s2">&quot;seek&quot;</span><span class="p">,</span> <span class="n">handler</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TargetCustom.on_end"><a class="viewcode-back" href="../../vtargetcustom.html#pyvips.vtargetcustom.TargetCustom.on_end">[docs]</a>    <span class="k">def</span> <span class="nf">on_end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Attach an end handler.</span>
+
+<span class="sd">        This optional handler is called at the end of write. It should do any</span>
+<span class="sd">        cleaning up necessary, and return 0 on success and -1 on error.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">at_least_libvips</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">13</span><span class="p">):</span>
+            <span class="c1"># fall back for older libvips</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">on_finish</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">signal_connect</span><span class="p">(</span><span class="s2">&quot;end&quot;</span><span class="p">,</span> <span class="n">handler</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="TargetCustom.on_finish"><a class="viewcode-back" href="../../vtargetcustom.html#pyvips.vtargetcustom.TargetCustom.on_finish">[docs]</a>    <span class="k">def</span> <span class="nf">on_finish</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Attach a finish handler.</span>
 
-<span class="sd">        This optional handler is called at the end of write. It should do any</span>
-<span class="sd">        cleaning up necessary.</span>
+<span class="sd">        For libvips 8.13 and later, this method is deprecated in favour of</span>
+<span class="sd">        :meth:`on_end`.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 

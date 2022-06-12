@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyvips.gobject &mdash; pyvips 2.2.0 documentation</title>
+  <title>pyvips.gobject &mdash; pyvips 2.2.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -13,6 +13,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../../../_static/collapse.js"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -128,14 +129,14 @@
 <span class="k">if</span> <span class="n">at_least_libvips</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">API_mode</span><span class="p">:</span>
         <span class="nd">@ffi</span><span class="o">.</span><span class="n">def_extern</span><span class="p">()</span>
-        <span class="k">def</span> <span class="nf">_marshal_read</span><span class="p">(</span><span class="n">source_custom</span><span class="p">,</span> <span class="n">pointer</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">_marshal_read</span><span class="p">(</span><span class="n">gobject</span><span class="p">,</span> <span class="n">pointer</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
             <span class="n">buf</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="n">pointer</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
             <span class="n">callback</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">callback</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
         <span class="n">_marshal_read_cb</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GCallback&#39;</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="o">.</span><span class="n">_marshal_read</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="nd">@ffi</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="s1">&#39;gint64(VipsSourceCustom*, void*, gint64, void*)&#39;</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">_marshal_read</span><span class="p">(</span><span class="n">source_custom</span><span class="p">,</span> <span class="n">pointer</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">_marshal_read</span><span class="p">(</span><span class="n">gobject</span><span class="p">,</span> <span class="n">pointer</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
             <span class="n">buf</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="n">pointer</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
             <span class="n">callback</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">callback</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
@@ -144,14 +145,14 @@
 
     <span class="k">if</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">API_mode</span><span class="p">:</span>
         <span class="nd">@ffi</span><span class="o">.</span><span class="n">def_extern</span><span class="p">()</span>
-        <span class="k">def</span> <span class="nf">_marshal_seek</span><span class="p">(</span><span class="n">source_custom</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">whence</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">_marshal_seek</span><span class="p">(</span><span class="n">gobject</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">whence</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
             <span class="n">callback</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">callback</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">whence</span><span class="p">)</span>
         <span class="n">_marshal_seek_cb</span> <span class="o">=</span> \
             <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GCallback&#39;</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="o">.</span><span class="n">_marshal_seek</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="nd">@ffi</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="s1">&#39;gint64(VipsSourceCustom*, gint64, int, void*)&#39;</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">_marshal_seek</span><span class="p">(</span><span class="n">source_custom</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">whence</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">_marshal_seek</span><span class="p">(</span><span class="n">gobject</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">whence</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
             <span class="n">callback</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">callback</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">whence</span><span class="p">)</span>
         <span class="n">_marshal_seek_cb</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GCallback&#39;</span><span class="p">,</span> <span class="n">_marshal_seek</span><span class="p">)</span>
@@ -159,15 +160,14 @@
 
     <span class="k">if</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">API_mode</span><span class="p">:</span>
         <span class="nd">@ffi</span><span class="o">.</span><span class="n">def_extern</span><span class="p">()</span>
-        <span class="k">def</span> <span class="nf">_marshal_write</span><span class="p">(</span><span class="n">source_custom</span><span class="p">,</span> <span class="n">pointer</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">_marshal_write</span><span class="p">(</span><span class="n">gobject</span><span class="p">,</span> <span class="n">pointer</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
             <span class="n">buf</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="n">pointer</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
             <span class="n">callback</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="n">callback</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">result</span>
+            <span class="k">return</span> <span class="n">callback</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
         <span class="n">_marshal_write_cb</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GCallback&#39;</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="o">.</span><span class="n">_marshal_write</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="nd">@ffi</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="s1">&#39;gint64(VipsTargetCustom*, void*, gint64, void*)&#39;</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">_marshal_write</span><span class="p">(</span><span class="n">source_custom</span><span class="p">,</span> <span class="n">pointer</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">_marshal_write</span><span class="p">(</span><span class="n">gobject</span><span class="p">,</span> <span class="n">pointer</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
             <span class="n">buf</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="n">pointer</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
             <span class="n">callback</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">callback</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
@@ -176,17 +176,32 @@
 
     <span class="k">if</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">API_mode</span><span class="p">:</span>
         <span class="nd">@ffi</span><span class="o">.</span><span class="n">def_extern</span><span class="p">()</span>
-        <span class="k">def</span> <span class="nf">_marshal_finish</span><span class="p">(</span><span class="n">source_custom</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">_marshal_finish</span><span class="p">(</span><span class="n">gobject</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
             <span class="n">callback</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
             <span class="n">callback</span><span class="p">()</span>
         <span class="n">_marshal_finish_cb</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GCallback&#39;</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="o">.</span><span class="n">_marshal_finish</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="nd">@ffi</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="s1">&#39;void(VipsTargetCustom*, void*)&#39;</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">_marshal_finish</span><span class="p">(</span><span class="n">source_custom</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">_marshal_finish</span><span class="p">(</span><span class="n">gobject</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
             <span class="n">callback</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
             <span class="n">callback</span><span class="p">()</span>
         <span class="n">_marshal_finish_cb</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GCallback&#39;</span><span class="p">,</span> <span class="n">_marshal_finish</span><span class="p">)</span>
     <span class="n">_marshalers</span><span class="p">[</span><span class="s1">&#39;finish&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_marshal_finish_cb</span>
+
+<span class="k">if</span> <span class="n">at_least_libvips</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">13</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">API_mode</span><span class="p">:</span>
+        <span class="nd">@ffi</span><span class="o">.</span><span class="n">def_extern</span><span class="p">()</span>
+        <span class="k">def</span> <span class="nf">_marshal_end</span><span class="p">(</span><span class="n">gobject</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+            <span class="n">callback</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">callback</span><span class="p">()</span>
+        <span class="n">_marshal_end_cb</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GCallback&#39;</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="o">.</span><span class="n">_marshal_end</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nd">@ffi</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="s1">&#39;int(VipsTargetCustom*, void*)&#39;</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">_marshal_end</span><span class="p">(</span><span class="n">gobject</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+            <span class="n">callback</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">callback</span><span class="p">()</span>
+        <span class="n">_marshal_end_cb</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GCallback&#39;</span><span class="p">,</span> <span class="n">_marshal_end</span><span class="p">)</span>
+    <span class="n">_marshalers</span><span class="p">[</span><span class="s1">&#39;end&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_marshal_end_cb</span>
 
 
 <div class="viewcode-block" id="GObject"><a class="viewcode-back" href="../../gobject.html#pyvips.gobject.GObject">[docs]</a><span class="k">class</span> <span class="nc">GObject</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>

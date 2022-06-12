@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TargetCustom &mdash; pyvips 2.2.0 documentation</title>
+  <title>TargetCustom &mdash; pyvips 2.2.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/collapse.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -87,7 +88,7 @@
            <div itemprop="articleBody">
              
   <section id="module-pyvips.vtargetcustom">
-<span id="targetcustom"></span><h1><code class="docutils literal notranslate"><span class="pre">TargetCustom</span></code><a class="headerlink" href="#module-pyvips.vtargetcustom" title="Permalink to this headline">¶</a></h1>
+<span id="targetcustom"></span><h1><code class="docutils literal notranslate"><span class="pre">TargetCustom</span></code><a class="headerlink" href="#module-pyvips.vtargetcustom" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyvips.vtargetcustom.TargetCustom">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyvips.vtargetcustom.</span></span><span class="sig-name descname"><span class="pre">TargetCustom</span></span><a class="reference internal" href="_modules/pyvips/vtargetcustom.html#TargetCustom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.vtargetcustom.TargetCustom" title="Permalink to this definition">¶</a></dt>
@@ -103,11 +104,45 @@ written.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pyvips.vtargetcustom.TargetCustom.on_read">
+<span class="sig-name descname"><span class="pre">on_read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vtargetcustom.html#TargetCustom.on_read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.vtargetcustom.TargetCustom.on_read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attach a read handler.</p>
+<p>The interface is exactly as io.read(). The handler is given a number
+of bytes to fetch, and should return a bytes-like object containing up
+to that number of bytes. If there is no more data available, it should
+return None.</p>
+<p>Read handlers are optional for targets. If you do not set one, your
+target will be treated as unreadable and libvips will be unable to
+write some file types (just TIFF, as of the time of writing).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyvips.vtargetcustom.TargetCustom.on_seek">
+<span class="sig-name descname"><span class="pre">on_seek</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vtargetcustom.html#TargetCustom.on_seek"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.vtargetcustom.TargetCustom.on_seek" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attach a seek handler.</p>
+<p>The interface is the same as io.seek(), so the handler is passed
+parameters for offset and whence with the same meanings.</p>
+<p>However, the handler MUST return the new seek position. A simple way
+to do this is to call io.tell() and return that result.</p>
+<p>Seek handlers are optional. If you do not set one, your target will be
+treated as unseekable and libvips will be unable to write some file
+types (just TIFF, as of the time of writing).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyvips.vtargetcustom.TargetCustom.on_end">
+<span class="sig-name descname"><span class="pre">on_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vtargetcustom.html#TargetCustom.on_end"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.vtargetcustom.TargetCustom.on_end" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attach an end handler.</p>
+<p>This optional handler is called at the end of write. It should do any
+cleaning up necessary, and return 0 on success and -1 on error.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pyvips.vtargetcustom.TargetCustom.on_finish">
 <span class="sig-name descname"><span class="pre">on_finish</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vtargetcustom.html#TargetCustom.on_finish"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.vtargetcustom.TargetCustom.on_finish" title="Permalink to this definition">¶</a></dt>
 <dd><p>Attach a finish handler.</p>
-<p>This optional handler is called at the end of write. It should do any
-cleaning up necessary.</p>
+<p>For libvips 8.13 and later, this method is deprecated in favour of
+<a class="reference internal" href="#pyvips.vtargetcustom.TargetCustom.on_end" title="pyvips.vtargetcustom.TargetCustom.on_end"><code class="xref py py-meth docutils literal notranslate"><span class="pre">on_end()</span></code></a>.</p>
 </dd></dl>
 
 </dd></dl>

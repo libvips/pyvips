@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>README &mdash; pyvips 2.2.0 documentation</title>
+  <title>README &mdash; pyvips 2.2.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/collapse.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -94,7 +95,7 @@
            <div itemprop="articleBody">
              
   <section id="readme">
-<h1>README<a class="headerlink" href="#readme" title="Permalink to this headline">¶</a></h1>
+<h1>README<a class="headerlink" href="#readme" title="Permalink to this heading">¶</a></h1>
 <a class="reference external image-reference" href="https://travis-ci.org/libvips/pyvips"><img alt="Build Status" src="https://travis-ci.org/libvips/pyvips.svg?branch=master" /></a>
 <p>PyPI package:</p>
 <p><a class="reference external" href="https://pypi.python.org/pypi/pyvips">https://pypi.python.org/pypi/pyvips</a></p>
@@ -116,7 +117,7 @@ pyvips installed with <code class="docutils literal notranslate"><span class="pr
 <p>This binding passes the vips test suite cleanly and with no leaks under
 python2.7 - python3.6, pypy and pypy3 on Windows, macOS and Linux.</p>
 <section id="how-it-works">
-<h2>How it works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h2>
+<h2>How it works<a class="headerlink" href="#how-it-works" title="Permalink to this heading">¶</a></h2>
 <p>Programs that use <code class="docutils literal notranslate"><span class="pre">pyvips</span></code> don’t manipulate images directly, instead
 they create pipelines of image processing operations building on a source
 image. When the end of the pipe is connected to a destination, the whole
@@ -134,14 +135,14 @@ which gives some more background.</p>
 <p><a class="reference external" href="http://libvips.github.io/libvips/API/current/How-it-opens-files.md.html">http://libvips.github.io/libvips/API/current/How-it-opens-files.md.html</a></p>
 </section>
 <section id="conda-install">
-<h2>conda Install<a class="headerlink" href="#conda-install" title="Permalink to this headline">¶</a></h2>
+<h2>conda Install<a class="headerlink" href="#conda-install" title="Permalink to this heading">¶</a></h2>
 <p>The conda package includes a matching libvips binary, so just enter:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ conda install --channel conda-forge pyvips
 </pre></div>
 </div>
 </section>
 <section id="non-conda-install">
-<h2>Non-conda install<a class="headerlink" href="#non-conda-install" title="Permalink to this headline">¶</a></h2>
+<h2>Non-conda install<a class="headerlink" href="#non-conda-install" title="Permalink to this heading">¶</a></h2>
 <p>First, you need the libvips shared library on your library search path, version
 8.2 or later, though at least version 8.9 is required for all features to work.
 On Linux and macOS, you can just install via your package manager; on Windows you
@@ -169,7 +170,7 @@ programs, so it’s usually safer just to set <code class="docutils literal notr
 <p>Now when you import pyvips, it should be able to find the DLLs.</p>
 </section>
 <section id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">¶</a></h2>
 <p>This sample program loads a JPG image, doubles the value of every green pixel,
 sharpens, and then writes the image back to the filesystem again:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyvips</span>
@@ -186,7 +187,7 @@ sharpens, and then writes the image back to the filesystem again:</p>
 </div>
 </section>
 <section id="notes">
-<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this heading">¶</a></h2>
 <p>Local user install:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pip3 install -e .
 $ pypy -m pip --user -e .
@@ -210,20 +211,29 @@ $ ./run.sh
 </pre></div>
 </div>
 <p>Stylecheck:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pytest --flake8
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ flake8
 </pre></div>
 </div>
 <p>Generate HTML docs in <code class="docutils literal notranslate"><span class="pre">doc/build/html</span></code>:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> doc<span class="p">;</span> sphinx-build -bhtml . build/html
 </pre></div>
 </div>
+<p>Regenerate enums:</p>
+<p>Make sure you have installed a libvips with all optional packages enabled,
+then</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> examples<span class="p">;</span> <span class="se">\</span>
+  ./gen-enums.py ~/GIT/libvips/libvips/Vips-8.0.gir &gt; enums.py
+</pre></div>
+</div>
+<p>Then check and move <cite>enums.py</cite> into <cite>pyvips/</cite>.</p>
 <p>Regenerate autodocs:</p>
+<p>Make sure you have installed a libvips with all optional packages enabled,
+then</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> doc<span class="p">;</span> <span class="se">\</span>
   python3 -c <span class="s2">&quot;import pyvips; pyvips.Operation.generate_sphinx_all()&quot;</span> &gt; x
 </pre></div>
 </div>
-<p>And copy-paste <code class="docutils literal notranslate"><span class="pre">x</span></code> into the obvious place in <code class="docutils literal notranslate"><span class="pre">doc/vimage.rst</span></code>. See
-<cite>examples/gen-enums.py</cite> to regenerate all enums.</p>
+<p>And copy-paste <code class="docutils literal notranslate"><span class="pre">x</span></code> into the obvious place in <code class="docutils literal notranslate"><span class="pre">doc/vimage.rst</span></code>.</p>
 <p>Update version number:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ vi pyvips/version.py
 $ vi doc/conf.py

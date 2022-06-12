@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyvips.vobject &mdash; pyvips 2.2.0 documentation</title>
+  <title>pyvips.vobject &mdash; pyvips 2.2.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -13,6 +13,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../../../_static/collapse.js"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -129,9 +130,9 @@
         <span class="c1"># this cache makes the libvips test suite about 10% faster</span>
         <span class="n">class_pointer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gobject</span><span class="o">.</span><span class="n">g_type_instance</span><span class="o">.</span><span class="n">g_class</span>
         <span class="n">cache</span> <span class="o">=</span> <span class="n">VipsObject</span><span class="o">.</span><span class="n">_pspec_cache</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">class_pointer</span> <span class="ow">in</span> <span class="n">cache</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">class_pointer</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cache</span><span class="p">:</span>
             <span class="n">cache</span><span class="p">[</span><span class="n">class_pointer</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">cache</span><span class="p">[</span><span class="n">class_pointer</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cache</span><span class="p">[</span><span class="n">class_pointer</span><span class="p">]:</span>
             <span class="n">pspec</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;GParamSpec **&#39;</span><span class="p">)</span>
             <span class="n">argument_class</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;VipsArgumentClass **&#39;</span><span class="p">)</span>
             <span class="n">argument_instance</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;VipsArgumentInstance **&#39;</span><span class="p">)</span>
