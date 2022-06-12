@@ -174,15 +174,29 @@ Generate HTML docs in ``doc/build/html``:
 
     $ cd doc; sphinx-build -bhtml . build/html
 
+Regenerate enums:
+
+Make sure you have installed a libvips with all optional packages enabled,
+then
+
+.. code-block:: shell
+
+    $ cd examples; \
+      ./gen-enums.py ~/GIT/libvips/libvips/Vips-8.0.gir > enums.py
+
+Then check and move `enums.py` into `pyvips/`.
+
 Regenerate autodocs:
+
+Make sure you have installed a libvips with all optional packages enabled,
+then
 
 .. code-block:: shell
 
     $ cd doc; \
       python3 -c "import pyvips; pyvips.Operation.generate_sphinx_all()" > x 
 
-And copy-paste ``x`` into the obvious place in ``doc/vimage.rst``. See
-`examples/gen-enums.py` to regenerate all enums.
+And copy-paste ``x`` into the obvious place in ``doc/vimage.rst``. 
 
 Update version number:
 

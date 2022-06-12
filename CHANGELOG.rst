@@ -1,7 +1,10 @@
 # master 
 
+## Version 2.2.1 (released 12 JUn 2022)
+
 * add seek and end handlers for TargetCustom [jcupitt]
 * add `block_untrusted_set`, `operation_block_set` [jcupitt]
+* update for libvips 8.13 [jcupitt]
  
 ## Version 2.2.0 (released 18 Apr 2022)
 
