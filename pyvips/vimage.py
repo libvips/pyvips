@@ -126,7 +126,7 @@ def _deprecated(note):
     return _dep
 
 
-# Rules for the mapping betweeen numpy typestrings and libvips formats
+# Rules for the mapping between numpy typestrings and libvips formats
 # b1: bool. Above u1 so that rev. map is uchar->u1
 TYPESTR_TO_FORMAT = {'|b1': 'uchar',
                      '|u1': 'uchar',
