@@ -70,15 +70,6 @@ def at_least_libvips(x, y):
 
     return major > x or (major == x and minor >= y)
 
-
-def path_filename7(filename):
-    return _to_string(vips_lib.vips_path_filename7(_to_bytes(filename)))
-
-
-def path_mode7(filename):
-    return _to_string(vips_lib.vips_path_mode7(_to_bytes(filename)))
-
-
 def type_find(basename, nickname):
     """Get the GType for a name.
 
@@ -139,8 +130,6 @@ __all__ = [
     'leak_set',
     'version',
     'at_least_libvips',
-    'path_filename7',
-    'path_mode7',
     'type_find',
     'nickname_find',
     'get_suffixes',
