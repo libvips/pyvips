@@ -109,9 +109,9 @@ Use :meth:`.get_fields` to get a list of all the field names you can use with
 libvips caches and shares images between different parts of your program. This
 means that you can't modify an image unless you are certain that you have
 the only reference to it. You can make a private copy of an image with
-``copy``, for example:
+``copy``, for example::
 
-        new_image = image.copy(xres=12, yres=13)
+    new_image = image.copy(xres=12, yres=13)
 
 Now ``new_image`` is a private clone of ``image`` with ``xres`` and ``yres``
 changed.
