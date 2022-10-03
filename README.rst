@@ -35,7 +35,7 @@ start up and is typically ~20% slower in execution.  You can find out how
 pyvips installed with ``pip show pyvips``.
 
 This binding passes the vips test suite cleanly and with no leaks under
-python2.7 - python3.6, pypy and pypy3 on Windows, macOS and Linux. 
+python2.7 - python3.10, pypy and pypy3 on Windows, macOS and Linux. 
 
 How it works
 ------------
@@ -61,7 +61,7 @@ which gives some more background.
 
 http://libvips.github.io/libvips/API/current/How-it-opens-files.md.html
 
-conda Install
+conda install
 -------------
 
 The conda package includes a matching libvips binary, so just enter:
@@ -73,10 +73,10 @@ The conda package includes a matching libvips binary, so just enter:
 Non-conda install
 -----------------
 
-First, you need the libvips shared library on your library search path, version
-8.2 or later, though at least version 8.9 is required for all features to work. 
-On Linux and macOS, you can just install via your package manager; on Windows you
-can download a pre-compiled binary from the libvips website.
+First, you need the libvips shared library on your library search path,
+version 8.2 or later, though at least version 8.9 is required for all features
+to work.  On Linux and macOS, you can just install via your package manager;
+on Windows you can download a pre-compiled binary from the libvips website.
 
 https://libvips.github.io/libvips/install.html
 
@@ -92,18 +92,31 @@ that pyvips can find all the DLLs it needs. You can either do this in the
 **Advanced System Settings** control panel, or you can just change
 ``PATH`` in your Python program.
 
-If you set the PATH environment variable in the control panel, you can use
-the ``vips`` command-line tools, which I find useful. However, this will add
-a lot of extra DLLs to your search path and they might conflict with other
-programs, so it's usually safer just to set ``PATH`` in your program.
+If you set the ``PATH`` environment variable in the control panel, you can
+use the ``vips`` command-line tools, which I find useful. However, this will
+add a lot of extra DLLs to your search path and they might conflict with
+other programs, so it's usually safer just to set ``PATH`` in your program.
 
-To set ``PATH`` from within Python, you need something like this at the start:
+To set ``PATH`` from within Python, you need something like this at the
+start:
 
 .. code-block:: python
 
     import os
-    vipshome = 'c:\\vips-dev-8.7\\bin'
-    os.environ['PATH'] = vipshome + ';' + os.environ['PATH']
+    vipsbin = r'c:\vips-dev-8.13\bin'
+    os.environ['PATH'] = vipsbin + ';' + os.environ['PATH']
+
+For Python 3.8 and later, you need:
+
+.. code-block:: python
+
+    import os
+    add_dll_dir = getattr(os, 'add_dll_directory', None)
+    vipsbin = r'c:\vips-dev-8.13\bin'
+    if callable(add_dll_dir):
+        add_dll_dir(vipsbin)
+    else:
+        os.environ['PATH'] = os.pathsep.join(vipsbin, os.environ['PATH'])
 
 Now when you import pyvips, it should be able to find the DLLs.
 
@@ -119,10 +132,11 @@ sharpens, and then writes the image back to the filesystem again:
 
     image = pyvips.Image.new_from_file('some-image.jpg', access='sequential')
     image *= [1, 2, 1]
-    mask = pyvips.Image.new_from_array([[-1, -1, -1],
-                                        [-1, 16, -1],
-                                        [-1, -1, -1]
-                                       ], scale=8)
+    mask = pyvips.Image.new_from_array([
+        [-1, -1, -1],
+        [-1, 16, -1],
+        [-1, -1, -1],
+    ], scale=8)
     image = image.conv(mask, precision='integer')
     image.write_to_file('x.jpg')
 

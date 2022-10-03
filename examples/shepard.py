@@ -48,7 +48,7 @@ def shepards(image: pyvips.Image, couples: List[Couple]) -> pyvips.Image:
 
 if __name__ == '__main__':
     image = pyvips.Image.new_from_file(sys.argv[1])
-    matches = re.findall('(\d+),(\d+) (\d+),(\d+)', sys.argv[3])
+    matches = re.findall(r'(\d+),(\d+) (\d+),(\d+)', sys.argv[3])
     couples = [((int(m[0]), int(m[1])), (int(m[2]), int(m[3])))
                for m in matches]
 

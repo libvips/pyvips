@@ -44,7 +44,7 @@ def target_custom(filename):
         return output_file.tell()
 
     def end_handler():
-        # you can't throw exceptions over on_ handlers, you must return an 
+        # you can't throw exceptions over on_ handlers, you must return an
         # error code
         try:
             output_file.close()
