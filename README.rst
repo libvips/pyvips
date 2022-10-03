@@ -111,12 +111,12 @@ For Python 3.8 and later, you need:
 .. code-block:: python
 
     import os
-    add_dll_dir = getattr(os, 'add_dll_directory', None)
     vipsbin = r'c:\vips-dev-8.13\bin'
+    add_dll_dir = getattr(os, 'add_dll_directory', None)
     if callable(add_dll_dir):
         add_dll_dir(vipsbin)
     else:
-        os.environ['PATH'] = os.pathsep.join(vipsbin, os.environ['PATH'])
+        os.environ['PATH'] = os.pathsep.join((vipsbin, os.environ['PATH']))
 
 Now when you import pyvips, it should be able to find the DLLs.
 
