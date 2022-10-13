@@ -88,4 +88,5 @@ def generate_enums():
 
 if __name__ == "__main__":
     print('# libvips enums -- this file is generated automatically')
+    print('# flake8: noqa: E501')  # ignore line too long error
     generate_enums()

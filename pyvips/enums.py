@@ -1,4 +1,5 @@
 # libvips enums -- this file is generated automatically
+# flake8: noqa: E501
 
 
 class BandFormat(object):

@@ -15,7 +15,7 @@ if _is_PY3:
     text_type = str, Path
     byte_type = bytes
 else:
-    text_type = unicode
+    text_type = unicode  # noqa: F821
     byte_type = str
 
 

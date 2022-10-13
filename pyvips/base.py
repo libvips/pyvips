@@ -70,6 +70,7 @@ def at_least_libvips(x, y):
 
     return major > x or (major == x and minor >= y)
 
+
 def type_find(basename, nickname):
     """Get the GType for a name.
 
