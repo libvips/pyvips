@@ -1,9 +1,9 @@
 README
 ======
 
-.. image:: https://travis-ci.org/libvips/pyvips.svg?branch=master
+.. image:: https://github.com/libvips/pyvips/workflows/CI/badge.svg
     :alt: Build Status
-    :target: https://travis-ci.org/libvips/pyvips
+    :target: https://github.com/libvips/pyvips/actions
 
 PyPI package:
 
