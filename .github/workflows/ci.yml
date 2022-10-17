@@ -23,7 +23,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install libvips
-        run: sudo apt install -y libvips --no-install-recommends
+        run: sudo apt-get install --no-install-recommends libvips
 
       - name: Lint with flake8
         run: |
