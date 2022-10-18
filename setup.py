@@ -55,9 +55,7 @@ install_deps = [
 
 test_deps = [
     'cffi>=1.0.0',
-    'pytest-runner',
     'pytest',
-    'pytest-flake8',
     'pyperf',
 ]
 

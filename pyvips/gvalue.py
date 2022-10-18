@@ -103,7 +103,7 @@ class GValue(object):
 
         """
 
-        if isinstance(value, basestring if _is_PY2 else str):
+        if isinstance(value, basestring if _is_PY2 else str):  # noqa: F821
             enum_value = vips_lib.vips_enum_from_nick(b'pyvips', gtype,
                                                       _to_bytes(value))
             if enum_value < 0:

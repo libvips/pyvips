@@ -1,0 +1,38 @@
+name: CI
+
+on: [ push, pull_request ]
+
+jobs:
+  CI:
+    name: "Linux x64 (Ubuntu 22.04) - Python ${{ matrix.python-version }}"
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        # Only test supported Python versions:
+        # https://endoflife.date/python
+        python-version: ["3.7", "3.8", "3.9", "3.10", "pypy3.9"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install libvips
+        run: sudo apt-get install --no-install-recommends libvips
+
+      - name: Lint with flake8
+        run: |
+          pip install flake8
+          flake8 .
+
+      - name: Install tox and any other packages
+        run: pip install tox
+
+      - name: Run tox
+        # Run tox using the version of Python in `PATH`
+        run: tox -e py

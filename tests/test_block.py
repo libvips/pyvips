@@ -26,7 +26,7 @@ class TestBlock:
 
         # should fail
         with pytest.raises(Exception):
-            image = pyvips.Image.new_from_file(WEBP_FILE)
+            _ = pyvips.Image.new_from_file(WEBP_FILE)
 
         # reenable all loads
         pyvips.operation_block_set("VipsForeignLoad", False)
@@ -41,7 +41,7 @@ class TestBlock:
 
         # should fail
         with pytest.raises(Exception):
-            image = pyvips.Image.new_from_file(SVG_FILE)
+            _ = pyvips.Image.new_from_file(SVG_FILE)
 
         # reenable all loads
         pyvips.block_untrusted_set(False)
