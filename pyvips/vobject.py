@@ -23,17 +23,13 @@ class VipsObject(pyvips.GObject):
         self.gobject = ffi.cast('GObject*', pointer)
 
     @staticmethod
-    def print_all(msg):
+    def print_all():
         """Print all objects.
 
         Print a table of all active libvips objects. Handy for debugging.
 
         """
-
-        gc.collect()
-        logger.debug(msg)
         vips_lib.vips_object_print_all()
-        logger.debug()
 
     def _get_pspec(self, name):
         # logger.debug('VipsObject.get_typeof: self = %s, name = %s',

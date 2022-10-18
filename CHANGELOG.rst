@@ -2,6 +2,7 @@
 
 + fix with libvips nodeprecated [kleisauke]
 + update README notes for py3.8+ on win [CristiFati]
++ fix VipsObect.print_all() [jcupitt]
 
 ## Version 2.2.1 (released 12 Jun 2022)
 
