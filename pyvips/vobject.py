@@ -2,7 +2,6 @@
 
 from __future__ import division
 
-import gc
 import logging
 
 import pyvips
