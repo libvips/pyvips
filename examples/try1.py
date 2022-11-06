@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 
 import logging
+logging.basicConfig(level=logging.DEBUG)
+import sys
+
 import pyvips
 
-logging.basicConfig(level=logging.DEBUG)
-
 print('test Image')
-image = pyvips.Image.new_from_file('/data/john/pics/k2.jpg')
+image = pyvips.Image.new_from_file(sys.argv[1])
 print('image =', image)
 print('image.width =', image.width)
 print('\n''')
