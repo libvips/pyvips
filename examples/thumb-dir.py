@@ -17,15 +17,12 @@ def resize(filein, fileout, maxw, maxh):
 
 # check dir dir args
 if os.path.isdir(sys.argv[1]) and os.path.isdir(sys.argv[2]):
-    # process all from one dir to the other
     srcdir = sys.argv[1]
     dstdir = sys.argv[2]
     files = os.listdir(srcdir)
     for fname in files:
-       if fname.endswith( ('.jpg', '.JPG', '.tif', '.png') ) :
-           resize(srcdir + "/" + fname, dstdir + "/" + fname, 128,128)
+        if fname.endswith(('.jpg', '.JPG', '.tif', '.png')):
+            resize(srcdir + "/" + fname, dstdir + "/" + fname, 128,128)
 
 else:
     print("args: input dir, outputdir")
-	
-
