@@ -12,7 +12,6 @@ import sys
 import pyvips
 
 def resize(filein, fileout, maxw, maxh):
-    im = pyvips.Image.new_from_file(filein, access="sequential")
     out = pyvips.Image.thumbnail(filein, maxw, height=maxh)
     out.write_to_file(fileout , Q=95)
 
