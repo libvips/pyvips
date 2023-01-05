@@ -13,7 +13,8 @@ import pyvips
 
 def resize(filein, fileout, maxw, maxh):
     out = pyvips.Image.thumbnail(filein, maxw, height=maxh)
-    out.write_to_file(fileout , Q=95)
+    out.write_to_file(fileout, Q=95)
+
 
 # check dir dir args
 if os.path.isdir(sys.argv[1]) and os.path.isdir(sys.argv[2]):
@@ -22,7 +23,7 @@ if os.path.isdir(sys.argv[1]) and os.path.isdir(sys.argv[2]):
     files = os.listdir(srcdir)
     for fname in files:
         if fname.endswith(('.jpg', '.JPG', '.tif', '.png')):
-            resize(srcdir + "/" + fname, dstdir + "/" + fname, 128,128)
+            resize(srcdir + "/" + fname, dstdir + "/" + fname, 128, 128)
 
 else:
     print("args: input dir, outputdir")
