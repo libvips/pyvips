@@ -3,7 +3,7 @@
 
 args: inputfile outputfile
 no error checking for simplicity
-Notes: the convolution mask can be other sizes, 
+Notes: the convolution mask can be other sizes,
 here we use a scale of 1 (no scaling - see libvips conv docs)
 https://www.libvips.org/API/current/libvips-convolution.html#vips-conv
 and offset of 128 so zero output is mid-grey
