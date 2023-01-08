@@ -15,6 +15,6 @@ image = pyvips.Image.new_from_file(sys.argv[1], access='sequential')
 mask = pyvips.Image.new_from_array([[1, 1, 1],
                                     [1, -8, 1],
                                     [1, 1, 1]
-                                   ], scale=1, offset=128)
+                                    ], scale=1, offset=128)
 image = image.conv(mask, precision='integer')
 image.write_to_file(sys.argv[2])
