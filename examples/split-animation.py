@@ -10,7 +10,7 @@ n_pages = image.get("n-pages")
 delay = image.get("delay")
 print(f"delay array = {delay}")
 
-pages = [image.crop(0, page_number * page_height, image.width, page_height) 
+pages = [image.crop(0, page_number * page_height, image.width, page_height)
          for page_number in range(0, n_pages)]
 print(f"writing frames to {sys.argv[1]} ...")
 for page_number in range(len(pages)):

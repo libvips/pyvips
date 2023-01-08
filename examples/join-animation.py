@@ -5,7 +5,7 @@ import pyvips
 
 # the input images
 # assume these are all the same size
-images = [pyvips.Image.new_from_file(filename, access="sequential") 
+images = [pyvips.Image.new_from_file(filename, access="sequential")
           for filename in sys.argv[2:]]
 
 # frame delays are in milliseconds
