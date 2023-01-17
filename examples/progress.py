@@ -4,12 +4,12 @@ import pyvips
 
 
 def progress_print(name, progress):
-    print('{}:'.format(name))
-    print('   run = {}'.format(progress.run))
-    print('   eta = {}'.format(progress.eta))
-    print('   tpels = {}'.format(progress.tpels))
-    print('   npels = {}'.format(progress.npels))
-    print('   percent = {}'.format(progress.percent))
+    print(f'{name}:'.format(name))
+    print(f'   run = {progress.run}')
+    print(f'   eta = {progress.eta}')
+    print(f'   tpels = {progress.tpels}')
+    print(f'   npels = {progress.npels}')
+    print(f'   percent = {progress.percent}')
 
 
 def preeval_cb(image, progress):
