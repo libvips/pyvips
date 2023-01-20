@@ -1,29 +1,32 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """
 example pyvips code to run thumbnail on a dir full of images
 
 https://libvips.github.io/pyvips/vimage.html?highlight=thumbnail#pyvips.Image.thumbnail
-process all images in a dir and put results in another dir
-resize to fixed values for simplicity and only process jpg tif png
 """
 
 import os
+import multiprocessing
 import sys
 import pyvips
 
 
-def resize(filein, fileout, maxw, maxh):
-    out = pyvips.Image.thumbnail(filein, maxw, height=maxh)
-    out.write_to_file(fileout, Q=95)
+def thumbnail(directory, filename):
+    try:
+        name, extension = os.path.splitext(filename)
+        thumb = pyvips.Image.thumbnail(f"{directory}/{filename}", 128)
+        thumb.write_to_file(f"{directory}/tn_{name}.jpg")
+    except pyvips.Error:
+        # ignore failures due to eg. not an image
+        pass
 
 
-# check dir dir args
-if os.path.isdir(sys.argv[1]) and os.path.isdir(sys.argv[2]):
-    srcdir = sys.argv[1]
-    dstdir = sys.argv[2]
-    files = os.listdir(srcdir)
-    for fname in files:
-        if fname.endswith(('.jpg', '.JPG', '.tif', '.png')):
-            resize(srcdir + "/" + fname, dstdir + "/" + fname, 128, 128)
-else:
-    print("args: input dir, outputdir")
+def all_files(path):
+    for (root, dirs, files) in os.walk(path):
+        for file in files:
+            yield root, file
+
+
+with multiprocessing.Pool() as pool:
+    pool.starmap(thumbnail, all_files(sys.argv[1]))
+
