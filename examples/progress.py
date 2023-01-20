@@ -4,12 +4,12 @@ import pyvips
 
 
 def progress_print(name, progress):
-    print(f'{name}:'.format(name))
-    print(f'   run = {progress.run}')
-    print(f'   eta = {progress.eta}')
-    print(f'   tpels = {progress.tpels}')
-    print(f'   npels = {progress.npels}')
-    print(f'   percent = {progress.percent}')
+    print(f'signal {name}:'.format(name))
+    print(f'   run = {progress.run} (seconds of run time)')
+    print(f'   eta = {progress.eta} (estimated seconds left)')
+    print(f'   tpels = {progress.tpels} (total number of pels)')
+    print(f'   npels = {progress.npels} (number of pels computed so far)')
+    print(f'   percent = {progress.percent} (percent complete)')
 
 
 def preeval_cb(image, progress):
