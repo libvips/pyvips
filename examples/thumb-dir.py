@@ -29,4 +29,3 @@ def all_files(path):
 
 with multiprocessing.Pool() as pool:
     pool.starmap(thumbnail, all_files(sys.argv[1]))
-
