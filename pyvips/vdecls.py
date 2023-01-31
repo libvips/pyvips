@@ -94,7 +94,7 @@ def cdefs(features):
             GType gtype, const char* str);
         const char *vips_enum_nick (GType gtype, int value);
 
-        void g_value_set_boolean (GValue* value, bool v_boolean);
+        void g_value_set_boolean (GValue* value, int v_boolean);
         void g_value_set_int (GValue* value, int i);
         void g_value_set_uint64 (GValue* value, guint64 ull);
         void g_value_set_double (GValue* value, double d);
@@ -112,7 +112,7 @@ def cdefs(features):
         void vips_value_set_blob (GValue* value,
             FreeFn free_fn, void* data, size_t length);
 
-        bool g_value_get_boolean (const GValue* value);
+        int g_value_get_boolean (const GValue* value);
         int g_value_get_int (GValue* value);
         guint64 g_value_get_uint64 (GValue* value);
         double g_value_get_double (GValue* value);
@@ -222,8 +222,8 @@ def cdefs(features):
         extern "Python" void _marshal_image_progress (VipsImage*,
             void*, void*);
 
-        void vips_image_set_progress (VipsImage* image, bool progress);
-        void vips_image_set_kill (VipsImage* image, bool kill);
+        void vips_image_set_progress (VipsImage* image, int progress);
+        void vips_image_set_kill (VipsImage* image, int kill);
 
         typedef struct _VipsProgress {
             VipsImage* im;
@@ -250,14 +250,14 @@ def cdefs(features):
         '''
 
     code += '''
-            bool constructed;
-            bool static_object;
+            int constructed;
+            int static_object;
             void *argument_table;
             char *nickname;
             char *description;
-            bool preclose;
-            bool close;
-            bool postclose;
+            int preclose;
+            int close;
+            int postclose;
             size_t local_memory;
         } VipsObject;
 
