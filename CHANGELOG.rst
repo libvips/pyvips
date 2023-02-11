@@ -3,7 +3,7 @@
 * fix with libvips nodeprecated [kleisauke]
 * update README notes for py3.8+ on win [CristiFati]
 * fix VipsObect.print_all() [jcupitt]
-* add split and join animation examples [jcupitt]
+* add split, join, annotate animation examples [jcupitt]
 * work around broken ffi bool type [amtsak]
 
 ## Version 2.2.1 (released 12 Jun 2022)
