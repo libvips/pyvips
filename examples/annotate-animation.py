@@ -9,11 +9,12 @@ if len(sys.argv) != 4:
 
 text = pyvips.Image.text(sys.argv[3], dpi=300, rgba=True)
 
-# draw an overlay on the page ... this could do anything
+
+# draw an overlay on a page ... this could do anything
 def process_page(page, i):
-    return page.composite(text, "over", 
-                          x=(i * 4) % page.width, 
-                          y=(i * 4) % page.height) 
+    return page.composite(text, "over",
+                          x=(i * 4) % page.width,
+                          y=(i * 4) % page.height)
 
 
 # load the animation, chop into pages, rejoin, save
