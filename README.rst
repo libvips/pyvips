@@ -61,30 +61,42 @@ which gives some more background.
 
 http://libvips.github.io/libvips/API/current/How-it-opens-files.md.html
 
-Linux and macOS install
------------------------
+Install
+-------
 
 You need the libvips shared library on your library search path,
 version 8.2 or later, though at least version 8.9 is required for all features
-to work. On Linux and macOS, you can just install via your package manager,
-see:
+to work.  See:
 
 https://libvips.github.io/libvips/install.html
 
-Next, install this package, perhaps:
+Linux install
+-------------
+
+Perhaps:
 
 .. code-block:: shell
 
-    $ pip install --user pyvips
+    $ sudo apt install libvips-dev --no-install-recommends
+    $ pip install pyvips
 
 With python 3.11 and later, you will need to create a venv first and add
-`path/to/venv` to your `PATH`. On a Linux system with `.local`, this works
-well:
+`path/to/venv` to your `PATH`. Something like:
 
 .. code-block:: shell
 
     $ python3 -m venv ~/.local
     $ pip install pyvips
+
+macOS install
+-------------
+
+With homebrew:
+
+.. code-block:: shell
+
+    $ brew install vips python pkg-config
+    $ pip3 install pyvips
 
 Windows install
 ---------------
