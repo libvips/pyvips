@@ -35,7 +35,7 @@ start up and is typically ~20% slower in execution.  You can find out how
 pyvips installed with ``pip show pyvips``.
 
 This binding passes the vips test suite cleanly and with no leaks under
-python2.7 - python3.10, pypy and pypy3 on Windows, macOS and Linux. 
+python2.7 - python3.11, pypy and pypy3 on Windows, macOS and Linux. 
 
 How it works
 ------------
