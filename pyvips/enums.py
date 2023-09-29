@@ -1374,3 +1374,33 @@ Attributes:
     MMAPIN = 'mmapin'
     MMAPINRW = 'mmapinrw'
     OPENOUT = 'openout'
+
+
+class ForeignPngFilter(object):
+    """ForeignPngFilter.
+
+http://www.w3.org/TR/PNG-Filters.html
+The values mirror those of png.h in libpng.
+
+Attributes:
+
+    NONE (str): no filtering
+
+    SUB (str): difference to the left
+
+    UP (str): difference up
+
+    AVG (str): average of left and up
+
+    PAETH (str): pick best neighbor predictor automatically
+
+    ALL (str): adaptive
+
+    """
+
+    NONE = 'none'
+    SUB = 'sub'
+    UP = 'up'
+    AVG = 'avg'
+    PAETH = 'paeth'
+    ALL = 'all'
