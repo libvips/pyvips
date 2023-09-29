@@ -250,30 +250,28 @@ Attributes:
 class DemandStyle(object):
     """DemandStyle.
 
-See vips_image_pipelinev(). Operations can hint to the VIPS image IO
-system about the kind of demand geometry they prefer.
+See vips_image_pipelinev(). Operations can hint
+the kind of demand geometry they prefer
+to the VIPS image IO system.
 
 These demand styles are given below in order of increasing
-restrictiveness.  When demanding output from a pipeline,
+specialisation.  When demanding output from a pipeline,
 vips_image_generate()
-will use the most restrictive of the styles requested by the operations
+will use the most general style requested by the operations
 in the pipeline.
 
-#VIPS_DEMAND_STYLE_THINSTRIP --- This operation would like to output strips
-the width of the image and a few pels high. This is option suitable for
-point-to-point operations, such as those in the arithmetic package.
-
-This option is only efficient for cases where each output pel depends
-upon the pel in the corresponding position in the input image.
+#VIPS_DEMAND_STYLE_SMALLTILE --- This is the most general demand format.
+Output is demanded in small (around 100x100 pel) sections. This style works
+reasonably efficiently, even for bizzarre operations like 45 degree rotate.
 
 #VIPS_DEMAND_STYLE_FATSTRIP --- This operation would like to output strips
 the width of the image and as high as possible. This option is suitable
 for area operations which do not violently transform coordinates, such
 as vips_conv().
 
-#VIPS_DEMAND_STYLE_SMALLTILE --- This is the most general demand format.
-Output is demanded in small (around 100x100 pel) sections. This style works
-reasonably efficiently, even for bizzare operations like 45 degree rotate.
+#VIPS_DEMAND_STYLE_THINSTRIP --- This operation would like to output strips
+the width of the image and a few pels high. This option is suitable for
+point-to-point operations, such as those in the arithmetic package.
 
 #VIPS_DEMAND_STYLE_ANY --- This image is not being demand-read from a disc
 file (even indirectly) so any demand style is OK. It's used for things like
@@ -283,9 +281,9 @@ See also: vips_image_pipelinev().
 
 Attributes:
 
-    SMALLTILE (str): demand in small (typically 64x64 pixel) tiles
+    SMALLTILE (str): demand in small (typically 128x128 pixel) tiles
 
-    FATSTRIP (str): demand in fat (typically 10 pixel high) strips
+    FATSTRIP (str): demand in fat (typically 16 pixel high) strips
 
     THINSTRIP (str): demand in thin (typically 1 pixel high) strips
 
@@ -359,11 +357,11 @@ See also: vips_math().
 
 Attributes:
 
-    POW (str): pow( left, right )
+    POW (str): pow(left, right)
 
-    WOP (str): pow( right, left )
+    WOP (str): pow(right, left)
 
-    ATAN2 (str): atan2( left, right )
+    ATAN2 (str): atan2(left, right)
 
     """
 
@@ -405,6 +403,14 @@ Attributes:
 
     ATAN (str): atan(), angles in degrees
 
+    LOG (str): log base e
+
+    LOG10 (str): log base 10
+
+    EXP (str): e to the something
+
+    EXP10 (str): 10 to the something
+
     SINH (str): sinh(), angles in radians
 
     COSH (str): cosh(), angles in radians
@@ -417,14 +423,6 @@ Attributes:
 
     ATANH (str): atanh(), angles in radians
 
-    LOG (str): log base e
-
-    LOG10 (str): log base 10
-
-    EXP (str): e to the something
-
-    EXP10 (str): 10 to the something
-
     """
 
     SIN = 'sin'
@@ -433,16 +431,16 @@ Attributes:
     ASIN = 'asin'
     ACOS = 'acos'
     ATAN = 'atan'
+    LOG = 'log'
+    LOG10 = 'log10'
+    EXP = 'exp'
+    EXP10 = 'exp10'
     SINH = 'sinh'
     COSH = 'cosh'
     TANH = 'tanh'
     ASINH = 'asinh'
     ACOSH = 'acosh'
     ATANH = 'atanh'
-    LOG = 'log'
-    LOG10 = 'log10'
-    EXP = 'exp'
-    EXP10 = 'exp10'
 
 
 class OperationRound(object):
@@ -808,6 +806,32 @@ Attributes:
     APPROXIMATE = 'approximate'
 
 
+class TextWrap(object):
+    """TextWrap.
+
+Sets the word wrapping style for vips_text() when used with a maximum
+width.
+
+See also: vips_text().
+
+Attributes:
+
+    WORD (str): wrap at word boundaries
+
+    CHAR (str): wrap at character boundaries
+
+    WORD_CHAR (str): wrap at word boundaries, but fall back to character boundaries if there is not enough space for a full word
+
+    NONE (str): no wrapping
+
+    """
+
+    WORD = 'word'
+    CHAR = 'char'
+    WORD_CHAR = 'word-char'
+    NONE = 'none'
+
+
 class FailOn(object):
     """FailOn.
 
@@ -848,6 +872,9 @@ The netpbm file format to save as.
 
 #VIPS_FOREIGN_PPM_FORMAT_PFM images are 32-bit float pixels.
 
+#VIPS_FOREIGN_PPM_FORMAT_PNM images are anymap images -- the image format
+is used to pick the saver.
+
 Attributes:
 
     PBM (str): portable bitmap
@@ -858,12 +885,15 @@ Attributes:
 
     PFM (str): portable float map
 
+    PNM (str): portable anymap
+
     """
 
     PBM = 'pbm'
     PGM = 'pgm'
     PPM = 'ppm'
     PFM = 'pfm'
+    PNM = 'pnm'
 
 
 class ForeignSubsample(object):
@@ -1117,6 +1147,34 @@ Attributes:
     AVC = 'avc'
     JPEG = 'jpeg'
     AV1 = 'av1'
+
+
+class ForeignHeifEncoder(object):
+    """ForeignHeifEncoder.
+
+The selected encoder to use.
+If libheif hasn't been compiled with the selected encoder,
+we will fallback to the default encoder for the compression format.
+
+Attributes:
+
+    AUTO (str): auto
+
+    AOM (str): aom
+
+    RAV1E (str): RAV1E
+
+    SVT (str): SVT-AV1
+
+    X265 (str): x265
+
+    """
+
+    AUTO = 'auto'
+    AOM = 'aom'
+    RAV1E = 'rav1e'
+    SVT = 'svt'
+    X265 = 'x265'
 
 
 class Size(object):
