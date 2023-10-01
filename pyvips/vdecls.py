@@ -92,6 +92,8 @@ def cdefs(features):
 
         int vips_enum_from_nick (const char* domain,
             GType gtype, const char* str);
+        int vips_flags_from_nick (const char* domain,
+            GType gtype, const char* nick);
         const char *vips_enum_nick (GType gtype, int value);
 
         void g_value_set_boolean (GValue* value, int v_boolean);

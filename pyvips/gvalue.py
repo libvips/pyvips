@@ -126,6 +126,23 @@ class GValue(object):
 
         return _to_string(pointer)
 
+    @staticmethod
+    def to_flag(gtype, value):
+        """Turn a string into a flag value ready to be passed into libvips.
+
+        """
+
+        if isinstance(value, basestring if _is_PY2 else str):  # noqa: F821
+            flag_value = vips_lib.vips_flags_from_nick(b'pyvips', gtype,
+                                                       _to_bytes(value))
+            if flag_value < 0:
+                raise Error('no value {0} in gtype {1} ({2})'.
+                            format(value, type_name(gtype), gtype))
+        else:
+            flag_value = value
+
+        return flag_value
+
     def __init__(self):
         # allocate memory for the gvalue which will be freed on GC
         self.pointer = ffi.new('GValue *')
@@ -173,7 +190,8 @@ class GValue(object):
             gobject_lib.g_value_set_enum(self.gvalue,
                                          GValue.to_enum(gtype, value))
         elif fundamental == GValue.gflags_type:
-            gobject_lib.g_value_set_flags(self.gvalue, value)
+            gobject_lib.g_value_set_flags(self.gvalue,
+                                          GValue.to_flag(gtype, value))
         elif gtype == GValue.gstr_type:
             gobject_lib.g_value_set_string(self.gvalue, _to_bytes(value))
         elif gtype == GValue.refstr_type:

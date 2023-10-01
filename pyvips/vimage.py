@@ -1430,8 +1430,8 @@ class Image(pyvips.VipsObject):
 
             # n.b. We don't use isinstance because isinstance(True, int)
             # is True!
-            if not (all(type(x) == int for x in arg) or
-                    all(type(x) == bool for x in arg)):
+            if not (all(type(x) == int for x in arg) or  # noqa: E721
+                    all(type(x) == bool for x in arg)):  # noqa: E721
                 raise IndexError('list must contain only ints or only bools')
 
             if isinstance(arg[0], bool):
