@@ -262,7 +262,7 @@ in the pipeline.
 
 #VIPS_DEMAND_STYLE_SMALLTILE --- This is the most general demand format.
 Output is demanded in small (around 100x100 pel) sections. This style works
-reasonably efficiently, even for bizzarre operations like 45 degree rotate.
+reasonably efficiently, even for bizarre operations like 45 degree rotate.
 
 #VIPS_DEMAND_STYLE_FATSTRIP --- This operation would like to output strips
 the width of the image and as high as possible. This option is suitable
@@ -1376,26 +1376,26 @@ Attributes:
     OPENOUT = 'openout'
 
 
-class ForeignPreserve(object):
-    """ForeignPreserve.
+class ForeignKeep(object):
+    """ForeignKeep.
 
-Which metadata should be preserved.
+Which metadata to retain.
 
 Attributes:
 
     NONE (int): don't attach metadata
 
-    EXIF (int): preserve Exif metadata
+    EXIF (int): keep Exif metadata
 
-    XMP (int): preserve XMP metadata
+    XMP (int): keep XMP metadata
 
-    IPTC (int): preserve IPTC metadata
+    IPTC (int): keep IPTC metadata
 
-    ICC (int): preserve ICC metadata
+    ICC (int): keep ICC metadata
 
-    OTHER (int): preserve other metadata (e.g. PNG comments and some TIFF tags)
+    OTHER (int): keep other metadata (e.g. PNG comments and some TIFF tags)
 
-    ALL (int): preserve all metadata
+    ALL (int): keep all metadata
 
     """
 
