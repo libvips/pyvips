@@ -62,6 +62,15 @@ class TestGValue:
         value = gv.get()
         assert value == 12
 
+        # we also support setting flags with strings
+        gv.set("deprecated")
+        value = gv.get()
+        assert value == 8
+
+        # libvips 8.15 allows this as well
+        # gv.set("deprecated|nocache")
+        # though we don't test it
+
     def test_string(self):
         gv = pyvips.GValue()
         gv.set_type(pyvips.GValue.gstr_type)

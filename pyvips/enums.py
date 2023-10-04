@@ -1376,6 +1376,38 @@ Attributes:
     OPENOUT = 'openout'
 
 
+class ForeignPreserve(object):
+    """ForeignPreserve.
+
+Which metadata should be preserved.
+
+Attributes:
+
+    NONE (int): don't attach metadata
+
+    EXIF (int): preserve Exif metadata
+
+    XMP (int): preserve XMP metadata
+
+    IPTC (int): preserve IPTC metadata
+
+    ICC (int): preserve ICC metadata
+
+    OTHER (int): preserve other metadata (e.g. PNG comments and some TIFF tags)
+
+    ALL (int): preserve all metadata
+
+    """
+
+    NONE = 0
+    EXIF = 1
+    XMP = 2
+    IPTC = 4
+    ICC = 8
+    OTHER = 16
+    ALL = 31
+
+
 class ForeignPngFilter(object):
     """ForeignPngFilter.
 
@@ -1384,23 +1416,23 @@ The values mirror those of png.h in libpng.
 
 Attributes:
 
-    NONE (str): no filtering
+    NONE (int): no filtering
 
-    SUB (str): difference to the left
+    SUB (int): difference to the left
 
-    UP (str): difference up
+    UP (int): difference up
 
-    AVG (str): average of left and up
+    AVG (int): average of left and up
 
-    PAETH (str): pick best neighbor predictor automatically
+    PAETH (int): pick best neighbor predictor automatically
 
-    ALL (str): adaptive
+    ALL (int): adaptive
 
     """
 
-    NONE = 'none'
-    SUB = 'sub'
-    UP = 'up'
-    AVG = 'avg'
-    PAETH = 'paeth'
-    ALL = 'all'
+    NONE = 8
+    SUB = 16
+    UP = 32
+    AVG = 64
+    PAETH = 128
+    ALL = 248
