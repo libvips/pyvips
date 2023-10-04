@@ -85,6 +85,7 @@ def generate_enums():
             python_name = value.replace('-', '_').upper()
             print(f'    {python_name} = \'{value}\'')
 
+
 def generate_flags():
     all_nicknames = []
 
