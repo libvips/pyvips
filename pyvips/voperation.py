@@ -528,7 +528,8 @@ class Operation(pyvips.VipsObject):
         all_names = [x for x in all_names if x not in exclude]
 
         # Output summary table
-        print('.. class:: pyvips.Image\n')
+        print('.. class:: Image')
+        print('   :noindex:\n')
         print('   .. rubric:: Methods\n')
         print('   .. autosummary::')
         print('      :nosignatures:\n')
