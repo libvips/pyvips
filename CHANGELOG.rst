@@ -6,6 +6,7 @@
 * add split, join, annotate animation examples [jcupitt]
 * work around broken ffi bool type [amtsak]
 * flag classes are now integer-valued so you can OR them [jcupitt]
+* update docs for 8.15 [jcupitt]
 
 ## Version 2.2.1 (released 12 Jun 2022)
 
