@@ -54,28 +54,35 @@ except Exception as e:
 
     # yuk
     if _is_windows:
-        _glib_libname = 'libglib-2.0-0.dll'
-        _gobject_libname = 'libgobject-2.0-0.dll'
-        _vips_libname = 'libvips-42.dll'
+        vips_lib = ffi.dlopen('libvips-42.dll')
     elif _is_mac:
-        _glib_libname = None
-        _vips_libname = 'libvips.42.dylib'
-        _gobject_libname = 'libgobject-2.0.dylib'
+        vips_lib = ffi.dlopen('libvips.42.dylib')
     else:
-        _glib_libname = None
-        _vips_libname = 'libvips.so.42'
-        _gobject_libname = 'libgobject-2.0.so.0'
-
-    # possibly use ctypes.util.find_library() to locate the lib?
-    gobject_lib = ffi.dlopen(_gobject_libname)
-    vips_lib = ffi.dlopen(_vips_libname)
-    if _glib_libname:
-        glib_lib = ffi.dlopen(_glib_libname)
-    else:
-        glib_lib = gobject_lib
+        vips_lib = ffi.dlopen('libvips.so.42')
 
     logger.debug('Loaded lib %s', vips_lib)
-    logger.debug('Loaded lib %s', gobject_lib)
+
+    if _is_windows:
+        # On Windows, `GetProcAddress()` can only search in a specified DLL and
+        # doesn't look into its dependent libraries for symbols. Therefore, we
+        # check if the GLib DLLs are available. If these can not be found, we
+        # assume that GLib is statically linked into libvips.
+        try:
+            glib_lib = ffi.dlopen('libglib-2.0-0.dll')
+            gobject_lib = ffi.dlopen('libgobject-2.0-0.dll')
+
+            logger.debug('Loaded lib %s', glib_lib)
+            logger.debug('Loaded lib %s', gobject_lib)
+        except Exception:
+            glib_lib = vips_lib
+            gobject_lib = vips_lib
+    else:
+        # macOS and *nix uses `dlsym()`, which also searches for named symbols
+        # in the dependencies of the shared library. Therefore, we can support
+        # a single shared libvips library with all dependencies statically
+        # linked.
+        glib_lib = vips_lib
+        gobject_lib = vips_lib
 
     ffi.cdef('''
         int vips_init (const char* argv0);
