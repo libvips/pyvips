@@ -1,5 +1,9 @@
 # master 
 
+- ensure compatibility with a single shared libvips library [kleisauke]
+
+## Version 2.2.2 (released 4 Jan 2023)
+
 * fix with libvips nodeprecated [kleisauke]
 * update README notes for py3.8+ on win [CristiFati]
 * fix VipsObect.print_all() [jcupitt]
