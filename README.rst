@@ -247,7 +247,7 @@ Update pypi package:
 .. code-block:: shell
 
     $ python3 setup.py sdist
-    $ twine upload dist/*
+    $ twine upload --repository pyvips dist/*
     $ git tag -a v2.2.0 -m "as uploaded to pypi"
     $ git push origin v2.2.0
 
