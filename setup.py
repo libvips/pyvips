@@ -84,9 +84,9 @@ def setup_API():
         keywords='image processing',
 
         packages=pyvips_packages,
-        setup_requires=setup_deps + ['pkgconfig'],
+        setup_requires=setup_deps + ['pkgconfig>=1.5'],
         cffi_modules=['pyvips/pyvips_build.py:ffibuilder'],
-        install_requires=install_deps + ['pkgconfig'],
+        install_requires=install_deps + ['pkgconfig>=1.5'],
         tests_require=test_deps,
         extras_require=extras,
 
