@@ -1,5 +1,3 @@
-from __future__ import division
-
 import logging
 
 import pyvips
@@ -34,13 +32,7 @@ class TargetCustom(pyvips.Target):
         """
 
         def interface_handler(buf):
-            bytes_written = handler(buf)
-            # py2 will often return None for bytes_written ... replace with
-            # the length of the string
-            if bytes_written is None:
-                bytes_written = len(buf)
-
-            return bytes_written
+            return handler(buf)
 
         self.signal_connect("write", interface_handler)
 
