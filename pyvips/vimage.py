@@ -1,7 +1,5 @@
 # wrap VipsImage
 
-from __future__ import division
-
 import numbers
 import struct
 
@@ -81,26 +79,6 @@ def _run_cmplx(fn, image):
         image = image.copy(format=new_format, bands=image.bands * 2)
 
     return image
-
-
-# https://stackoverflow.com/a/22409540/1480019
-# https://github.com/benjaminp/six/blob/33b584b2c551548021adb92a028ceaf892deb5be/six.py#L846-L861
-def _with_metaclass(metaclass):
-    """Class decorator for creating a class with a metaclass."""
-    def wrapper(cls):
-        orig_vars = cls.__dict__.copy()
-        slots = orig_vars.get('__slots__')
-        if slots is not None:
-            if isinstance(slots, str):
-                slots = [slots]
-            for slots_var in slots:
-                orig_vars.pop(slots_var)
-        orig_vars.pop('__dict__', None)
-        orig_vars.pop('__weakref__', None)
-        if hasattr(cls, '__qualname__'):
-            orig_vars['__qualname__'] = cls.__qualname__
-        return metaclass(cls.__name__, cls.__bases__, orig_vars)
-    return wrapper
 
 
 # decorator to set docstring
@@ -258,8 +236,7 @@ class ImageType(type):
         return call_function
 
 
-@_with_metaclass(ImageType)
-class Image(pyvips.VipsObject):
+class Image(pyvips.VipsObject, metaclass=ImageType):
     """Wrap a VipsImage object.
 
     """
@@ -610,12 +587,6 @@ class Image(pyvips.VipsObject):
         """
         format_value = GValue.to_enum(GValue.format_type, format)
         pointer = ffi.from_buffer(data)
-        # py3:
-        #   - memoryview has .nbytes for number of bytes in object
-        #   - len() returns number of elements in top array
-        # py2:
-        #   - buffer has no nbytes member
-        #   - but len() gives number of bytes in object
         nbytes = data.nbytes if hasattr(data, 'nbytes') else len(data)
         vi = vips_lib.vips_image_new_from_memory(pointer,
                                                  nbytes,

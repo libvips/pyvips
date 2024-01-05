@@ -7,17 +7,21 @@ import pyvips
 
 class TestProgress:
     def test_progress(self):
-        # py27 requires this pattern for non-local modification
-        notes = {}
+        seen_preeval = False
+        seen_eval = False
+        seen_posteval = False
 
         def preeval_cb(image, progress):
-            notes['seen_preeval'] = True
+            nonlocal seen_preeval
+            seen_preeval = True
 
         def eval_cb(image, progress):
-            notes['seen_eval'] = True
+            nonlocal seen_eval
+            seen_eval = True
 
         def posteval_cb(image, progress):
-            notes['seen_posteval'] = True
+            nonlocal seen_posteval
+            seen_posteval = True
 
         image = pyvips.Image.black(1, 100000)
         image.set_progress(True)
@@ -26,9 +30,9 @@ class TestProgress:
         image.signal_connect('posteval', posteval_cb)
         image.avg()
 
-        assert notes['seen_preeval']
-        assert notes['seen_eval']
-        assert notes['seen_posteval']
+        assert seen_preeval
+        assert seen_eval
+        assert seen_posteval
 
     def test_progress_fields(self):
         def preeval_cb(image, progress):
