@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 # user code can override this null handler
 logger.addHandler(logging.NullHandler())
 
-# pull in our module version number, see also setup.py
+# pull in our module version number
 from .version import __version__
 
 # try to import our binary interface ... if that works, we are in API mode

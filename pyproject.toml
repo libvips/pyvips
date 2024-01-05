@@ -1,0 +1,93 @@
+[build-system]
+requires = [
+    # First version of setuptools to support pyproject.toml configuration
+    "setuptools>=61.0.0",
+    "wheel",
+    # Must be kept in sync with `project.dependencies`
+    "cffi>=1.0.0",
+    "pkgconfig>=1.5",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyvips"
+authors = [
+    {name = "John Cupitt", email = "jcupitt@gmail.com"},
+]
+description = "binding for the libvips image processing library"
+readme = "README.rst"
+keywords = [
+    "image processing",
+]
+license = {text = "MIT"}
+requires-python = ">=3.3"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Multimedia :: Graphics",
+    "Topic :: Multimedia :: Graphics :: Graphics Conversion",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.3",
+    "Programming Language :: Python :: 3.4",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+    # Must be kept in sync with `build-system.requires`
+    "cffi>=1.0.0",
+]
+dynamic = [
+    "version",
+]
+
+[project.urls]
+changelog = "https://github.com/libvips/pyvips/blob/master/CHANGELOG.rst"
+documentation = "https://libvips.github.io/pyvips/"
+funding = "https://opencollective.com/libvips"
+homepage = "https://github.com/libvips/pyvips"
+issues = "https://github.com/libvips/pyvips/issues"
+source = "https://github.com/libvips/pyvips"
+
+[tool.setuptools]
+# We try to compile as part of install, so we can't run in a ZIP
+zip-safe = false
+include-package-data = false
+
+[tool.setuptools.dynamic]
+version = {attr = "pyvips.version.__version__"}
+
+[tool.setuptools.packages.find]
+exclude = [
+    "doc*",
+    "examples*",
+    "tests*",
+]
+
+[project.optional-dependencies]
+# All the following are used for our own testing
+tox = ["tox"]
+test = [
+    "pytest",
+    "pyperf",
+]
+sdist = ["build"]
+doc = [
+    "sphinx",
+    "sphinx_rtd_theme",
+]
+
+[tool.pytest.ini_options]
+norecursedirs = ["tests/helpers"]

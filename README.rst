@@ -31,8 +31,14 @@ binary extension for your Python.
 
 If it is unable to build a binary extension, it will use cffi ABI mode
 instead and only needs the libvips shared library. This takes longer to
-start up and is typically ~20% slower in execution.  You can find out how
-pyvips installed with ``pip show pyvips``.
+start up and is typically ~20% slower in execution.  You can find out if
+API mode is being used with:
+
+.. code-block:: python
+
+    import pyvips
+
+    print(pyvips.API_mode)
 
 This binding passes the vips test suite cleanly and with no leaks under
 python3 and pypy3 on Windows, macOS and Linux. 
@@ -246,7 +252,7 @@ Update pypi package:
 
 .. code-block:: shell
 
-    $ python3 setup.py sdist
+    $ python3 -m build --sdist
     $ twine upload --repository pyvips dist/*
     $ git tag -a v2.2.0 -m "as uploaded to pypi"
     $ git push origin v2.2.0
