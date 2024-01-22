@@ -3,7 +3,7 @@
 import sys
 import xml.etree.ElementTree as ET
 
-from pyvips import ffi, values_for_enum, values_for_flag, \
+from pyvips import ffi, enum_dict, flags_dict, \
     vips_lib, type_map, type_name, type_from_name
 
 # This file generates enums.py -- the set of classes giving the permissible
@@ -50,6 +50,10 @@ def generate_enums():
 
     type_map(type_from_name('GEnum'), add_nickname)
 
+    # Filter internal enums
+    blacklist = ['VipsImageType', 'VipsToken']
+    all_nicknames = [name for name in all_nicknames if name not in blacklist]
+
     for name in all_nicknames:
         gtype = type_from_name(name)
         python_name = remove_prefix(name)
@@ -57,7 +61,7 @@ def generate_enums():
             continue
 
         node = xml_enums[python_name]
-        values = values_for_enum(gtype)
+        values = enum_dict(gtype)
         enum_doc = node.find("goi:doc", namespace)
 
         print('')
@@ -70,8 +74,8 @@ def generate_enums():
         print('')
         print('Attributes:')
         print('')
-        for value in values:
-            python_name = value.replace('-', '_')
+        for key, value in values.items():
+            python_name = key.replace('-', '_')
             member = node.find(f"goi:member[@name='{python_name}']", namespace)
             member_doc = member.find("goi:doc", namespace)
             if member_doc is not None:
@@ -81,9 +85,9 @@ def generate_enums():
         print('    """')
         print('')
 
-        for value in values:
-            python_name = value.replace('-', '_').upper()
-            print(f'    {python_name} = \'{value}\'')
+        for key, value in values.items():
+            python_name = key.replace('-', '_').upper()
+            print(f'    {python_name} = \'{key}\'')
 
 
 def generate_flags():
@@ -100,8 +104,8 @@ def generate_flags():
     type_map(type_from_name('GFlags'), add_nickname)
 
     # Filter internal flags
-    filter = ['VipsForeignFlags']
-    all_nicknames = [name for name in all_nicknames if name not in filter]
+    blacklist = ['VipsForeignFlags']
+    all_nicknames = [name for name in all_nicknames if name not in blacklist]
 
     for name in all_nicknames:
         gtype = type_from_name(name)
@@ -110,7 +114,7 @@ def generate_flags():
             continue
 
         node = xml_flags[python_name]
-        values = values_for_flag(gtype)
+        values = flags_dict(gtype)
         enum_doc = node.find("goi:doc", namespace)
 
         print('')
@@ -123,8 +127,8 @@ def generate_flags():
         print('')
         print('Attributes:')
         print('')
-        for value in values:
-            python_name = value.replace('-', '_')
+        for key, value in values.items():
+            python_name = key.replace('-', '_')
             member = node.find(f"goi:member[@name='{python_name}']", namespace)
             member_doc = member.find("goi:doc", namespace)
             if member_doc is not None:
@@ -134,10 +138,9 @@ def generate_flags():
         print('    """')
         print('')
 
-        for value in values:
-            python_name = value.replace('-', '_')
-            member = node.find(f"goi:member[@name='{python_name}']", namespace)
-            print(f'    {python_name.upper()} = {member.get("value")}')
+        for key, value in values.items():
+            python_name = key.replace('-', '_').upper()
+            print(f'    {python_name} = {value}')
 
 
 if __name__ == "__main__":

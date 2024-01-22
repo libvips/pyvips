@@ -1,6 +1,8 @@
 # master 
 
 - ensure compatibility with a single shared libvips library [kleisauke]
+- add flags_dict(), enum_dict() for better flags introspection
+- improve generation of enums.py
 
 ## Version 2.2.2 (released 4 Jan 2023)
 

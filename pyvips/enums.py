@@ -1317,19 +1317,6 @@ Attributes:
     ADD = 'add'
 
 
-class Token(object):
-    """Token.
-
-Attributes:
-
-    """
-
-    LEFT = 'left'
-    RIGHT = 'right'
-    STRING = 'string'
-    EQUALS = 'equals'
-
-
 class Saveable(object):
     """Saveable.
 
@@ -1357,23 +1344,6 @@ Attributes:
     RGBA_ONLY = 'rgba-only'
     RGB_CMYK = 'rgb-cmyk'
     ANY = 'any'
-
-
-class ImageType(object):
-    """ImageType.
-
-Attributes:
-
-    """
-
-    ERROR = 'error'
-    NONE = 'none'
-    SETBUF = 'setbuf'
-    SETBUF_FOREIGN = 'setbuf-foreign'
-    OPENIN = 'openin'
-    MMAPIN = 'mmapin'
-    MMAPINRW = 'mmapinrw'
-    OPENOUT = 'openout'
 
 
 class ForeignKeep(object):

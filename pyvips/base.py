@@ -107,7 +107,7 @@ def type_map(gtype, fn):
 
 
 def values_for_enum(gtype):
-    """Get all values for a enum (gtype)."""
+    """Deprecated."""
 
     g_type_class = gobject_lib.g_type_class_ref(gtype)
     g_enum_class = ffi.cast('GEnumClass *', g_type_class)
@@ -118,13 +118,36 @@ def values_for_enum(gtype):
 
 
 def values_for_flag(gtype):
-    """Get all values for a flag (gtype)."""
+    """Deprecated."""
 
     g_type_class = gobject_lib.g_type_class_ref(gtype)
     g_flags_class = ffi.cast('GFlagsClass *', g_type_class)
 
     return [_to_string(g_flags_class.values[i].value_nick)
             for i in range(g_flags_class.n_values)]
+
+
+def enum_dict(gtype):
+    """Get name -> value dict for a enum (gtype)."""
+
+    g_type_class = gobject_lib.g_type_class_ref(gtype)
+    g_enum_class = ffi.cast('GEnumClass *', g_type_class)
+
+    # -1 since we always have a "last" member.
+    return {_to_string(g_enum_class.values[i].value_nick): 
+                g_enum_class.values[i].value
+            for i in range(g_enum_class.n_values - 1)}
+
+
+def flags_dict(gtype):
+    """Get name -> value dict for a flags (gtype)."""
+
+    g_type_class = gobject_lib.g_type_class_ref(gtype)
+    g_flags_class = ffi.cast('GFlagsClass *', g_type_class)
+
+    return {_to_string(g_flags_class.values[i].value_nick): 
+                g_flags_class.values[i].value
+            for i in range(g_flags_class.n_values)}
 
 
 __all__ = [
@@ -138,5 +161,7 @@ __all__ = [
     'type_map',
     'type_from_name',
     'values_for_enum',
-    'values_for_flag'
+    'values_for_flag',
+    'enum_dict',
+    'flags_dict'
 ]
