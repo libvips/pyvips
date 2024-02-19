@@ -664,8 +664,15 @@ class Image(pyvips.VipsObject):
             raise Error('unable to load from source')
         name = _to_string(pointer)
 
-        return pyvips.Operation.call(name, source,
-                                     string_options=options, **kwargs)
+        image = pyvips.Operation.call(name, source,
+                                      string_options=options, **kwargs)
+
+        # keep a secret ref to the source object .. we need that to stay
+        # alive, since it might be a custom source that triggers a python
+        # callback
+        image._references.append(source)
+
+        return image
 
     @staticmethod
     def new_temp_file(format):

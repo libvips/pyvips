@@ -2,7 +2,9 @@
 
 - ensure compatibility with a single shared libvips library [kleisauke]
 - add flags_dict(), enum_dict() for better flags introspection
-- improve generation of enums.py
+- improve generation of `enums.py`
+- add `stream.py` example
+- fix a missing reference issue with custom sources
 
 ## Version 2.2.2 (released 4 Jan 2023)
 
