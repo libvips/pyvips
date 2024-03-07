@@ -5,6 +5,7 @@
 - improve generation of `enums.py`
 - add `stream.py` example
 - fix a missing reference issue with custom sources
+- fix `addalpha` with scrgb images [RiskoZoSlovenska]
 
 ## Version 2.2.2 (released 4 Jan 2023)
 

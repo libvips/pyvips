@@ -1886,6 +1886,8 @@ class Image(pyvips.VipsObject):
         """Add an alpha channel."""
         if self.interpretation == 'grey16' or self.interpretation == 'rgb16':
             max_alpha = 65535
+        elif self.interpretation == 'scrgb':
+            max_alpha = 1.0
         else:
             max_alpha = 255
         return self.bandjoin(max_alpha)
