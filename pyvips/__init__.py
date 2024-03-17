@@ -26,15 +26,15 @@ try:
     gobject_lib = _libvips.lib
 
     # now check that the binary wrapper is for the same version of libvips that
-    # we find ourseleves linking to at runtime ... if it isn't, we must fall 
+    # we find ourseleves linking to at runtime ... if it isn't, we must fall
     # back to ABI mode
     lib_major = vips_lib.vips_version(0)
     lib_minor = vips_lib.vips_version(1)
     wrap_major = vips_lib.VIPS_MAJOR_VERSION
     wrap_minor = vips_lib.VIPS_MINOR_VERSION
-    logger.debug('Module generated for libvips %s.%s' % 
-                 (wrap_major, wrap_minor)) 
-    logger.debug('Linked to libvips %s.%s' % (lib_major, lib_minor)) 
+    logger.debug('Module generated for libvips %s.%s' %
+                 (wrap_major, wrap_minor))
+    logger.debug('Linked to libvips %s.%s' % (lib_major, lib_minor))
 
     if wrap_major != lib_major or wrap_minor != lib_minor:
         raise Exception('bad wrapper version')
@@ -109,16 +109,17 @@ if not API_mode:
 
     ffi.cdef(cdefs(features))
 
+
 from .error import *
 
 # redirect all vips warnings to logging
 
 class GLogLevelFlags(object):
-    # log flags 
+    # log flags
     FLAG_RECURSION          = 1 << 0
     FLAG_FATAL              = 1 << 1
 
-    # GLib log levels 
+    # GLib log levels
     LEVEL_ERROR             = 1 << 2       # always fatal 
     LEVEL_CRITICAL          = 1 << 3
     LEVEL_WARNING           = 1 << 4
@@ -127,13 +128,14 @@ class GLogLevelFlags(object):
     LEVEL_DEBUG             = 1 << 7
 
     LEVEL_TO_LOGGER = {
-        LEVEL_DEBUG : 10,
-        LEVEL_INFO : 20,
-        LEVEL_MESSAGE : 20,
-        LEVEL_WARNING : 30,
-        LEVEL_ERROR : 40,
-        LEVEL_CRITICAL : 50,
+        LEVEL_DEBUG: 10,
+        LEVEL_INFO: 20,
+        LEVEL_MESSAGE: 20,
+        LEVEL_WARNING: 30,
+        LEVEL_ERROR: 40,
+        LEVEL_CRITICAL: 50,
     }
+
 
 if API_mode:
     @ffi.def_extern()
@@ -151,16 +153,16 @@ else:
     # keep a ref to the cb to stop it being GCd
     _log_handler_cb = ffi.callback('GLogFunc', _log_handler_callback)
 
-_log_handler_id = glib_lib.g_log_set_handler(_to_bytes('VIPS'), 
-                           GLogLevelFlags.LEVEL_DEBUG | 
-                           GLogLevelFlags.LEVEL_INFO | 
-                           GLogLevelFlags.LEVEL_MESSAGE | 
-                           GLogLevelFlags.LEVEL_WARNING | 
-                           GLogLevelFlags.LEVEL_CRITICAL | 
-                           GLogLevelFlags.LEVEL_ERROR | 
-                           GLogLevelFlags.FLAG_FATAL | 
-                           GLogLevelFlags.FLAG_RECURSION,
-                           _log_handler_cb, ffi.NULL)
+_log_handler_id = glib_lib.g_log_set_handler(_to_bytes('VIPS'),
+                                             GLogLevelFlags.LEVEL_DEBUG |
+                                             GLogLevelFlags.LEVEL_INFO |
+                                             GLogLevelFlags.LEVEL_MESSAGE |
+                                             GLogLevelFlags.LEVEL_WARNING |
+                                             GLogLevelFlags.LEVEL_CRITICAL |
+                                             GLogLevelFlags.LEVEL_ERROR |
+                                             GLogLevelFlags.FLAG_FATAL |
+                                             GLogLevelFlags.FLAG_RECURSION,
+                                             _log_handler_cb, ffi.NULL)
 
 # ffi doesn't like us looking up methods during shutdown: make a note of the
 # remove handler here
@@ -175,6 +177,7 @@ def _remove_log_handler():
     if _log_handler_id:
         _remove_handler(_to_bytes('VIPS'), _log_handler_id)
         _log_handler_id = None
+
 
 atexit.register(_remove_log_handler)
 
