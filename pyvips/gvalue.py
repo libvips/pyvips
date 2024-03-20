@@ -226,36 +226,17 @@ class GValue(object):
             memory = glib_lib.g_malloc(len(value))
             ffi.memmove(memory, value, len(value))
 
-            # this is horrible!
-            #
-            # * in API mode, we must have 8.6+ and use set_blob_free to
-            #   attach the metadata to avoid leaks
-            # * pre-8.6, we just pass a NULL free pointer and live with the
-            #   leak
-            #
-            # this is because in API mode you can't pass a builtin (what
-            # vips_lib.g_free() becomes) as a parameter to ffi.callback(), and
-            # vips_value_set_blob() needs a callback for arg 2
-            #
-            # additionally, you can't make a py def which calls g_free() and
-            # then use the py def in the callback, since libvips will trigger
-            # these functions during cleanup, and py will have shut down by
-            # then and you'll get a segv
-
-            if at_least_libvips(8, 6):
+            # In API mode, we use set_blob_free in a backwards compatible way.
+            # For pre-8.6 libvipses, in ABI mode, we declare the type of the
+            # free func in set_blob incorrectly so that we can pass g_free
+            # at runtime without triggering an exception.
+            if pyvips.API_mode or at_least_libvips(8, 6):
                 vips_lib.vips_value_set_blob_free(self.gvalue,
                                                   memory, len(value))
             else:
-                # we declare the type of the free func in set_blob incorrectly
-                # so that we can pass g_free at runtime without triggering an
-                # exception
-                if pyvips.API_mode:
-                    vips_lib.vips_value_set_blob(self.gvalue,
-                                                 ffi.NULL, memory, len(value))
-                else:
-                    vips_lib.vips_value_set_blob(self.gvalue,
-                                                 glib_lib.g_free,
-                                                 memory, len(value))
+                vips_lib.vips_value_set_blob(self.gvalue,
+                                             glib_lib.g_free,
+                                             memory, len(value))
         else:
             raise Error('unsupported gtype for set {0}, fundamental {1}'.
                         format(type_name(gtype), type_name(fundamental)))
