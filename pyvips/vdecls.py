@@ -110,9 +110,6 @@ def cdefs(features):
         void vips_value_set_array_int (GValue* value,
             const int* array, int n );
         void vips_value_set_array_image (GValue *value, int n);
-        typedef void (*FreeFn)(void* a);
-        void vips_value_set_blob (GValue* value,
-            FreeFn free_fn, void* data, size_t length);
 
         int g_value_get_boolean (const GValue* value);
         int g_value_get_int (GValue* value);
@@ -404,6 +401,15 @@ def cdefs(features):
         size_t vips_cache_get_max_mem();
         int vips_cache_get_max_files();
     '''
+
+    # we must only define this in ABI mode ... in API mode we use
+    # vips_value_set_blob_free in a backwards compatible way
+    if not features['api']:
+        code += '''
+            typedef void (*FreeFn)(void* a);
+            void vips_value_set_blob (GValue* value,
+                FreeFn free_fn, void* data, size_t length);
+        '''
 
     if _at_least(features, 8, 5):
         code += '''
