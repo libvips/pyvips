@@ -56,7 +56,15 @@ except Exception as e:
     if _is_windows:
         vips_lib = ffi.dlopen('libvips-42.dll')
     elif _is_mac:
-        vips_lib = ffi.dlopen('libvips.42.dylib')
+        vips_filename = 'libvips.42.dylib'
+        try:
+            vips_lib = ffi.dlopen(vips_filename)
+        except OSError:
+            _homebrew_lib_prefix = os.getenv('HOMEBREW_PREFIX')
+            if not _homebrew_lib_prefix:
+                raise
+            vips_path = os.path.join(_homebrew_lib_prefix, 'lib', vips_filename)
+            vips_lib = ffi.dlopen(vips_path)
     else:
         vips_lib = ffi.dlopen('libvips.so.42')
 
