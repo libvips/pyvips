@@ -1,5 +1,3 @@
-from __future__ import division
-
 import logging
 
 import pyvips
@@ -81,12 +79,6 @@ class Source(pyvips.Connection):
 
         # logger.debug('VipsSource.new_from_memory:')
 
-        # py3:
-        #   - memoryview has .nbytes for number of bytes in object
-        #   - len() returns number of elements in top array
-        # py2:
-        #   - buffer has no nbytes member
-        #   - but len() gives number of bytes in object
         start = ffi.from_buffer(data)
         nbytes = data.nbytes if hasattr(data, 'nbytes') else len(data)
 

@@ -134,8 +134,8 @@ def enum_dict(gtype):
     g_enum_class = ffi.cast('GEnumClass *', g_type_class)
 
     # -1 since we always have a "last" member.
-    return {_to_string(g_enum_class.values[i].value_nick): 
-                g_enum_class.values[i].value
+    return {_to_string(g_enum_class.values[i].value_nick):
+            g_enum_class.values[i].value
             for i in range(g_enum_class.n_values - 1)}
 
 
@@ -145,8 +145,8 @@ def flags_dict(gtype):
     g_type_class = gobject_lib.g_type_class_ref(gtype)
     g_flags_class = ffi.cast('GFlagsClass *', g_type_class)
 
-    return {_to_string(g_flags_class.values[i].value_nick): 
-                g_flags_class.values[i].value
+    return {_to_string(g_flags_class.values[i].value_nick):
+            g_flags_class.values[i].value
             for i in range(g_flags_class.n_values)}
 
 

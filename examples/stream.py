@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import sys
-import gc
 import requests
 import pyvips
 
@@ -20,8 +19,7 @@ for i, url in enumerate(URLS):
     source.on_read((lambda stream: stream.read)(stream))
 
     tile = pyvips.Image.new_from_source(source, "", access="sequential")
-    image = image.composite2(tile, "over", x= 50 * (i + 1), y= 50 * (i + 1))
+    image = image.composite2(tile, "over", x=50 * (i + 1), y=50 * (i + 1))
 
-print(f"writing output.jpg ...")
+print("writing output.jpg ...")
 image.write_to_file("output.jpg")
-
