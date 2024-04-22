@@ -1,10 +1,6 @@
 # all the C decls for pyvips
 
-# we keep these together to make switching between ABI and API modes simpler
-
-# we have to pass in the libvips version, since it can come from either
-# pkg-config in compile.py (in API mode) or libvips itself in __init__.py
-# (in ABI mode)
+# we have to pass in the libvips version to maintain backwards compatibility.
 
 import sys
 
@@ -18,8 +14,7 @@ def cdefs(features):
     """Return the C API declarations for libvips.
 
     features is a dict with the features we want. Some features were only
-    added in later libvips, for example, and some need to be disabled in
-    some FFI modes.
+    added in later libvips, for example, and some need to be disabled.
 
     """
 
@@ -110,6 +105,9 @@ def cdefs(features):
         void vips_value_set_array_int (GValue* value,
             const int* array, int n );
         void vips_value_set_array_image (GValue *value, int n);
+        typedef void (*FreeFn)(void* a);
+        void vips_value_set_blob (GValue* value,
+            FreeFn free_fn, void* data, size_t length);
 
         int g_value_get_boolean (const GValue* value);
         int g_value_get_int (GValue* value);
@@ -402,15 +400,6 @@ def cdefs(features):
         int vips_cache_get_max_files();
     '''
 
-    # we must only define this in ABI mode ... in API mode we use
-    # vips_value_set_blob_free in a backwards compatible way
-    if not features['api']:
-        code += '''
-            typedef void (*FreeFn)(void* a);
-            void vips_value_set_blob (GValue* value,
-                FreeFn free_fn, void* data, size_t length);
-        '''
-
     if _at_least(features, 8, 5):
         code += '''
             char** vips_image_get_fields (VipsImage* image);
@@ -517,14 +506,6 @@ def cdefs(features):
             void vips_block_untrusted_set (int state);
             void vips_operation_block_set (const char *name, int state);
 
-        '''
-
-    # we must only define these in API mode ... in ABI mode we need to call
-    # these things earlier
-    if features['api']:
-        code += '''
-            int vips_init (const char* argv0);
-            int vips_version (int flag);
         '''
 
     # ... means inherit from C defines

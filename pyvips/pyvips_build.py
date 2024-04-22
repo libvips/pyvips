@@ -49,22 +49,6 @@ ffibuilder.set_source("_libvips",
     """ + compat,
     **pkgconfig.parse('vips'))
 
-features = {
-    'major': major,
-    'minor': minor,
-    'micro': micro,
-    'api': True,
-}
-
-
-import vdecls
-
-# handy for debugging
-# with open('vips-source.txt','w') as f:
-#     c = vdecls.cdefs(features)
-#     f.write(c)
-
-ffibuilder.cdef(vdecls.cdefs(features))
 
 if __name__ == "__main__":
     ffibuilder.compile(verbose=True)
