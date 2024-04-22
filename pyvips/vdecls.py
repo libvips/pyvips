@@ -153,14 +153,6 @@ def cdefs(features):
             unsigned int flags;
             GType value_type;
             GType owner_type;
-
-            // private, but cffi in API mode needs these to be able to get the
-            // offset of any member
-            char* _nick;
-            char* _blurb;
-            GData* qdata;
-            unsigned int ref_count;
-            unsigned int param_id;
         } GParamSpec;
 
         typedef struct _GEnumValue {
