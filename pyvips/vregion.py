@@ -1,7 +1,5 @@
 # wrap VipsRegion
 
-from __future__ import division
-
 import pyvips
 from pyvips import ffi, glib_lib, vips_lib, Error, at_least_libvips
 
