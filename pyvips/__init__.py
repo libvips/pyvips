@@ -10,6 +10,17 @@ logger = logging.getLogger(__name__)
 # user code can override this null handler
 logger.addHandler(logging.NullHandler())
 
+def library_name(name, abi_number):
+    is_windows = os.name == 'nt'
+    is_mac = sys.platform == 'darwin'
+
+    if is_windows:
+        return 'lib{0}-{1}.dll'.format(name, abi_number)
+    elif is_mac:
+        return 'lib{0}.{1}.dylib'.format(name, abi_number)
+    else:
+        return 'lib{0}.so.{1}'.format(name, abi_number)
+
 # pull in our module version number, see also setup.py
 from .version import __version__
 
@@ -49,40 +60,11 @@ except Exception as e:
 
     ffi = FFI()
 
-    _is_windows = os.name == 'nt'
-    _is_mac = sys.platform == 'darwin'
-
-    # yuk
-    if _is_windows:
-        vips_lib = ffi.dlopen('libvips-42.dll')
-    elif _is_mac:
-        vips_lib = ffi.dlopen('libvips.42.dylib')
-    else:
-        vips_lib = ffi.dlopen('libvips.so.42')
+    vips_lib = ffi.dlopen(library_name('vips', 42))
+    glib_lib = vips_lib
+    gobject_lib = vips_lib
 
     logger.debug('Loaded lib %s', vips_lib)
-
-    if _is_windows:
-        # On Windows, `GetProcAddress()` can only search in a specified DLL and
-        # doesn't look into its dependent libraries for symbols. Therefore, we
-        # check if the GLib DLLs are available. If these can not be found, we
-        # assume that GLib is statically linked into libvips.
-        try:
-            glib_lib = ffi.dlopen('libglib-2.0-0.dll')
-            gobject_lib = ffi.dlopen('libgobject-2.0-0.dll')
-
-            logger.debug('Loaded lib %s', glib_lib)
-            logger.debug('Loaded lib %s', gobject_lib)
-        except Exception:
-            glib_lib = vips_lib
-            gobject_lib = vips_lib
-    else:
-        # macOS and *nix uses `dlsym()`, which also searches for named symbols
-        # in the dependencies of the shared library. Therefore, we can support
-        # a single shared libvips library with all dependencies statically
-        # linked.
-        glib_lib = vips_lib
-        gobject_lib = vips_lib
 
     ffi.cdef('''
         int vips_init (const char* argv0);
@@ -108,6 +90,25 @@ if not API_mode:
     }
 
     ffi.cdef(cdefs(features))
+
+    # We can sometimes get dependent libraries from libvips -- either the platform
+    # will open dependencies for us automatically, or the libvips binary has been
+    # built to includes all main dependencies (common on windows, can happen
+    # elsewhere).
+    #
+    # We must get glib functions from libvips if we can, since it will be the
+    # one that libvips itself is using, and they will share runtime types.
+    try:
+        is_unified = gobject_lib.g_type_from_name(b'VipsImage') != 0
+    except Exception:
+        is_unified = False
+
+    if not is_unified:
+        glib_lib = ffi.dlopen(library_name('glib-2.0', 0))
+        gobject_lib = ffi.dlopen(library_name('gobject-2.0', 0))
+
+        logger.debug('Loaded lib %s', glib_lib)
+        logger.debug('Loaded lib %s', gobject_lib)
 
 
 from .error import *
