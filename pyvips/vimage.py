@@ -820,6 +820,7 @@ class Image(pyvips.VipsObject, metaclass=ImageType):
         format_string = _to_bytes(format_string)
 
         filename = vips_lib.vips_filename_get_filename(format_string)
+        filename = ffi.gc(filename, glib_lib.g_free)
 
         pointer = vips_lib.vips_filename_get_options(format_string)
         options = _to_string_copy(pointer)

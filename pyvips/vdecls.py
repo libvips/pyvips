@@ -45,6 +45,7 @@ def cdefs(features):
             typedef guint32 GType;
         '''
 
+    # ... means opaque
     code += '''
         typedef void (*GLogFunc) (const char* log_domain,
             int log_level,
@@ -58,9 +59,7 @@ def cdefs(features):
 
         void g_log_remove_handler (const char* log_domain, int handler_id);
 
-        typedef struct _VipsImage VipsImage;
-        typedef struct _VipsProgress VipsProgress;
-        typedef struct _GValue GValue;
+        typedef ... VipsImage;
 
         void* g_malloc (size_t size);
         void g_free (void* data);
@@ -73,7 +72,7 @@ def cdefs(features):
         const char* g_type_name (GType gtype);
         GType g_type_from_name (const char* name);
 
-        typedef void* (*VipsTypeMap2Fn) (GType type, void* a, void* b);
+        typedef ... VipsTypeMap2Fn;
         void* vips_type_map (GType base, VipsTypeMap2Fn fn, void* a, void* b);
 
         const char* vips_error_buffer (void);
@@ -83,7 +82,11 @@ def cdefs(features):
 
         typedef struct _GValue {
             GType g_type;
-            guint64 data[2];
+            union {
+                guint64 v_uint64;
+
+                // more
+            } data[2];
         } GValue;
 
         void g_value_init (GValue* value, GType gtype);
@@ -134,9 +137,11 @@ def cdefs(features):
         GType vips_saveable_get_type (void);
         GType vips_image_type_get_type (void);
 
-        typedef struct _GData GData;
+        typedef ... GData;
 
-        typedef struct _GTypeClass GTypeClass;
+        typedef struct _GTypeClass {
+            GType g_type;
+        } GTypeClass;
 
         typedef struct _GTypeInstance {
             GTypeClass *g_class;
@@ -144,6 +149,7 @@ def cdefs(features):
 
         typedef struct _GObject {
             GTypeInstance g_type_instance;
+
             unsigned int ref_count;
             GData *qdata;
         } GObject;
@@ -173,7 +179,7 @@ def cdefs(features):
         } GEnumValue;
 
         typedef struct _GEnumClass {
-            GTypeClass *g_type_class;
+            GTypeClass g_type_class;
 
             int minimum;
             int maximum;
@@ -189,7 +195,7 @@ def cdefs(features):
         } GFlagsValue;
 
         typedef struct _GFlagsClass {
-            GTypeClass *g_type_class;
+            GTypeClass g_type_class;
 
             unsigned int mask;
             unsigned int n_values;
@@ -224,6 +230,8 @@ def cdefs(features):
         void vips_image_set_progress (VipsImage* image, int progress);
         void vips_image_set_kill (VipsImage* image, int kill);
 
+        typedef ... GTimer;
+
         typedef struct _VipsProgress {
             VipsImage* im;
 
@@ -232,35 +240,12 @@ def cdefs(features):
             gint64 tpels;
             gint64 npels;
             int percent;
-            void* start;
+            GTimer* start;
         } VipsProgress;
 
-        typedef struct _VipsObject {
-    '''
+        typedef ... VipsObject;
 
-    # this field changed name in libvips 8.4
-    if _at_least(features, 8, 4):
-        code += '''
-            GObject parent_instance;
-        '''
-    else:
-        code += '''
-            GObject parent_object;
-        '''
-
-    code += '''
-            int constructed;
-            int static_object;
-            void *argument_table;
-            char *nickname;
-            char *description;
-            int preclose;
-            int close;
-            int postclose;
-            size_t local_memory;
-        } VipsObject;
-
-        typedef struct _VipsObjectClass VipsObjectClass;
+        typedef ... VipsObjectClass;
 
         typedef struct _VipsArgument {
             GParamSpec *pspec;
@@ -307,23 +292,6 @@ def cdefs(features):
 
         const char* g_param_spec_get_blurb (GParamSpec* pspec);
 
-        typedef struct _VipsImage {
-    '''
-
-    # this field changed name in libvips 8.4
-    if _at_least(features, 8, 4):
-        code += '''
-            VipsObject parent_instance;
-        '''
-    else:
-        code += '''
-            VipsObject parent_object;
-        '''
-
-    code += '''
-            // more
-        } VipsImage;
-
         const char* vips_foreign_find_load (const char* name);
         const char* vips_foreign_find_load_buffer (const void* data,
             size_t size);
@@ -353,19 +321,11 @@ def cdefs(features):
         int vips_image_write (VipsImage* image, VipsImage* out);
         void* vips_image_write_to_memory (VipsImage* in, size_t* size_out);
 
-        typedef struct _VipsInterpolate {
-            VipsObject parent_object;
-
-            // more
-        } VipsInterpolate;
+        typedef ... VipsInterpolate;
 
         VipsInterpolate* vips_interpolate_new (const char* name);
 
-        typedef struct _VipsOperation {
-            VipsObject parent_instance;
-
-            // more
-        } VipsOperation;
+        typedef ... VipsOperation;
 
         VipsOperation* vips_operation_new (const char* name);
 
@@ -378,11 +338,7 @@ def cdefs(features):
         void* vips_argument_map (VipsObject* object,
             VipsArgumentMapFn fn, void* a, void* b);
 
-        typedef struct _VipsRegion {
-            VipsObject parent_object;
-
-            // more
-        } VipsRegion;
+        typedef ... VipsRegion;
 
         VipsRegion* vips_region_new (VipsImage*);
 
@@ -448,31 +404,19 @@ def cdefs(features):
 
     if _at_least(features, 8, 9):
         code += '''
-            typedef struct _VipsConnection {
-                VipsObject parent_object;
-
-                // more
-            } VipsConnection;
+            typedef ... VipsConnection;
 
             const char* vips_connection_filename (VipsConnection* stream);
             const char* vips_connection_nick (VipsConnection* stream);
 
-            typedef struct _VipsSource {
-                VipsConnection parent_object;
-
-                // more
-            } VipsSource;
+            typedef ... VipsSource;
 
             VipsSource* vips_source_new_from_descriptor (int descriptor);
             VipsSource* vips_source_new_from_file (const char* filename);
             VipsSource* vips_source_new_from_memory (const void* data,
                 size_t size);
 
-            typedef struct _VipsSourceCustom {
-                VipsSource parent_object;
-
-                // more
-            } VipsSourceCustom;
+            typedef ... VipsSourceCustom;
 
             VipsSourceCustom* vips_source_custom_new (void);
 
@@ -481,21 +425,13 @@ def cdefs(features):
             extern "Python" gint64 _marshal_seek (VipsSource*,
                 gint64, int, void*);
 
-            typedef struct _VipsTarget {
-                VipsConnection parent_object;
-
-                // more
-            } VipsTarget;
+            typedef ... VipsTarget;
 
             VipsTarget* vips_target_new_to_descriptor (int descriptor);
             VipsTarget* vips_target_new_to_file (const char* filename);
             VipsTarget* vips_target_new_to_memory (void);
 
-            typedef struct _VipsTargetCustom {
-                VipsTarget parent_object;
-
-                // more
-            } VipsTargetCustom;
+            typedef ... VipsTargetCustom;
 
             VipsTargetCustom* vips_target_custom_new (void);
 
@@ -528,9 +464,11 @@ def cdefs(features):
         '''
 
     # ... means inherit from C defines
-    code += '#define VIPS_MAJOR_VERSION ...\n'
-    code += '#define VIPS_MINOR_VERSION ...\n'
-    code += '#define VIPS_MICRO_VERSION ...\n'
+    code += '''
+        #define VIPS_MAJOR_VERSION ...
+        #define VIPS_MINOR_VERSION ...
+        #define VIPS_MICRO_VERSION ...
+    '''
 
     # add contents of features as a comment ... handy for debugging
     for key, value in features.items():
