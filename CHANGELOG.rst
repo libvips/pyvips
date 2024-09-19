@@ -1,4 +1,9 @@
-# master 
+# master
+
+- fix a small memleak in `write_to_buffer()` [kleisauke]
+- revise logic for unified (semistatic) libvips binaries [kleisauke]
+
+## Version 2.2.3 (released 28 April 2024)
 
 - ensure compatibility with a single shared libvips library [kleisauke]
 - add flags_dict(), enum_dict() for better flags introspection
