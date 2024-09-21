@@ -15,11 +15,11 @@ def library_name(name, abi_number):
     is_mac = sys.platform == 'darwin'
 
     if is_windows:
-        return 'lib{0}-{1}.dll'.format(name, abi_number)
+        return f'lib{name}-{abi_number}.dll'
     elif is_mac:
-        return 'lib{0}.{1}.dylib'.format(name, abi_number)
+        return f'lib{name}.{abi_number}.dylib'
     else:
-        return 'lib{0}.so.{1}'.format(name, abi_number)
+        return f'lib{name}.so.{abi_number}'
 
 # pull in our module version number
 from .version import __version__
