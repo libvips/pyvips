@@ -1,5 +1,3 @@
-from __future__ import division
-
 import pyvips
 from pyvips import ffi, vips_lib, Error, _to_bytes
 

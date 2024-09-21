@@ -21,7 +21,7 @@ def library_name(name, abi_number):
     else:
         return 'lib{0}.so.{1}'.format(name, abi_number)
 
-# pull in our module version number, see also setup.py
+# pull in our module version number
 from .version import __version__
 
 # try to import our binary interface ... if that works, we are in API mode
