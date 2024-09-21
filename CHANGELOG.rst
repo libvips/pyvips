@@ -12,6 +12,7 @@
 - add `stream.py` example
 - fix a missing reference issue with custom sources
 - fix `addalpha` with scrgb images [RiskoZoSlovenska]
+- fix macos compat, again [kleisauke]
 
 ## Version 2.2.2 (released 4 Jan 2023)
 
