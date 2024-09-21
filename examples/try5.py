@@ -11,7 +11,7 @@ a = pyvips.Image.new_from_file(sys.argv[1])
 
 def should_equal(test, a, b):
     if abs(a - b) > 0.01:
-        print('%s: seen %g and %g' % (test, a, b))
+        print(f'{test}: seen {a:g} and {b:g}')
         sys.exit(1)
 
 

@@ -32,9 +32,8 @@ try:
     lib_minor = vips_lib.vips_version(1)
     wrap_major = vips_lib.VIPS_MAJOR_VERSION
     wrap_minor = vips_lib.VIPS_MINOR_VERSION
-    logger.debug('Module generated for libvips %s.%s' %
-                 (wrap_major, wrap_minor))
-    logger.debug('Linked to libvips %s.%s' % (lib_major, lib_minor))
+    logger.debug(f'Module generated for libvips {wrap_major}.{wrap_minor}')
+    logger.debug(f'Linked to libvips {lib_major}.{lib_minor}')
 
     if wrap_major != lib_major or wrap_minor != lib_minor:
         raise Exception('bad wrapper version')
@@ -42,7 +41,7 @@ try:
     API_mode = True
 
 except Exception as e:
-    logger.debug('Binary module load failed: %s' % e)
+    logger.debug(f'Binary module load failed: {e}')
     logger.debug('Falling back to ABI mode')
 
     from cffi import FFI
@@ -141,14 +140,14 @@ if API_mode:
     @ffi.def_extern()
     def _log_handler_callback(domain, level, message, user_data):
         logger.log(GLogLevelFlags.LEVEL_TO_LOGGER[level],
-                   '{0}: {1}'.format(_to_string(domain), _to_string(message)))
+                   f'{_to_string(domain)}: {_to_string(message)}')
 
     # keep a ref to the cb to stop it being GCd
     _log_handler_cb = glib_lib._log_handler_callback
 else:
     def _log_handler_callback(domain, level, message, user_data):
         logger.log(GLogLevelFlags.LEVEL_TO_LOGGER[level],
-                   '{0}: {1}'.format(_to_string(domain), _to_string(message)))
+                   f'{_to_string(domain)}: {_to_string(message)}')
 
     # keep a ref to the cb to stop it being GCd
     _log_handler_cb = ffi.callback('GLogFunc', _log_handler_callback)

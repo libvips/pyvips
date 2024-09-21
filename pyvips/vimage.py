@@ -181,7 +181,7 @@ def _guess_interpretation(bands, format):
     """
 
     if format not in FORMAT_TO_TYPESTR:
-        raise ValueError('Unknown format: {}'.format(format))
+        raise ValueError(f'Unknown format: {format}')
     if not isinstance(bands, int) or bands < 1:
         raise ValueError('Number of bands must be a positive integer.')
 
@@ -323,7 +323,7 @@ class Image(pyvips.VipsObject, metaclass=ImageType):
 
         pointer = vips_lib.vips_foreign_find_load(vips_filename)
         if pointer == ffi.NULL:
-            raise Error('unable to load from file {0}'.format(vips_filename))
+            raise Error(f'unable to load from file {vips_filename}')
         name = _to_string(pointer)
 
         return pyvips.Operation.call(name, filename,
@@ -493,8 +493,7 @@ class Image(pyvips.VipsObject, metaclass=ImageType):
             if ndim > 3:
                 raise ValueError('array has more than 3 dimensions')
             if typestr not in TYPESTR_TO_FORMAT:
-                raise ValueError('conversion from {0} not supported'
-                                 .format(typestr))
+                raise ValueError(f'conversion from {typestr} not supported')
 
             if ndim == 0:
                 width = 1
@@ -776,7 +775,7 @@ class Image(pyvips.VipsObject, metaclass=ImageType):
 
         pointer = vips_lib.vips_foreign_find_save(vips_filename)
         if pointer == ffi.NULL:
-            raise Error('unable to write to file {0}'.format(vips_filename))
+            raise Error(f'unable to write to file {vips_filename}')
         name = _to_string(pointer)
 
         return pyvips.Operation.call(name, self, filename,
@@ -1038,7 +1037,7 @@ class Image(pyvips.VipsObject, metaclass=ImageType):
         result = vips_lib.vips_image_get(self.pointer, _to_bytes(name),
                                          gv.pointer)
         if result != 0:
-            raise Error('unable to get {0}'.format(name))
+            raise Error(f'unable to get {name}')
 
         return gv.get()
 
@@ -1107,8 +1106,8 @@ class Image(pyvips.VipsObject, metaclass=ImageType):
         """
         gtype = self.get_typeof(name)
         if gtype == 0:
-            raise Error('metadata item {0} does not exist - '
-                        'use set_type() to create and set'.format(name))
+            raise Error(f'metadata item {name} does not exist -'
+                        ' use set_type() to create and set')
         self.set_type(gtype, name, value)
 
     def remove(self, name):
@@ -1143,7 +1142,7 @@ class Image(pyvips.VipsObject, metaclass=ImageType):
 
         row_els = self.width if not is_complex else 2 * self.width
 
-        rowfmt = '{0}{1}'.format(row_els, FORMAT_TO_PYFORMAT[self.format])
+        rowfmt = f'{row_els}{FORMAT_TO_PYFORMAT[self.format]}'
         buf = self.write_to_memory()
 
         lst = [list(row) for row in struct.iter_unpack(rowfmt, buf)]
@@ -1261,9 +1260,8 @@ class Image(pyvips.VipsObject, metaclass=ImageType):
             array = self.tolist()
             return repr(array)
         else:
-            return ('<pyvips.Image {0}x{1} {2}, {3} bands, {4}>'.
-                    format(self.width, self.height, self.format, self.bands,
-                           self.interpretation))
+            return (f'<pyvips.Image {self.width}x{self.height} {self.format}, '
+                    f'{self.bands} bands, {self.interpretation}>')
 
     def __getattr__(self, name):
         """Divert unknown names to libvips.

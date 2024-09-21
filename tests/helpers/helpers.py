@@ -74,14 +74,14 @@ def run_fn2(fn, x, y):
 
 # test a pair of things which can be lists for approx. equality
 def assert_almost_equal_objects(a, b, threshold=0.0001, msg=''):
-    # print 'assertAlmostEqualObjects %s = %s' % (a, b)
+    # print(f'assertAlmostEqualObjects {a} = {b}')
     assert all([pytest.approx(x, abs=threshold) == y
                 for x, y in zip_expand(a, b)]), msg
 
 
 # test a pair of things which can be lists for equality
 def assert_equal_objects(a, b, msg=''):
-    # print 'assertEqualObjects %s = %s' % (a, b)
+    # print(f'assertEqualObjects {a} = {b}')
     assert all([x == y for x, y in zip_expand(a, b)]), msg
 
 

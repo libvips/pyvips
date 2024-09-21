@@ -4,7 +4,7 @@ import pyvips
 
 
 def progress_print(name, progress):
-    print(f'signal {name}:'.format(name))
+    print(f'signal {name}:')
     print(f'   run = {progress.run} (seconds of run time)')
     print(f'   eta = {progress.eta} (estimated seconds left)')
     print(f'   tpels = {progress.tpels} (total number of pels)')

@@ -35,8 +35,7 @@ class Source(pyvips.Connection):
         # sources are mutable, so we can't use the cache
         pointer = vips_lib.vips_source_new_from_descriptor(descriptor)
         if pointer == ffi.NULL:
-            raise Error("can't create source from descriptor {0}"
-                        .format(descriptor))
+            raise Error(f"can't create source from descriptor {descriptor}")
 
         return Source(pointer)
 
@@ -57,8 +56,7 @@ class Source(pyvips.Connection):
 
         pointer = vips_lib.vips_source_new_from_file(_to_bytes(filename))
         if pointer == ffi.NULL:
-            raise Error("can't create source from filename {0}"
-                        .format(filename))
+            raise Error(f"can't create source from filename {filename}")
 
         return Source(pointer)
 

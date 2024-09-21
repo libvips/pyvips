@@ -188,7 +188,7 @@ class Operation(pyvips.VipsObject):
     def new_from_name(operation_name):
         vop = vips_lib.vips_operation_new(_to_bytes(operation_name))
         if vop == ffi.NULL:
-            raise Error('no such operation {0}'.format(operation_name))
+            raise Error(f'no such operation {operation_name}')
         return Operation(vop)
 
     def set(self, name, flags, match_image, value):
@@ -232,10 +232,8 @@ class Operation(pyvips.VipsObject):
         intro = Introspect.get(operation_name)
 
         if len(intro.required_input) != len(args):
-            raise Error('{0} needs {1} arguments, but {2} given'
-                        .format(operation_name,
-                                len(intro.required_input),
-                                len(args)))
+            raise Error(f'{operation_name} needs {len(intro.required_input)} '
+                        f'arguments, but {len(args)} given')
 
         op = Operation.new_from_name(operation_name)
 
@@ -243,7 +241,7 @@ class Operation(pyvips.VipsObject):
         # overridden
         string_options = kwargs.pop('string_options', '')
         if not op.set_string(string_options):
-            raise Error('unable to call {0}'.format(operation_name))
+            raise Error(f'unable to call {operation_name}')
 
         # the first image argument is the thing we expand constants to
         # match ... look inside tables for images, since we may be passing
@@ -283,8 +281,8 @@ class Operation(pyvips.VipsObject):
         for name in kwargs:
             if (name not in intro.optional_input and
                     name not in intro.optional_output):
-                raise Error('{0} does not support optional argument {1}'
-                            .format(operation_name, name))
+                raise Error(f'{operation_name} does not support optional '
+                            f'argument {name}')
 
             value = kwargs[name]
             details = intro.details[name]
@@ -300,7 +298,7 @@ class Operation(pyvips.VipsObject):
         vop = vips_lib.vips_cache_operation_build(op.pointer)
         if vop == ffi.NULL:
             vips_lib.vips_object_unref_outputs(op.vobject)
-            raise Error('unable to call {0}'.format(operation_name))
+            raise Error(f'unable to call {operation_name}')
         op = Operation(vop)
 
         # attach all input refs to output x
@@ -353,7 +351,7 @@ class Operation(pyvips.VipsObject):
         intro = Introspect.get(operation_name)
         if (intro.flags & _OPERATION_DEPRECATED) != 0:
             raise Error('No such operator.',
-                        'operator "{0}" is deprecated'.format(operation_name))
+                        f'operator "{operation_name}" is deprecated')
 
         result = intro.description[0].upper() + intro.description[1:] + '.\n\n'
         result += 'Example:\n'
@@ -417,7 +415,7 @@ class Operation(pyvips.VipsObject):
         intro = Introspect.get(operation_name)
         if (intro.flags & _OPERATION_DEPRECATED) != 0:
             raise Error('No such operator.',
-                        'operator "{0}" is deprecated'.format(operation_name))
+                        f'operator "{operation_name}" is deprecated')
 
         if intro.member_x is not None:
             result = '.. method:: '
@@ -451,14 +449,13 @@ class Operation(pyvips.VipsObject):
 
         for name in intro.method_args + intro.doc_optional_input:
             details = intro.details[name]
-            result += (':param {0}: {1}\n'.
-                       format(name, details['blurb']))
-            result += (':type {0}: {1}\n'.
-                       format(name, GValue.gtype_to_python(details['type'])))
+            result += f':param {name}: {details["blurb"]}\n'
+            result += (f':type {name}: '
+                       f'{GValue.gtype_to_python(details["type"])}\n')
         for name in intro.doc_optional_output:
-            result += (':param {0}: enable output: {1}\n'.
-                       format(name, intro.details[name]['blurb']))
-            result += (':type {0}: bool\n'.format(name))
+            result += (f':param {name}: '
+                       f'enable output: {intro.details[name]["blurb"]}\n')
+            result += f':type {name}: bool\n'
 
         output_types = [GValue.gtype_to_python(intro.details[name]['type'])
                         for name in intro.required_output]
@@ -532,7 +529,7 @@ class Operation(pyvips.VipsObject):
         print('   .. autosummary::')
         print('      :nosignatures:\n')
         for name in all_names:
-            print('      ~{0}'.format(name))
+            print(f'      ~{name}')
         print()
 
         # Output docs

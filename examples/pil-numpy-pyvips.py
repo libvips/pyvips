@@ -8,7 +8,7 @@ from PIL import Image
 import numpy as np
 
 if len(sys.argv) != 3:
-    print('usage: {0} input-filename output-filename'.format(sys.argv[0]))
+    print(f'usage: {sys.argv[0]} input-filename output-filename')
     sys.exit(-1)
 
 

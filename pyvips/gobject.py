@@ -159,7 +159,7 @@ class GObject(object):
 
         pointer = gobject_lib.g_object_new(gtype, ffi.NULL)
         if pointer == ffi.NULL:
-            raise Error("can't create {0}".format(type_name(gtype)))
+            raise Error(f"can't create {type_name(gtype)}")
 
         return pointer
 
@@ -176,7 +176,7 @@ class GObject(object):
         """
 
         if name not in _marshalers:
-            raise Error('unsupported signal "{0}"'.format(name))
+            raise Error(f'unsupported signal "{name}"')
 
         go = ffi.cast('GObject *', self.pointer)
         handle = ffi.new_handle(callback)

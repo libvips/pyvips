@@ -18,5 +18,5 @@ sys.path.insert(0, src_dir)
 try:
     setup(cffi_modules=['pyvips/pyvips_build.py:ffibuilder'])
 except Exception as e:
-    print('Falling back to ABI mode. Details: {0}'.format(e))
+    print(f'Falling back to ABI mode. Details: {e}')
     setup()
