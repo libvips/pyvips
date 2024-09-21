@@ -35,7 +35,7 @@ class Interpolate(pyvips.VipsObject):
 
         vi = vips_lib.vips_interpolate_new(_to_bytes(name))
         if vi == ffi.NULL:
-            raise Error('no such interpolator {0}'.format(name))
+            raise Error(f'no such interpolator {name}')
 
         return Interpolate(vi)
 

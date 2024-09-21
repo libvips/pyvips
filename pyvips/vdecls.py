@@ -472,7 +472,7 @@ def cdefs(features):
 
     # add contents of features as a comment ... handy for debugging
     for key, value in features.items():
-        code += '//%s = %s\n' % (key, value)
+        code += f'//{key} = {value}\n'
 
     return code
 

@@ -333,11 +333,11 @@ Handlers are given a `progress` object containing a number of useful fields.
 For example::
 
    def eval_handler(image, progress):
-       print('run time so far (secs) = {}'.format(progress.run))
-       print('estimated time of arrival (secs) = {}'.format(progress.eta))
-       print('total number of pels to process = {}'.format(progress.tpels))
-       print('number of pels processed so far = {}'.format(progress.npels))
-       print('percent complete = {}'.format(progress.percent))
+       print(f'   run = {progress.run} (seconds of run time)')
+       print(f'   eta = {progress.eta} (estimated seconds left)')
+       print(f'   tpels = {progress.tpels} (total number of pels)')
+       print(f'   npels = {progress.npels} (number of pels computed so far)')
+       print(f'   percent = {progress.percent} (percent complete)')
 
 Use :meth:`.Image.set_kill` on the image to stop computation early. 
 

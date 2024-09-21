@@ -36,8 +36,8 @@ class Target(pyvips.Connection):
         # targets are mutable, so we can't use the cache
         pointer = vips_lib.vips_target_new_to_descriptor(descriptor)
         if pointer == ffi.NULL:
-            raise Error("can't create output target from descriptor {0}"
-                        .format(descriptor))
+            raise Error(f"can't create output target from descriptor "
+                        f'{descriptor}')
 
         return Target(pointer)
 
@@ -57,8 +57,7 @@ class Target(pyvips.Connection):
 
         pointer = vips_lib.vips_target_new_to_file(_to_bytes(filename))
         if pointer == ffi.NULL:
-            raise Error("can't create output target from filename {0}"
-                        .format(filename))
+            raise Error(f"can't create output target from filename {filename}")
 
         return Target(pointer)
 

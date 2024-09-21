@@ -68,7 +68,7 @@ class Error(Exception):
         logger.debug('Error %s %s', self.message, self.detail)
 
     def __str__(self):
-        return '{0}\n  {1}'.format(self.message, self.detail)
+        return f'{self.message}\n  {self.detail}'
 
 
 __all__ = [

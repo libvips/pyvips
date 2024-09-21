@@ -32,9 +32,10 @@ vips_value_set_blob_free(GValue* value, void* data, size_t length)
 ''' if major == 8 and minor < 6 else ''
 
 ffibuilder.set_source("_libvips",
-    r"""
+    f"""
         #include <vips/vips.h>
-    """ + compat,
+        {compat}
+    """,
     **pkgconfig.parse('vips'))
 
 features = {
