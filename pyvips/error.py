@@ -1,22 +1,11 @@
 # errors from libvips
 
-import sys
 import logging
 
+from pathlib import Path
 from pyvips import ffi, vips_lib, glib_lib
 
 logger = logging.getLogger(__name__)
-
-_is_PY3 = sys.version_info[0] == 3
-
-if _is_PY3:
-    # pathlib is not part of Python 2 stdlib
-    from pathlib import Path
-    text_type = str, Path
-    byte_type = bytes
-else:
-    text_type = unicode  # noqa: F821
-    byte_type = str
 
 
 def _to_bytes(x):
@@ -26,7 +15,7 @@ def _to_bytes(x):
     byte string. You must call this on strings you pass to libvips.
 
     """
-    if isinstance(x, text_type):
+    if isinstance(x, (str, Path)):
         # n.b. str also converts pathlib.Path objects
         x = str(x).encode('utf-8')
 
@@ -44,7 +33,7 @@ def _to_string(x):
         x = 'NULL'
     else:
         x = ffi.string(x)
-        if isinstance(x, byte_type):
+        if isinstance(x, bytes):
             x = x.decode('utf-8')
 
     return x

@@ -1,9 +1,5 @@
-from __future__ import division
-from __future__ import unicode_literals
-
 import logging
 import numbers
-import sys
 
 import pyvips
 from pyvips import ffi, vips_lib, gobject_lib, \
@@ -11,8 +7,6 @@ from pyvips import ffi, vips_lib, gobject_lib, \
     at_least_libvips
 
 logger = logging.getLogger(__name__)
-
-_is_PY2 = sys.version_info.major == 2
 
 
 class GValue(object):
@@ -103,7 +97,7 @@ class GValue(object):
 
         """
 
-        if isinstance(value, basestring if _is_PY2 else str):  # noqa: F821
+        if isinstance(value, str):
             enum_value = vips_lib.vips_enum_from_nick(b'pyvips', gtype,
                                                       _to_bytes(value))
             if enum_value < 0:
@@ -132,7 +126,7 @@ class GValue(object):
 
         """
 
-        if isinstance(value, basestring if _is_PY2 else str):  # noqa: F821
+        if isinstance(value, str):
             flag_value = vips_lib.vips_flags_from_nick(b'pyvips', gtype,
                                                        _to_bytes(value))
             if flag_value < 0:
