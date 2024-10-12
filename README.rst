@@ -225,7 +225,7 @@ then
 .. code-block:: shell
 
     $ cd examples; \
-      ./gen-enums.py ~/GIT/libvips/libvips/Vips-8.0.gir > enums.py
+      ./gen-enums.py ~/GIT/libvips/build/libvips/Vips-8.0.gir > enums.py
 
 Then check and move `enums.py` into `pyvips/`.
 

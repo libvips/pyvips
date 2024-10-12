@@ -832,6 +832,31 @@ Attributes:
     NONE = 'none'
 
 
+class SdfShape(object):
+    """SdfShape.
+
+The SDF to generate,
+
+See also: vips_sdf().
+
+Attributes:
+
+    CIRCLE (str): a circle at @a, radius @r
+
+    BOX (str): a box from @a to @b
+
+    ROUNDED_BOX (str): a box with rounded @corners from @a to @b
+
+    LINE (str): a line from @a to @b
+
+    """
+
+    CIRCLE = 'circle'
+    BOX = 'box'
+    ROUNDED_BOX = 'rounded-box'
+    LINE = 'line'
+
+
 class FailOn(object):
     """FailOn.
 
