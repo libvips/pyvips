@@ -19,19 +19,19 @@ https://libvips.github.io/pyvips/
 
 This module wraps the libvips image processing library:
 
-https://libvips.github.io/libvips/
+https://www.libvips.org/
 
 The libvips docs are also very useful:
 
-https://libvips.github.io/libvips/API/current/
+https://www.libvips.org/API/current/
 
 If you have the development headers for libvips installed and have a working C
-compiler, this module will use cffi API mode to try to build a libvips 
-binary extension for your Python. 
+compiler, this module will use cffi API mode to try to build a libvips
+binary extension for your Python.
 
 If it is unable to build a binary extension, it will use cffi ABI mode
 instead and only needs the libvips shared library. This takes longer to
-start up and is typically ~20% slower in execution.  You can find out if
+start up and is typically ~20% slower in execution. You can find out if
 API mode is being used with:
 
 .. code-block:: python
@@ -41,7 +41,7 @@ API mode is being used with:
     print(pyvips.API_mode)
 
 This binding passes the vips test suite cleanly and with no leaks under
-python3 and pypy3 on Windows, macOS and Linux. 
+python3 and pypy3 on Windows, macOS and Linux.
 
 How it works
 ------------
@@ -53,31 +53,45 @@ pipeline executes at once, streaming the image in parallel from source to
 destination a section at a time.
 
 Because ``pyvips`` is parallel, it's quick, and because it doesn't need to
-keep entire images in memory, it's light.  For example, the libvips 
+keep entire images in memory, it's light.  For example, the libvips
 speed and memory use benchmark:
 
 https://github.com/libvips/libvips/wiki/Speed-and-memory-use
 
 Loads a large tiff image, shrinks by 10%, sharpens, and saves again. On this
 test ``pyvips`` is typically 3x faster than ImageMagick and needs 5x less
-memory. 
+memory.
 
 There's a handy chapter in the docs explaining how libvips opens files,
 which gives some more background.
 
-http://libvips.github.io/libvips/API/current/How-it-opens-files.md.html
+https://www.libvips.org/API/current/How-it-opens-files.html
 
-Install
--------
+Binary installation
+-------------------
 
-You need the libvips shared library on your library search path,
-version 8.2 or later, though at least version 8.9 is required for all features
-to work.  See:
+The quickest way to start with pyvips is by installing the binary package
+with:
 
-https://libvips.github.io/libvips/install.html
+.. code-block:: shell
 
-Linux install
--------------
+    $ pip install "pyvips[binary]"
+
+This installs a self-contained package with the most commonly needed
+libraries. If your platform is unsupported or the pre-built binary is
+unsuitable, you can install libvips globally instead.
+
+Local installation
+------------------
+
+You need the libvips shared library on your library search path, version 8.2
+or later, though at least version 8.9 is required for all features to work.
+See:
+
+https://www.libvips.org/install.html
+
+Linux
+^^^^^
 
 Perhaps:
 
@@ -94,22 +108,22 @@ With python 3.11 and later, you will need to create a venv first and add
     $ python3 -m venv ~/.local
     $ pip install pyvips
 
-macOS install
--------------
+macOS
+^^^^^
 
-With homebrew:
+With Homebrew:
 
 .. code-block:: shell
 
     $ brew install vips python pkg-config
     $ pip3 install pyvips
 
-Windows install
----------------
+Windows
+^^^^^^^
 
-on Windows you can download a pre-compiled binary from the libvips website.
+On Windows, you can download a pre-compiled binary from the libvips website.
 
-https://libvips.github.io/libvips/install.html
+https://www.libvips.org/install.html
 
 You'll need a 64-bit Python. The official one works well.
 
@@ -123,7 +137,7 @@ start of your program:
 .. code-block:: python
 
     import os
-    vipsbin = r'c:\vips-dev-8.13\bin'
+    vipsbin = r'c:\vips-dev-8.16\bin'
     os.environ['PATH'] = vipsbin + ';' + os.environ['PATH']
 
 For Python 3.8 and later, you need:
@@ -131,7 +145,7 @@ For Python 3.8 and later, you need:
 .. code-block:: python
 
     import os
-    vipsbin = r'c:\vips-dev-8.13\bin'
+    vipsbin = r'c:\vips-dev-8.16\bin'
     add_dll_dir = getattr(os, 'add_dll_directory', None)
     if callable(add_dll_dir):
         add_dll_dir(vipsbin)
@@ -140,10 +154,10 @@ For Python 3.8 and later, you need:
 
 Now when you import pyvips, it should be able to find the DLLs.
 
-conda install
--------------
+Conda
+^^^^^
 
-The conda package includes a matching libvips binary, so just enter:
+The Conda package includes a matching libvips binary, so just enter:
 
 .. code-block:: shell
 
@@ -184,7 +198,7 @@ Run all tests:
 
 .. code-block:: shell
 
-    $ tox 
+    $ tox
 
 Run test suite:
 
@@ -237,9 +251,9 @@ then
 .. code-block:: shell
 
     $ cd doc; \
-      python3 -c "import pyvips; pyvips.Operation.generate_sphinx_all()" > x 
+      python3 -c "import pyvips; pyvips.Operation.generate_sphinx_all()" > x
 
-And copy-paste ``x`` into the obvious place in ``doc/vimage.rst``. 
+And copy-paste ``x`` into the obvious place in ``doc/vimage.rst``.
 
 Update version number:
 
@@ -256,4 +270,3 @@ Update pypi package:
     $ twine upload --repository pyvips dist/*
     $ git tag -a v2.2.0 -m "as uploaded to pypi"
     $ git push origin v2.2.0
-
