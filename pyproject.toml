@@ -74,6 +74,7 @@ exclude = [
 ]
 
 [project.optional-dependencies]
+binary = ["pyvips-binary"]
 # All the following are used for our own testing
 tox = ["tox"]
 test = [
