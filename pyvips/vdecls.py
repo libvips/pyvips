@@ -75,6 +75,8 @@ def cdefs(features):
         typedef void* (*VipsTypeMap2Fn) (GType type, void* a, void* b);
         void* vips_type_map (GType base, void* fn, void* a, void* b);
 
+        void vips_shutdown (void);
+
         const char* vips_error_buffer (void);
         void vips_error_clear (void);
         void vips_error_freeze (void);
