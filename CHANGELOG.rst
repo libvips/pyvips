@@ -3,6 +3,8 @@
 - drop support for Python 2.7, require Python >= 3.7 [kleisauke]
 - migrate to `pyproject.toml` [kleisauke]
 - fix a small memleak in `write_to_buffer()` [kleisauke]
+- add `[binary]` install option [kleisauke]
+- add `shutdown()` 
 
 ## Version 2.2.3 (released 28 April 2024)
 

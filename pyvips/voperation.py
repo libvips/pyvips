@@ -540,6 +540,11 @@ class Operation(pyvips.VipsObject):
             print('   ' + docstr)
 
 
+def shutdown():
+    """Shut libvips down."""
+    vips_lib.vips_shutdown()
+
+
 def cache_set_max(mx):
     """Set the maximum number of operations libvips will cache."""
     vips_lib.vips_cache_set_max(mx)

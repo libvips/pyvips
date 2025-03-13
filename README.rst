@@ -78,8 +78,11 @@ with:
     $ pip install "pyvips[binary]"
 
 This installs a self-contained package with the most commonly needed
-libraries. If your platform is unsupported or the pre-built binary is
-unsuitable, you can install libvips globally instead.
+libraries. It should just work on most common platforms, including Linux,
+Window and macOS, with x64 and ARM CPUs.
+
+If your platform is unsupported or the pre-built binary is
+unsuitable, you can install libvips separately instead.
 
 Local installation
 ------------------
@@ -191,6 +194,7 @@ Local user install:
 
 .. code-block:: shell
 
+    $ pip install pyvips-binary==8.16.0
     $ pip3 install -e .
     $ pypy -m pip --user -e .
 
