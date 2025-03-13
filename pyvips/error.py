@@ -72,5 +72,8 @@ class Error(Exception):
 
 
 __all__ = [
-    '_to_bytes', '_to_string', '_to_string_copy', 'Error',
+    '_to_bytes',
+    '_to_string',
+    '_to_string_copy',
+    'Error'
 ]

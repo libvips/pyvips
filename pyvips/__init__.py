@@ -196,10 +196,4 @@ from .voperation import *
 from .vimage import *
 from .vregion import *
 
-__all__ = [
-    'Error', 'Image', 'Region', 'Introspect', 'Operation', 'GValue', 'Interpolate', 'GObject',
-    'VipsObject', 'type_find', 'type_name', 'version', '__version__',
-    'at_least_libvips', 'API_mode',
-    'get_suffixes',
-    'cache_set_max', 'cache_set_max_mem', 'cache_set_max_files',
-]
+__all__ = ['API_mode']

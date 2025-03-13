@@ -15,6 +15,11 @@ def leak_set(leak):
     return vips_lib.vips_leak_set(leak)
 
 
+def shutdown():
+    """Shut libvips down."""
+    vips_lib.vips_shutdown()
+
+
 def version(flag):
     """Get the major, minor or micro version number of the libvips library.
 
@@ -152,6 +157,7 @@ def flags_dict(gtype):
 
 __all__ = [
     'leak_set',
+    'shutdown',
     'version',
     'at_least_libvips',
     'type_find',

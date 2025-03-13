@@ -480,6 +480,4 @@ def cdefs(features):
     return code
 
 
-__all__ = [
-    'cdefs'
-]
+__all__ = ['cdefs']
