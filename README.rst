@@ -79,7 +79,7 @@ with:
 
 This installs a self-contained package with the most commonly needed
 libraries. It should just work on most common platforms, including Linux,
-Window and macOS, with x64 and ARM CPUs.
+Windows and macOS, with x64 and ARM CPUs.
 
 If your platform is unsupported or the pre-built binary is
 unsuitable, you can install libvips separately instead.
