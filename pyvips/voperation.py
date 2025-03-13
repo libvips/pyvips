@@ -593,10 +593,16 @@ def operation_block_set(name, state):
 
 
 __all__ = [
-    'Introspect', 'Operation',
-    'cache_set_max', 'cache_set_max_mem', 'cache_set_max_files',
+    'Introspect',
+    'Operation',
+    'cache_set_max',
+    'cache_set_max_mem',
+    'cache_set_max_files',
     'cache_set_trace',
-    'cache_get_max', 'cache_get_max_mem', 'cache_get_max_files',
+    'cache_get_max',
+    'cache_get_max_mem',
+    'cache_get_max_files',
     'cache_get_size',
-    'block_untrusted_set', 'operation_block_set',
+    'block_untrusted_set',
+    'operation_block_set'
 ]
