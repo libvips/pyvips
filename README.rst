@@ -119,7 +119,7 @@ With Homebrew:
 .. code-block:: shell
 
     $ brew install vips python pkg-config
-    $ pip3 install pyvips
+    $ pip install pyvips
 
 Windows
 ^^^^^^^
@@ -194,8 +194,7 @@ Local user install:
 
 .. code-block:: shell
 
-    $ pip install pyvips-binary==8.16.0
-    $ pip3 install -e .
+    $ pip install -e .[binary]
     $ pypy -m pip --user -e .
 
 Run all tests:
