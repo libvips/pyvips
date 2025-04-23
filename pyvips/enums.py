@@ -8,7 +8,7 @@ class BandFormat(object):
 The format used for each band element.
 
 Each corresponds to a native C type for the current machine. For example,
-[enum@Vips.BandFormat.USHORT] is `unsigned short`.
+:class:`.enums.BandFormat.USHORT` is `unsigned short`.
 
 Attributes:
 
@@ -52,7 +52,7 @@ Attributes:
 class BlendMode(object):
     """BlendMode.
 
-The various Porter-Duff and PDF blend modes. See [func@Image.composite],
+The various Porter-Duff and PDF blend modes. See :meth:`.Image.composite`,
 for example.
 
 The Cairo docs have a nice explanation of all the blend modes:
@@ -250,13 +250,13 @@ Attributes:
 class DemandStyle(object):
     """DemandStyle.
 
-See [method@Image.pipelinev]. Operations can hint
+See :meth:`.Image.pipelinev`. Operations can hint
 the kind of demand geometry they prefer
 to the VIPS image IO system.
 
 These demand styles are given below in order of increasing
 specialisation.  When demanding output from a pipeline,
-[method@Image.generate]
+:meth:`.Image.generate`
 will use the most general style requested by the operations
 in the pipeline.
 
@@ -267,7 +267,7 @@ reasonably efficiently, even for bizarre operations like 45 degree rotate.
 @VIPS_DEMAND_STYLE_FATSTRIP -- This operation would like to output strips
 the width of the image and as high as possible. This option is suitable
 for area operations which do not violently transform coordinates, such
-as [method@Image.conv].
+as :meth:`.Image.conv`.
 
 @VIPS_DEMAND_STYLE_THINSTRIP -- This operation would like to output strips
 the width of the image and a few pels high. This option is suitable for
@@ -275,10 +275,10 @@ point-to-point operations, such as those in the arithmetic package.
 
 @VIPS_DEMAND_STYLE_ANY -- This image is not being demand-read from a disc
 file (even indirectly) so any demand style is OK. It's used for things like
-[ctor@Image.black] where the pixels are calculated.
+:meth:`.Image.black` where the pixels are calculated.
 
 ::: seealso
-    [method@Image.pipelinev].
+    :meth:`.Image.pipelinev`.
 
 Attributes:
 
@@ -504,7 +504,7 @@ Attributes:
 class Combine(object):
     """Combine.
 
-How to combine values. See [method@Image.compass], for example.
+How to combine values. See :meth:`.Image.compass`, for example.
 
 Attributes:
 
@@ -524,8 +524,8 @@ Attributes:
 class Access(object):
     """Access.
 
-The type of access an operation has to supply. See [method@Image.tilecache]
-and [class@Foreign].
+The type of access an operation has to supply. See :meth:`.Image.tilecache`
+and :class:`.Foreign`.
 
 @VIPS_ACCESS_RANDOM means requests can come in any order.
 
@@ -548,7 +548,7 @@ Attributes:
 class Extend(object):
     """Extend.
 
-See [method@Image.embed], [method@Image.conv], [method@Image.affine] and so on.
+See :meth:`.Image.embed`, :meth:`.Image.conv`, :meth:`.Image.affine` and so on.
 
 When the edges of an image are extended, you can specify
 how you want the extension done.
@@ -571,7 +571,7 @@ We have to specify the exact value of each enum member since we have to
 keep these frozen for back compat with vips7.
 
 ::: seealso
-    [method@Image.embed].
+    :meth:`.Image.embed`.
 
 Attributes:
 
@@ -600,7 +600,7 @@ Attributes:
 class CompassDirection(object):
     """CompassDirection.
 
-A direction on a compass. Used for [method@Image.gravity], for example.
+A direction on a compass. Used for :meth:`.Image.gravity`, for example.
 
 Attributes:
 
@@ -638,13 +638,13 @@ Attributes:
 class Direction(object):
     """Direction.
 
-See [method@Image.flip], [method@Image.join] and so on.
+See :meth:`.Image.flip`, :meth:`.Image.join` and so on.
 
-Operations like [method@Image.flip] need to be told whether to flip left-right or
+Operations like :meth:`.Image.flip` need to be told whether to flip left-right or
 top-bottom.
 
 ::: seealso
-    [method@Image.flip], [method@Image.join].
+    :meth:`.Image.flip`, :meth:`.Image.join`.
 
 Attributes:
 
@@ -661,13 +661,13 @@ Attributes:
 class Align(object):
     """Align.
 
-See [method@Image.join] and so on.
+See :meth:`.Image.join` and so on.
 
-Operations like [method@Image.join] need to be told whether to align images on the
+Operations like :meth:`.Image.join` need to be told whether to align images on the
 low or high coordinate edge, or centre.
 
 ::: seealso
-    [method@Image.join].
+    :meth:`.Image.join`.
 
 Attributes:
 
@@ -688,7 +688,7 @@ class Interesting(object):
     """Interesting.
 
 Pick the algorithm vips uses to decide image "interestingness". This is used
-by [method@Image.smartcrop], for example, to decide what parts of the image to
+by :meth:`.Image.smartcrop`, for example, to decide what parts of the image to
 keep.
 
 #VIPS_INTERESTING_NONE and #VIPS_INTERESTING_LOW mean the same -- the
@@ -696,7 +696,7 @@ crop is positioned at the top or left. #VIPS_INTERESTING_HIGH positions at
 the bottom or right.
 
 ::: seealso
-    [method@Image.smartcrop].
+    :meth:`.Image.smartcrop`.
 
 Attributes:
 
@@ -728,12 +728,12 @@ Attributes:
 class Angle(object):
     """Angle.
 
-See [method@Image.rot] and so on.
+See :meth:`.Image.rot` and so on.
 
 Fixed rotate angles.
 
 ::: seealso
-    [method@Image.rot].
+    :meth:`.Image.rot`.
 
 Attributes:
 
@@ -756,12 +756,12 @@ Attributes:
 class Angle45(object):
     """Angle45.
 
-See [method@Image.rot45] and so on.
+See :meth:`.Image.rot45` and so on.
 
 Fixed rotate angles.
 
 ::: seealso
-    [method@Image.rot45].
+    :meth:`.Image.rot45`.
 
 Attributes:
 
@@ -816,11 +816,11 @@ Attributes:
 class TextWrap(object):
     """TextWrap.
 
-Sets the word wrapping style for [ctor@Image.text] when used with a maximum
+Sets the word wrapping style for :meth:`.Image.text` when used with a maximum
 width.
 
 ::: seealso
-    [ctor@Image.text].
+    :meth:`.Image.text`.
 
 Attributes:
 
@@ -846,7 +846,7 @@ class SdfShape(object):
 The SDF to generate,
 
 ::: seealso
-    [ctor@Image.sdf].
+    :meth:`.Image.sdf`.
 
 Attributes:
 
@@ -1257,8 +1257,8 @@ Attributes:
 class PCS(object):
     """PCS.
 
-Pick a Profile Connection Space for [method@Image.icc_import] and
-[method@Image.icc_export]. LAB is usually best, XYZ can be more convenient in some
+Pick a Profile Connection Space for :meth:`.Image.icc_import` and
+:meth:`.Image.icc_export`. LAB is usually best, XYZ can be more convenient in some
 cases.
 
 Attributes:

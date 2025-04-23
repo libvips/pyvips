@@ -195,7 +195,6 @@ Local user install:
 .. code-block:: shell
 
     $ pip install -e .[binary]
-    $ pypy -m pip --user -e .
 
 Run all tests:
 

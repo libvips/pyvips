@@ -37,6 +37,58 @@ def remove_prefix(enum_str):
     return enum_str
 
 
+def rewrite_references(string):
+    """Rewrite a gi-docgen references to RST style.
+
+    gi-docgen references look like this:
+
+        [func@version]
+        [class@Image]
+        [func@Image.bandjoin]
+        [meth@Image.add]
+        [ctor@Image.new_from_file]
+        [enum@SdfShape]
+        [enum@Vips.SdfShape.CIRCLE]
+
+    we look for the approximate patterns and rewrite in RST style, so:
+
+        :meth:`.version`
+        :class:`.Image`
+        :meth:`.Image.bandjoin`
+        :meth:`.Image.new_from_file`
+        :class:`.enums.SdfShape`
+        :class:`.enums.SdfShape.CIRCLE`
+    """
+
+    import re
+    while True:
+        match = re.search(r"\[(.*?)@(.*?)\]", string)
+        if not match:
+            break
+
+        before = string[0:match.span(0)[0]]
+        type = match[1]
+        target = match[2]
+        after = string[match.span(0)[1]:]
+
+        if type in ["ctor", "meth", "method", "func"]:
+            python_type = "meth"
+        elif type in ["class", "enum", "flags"]:
+            python_type = "class"
+        else:
+            raise Exception(f'type "{type}" is unknown')
+
+        match = re.match("Vips.(.*)", target)
+        if match:
+            target = match[1]
+
+        if type == "enum":
+            target = f"enums.{target}"
+
+        string = f"{before}:{python_type}:`.{target}`{after}"
+
+    return string
+
 def generate_enums():
     all_nicknames = []
 
@@ -70,7 +122,7 @@ def generate_enums():
         print(f'    """{python_name}.')
         if enum_doc is not None:
             print('')
-            print(f'{enum_doc.text}')
+            print(f'{rewrite_references(enum_doc.text)}')
         print('')
         print('Attributes:')
         print('')
@@ -79,7 +131,7 @@ def generate_enums():
             member = node.find(f"goi:member[@name='{python_name}']", namespace)
             member_doc = member.find("goi:doc", namespace)
             if member_doc is not None:
-                text = member_doc.text
+                text = rewrite_references(member_doc.text)
                 print(f'    {python_name.upper()} (str): {text}')
                 print('')
         print('    """')
@@ -123,7 +175,7 @@ def generate_flags():
         print(f'    """{python_name}.')
         if enum_doc is not None:
             print('')
-            print(f'{enum_doc.text}')
+            print(f'{rewrite_references(enum_doc.text)}')
         print('')
         print('Attributes:')
         print('')
@@ -133,7 +185,7 @@ def generate_flags():
             member_doc = member.find("goi:doc", namespace)
             if member_doc is not None:
                 text = member_doc.text
-                print(f'    {python_name.upper()} (int): {text}')
+                print(f'    {python_name.upper()} (int): {rewrite_references(text)}')
                 print('')
         print('    """')
         print('')
