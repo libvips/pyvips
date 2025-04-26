@@ -893,6 +893,63 @@ Attributes:
     WARNING = 'warning'
 
 
+class ForeignPpmFormat(object):
+    """ForeignPpmFormat.
+
+The netpbm file format to save as.
+
+#VIPS_FOREIGN_PPM_FORMAT_PBM images are single bit.
+
+#VIPS_FOREIGN_PPM_FORMAT_PGM images are 8, 16, or 32-bits, one band.
+
+#VIPS_FOREIGN_PPM_FORMAT_PPM images are 8, 16, or 32-bits, three bands.
+
+#VIPS_FOREIGN_PPM_FORMAT_PFM images are 32-bit float pixels.
+
+#VIPS_FOREIGN_PPM_FORMAT_PNM images are anymap images -- the image format
+is used to pick the saver.
+
+Attributes:
+
+    PBM (str): portable bitmap
+
+    PGM (str): portable greymap
+
+    PPM (str): portable pixmap
+
+    PFM (str): portable float map
+
+    PNM (str): portable anymap
+
+    """
+
+    PBM = 'pbm'
+    PGM = 'pgm'
+    PPM = 'ppm'
+    PFM = 'pfm'
+    PNM = 'pnm'
+
+
+class ForeignSubsample(object):
+    """ForeignSubsample.
+
+Set subsampling mode.
+
+Attributes:
+
+    AUTO (str): prevent subsampling when quality >= 90
+
+    ON (str): always perform subsampling
+
+    OFF (str): never perform subsampling
+
+    """
+
+    AUTO = 'auto'
+    ON = 'on'
+    OFF = 'off'
+
+
 class ForeignDzLayout(object):
     """ForeignDzLayout.
 
@@ -986,26 +1043,6 @@ Attributes:
     MAX = 'max'
     MIN = 'min'
     NEAREST = 'nearest'
-
-
-class ForeignSubsample(object):
-    """ForeignSubsample.
-
-Set subsampling mode.
-
-Attributes:
-
-    AUTO (str): prevent subsampling when quality >= 90
-
-    ON (str): always perform subsampling
-
-    OFF (str): never perform subsampling
-
-    """
-
-    AUTO = 'auto'
-    ON = 'on'
-    OFF = 'off'
 
 
 class ForeignWebpPreset(object):
@@ -1217,12 +1254,15 @@ Attributes:
 
     ABSOLUTE (str): absolute colorimetric rendering intent
 
+    AUTO (str): the rendering intent that the profile suggests
+
     """
 
     PERCEPTUAL = 'perceptual'
     RELATIVE = 'relative'
     SATURATION = 'saturation'
     ABSOLUTE = 'absolute'
+    AUTO = 'auto'
 
 
 class Kernel(object):
@@ -1244,6 +1284,10 @@ Attributes:
 
     LANCZOS3 (str): Convolve with a three-lobe Lanczos kernel.
 
+    MKS2013 (str): Convolve with Magic Kernel Sharp 2013.
+
+    MKS2021 (str): Convolve with Magic Kernel Sharp 2021.
+
     """
 
     NEAREST = 'nearest'
@@ -1252,6 +1296,8 @@ Attributes:
     MITCHELL = 'mitchell'
     LANCZOS2 = 'lanczos2'
     LANCZOS3 = 'lanczos3'
+    MKS2013 = 'mks2013'
+    MKS2021 = 'mks2021'
 
 
 class PCS(object):
@@ -1295,12 +1341,13 @@ Attributes:
 class CombineMode(object):
     """CombineMode.
 
-See vips_draw_image() and so on.
+See :meth:`.Image.draw_image` and so on.
 
-Operations like vips_draw_image() need to be told how to combine images
+Operations like :meth:`.Image.draw_image` need to be told how to combine images
 from two sources.
 
-See also: vips_join().
+::: seealso
+    :meth:`.Image.join`.
 
 Attributes:
 

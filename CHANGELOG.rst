@@ -1,4 +1,4 @@
-## Version 3.0.0 (released 22 April 2025)
+## Version 3.0.0 (released 26 April 2025)
 
 - drop support for Python 2.7, require Python >= 3.7 [kleisauke]
 - migrate to `pyproject.toml` [kleisauke]
