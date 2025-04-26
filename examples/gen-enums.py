@@ -89,6 +89,7 @@ def rewrite_references(string):
 
     return string
 
+
 def generate_enums():
     all_nicknames = []
 
@@ -185,7 +186,8 @@ def generate_flags():
             member_doc = member.find("goi:doc", namespace)
             if member_doc is not None:
                 text = member_doc.text
-                print(f'    {python_name.upper()} (int): {rewrite_references(text)}')
+                print(f'    {python_name.upper()} (int): '
+                      f'{rewrite_references(text)}')
                 print('')
         print('    """')
         print('')
