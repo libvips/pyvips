@@ -270,5 +270,5 @@ Update pypi package:
 
     $ python3 -m build --sdist
     $ twine upload --repository pyvips dist/*
-    $ git tag -a v2.2.0 -m "as uploaded to pypi"
-    $ git push origin v2.2.0
+    $ git tag -a v3.0.0 -m "as uploaded to pypi"
+    $ git push origin v3.0.0
