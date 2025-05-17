@@ -1425,33 +1425,3 @@ Attributes:
     AVG = 64
     PAETH = 128
     ALL = 248
-
-
-class ForeignSaveable(object):
-    """ForeignSaveable.
-
-The set of image types supported by a saver.
-
-::: seealso
-    :class:`.ForeignSave`.
-
-Attributes:
-
-    ANY (int): saver supports everything (eg. TIFF)
-
-    MONO (int): 1 band
-
-    RGB (int): 3 bands
-
-    CMYK (int): 4 bands
-
-    ALPHA (int): an extra band
-
-    """
-
-    ANY = 0
-    MONO = 1
-    RGB = 2
-    CMYK = 4
-    ALPHA = 8
-    ALL = 15

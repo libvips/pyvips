@@ -135,9 +135,6 @@ def cdefs(features):
         GType vips_interpretation_get_type (void);
         GType vips_operation_flags_get_type (void);
         GType vips_band_format_get_type (void);
-        GType vips_token_get_type (void);
-        GType vips_saveable_get_type (void);
-        GType vips_image_type_get_type (void);
 
         typedef ... GData;
 
