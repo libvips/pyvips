@@ -4,7 +4,7 @@ import sys
 import xml.etree.ElementTree as ET
 
 from pyvips import ffi, enum_dict, flags_dict, \
-    vips_lib, type_map, type_name, type_from_name
+    type_map, type_name, type_from_name
 
 # This file generates enums.py -- the set of classes giving the permissible
 # values for the pyvips enums/flags. Run with something like:
@@ -103,10 +103,6 @@ def generate_enums():
 
     type_map(type_from_name('GEnum'), add_nickname)
 
-    # Filter internal enums
-    blacklist = ['VipsImageType', 'VipsToken']
-    all_nicknames = [name for name in all_nicknames if name not in blacklist]
-
     for name in all_nicknames:
         gtype = type_from_name(name)
         python_name = remove_prefix(name)
@@ -198,11 +194,6 @@ def generate_flags():
 
 
 if __name__ == "__main__":
-    # otherwise we're missing some enums
-    vips_lib.vips_token_get_type()
-    vips_lib.vips_saveable_get_type()
-    vips_lib.vips_image_type_get_type()
-
     print('# libvips enums -- this file is generated automatically')
     print('# flake8: noqa: E501')  # ignore line too long error
     generate_enums()
