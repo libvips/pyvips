@@ -103,6 +103,10 @@ def generate_enums():
 
     type_map(type_from_name('GEnum'), add_nickname)
 
+    # Filter internal enums
+    blacklist = ['VipsDemandStyle']
+    all_nicknames = [name for name in all_nicknames if name not in blacklist]
+
     for name in all_nicknames:
         gtype = type_from_name(name)
         python_name = remove_prefix(name)

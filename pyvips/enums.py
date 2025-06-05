@@ -246,58 +246,6 @@ Attributes:
     HSV = 'hsv'
 
 
-class DemandStyle(object):
-    """DemandStyle.
-
-See :meth:`.Image.pipelinev`. Operations can hint
-the kind of demand geometry they prefer
-to the VIPS image IO system.
-
-These demand styles are given below in order of increasing
-specialisation.  When demanding output from a pipeline,
-:meth:`.Image.generate`
-will use the most general style requested by the operations
-in the pipeline.
-
-:class:`.enums.DemandStyle.SMALLTILE` -- This is the most general demand format.
-Output is demanded in small (around 100x100 pel) sections. This style works
-reasonably efficiently, even for bizarre operations like 45 degree rotate.
-
-:class:`.enums.DemandStyle.FATSTRIP` -- This operation would like to output strips
-the width of the image and as high as possible. This option is suitable
-for area operations which do not violently transform coordinates, such
-as :meth:`.Image.conv`.
-
-:class:`.enums.DemandStyle.THINSTRIP` -- This operation would like to output strips
-the width of the image and a few pels high. This option is suitable for
-point-to-point operations, such as those in the arithmetic package.
-
-:class:`.enums.DemandStyle.ANY` -- This image is not being demand-read from a disc
-file (even indirectly) so any demand style is OK. It's used for things like
-:meth:`.Image.black` where the pixels are calculated.
-
-::: seealso
-    :meth:`.Image.pipelinev`.
-
-Attributes:
-
-    SMALLTILE (str): demand in small (typically 128x128 pixel) tiles
-
-    FATSTRIP (str): demand in fat (typically 16 pixel high) strips
-
-    THINSTRIP (str): demand in thin (typically 1 pixel high) strips
-
-    ANY (str): demand geometry does not matter
-
-    """
-
-    ERROR = 'error'
-    SMALLTILE = 'smalltile'
-    FATSTRIP = 'fatstrip'
-    THINSTRIP = 'thinstrip'
-    ANY = 'any'
-
-
 class OperationRelational(object):
     """OperationRelational.
 
