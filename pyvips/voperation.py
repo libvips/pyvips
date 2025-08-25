@@ -17,6 +17,7 @@ _DEPRECATED = 64
 _MODIFY = 128
 
 # for VipsOperationFlags
+_OPERATION_NOCACHE = 4
 _OPERATION_DEPRECATED = 8
 
 
@@ -90,8 +91,8 @@ class Introspect(object):
         self.required_output = []
         self.optional_output = []
 
-        # same, but with deprecated args filtered out ... this is the set we
-        # show in documentation
+        # same, but with deprecated and redundant args filtered out ... this is
+        # the set we show in documentation
         self.doc_optional_input = []
         self.doc_optional_output = []
 
@@ -116,7 +117,12 @@ class Introspect(object):
                     (flags & _REQUIRED) == 0):
                 self.optional_input.append(name)
 
-                if (flags & _DEPRECATED) == 0:
+                # drop "revalidate" flag from buffer loaders and operations
+                # marked "nocache" as they are already uncached
+                if ((flags & _DEPRECATED) == 0 and
+                        (name != 'revalidate' or
+                         ('_buffer' not in operation_name and
+                          (self.flags & _OPERATION_NOCACHE) == 0))):
                     self.doc_optional_input.append(name)
 
             if ((flags & _OUTPUT) != 0 and
