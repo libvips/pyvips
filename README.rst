@@ -269,6 +269,12 @@ Update pypi package:
 .. code-block:: shell
 
     $ python3 -m build --sdist
+
+Ignore the deprecation warnings about the license, we need to update the 
+build backend before we can fix this.
+
+.. code-block:: shell
+
     $ twine upload --repository pyvips dist/*
     $ git tag -a v3.0.0 -m "as uploaded to pypi"
     $ git push origin v3.0.0
