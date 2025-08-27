@@ -10,16 +10,16 @@ logger = logging.getLogger(__name__)
 # user code can override this null handler
 logger.addHandler(logging.NullHandler())
 
-def library_name(name, abi_number):
+def library_name(name, abi_number, lib_prefix='lib'):
     is_windows = os.name == 'nt'
     is_mac = sys.platform == 'darwin'
 
     if is_windows:
-        return f'lib{name}-{abi_number}.dll'
+        return f'{lib_prefix}{name}-{abi_number}.dll'
     elif is_mac:
-        return f'lib{name}.{abi_number}.dylib'
+        return f'{lib_prefix}{name}.{abi_number}.dylib'
     else:
-        return f'lib{name}.so.{abi_number}'
+        return f'{lib_prefix}{name}.so.{abi_number}'
 
 # pull in our module version number
 from .version import __version__
@@ -103,8 +103,13 @@ if not API_mode:
         is_unified = False
 
     if not is_unified:
-        glib_lib = ffi.dlopen(library_name('glib-2.0', 0))
-        gobject_lib = ffi.dlopen(library_name('gobject-2.0', 0))
+        try:
+            glib_lib = ffi.dlopen(library_name('glib-2.0', 0))
+            gobject_lib = ffi.dlopen(library_name('gobject-2.0', 0))
+        except Exception:
+            # on windows glib maybe named glib-2.0-0.dll instead of libglib-2.0-0.dll
+            glib_lib = ffi.dlopen(library_name('glib-2.0', 0, lib_prefix=''))
+            gobject_lib = ffi.dlopen(library_name('gobject-2.0', 0, lib_prefix=''))
 
         logger.debug('Loaded lib %s', glib_lib)
         logger.debug('Loaded lib %s', gobject_lib)
