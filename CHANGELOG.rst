@@ -1,6 +1,7 @@
 ## Version 3.0.1 (git master)
 
 - fix glib DLL name with Conan [boussaffawalid]
+- remove redundant `revalidate` flags from docs [kleisauke]
 
 ## Version 3.0.0 (released 28 April 2025)
 
