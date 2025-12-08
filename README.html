@@ -1,22 +1,20 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>README &mdash; pyvips 2.2.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>README &mdash; pyvips 3.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/collapse.js"></script>
+      <script src="_static/documentation_options.js?v=dd1205ac"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/collapse.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -31,14 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> pyvips
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyvips
           </a>
-              <div class="version">
-                2.2
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -47,8 +46,14 @@
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">README</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#how-it-works">How it works</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#conda-install">conda Install</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#non-conda-install">Non-conda install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#binary-installation">Binary installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#local-installation">Local installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#linux">Linux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#macos">macOS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#windows">Windows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#conda">Conda</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#notes">Notes</a></li>
 </ul>
@@ -83,8 +88,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>README</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">README</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com/libvips/pyvips/blob/master/doc/README.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -95,8 +100,9 @@
            <div itemprop="articleBody">
              
   <section id="readme">
-<h1>README<a class="headerlink" href="#readme" title="Permalink to this heading">¶</a></h1>
-<a class="reference external image-reference" href="https://travis-ci.org/libvips/pyvips"><img alt="Build Status" src="https://travis-ci.org/libvips/pyvips.svg?branch=master" /></a>
+<h1>README<a class="headerlink" href="#readme" title="Link to this heading">¶</a></h1>
+<a class="reference external image-reference" href="https://github.com/libvips/pyvips/actions"><img alt="Build Status" src="https://github.com/libvips/pyvips/workflows/CI/badge.svg" />
+</a>
 <p>PyPI package:</p>
 <p><a class="reference external" href="https://pypi.python.org/pypi/pyvips">https://pypi.python.org/pypi/pyvips</a></p>
 <p>conda package:</p>
@@ -104,20 +110,25 @@
 <p>We have formatted docs online here:</p>
 <p><a class="reference external" href="https://libvips.github.io/pyvips/">https://libvips.github.io/pyvips/</a></p>
 <p>This module wraps the libvips image processing library:</p>
-<p><a class="reference external" href="https://libvips.github.io/libvips/">https://libvips.github.io/libvips/</a></p>
+<p><a class="reference external" href="https://www.libvips.org/">https://www.libvips.org/</a></p>
 <p>The libvips docs are also very useful:</p>
-<p><a class="reference external" href="https://libvips.github.io/libvips/API/current/">https://libvips.github.io/libvips/API/current/</a></p>
+<p><a class="reference external" href="https://www.libvips.org/API/current/">https://www.libvips.org/API/current/</a></p>
 <p>If you have the development headers for libvips installed and have a working C
 compiler, this module will use cffi API mode to try to build a libvips
 binary extension for your Python.</p>
 <p>If it is unable to build a binary extension, it will use cffi ABI mode
 instead and only needs the libvips shared library. This takes longer to
-start up and is typically ~20% slower in execution.  You can find out how
-pyvips installed with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">show</span> <span class="pre">pyvips</span></code>.</p>
+start up and is typically ~20% slower in execution. You can find out if
+API mode is being used with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pyvips</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">API_mode</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>This binding passes the vips test suite cleanly and with no leaks under
-python2.7 - python3.6, pypy and pypy3 on Windows, macOS and Linux.</p>
+python3 and pypy3 on Windows, macOS and Linux.</p>
 <section id="how-it-works">
-<h2>How it works<a class="headerlink" href="#how-it-works" title="Permalink to this heading">¶</a></h2>
+<h2>How it works<a class="headerlink" href="#how-it-works" title="Link to this heading">¶</a></h2>
 <p>Programs that use <code class="docutils literal notranslate"><span class="pre">pyvips</span></code> don’t manipulate images directly, instead
 they create pipelines of image processing operations building on a source
 image. When the end of the pipe is connected to a destination, the whole
@@ -132,118 +143,164 @@ test <code class="docutils literal notranslate"><span class="pre">pyvips</span><
 memory.</p>
 <p>There’s a handy chapter in the docs explaining how libvips opens files,
 which gives some more background.</p>
-<p><a class="reference external" href="http://libvips.github.io/libvips/API/current/How-it-opens-files.md.html">http://libvips.github.io/libvips/API/current/How-it-opens-files.md.html</a></p>
+<p><a class="reference external" href="https://www.libvips.org/API/current/How-it-opens-files.html">https://www.libvips.org/API/current/How-it-opens-files.html</a></p>
 </section>
-<section id="conda-install">
-<h2>conda Install<a class="headerlink" href="#conda-install" title="Permalink to this heading">¶</a></h2>
-<p>The conda package includes a matching libvips binary, so just enter:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ conda install --channel conda-forge pyvips
+<section id="binary-installation">
+<h2>Binary installation<a class="headerlink" href="#binary-installation" title="Link to this heading">¶</a></h2>
+<p>The quickest way to start with pyvips is by installing the binary package
+with:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;pyvips[binary]&quot;</span>
+</pre></div>
+</div>
+<p>This installs a self-contained package with the most commonly needed
+libraries. It should just work on most platforms, including Linux,
+Windows and macOS, with 64 and 32 bit x64 and ARM CPUs. Note that this libvips
+is missing features like PDF load and OpenSlide support.</p>
+<p>If your platform is unsupported or the pre-built binary is unsuitable, you
+can install libvips separately instead.</p>
+</section>
+<section id="local-installation">
+<h2>Local installation<a class="headerlink" href="#local-installation" title="Link to this heading">¶</a></h2>
+<p>You need the libvips shared library on your library search path, version 8.2
+or later, though at least version 8.9 is required for all features to work.
+See:</p>
+<p><a class="reference external" href="https://www.libvips.org/install.html">https://www.libvips.org/install.html</a></p>
+<section id="linux">
+<h3>Linux<a class="headerlink" href="#linux" title="Link to this heading">¶</a></h3>
+<p>Perhaps:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>libvips-dev<span class="w"> </span>--no-install-recommends
+$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>pyvips
+</pre></div>
+</div>
+<p>With python 3.11 and later, you will need to create a venv first and add
+<cite>path/to/venv</cite> to your <cite>PATH</cite>. Something like:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>~/.local
+$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>pyvips
 </pre></div>
 </div>
 </section>
-<section id="non-conda-install">
-<h2>Non-conda install<a class="headerlink" href="#non-conda-install" title="Permalink to this heading">¶</a></h2>
-<p>First, you need the libvips shared library on your library search path, version
-8.2 or later, though at least version 8.9 is required for all features to work.
-On Linux and macOS, you can just install via your package manager; on Windows you
-can download a pre-compiled binary from the libvips website.</p>
-<p><a class="reference external" href="https://libvips.github.io/libvips/install.html">https://libvips.github.io/libvips/install.html</a></p>
-<p>Next, install this package, perhaps:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pip install --user pyvips
+<section id="macos">
+<h3>macOS<a class="headerlink" href="#macos" title="Link to this heading">¶</a></h3>
+<p>With Homebrew:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>brew<span class="w"> </span>install<span class="w"> </span>vips<span class="w"> </span>python<span class="w"> </span>pkg-config
+$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>pyvips
 </pre></div>
 </div>
-<p>On Windows, you’ll need a 64-bit Python. The official one works well.
-You will also need to add <code class="docutils literal notranslate"><span class="pre">vips-dev-x.y\bin</span></code> to your <code class="docutils literal notranslate"><span class="pre">PATH</span></code> so
-that pyvips can find all the DLLs it needs. You can either do this in the
-<strong>Advanced System Settings</strong> control panel, or you can just change
-<code class="docutils literal notranslate"><span class="pre">PATH</span></code> in your Python program.</p>
-<p>If you set the PATH environment variable in the control panel, you can use
-the <code class="docutils literal notranslate"><span class="pre">vips</span></code> command-line tools, which I find useful. However, this will add
-a lot of extra DLLs to your search path and they might conflict with other
-programs, so it’s usually safer just to set <code class="docutils literal notranslate"><span class="pre">PATH</span></code> in your program.</p>
-<p>To set <code class="docutils literal notranslate"><span class="pre">PATH</span></code> from within Python, you need something like this at the start:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="n">vipshome</span> <span class="o">=</span> <span class="s1">&#39;c:</span><span class="se">\\</span><span class="s1">vips-dev-8.7</span><span class="se">\\</span><span class="s1">bin&#39;</span>
-<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;PATH&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vipshome</span> <span class="o">+</span> <span class="s1">&#39;;&#39;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;PATH&#39;</span><span class="p">]</span>
+</section>
+<section id="windows">
+<h3>Windows<a class="headerlink" href="#windows" title="Link to this heading">¶</a></h3>
+<p>On Windows, you can download a pre-compiled binary from the libvips website.</p>
+<p><a class="reference external" href="https://www.libvips.org/install.html">https://www.libvips.org/install.html</a></p>
+<p>You’ll need a 64-bit Python. The official one works well.</p>
+<p>You can add <code class="docutils literal notranslate"><span class="pre">vips-dev-x.y\bin</span></code> to your <code class="docutils literal notranslate"><span class="pre">PATH</span></code>, but this will add a lot of
+extra DLLs to your search path and they might conflict with other programs,
+so it’s usually safer to set <code class="docutils literal notranslate"><span class="pre">PATH</span></code> in your program.</p>
+<p>To set <code class="docutils literal notranslate"><span class="pre">PATH</span></code> from within Python, you need something like this at the
+start of your program:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">vipsbin</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;c:\vips-dev-8.16\bin&#39;</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;PATH&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vipsbin</span> <span class="o">+</span> <span class="s1">&#39;;&#39;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;PATH&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>For Python 3.8 and later, you need:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">vipsbin</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;c:\vips-dev-8.16\bin&#39;</span>
+<span class="n">add_dll_dir</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">os</span><span class="p">,</span> <span class="s1">&#39;add_dll_directory&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">add_dll_dir</span><span class="p">):</span>
+    <span class="n">add_dll_dir</span><span class="p">(</span><span class="n">vipsbin</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;PATH&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">pathsep</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="n">vipsbin</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;PATH&#39;</span><span class="p">]))</span>
 </pre></div>
 </div>
 <p>Now when you import pyvips, it should be able to find the DLLs.</p>
 </section>
+<section id="conda">
+<h3>Conda<a class="headerlink" href="#conda" title="Link to this heading">¶</a></h3>
+<p>The Conda package includes a matching libvips binary, so just enter:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>conda<span class="w"> </span>install<span class="w"> </span>--channel<span class="w"> </span>conda-forge<span class="w"> </span>pyvips
+</pre></div>
+</div>
+</section>
+</section>
 <section id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">¶</a></h2>
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading">¶</a></h2>
 <p>This sample program loads a JPG image, doubles the value of every green pixel,
 sharpens, and then writes the image back to the filesystem again:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyvips</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pyvips</span>
 
 <span class="n">image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_file</span><span class="p">(</span><span class="s1">&#39;some-image.jpg&#39;</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="s1">&#39;sequential&#39;</span><span class="p">)</span>
 <span class="n">image</span> <span class="o">*=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-<span class="n">mask</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_array</span><span class="p">([[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-                                    <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-                                    <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-                                   <span class="p">],</span> <span class="n">scale</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_array</span><span class="p">([</span>
+    <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+    <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+    <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="p">],</span> <span class="n">scale</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
 <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="s1">&#39;integer&#39;</span><span class="p">)</span>
 <span class="n">image</span><span class="o">.</span><span class="n">write_to_file</span><span class="p">(</span><span class="s1">&#39;x.jpg&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="notes">
-<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this heading">¶</a></h2>
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
 <p>Local user install:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pip3 install -e .
-$ pypy -m pip --user -e .
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="o">[</span>binary<span class="o">]</span>
 </pre></div>
 </div>
 <p>Run all tests:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ tox
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>tox
 </pre></div>
 </div>
 <p>Run test suite:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pytest
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pytest
 </pre></div>
 </div>
 <p>Run a specific test:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pytest tests/test_saveload.py
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pytest<span class="w"> </span>tests/test_saveload.py
 </pre></div>
 </div>
 <p>Run perf tests:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> tests/perf
-$ ./run.sh
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>tests/perf
+$<span class="w"> </span>./run.sh
 </pre></div>
 </div>
 <p>Stylecheck:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ flake8
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>flake8
 </pre></div>
 </div>
 <p>Generate HTML docs in <code class="docutils literal notranslate"><span class="pre">doc/build/html</span></code>:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> doc<span class="p">;</span> sphinx-build -bhtml . build/html
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>doc<span class="p">;</span><span class="w"> </span>sphinx-build<span class="w"> </span>-bhtml<span class="w"> </span>.<span class="w"> </span>build/html
 </pre></div>
 </div>
 <p>Regenerate enums:</p>
 <p>Make sure you have installed a libvips with all optional packages enabled,
 then</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> examples<span class="p">;</span> <span class="se">\</span>
-  ./gen-enums.py ~/GIT/libvips/libvips/Vips-8.0.gir &gt; enums.py
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>examples<span class="p">;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>./gen-enums.py<span class="w"> </span>~/GIT/libvips/build/libvips/Vips-8.0.gir<span class="w"> </span>&gt;<span class="w"> </span>enums.py
 </pre></div>
 </div>
 <p>Then check and move <cite>enums.py</cite> into <cite>pyvips/</cite>.</p>
 <p>Regenerate autodocs:</p>
 <p>Make sure you have installed a libvips with all optional packages enabled,
 then</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> doc<span class="p">;</span> <span class="se">\</span>
-  python3 -c <span class="s2">&quot;import pyvips; pyvips.Operation.generate_sphinx_all()&quot;</span> &gt; x
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>doc<span class="p">;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import pyvips; pyvips.Operation.generate_sphinx_all()&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>x
 </pre></div>
 </div>
 <p>And copy-paste <code class="docutils literal notranslate"><span class="pre">x</span></code> into the obvious place in <code class="docutils literal notranslate"><span class="pre">doc/vimage.rst</span></code>.</p>
 <p>Update version number:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ vi pyvips/version.py
-$ vi doc/conf.py
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>vi<span class="w"> </span>pyvips/version.py
+$<span class="w"> </span>vi<span class="w"> </span>doc/conf.py
 </pre></div>
 </div>
 <p>Update pypi package:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ python3 setup.py sdist
-$ twine upload dist/*
-$ git tag -a v2.2.0 -m <span class="s2">&quot;as uploaded to pypi&quot;</span>
-$ git push origin v2.2.0
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>build<span class="w"> </span>--sdist
+</pre></div>
+</div>
+<p>Ignore the deprecation warnings about the license, we need to update the
+build backend before we can fix this.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>twine<span class="w"> </span>upload<span class="w"> </span>--repository<span class="w"> </span>pyvips<span class="w"> </span>dist/*
+$<span class="w"> </span>git<span class="w"> </span>tag<span class="w"> </span>-a<span class="w"> </span>v3.0.0<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;as uploaded to pypi&quot;</span>
+$<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>v3.0.0
 </pre></div>
 </div>
 </section>

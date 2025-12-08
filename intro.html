@@ -1,22 +1,20 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Introduction &mdash; pyvips 2.2.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>Introduction &mdash; pyvips 3.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/collapse.js"></script>
+      <script src="_static/documentation_options.js?v=dd1205ac"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/collapse.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -31,14 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> pyvips
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyvips
           </a>
-              <div class="version">
-                2.2
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -92,8 +91,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Introduction</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Introduction</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com/libvips/pyvips/blob/master/doc/intro.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -104,15 +103,15 @@
            <div itemprop="articleBody">
              
   <section id="introduction">
-<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h1>
+<h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h1>
 <p>See the main libvips site for an introduction to the underlying library. These
 notes introduce the Python binding.</p>
 <p><a class="reference external" href="https://libvips.github.io/libvips">https://libvips.github.io/libvips</a></p>
 <section id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">¶</a></h2>
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading">¶</a></h2>
 <p>This example loads a file, boosts the green channel, sharpens the image,
 and saves it back to disc again:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyvips</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pyvips</span>
 
 <span class="n">image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_file</span><span class="p">(</span><span class="s1">&#39;some-image.jpg&#39;</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="s1">&#39;sequential&#39;</span><span class="p">)</span>
 <span class="n">image</span> <span class="o">*=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
@@ -177,8 +176,8 @@ suffix. You can also write formatted images to memory, or dump
 image data to a C-style array in a Python buffer.</p>
 </section>
 <section id="metadata-and-attributes">
-<h2>Metadata and attributes<a class="headerlink" href="#metadata-and-attributes" title="Permalink to this heading">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">pyvips</span></code> adds a <a class="reference internal" href="vimage.html#pyvips.Image.__getattr__" title="pyvips.Image.__getattr__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__getattr__()</span></code></a> handler to <a class="reference internal" href="vimage.html#id1" title="pyvips.Image"><code class="xref py py-class docutils literal notranslate"><span class="pre">Image</span></code></a> and to
+<h2>Metadata and attributes<a class="headerlink" href="#metadata-and-attributes" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">pyvips</span></code> adds a <a class="reference internal" href="vimage.html#pyvips.Image.__getattr__" title="pyvips.Image.__getattr__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__getattr__()</span></code></a> handler to <a class="reference internal" href="vimage.html#pyvips.Image" title="pyvips.Image"><code class="xref py py-class docutils literal notranslate"><span class="pre">Image</span></code></a> and to
 the Image metaclass, then uses it to look up unknown names in libvips.</p>
 <p>Names are first checked against the set of properties that libvips
 keeps for images, see <a class="reference internal" href="vimage.html#pyvips.Image.width" title="pyvips.Image.width"><code class="xref py py-attr docutils literal notranslate"><span class="pre">width</span></code></a> and friends. If the name is not
@@ -198,9 +197,9 @@ friends. For example:</p>
 means that you can’t modify an image unless you are certain that you have
 the only reference to it. You can make a private copy of an image with
 <code class="docutils literal notranslate"><span class="pre">copy</span></code>, for example:</p>
-<blockquote>
-<div><p>new_image = image.copy(xres=12, yres=13)</p>
-</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">new_image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">xres</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">yres</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>Now <code class="docutils literal notranslate"><span class="pre">new_image</span></code> is a private clone of <code class="docutils literal notranslate"><span class="pre">image</span></code> with <code class="docutils literal notranslate"><span class="pre">xres</span></code> and <code class="docutils literal notranslate"><span class="pre">yres</span></code>
 changed.</p>
 <p>Set image metadata with <a class="reference internal" href="vimage.html#pyvips.Image.set" title="pyvips.Image.set"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Image.set()</span></code></a>. Use <a class="reference internal" href="vimage.html#pyvips.Image.copy" title="pyvips.Image.copy"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Image.copy()</span></code></a> to make
@@ -212,26 +211,26 @@ a private copy of the image first, for example:</p>
 it.</p>
 </section>
 <section id="numpy-and-pil">
-<h2>NumPy and PIL<a class="headerlink" href="#numpy-and-pil" title="Permalink to this heading">¶</a></h2>
+<h2>NumPy and PIL<a class="headerlink" href="#numpy-and-pil" title="Link to this heading">¶</a></h2>
 <p>You can use <a class="reference internal" href="vimage.html#pyvips.Image.new_from_array" title="pyvips.Image.new_from_array"><code class="xref py py-meth docutils literal notranslate"><span class="pre">new_from_array()</span></code></a> to create a pyvips image from a NumPy array
 or a PIL image. For example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyvips</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pyvips</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
 <span class="n">image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_array</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 
-<span class="kn">import</span> <span class="nn">PIL.Image</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">PIL.Image</span>
 <span class="n">pil_image</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span>
 <span class="n">image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_array</span><span class="p">(</span><span class="n">pil_image</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Going the other direction, a conversion from a pyvips image to a NumPy array can
-be obtained with the <a class="reference internal" href="vimage.html#pyvips.Image.numpy" title="pyvips.Image.numpy"><code class="xref py py-meth docutils literal notranslate"><span class="pre">numpy()</span></code></a> method of the <a class="reference internal" href="vimage.html#id1" title="pyvips.Image"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyvips.Image</span></code></a> class
+be obtained with the <a class="reference internal" href="vimage.html#pyvips.Image.numpy" title="pyvips.Image.numpy"><code class="xref py py-meth docutils literal notranslate"><span class="pre">numpy()</span></code></a> method of the <a class="reference internal" href="vimage.html#pyvips.Image" title="pyvips.Image"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyvips.Image</span></code></a> class
 or from the numpy side with <code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.asarray()</span></code>.  This is a fast way to load
 many image formats:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyvips</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pyvips</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="n">image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_file</span><span class="p">(</span><span class="s1">&#39;some-image.jpg&#39;</span><span class="p">)</span>
 <span class="n">a1</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
@@ -242,15 +241,15 @@ many image formats:</p>
 </div>
 <p>The <code class="xref py py-meth docutils literal notranslate"><span class="pre">PIL.Image.fromarray()</span></code> method can be used to convert a pyvips image
 to a PIL image via a NumPy array:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyvips</span>
-<span class="kn">import</span> <span class="nn">PIL.Image</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pyvips</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">PIL.Image</span>
 <span class="n">image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">black</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">bands</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">pil_image</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
 </pre></div>
 </div>
 </section>
 <section id="calling-libvips-operations">
-<h2>Calling libvips operations<a class="headerlink" href="#calling-libvips-operations" title="Permalink to this heading">¶</a></h2>
+<h2>Calling libvips operations<a class="headerlink" href="#calling-libvips-operations" title="Link to this heading">¶</a></h2>
 <p>Unknown names which are not image properties are looked up as libvips
 operations. For example, the libvips operation <code class="docutils literal notranslate"><span class="pre">add</span></code>, which appears in C as
 <code class="docutils literal notranslate"><span class="pre">vips_add()</span></code>, appears in Python as <a class="reference internal" href="vimage.html#pyvips.Image.add" title="pyvips.Image.add"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Image.add()</span></code></a>.</p>
@@ -336,29 +335,29 @@ course you can also write:</p>
 <p>and so on.</p>
 </section>
 <section id="logging-and-warnings">
-<h2>Logging and warnings<a class="headerlink" href="#logging-and-warnings" title="Permalink to this heading">¶</a></h2>
+<h2>Logging and warnings<a class="headerlink" href="#logging-and-warnings" title="Link to this heading">¶</a></h2>
 <p>The module uses <code class="docutils literal notranslate"><span class="pre">logging</span></code> to log warnings from libvips, and debug messages
 from the module itself. Some warnings are important, for example truncated
 files, and you might want to see them.</p>
 <p>Add these lines somewhere near the start of your program:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="exceptions">
-<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this heading">¶</a></h2>
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Link to this heading">¶</a></h2>
 <p>The wrapper spots errors from vips operations and raises the <a class="reference internal" href="error.html#pyvips.error.Error" title="pyvips.error.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">Error</span></code></a>
 exception. You can catch it in the usual way.</p>
 </section>
 <section id="enums">
-<h2>Enums<a class="headerlink" href="#enums" title="Permalink to this heading">¶</a></h2>
+<h2>Enums<a class="headerlink" href="#enums" title="Link to this heading">¶</a></h2>
 <p>The libvips enums, such as <code class="docutils literal notranslate"><span class="pre">VipsBandFormat</span></code>, appear in pyvips as strings
 like <code class="docutils literal notranslate"><span class="pre">'uchar'</span></code>. They are documented as a set of classes for convenience, see
 <a class="reference internal" href="enums.html#pyvips.enums.Access" title="pyvips.enums.Access"><code class="xref py py-class docutils literal notranslate"><span class="pre">Access</span></code></a>, for example.</p>
 </section>
 <section id="overloads">
-<h2>Overloads<a class="headerlink" href="#overloads" title="Permalink to this heading">¶</a></h2>
+<h2>Overloads<a class="headerlink" href="#overloads" title="Link to this heading">¶</a></h2>
 <p>The wrapper defines the usual set of arithmetic, boolean and relational
 overloads on image. You can mix images, constants and lists of constants
 freely. For example, you can write:</p>
@@ -367,7 +366,7 @@ freely. For example, you can write:</p>
 </div>
 </section>
 <section id="expansions">
-<h2>Expansions<a class="headerlink" href="#expansions" title="Permalink to this heading">¶</a></h2>
+<h2>Expansions<a class="headerlink" href="#expansions" title="Link to this heading">¶</a></h2>
 <p>Some vips operators take an enum to select an action, for example
 <a class="reference internal" href="vimage.html#pyvips.Image.math" title="pyvips.Image.math"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Image.math()</span></code></a> can be used to calculate sine of every pixel
 like this:</p>
@@ -381,13 +380,13 @@ named after the enum value. So you can also write:</p>
 </div>
 </section>
 <section id="convenience-functions">
-<h2>Convenience functions<a class="headerlink" href="#convenience-functions" title="Permalink to this heading">¶</a></h2>
+<h2>Convenience functions<a class="headerlink" href="#convenience-functions" title="Link to this heading">¶</a></h2>
 <p>The wrapper defines a few extra useful utility functions:
 <a class="reference internal" href="vimage.html#pyvips.Image.bandsplit" title="pyvips.Image.bandsplit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">bandsplit()</span></code></a>, <a class="reference internal" href="vimage.html#pyvips.Image.maxpos" title="pyvips.Image.maxpos"><code class="xref py py-meth docutils literal notranslate"><span class="pre">maxpos()</span></code></a>, <a class="reference internal" href="vimage.html#pyvips.Image.minpos" title="pyvips.Image.minpos"><code class="xref py py-meth docutils literal notranslate"><span class="pre">minpos()</span></code></a>,
 <a class="reference internal" href="vimage.html#pyvips.Image.median" title="pyvips.Image.median"><code class="xref py py-meth docutils literal notranslate"><span class="pre">median()</span></code></a>.</p>
 </section>
 <section id="tracking-and-interrupting-computation">
-<h2>Tracking and interrupting computation<a class="headerlink" href="#tracking-and-interrupting-computation" title="Permalink to this heading">¶</a></h2>
+<h2>Tracking and interrupting computation<a class="headerlink" href="#tracking-and-interrupting-computation" title="Link to this heading">¶</a></h2>
 <p>You can attach progress handlers to images to watch the progress of
 computation.</p>
 <p>For example:</p>
@@ -401,24 +400,24 @@ computation.</p>
 </div>
 <p>Handlers are given a <cite>progress</cite> object containing a number of useful fields.
 For example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">eval_handler</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">progress</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;run time so far (secs) = </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">progress</span><span class="o">.</span><span class="n">run</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;estimated time of arrival (secs) = </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">progress</span><span class="o">.</span><span class="n">eta</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;total number of pels to process = </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">progress</span><span class="o">.</span><span class="n">tpels</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;number of pels processed so far = </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">progress</span><span class="o">.</span><span class="n">npels</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;percent complete = </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">progress</span><span class="o">.</span><span class="n">percent</span><span class="p">))</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">eval_handler</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">progress</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;   run = </span><span class="si">{</span><span class="n">progress</span><span class="o">.</span><span class="n">run</span><span class="si">}</span><span class="s1"> (seconds of run time)&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;   eta = </span><span class="si">{</span><span class="n">progress</span><span class="o">.</span><span class="n">eta</span><span class="si">}</span><span class="s1"> (estimated seconds left)&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;   tpels = </span><span class="si">{</span><span class="n">progress</span><span class="o">.</span><span class="n">tpels</span><span class="si">}</span><span class="s1"> (total number of pels)&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;   npels = </span><span class="si">{</span><span class="n">progress</span><span class="o">.</span><span class="n">npels</span><span class="si">}</span><span class="s1"> (number of pels computed so far)&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;   percent = </span><span class="si">{</span><span class="n">progress</span><span class="o">.</span><span class="n">percent</span><span class="si">}</span><span class="s1"> (percent complete)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Use <a class="reference internal" href="vimage.html#pyvips.Image.set_kill" title="pyvips.Image.set_kill"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Image.set_kill()</span></code></a> on the image to stop computation early.</p>
 <p>For example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">eval_handler</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">progress</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">eval_handler</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">progress</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">progress</span><span class="o">.</span><span class="n">percent</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">:</span>
         <span class="n">image</span><span class="o">.</span><span class="n">set_kill</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="custom-sources-and-targets">
-<h2>Custom sources and targets<a class="headerlink" href="#custom-sources-and-targets" title="Permalink to this heading">¶</a></h2>
+<h2>Custom sources and targets<a class="headerlink" href="#custom-sources-and-targets" title="Link to this heading">¶</a></h2>
 <p>You can load and save images to and from <a class="reference internal" href="vsource.html#pyvips.vsource.Source" title="pyvips.vsource.Source"><code class="xref py py-class docutils literal notranslate"><span class="pre">Source</span></code></a> and
 <a class="reference internal" href="vtarget.html#pyvips.vtarget.Target" title="pyvips.vtarget.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a>.</p>
 <p>For example:</p>
@@ -433,7 +432,7 @@ For example:</p>
 <p>For example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">input_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">read_handler</span><span class="p">(</span><span class="n">size</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_handler</span><span class="p">(</span><span class="n">size</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">input_file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
 
 <span class="n">source</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">SourceCustom</span><span class="p">()</span>
@@ -441,7 +440,7 @@ For example:</p>
 
 <span class="n">output_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">write_handler</span><span class="p">(</span><span class="n">chunk</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_handler</span><span class="p">(</span><span class="n">chunk</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">output_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
 
 <span class="n">target</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">TargetCustom</span><span class="p">()</span>
@@ -454,7 +453,7 @@ For example:</p>
 <p>You can also define seek and finish handlers, see the docs.</p>
 </section>
 <section id="automatic-documentation">
-<h2>Automatic documentation<a class="headerlink" href="#automatic-documentation" title="Permalink to this heading">¶</a></h2>
+<h2>Automatic documentation<a class="headerlink" href="#automatic-documentation" title="Link to this heading">¶</a></h2>
 <p>The bulk of these API docs are generated automatically by
 <a class="reference internal" href="voperation.html#pyvips.voperation.Operation.generate_sphinx_all" title="pyvips.voperation.Operation.generate_sphinx_all"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Operation.generate_sphinx_all()</span></code></a>. It examines libvips and writes a
 summary of each operation and the arguments and options that that operation
@@ -463,7 +462,7 @@ expects.</p>
 <p><a class="reference external" href="https://libvips.github.io/libvips/API/current">https://libvips.github.io/libvips/API/current</a></p>
 </section>
 <section id="draw-operations">
-<h2>Draw operations<a class="headerlink" href="#draw-operations" title="Permalink to this heading">¶</a></h2>
+<h2>Draw operations<a class="headerlink" href="#draw-operations" title="Link to this heading">¶</a></h2>
 <p>Paint operations like <a class="reference internal" href="vimage.html#pyvips.Image.draw_circle" title="pyvips.Image.draw_circle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Image.draw_circle()</span></code></a> and
 <a class="reference internal" href="vimage.html#pyvips.Image.draw_line" title="pyvips.Image.draw_line"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Image.draw_line()</span></code></a> modify their input image. This makes them
 hard to use with the rest of libvips: you need to be very careful about

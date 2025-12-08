@@ -1,21 +1,19 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyvips.base &mdash; pyvips 2.2.1 documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>pyvips.base &mdash; pyvips 3.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../../../_static/collapse.js"></script>
+      <script src="../../_static/documentation_options.js?v=dd1205ac"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/collapse.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -28,14 +26,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> pyvips
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pyvips
           </a>
-              <div class="version">
-                2.2
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -73,9 +72,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>pyvips.base</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pyvips.base</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -88,12 +87,14 @@
 <span></span><span class="c1"># basic defs and link to ffi</span>
 
 
-<span class="kn">from</span> <span class="nn">pyvips</span> <span class="kn">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">glib_lib</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="p">,</span> \
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyvips</span><span class="w"> </span><span class="kn">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">glib_lib</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="p">,</span> \
     <span class="n">_to_string</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">,</span> <span class="n">Error</span>
 
 
-<div class="viewcode-block" id="leak_set"><a class="viewcode-back" href="../../base.html#pyvips.base.leak_set">[docs]</a><span class="k">def</span> <span class="nf">leak_set</span><span class="p">(</span><span class="n">leak</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Enable or disable libvips leak checking.</span>
+<div class="viewcode-block" id="leak_set">
+<a class="viewcode-back" href="../../base.html#pyvips.base.leak_set">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">leak_set</span><span class="p">(</span><span class="n">leak</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enable or disable libvips leak checking.</span>
 
 <span class="sd">    With this enabled, libvips will check for object and area leaks on exit.</span>
 <span class="sd">    Enabling this option will make libvips run slightly more slowly.</span>
@@ -102,8 +103,19 @@
     <span class="k">return</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_leak_set</span><span class="p">(</span><span class="n">leak</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="version"><a class="viewcode-back" href="../../base.html#pyvips.base.version">[docs]</a><span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="n">flag</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Get the major, minor or micro version number of the libvips library.</span>
+
+<div class="viewcode-block" id="shutdown">
+<a class="viewcode-back" href="../../base.html#pyvips.base.shutdown">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">shutdown</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Shut libvips down.&quot;&quot;&quot;</span>
+    <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_shutdown</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="version">
+<a class="viewcode-back" href="../../base.html#pyvips.base.version">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">version</span><span class="p">(</span><span class="n">flag</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the major, minor or micro version number of the libvips library.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        flag (int): Pass flag 0 to get the major version number, flag 1 to</span>
@@ -123,8 +135,11 @@
     <span class="k">return</span> <span class="n">value</span></div>
 
 
-<div class="viewcode-block" id="get_suffixes"><a class="viewcode-back" href="../../base.html#pyvips.base.get_suffixes">[docs]</a><span class="k">def</span> <span class="nf">get_suffixes</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Get a list of all the filename suffixes supported by libvips.</span>
+
+<div class="viewcode-block" id="get_suffixes">
+<a class="viewcode-back" href="../../base.html#pyvips.base.get_suffixes">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_suffixes</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get a list of all the filename suffixes supported by libvips.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        [string]</span>
@@ -147,10 +162,13 @@
     <span class="k">return</span> <span class="n">names</span></div>
 
 
+
 <span class="c1"># we need to define this before we import the declarations: they need to know</span>
 <span class="c1"># which bits to make</span>
-<div class="viewcode-block" id="at_least_libvips"><a class="viewcode-back" href="../../base.html#pyvips.base.at_least_libvips">[docs]</a><span class="k">def</span> <span class="nf">at_least_libvips</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Is this at least libvips x.y?&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="at_least_libvips">
+<a class="viewcode-back" href="../../base.html#pyvips.base.at_least_libvips">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">at_least_libvips</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Is this at least libvips x.y?&quot;&quot;&quot;</span>
 
     <span class="n">major</span> <span class="o">=</span> <span class="n">version</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">minor</span> <span class="o">=</span> <span class="n">version</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -158,16 +176,11 @@
     <span class="k">return</span> <span class="n">major</span> <span class="o">&gt;</span> <span class="n">x</span> <span class="ow">or</span> <span class="p">(</span><span class="n">major</span> <span class="o">==</span> <span class="n">x</span> <span class="ow">and</span> <span class="n">minor</span> <span class="o">&gt;=</span> <span class="n">y</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">path_filename7</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_path_filename7</span><span class="p">(</span><span class="n">_to_bytes</span><span class="p">(</span><span class="n">filename</span><span class="p">)))</span>
 
-
-<span class="k">def</span> <span class="nf">path_mode7</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_path_mode7</span><span class="p">(</span><span class="n">_to_bytes</span><span class="p">(</span><span class="n">filename</span><span class="p">)))</span>
-
-
-<div class="viewcode-block" id="type_find"><a class="viewcode-back" href="../../base.html#pyvips.base.type_find">[docs]</a><span class="k">def</span> <span class="nf">type_find</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="n">nickname</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Get the GType for a name.</span>
+<div class="viewcode-block" id="type_find">
+<a class="viewcode-back" href="../../base.html#pyvips.base.type_find">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">type_find</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="n">nickname</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the GType for a name.</span>
 
 <span class="sd">    Looks up the GType for a nickname. Types below basename in the type</span>
 <span class="sd">    hierarchy are searched.</span>
@@ -176,44 +189,63 @@
     <span class="k">return</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_type_find</span><span class="p">(</span><span class="n">_to_bytes</span><span class="p">(</span><span class="n">basename</span><span class="p">),</span> <span class="n">_to_bytes</span><span class="p">(</span><span class="n">nickname</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="type_name"><a class="viewcode-back" href="../../base.html#pyvips.base.type_name">[docs]</a><span class="k">def</span> <span class="nf">type_name</span><span class="p">(</span><span class="n">gtype</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Return the name for a GType.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="type_name">
+<a class="viewcode-back" href="../../base.html#pyvips.base.type_name">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">type_name</span><span class="p">(</span><span class="n">gtype</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the name for a GType.&quot;&quot;&quot;</span>
 
     <span class="k">return</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_type_name</span><span class="p">(</span><span class="n">gtype</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="nickname_find"><a class="viewcode-back" href="../../base.html#pyvips.base.nickname_find">[docs]</a><span class="k">def</span> <span class="nf">nickname_find</span><span class="p">(</span><span class="n">gtype</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Return the nickname for a GType.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="nickname_find">
+<a class="viewcode-back" href="../../base.html#pyvips.base.nickname_find">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">nickname_find</span><span class="p">(</span><span class="n">gtype</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the nickname for a GType.&quot;&quot;&quot;</span>
 
     <span class="k">return</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_nickname_find</span><span class="p">(</span><span class="n">gtype</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="type_from_name"><a class="viewcode-back" href="../../base.html#pyvips.base.type_from_name">[docs]</a><span class="k">def</span> <span class="nf">type_from_name</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Return the GType for a name.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="type_from_name">
+<a class="viewcode-back" href="../../base.html#pyvips.base.type_from_name">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">type_from_name</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the GType for a name.&quot;&quot;&quot;</span>
 
     <span class="k">return</span> <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_type_from_name</span><span class="p">(</span><span class="n">_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="type_map"><a class="viewcode-back" href="../../base.html#pyvips.base.type_map">[docs]</a><span class="k">def</span> <span class="nf">type_map</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Map fn over all child types of gtype.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="type_map">
+<a class="viewcode-back" href="../../base.html#pyvips.base.type_map">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">type_map</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Map fn over all child types of gtype.&quot;&quot;&quot;</span>
 
     <span class="n">cb</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="s1">&#39;VipsTypeMap2Fn&#39;</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_type_map</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">cb</span><span class="p">,</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">,</span> <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="values_for_enum"><a class="viewcode-back" href="../../base.html#pyvips.base.values_for_enum">[docs]</a><span class="k">def</span> <span class="nf">values_for_enum</span><span class="p">(</span><span class="n">gtype</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Get all values for a enum (gtype).&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="values_for_enum">
+<a class="viewcode-back" href="../../base.html#pyvips.base.values_for_enum">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">values_for_enum</span><span class="p">(</span><span class="n">gtype</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Deprecated.&quot;&quot;&quot;</span>
 
     <span class="n">g_type_class</span> <span class="o">=</span> <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_type_class_ref</span><span class="p">(</span><span class="n">gtype</span><span class="p">)</span>
     <span class="n">g_enum_class</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GEnumClass *&#39;</span><span class="p">,</span> <span class="n">g_type_class</span><span class="p">)</span>
 
-    <span class="c1"># -1 since we always have a &quot;last&quot; member.</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">_to_string</span><span class="p">(</span><span class="n">g_enum_class</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value_nick</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">g_enum_class</span><span class="o">.</span><span class="n">n_values</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span></div>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">_to_string</span><span class="p">(</span><span class="n">g_enum_class</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value_nick</span><span class="p">)</span>
+              <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">g_enum_class</span><span class="o">.</span><span class="n">n_values</span><span class="p">)]</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
 
 
-<div class="viewcode-block" id="values_for_flag"><a class="viewcode-back" href="../../base.html#pyvips.base.values_for_flag">[docs]</a><span class="k">def</span> <span class="nf">values_for_flag</span><span class="p">(</span><span class="n">gtype</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Get all values for a flag (gtype).&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="values_for_flag">
+<a class="viewcode-back" href="../../base.html#pyvips.base.values_for_flag">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">values_for_flag</span><span class="p">(</span><span class="n">gtype</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Deprecated.&quot;&quot;&quot;</span>
 
     <span class="n">g_type_class</span> <span class="o">=</span> <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_type_class_ref</span><span class="p">(</span><span class="n">gtype</span><span class="p">)</span>
     <span class="n">g_flags_class</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GFlagsClass *&#39;</span><span class="p">,</span> <span class="n">g_type_class</span><span class="p">)</span>
@@ -222,12 +254,42 @@
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">g_flags_class</span><span class="o">.</span><span class="n">n_values</span><span class="p">)]</span></div>
 
 
+
+<div class="viewcode-block" id="enum_dict">
+<a class="viewcode-back" href="../../base.html#pyvips.base.enum_dict">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">enum_dict</span><span class="p">(</span><span class="n">gtype</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get name -&gt; value dict for a enum (gtype).&quot;&quot;&quot;</span>
+
+    <span class="n">g_type_class</span> <span class="o">=</span> <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_type_class_ref</span><span class="p">(</span><span class="n">gtype</span><span class="p">)</span>
+    <span class="n">g_enum_class</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GEnumClass *&#39;</span><span class="p">,</span> <span class="n">g_type_class</span><span class="p">)</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="n">_to_string</span><span class="p">(</span><span class="n">g_enum_class</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value_nick</span><span class="p">):</span>
+              <span class="n">g_enum_class</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+              <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">g_enum_class</span><span class="o">.</span><span class="n">n_values</span><span class="p">)}</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+
+<div class="viewcode-block" id="flags_dict">
+<a class="viewcode-back" href="../../base.html#pyvips.base.flags_dict">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">flags_dict</span><span class="p">(</span><span class="n">gtype</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get name -&gt; value dict for a flags (gtype).&quot;&quot;&quot;</span>
+
+    <span class="n">g_type_class</span> <span class="o">=</span> <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_type_class_ref</span><span class="p">(</span><span class="n">gtype</span><span class="p">)</span>
+    <span class="n">g_flags_class</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;GFlagsClass *&#39;</span><span class="p">,</span> <span class="n">g_type_class</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="n">_to_string</span><span class="p">(</span><span class="n">g_flags_class</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value_nick</span><span class="p">):</span>
+            <span class="n">g_flags_class</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">g_flags_class</span><span class="o">.</span><span class="n">n_values</span><span class="p">)}</span></div>
+
+
+
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;leak_set&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;shutdown&#39;</span><span class="p">,</span>
     <span class="s1">&#39;version&#39;</span><span class="p">,</span>
     <span class="s1">&#39;at_least_libvips&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;path_filename7&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;path_mode7&#39;</span><span class="p">,</span>
     <span class="s1">&#39;type_find&#39;</span><span class="p">,</span>
     <span class="s1">&#39;nickname_find&#39;</span><span class="p">,</span>
     <span class="s1">&#39;get_suffixes&#39;</span><span class="p">,</span>
@@ -235,7 +297,9 @@
     <span class="s1">&#39;type_map&#39;</span><span class="p">,</span>
     <span class="s1">&#39;type_from_name&#39;</span><span class="p">,</span>
     <span class="s1">&#39;values_for_enum&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;values_for_flag&#39;</span>
+    <span class="s1">&#39;values_for_flag&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;enum_dict&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;flags_dict&#39;</span>
 <span class="p">]</span>
 </pre></div>
 

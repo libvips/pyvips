@@ -1,21 +1,19 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyvips.error &mdash; pyvips 2.2.1 documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>pyvips.error &mdash; pyvips 3.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../../../_static/collapse.js"></script>
+      <script src="../../_static/documentation_options.js?v=dd1205ac"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/collapse.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -28,14 +26,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> pyvips
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pyvips
           </a>
-              <div class="version">
-                2.2
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -73,9 +72,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>pyvips.error</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pyvips.error</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -87,41 +86,30 @@
   <h1>Source code for pyvips.error</h1><div class="highlight"><pre>
 <span></span><span class="c1"># errors from libvips</span>
 
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 
-<span class="kn">from</span> <span class="nn">pyvips</span> <span class="kn">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">glib_lib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyvips</span><span class="w"> </span><span class="kn">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">glib_lib</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
-<span class="n">_is_PY3</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span>
 
-<span class="k">if</span> <span class="n">_is_PY3</span><span class="p">:</span>
-    <span class="c1"># pathlib is not part of Python 2 stdlib</span>
-    <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-    <span class="n">text_type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Path</span>
-    <span class="n">byte_type</span> <span class="o">=</span> <span class="nb">bytes</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">text_type</span> <span class="o">=</span> <span class="n">unicode</span>
-    <span class="n">byte_type</span> <span class="o">=</span> <span class="nb">str</span>
-
-
-<span class="k">def</span> <span class="nf">_to_bytes</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Convert to a byte string.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_to_bytes</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert to a byte string.</span>
 
 <span class="sd">    Convert a Python unicode string or a pathlib.Path to a utf-8-encoded</span>
 <span class="sd">    byte string. You must call this on strings you pass to libvips.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">text_type</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
         <span class="c1"># n.b. str also converts pathlib.Path objects</span>
         <span class="n">x</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">x</span>
 
 
-<span class="k">def</span> <span class="nf">_to_string</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Convert to a unicode string.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_to_string</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert to a unicode string.</span>
 
 <span class="sd">    If x is a byte string, assume it is utf-8 and decode to a Python unicode</span>
 <span class="sd">    string. You must call this on text strings you get back from libvips.</span>
@@ -131,14 +119,14 @@
         <span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;NULL&#39;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">string</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">byte_type</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">x</span>
 
 
-<span class="k">def</span> <span class="nf">_to_string_copy</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Convert to a unicode string, and auto-free.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_to_string_copy</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert to a unicode string, and auto-free.</span>
 
 <span class="sd">    As _to_string(), but also tag x as a pointer to a memory area that must</span>
 <span class="sd">    be freed with g_free().</span>
@@ -147,8 +135,10 @@
     <span class="k">return</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">ffi</span><span class="o">.</span><span class="n">gc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">glib_lib</span><span class="o">.</span><span class="n">g_free</span><span class="p">))</span>
 
 
-<div class="viewcode-block" id="Error"><a class="viewcode-back" href="../../error.html#pyvips.error.Error">[docs]</a><span class="k">class</span> <span class="nc">Error</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;An error from vips.</span>
+<div class="viewcode-block" id="Error">
+<a class="viewcode-back" href="../../error.html#pyvips.error.Error">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Error</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An error from vips.</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        message (str): a high-level description of the error</span>
@@ -156,7 +146,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
         <span class="k">if</span> <span class="n">detail</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">detail</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
             <span class="n">detail</span> <span class="o">=</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_error_buffer</span><span class="p">())</span>
@@ -165,12 +155,16 @@
 
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Error </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">detail</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{0}</span><span class="se">\n</span><span class="s1">  </span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">detail</span><span class="p">)</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="se">\n</span><span class="s1">  </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">detail</span><span class="si">}</span><span class="s1">&#39;</span></div>
+
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s1">&#39;_to_bytes&#39;</span><span class="p">,</span> <span class="s1">&#39;_to_string&#39;</span><span class="p">,</span> <span class="s1">&#39;_to_string_copy&#39;</span><span class="p">,</span> <span class="s1">&#39;Error&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;_to_bytes&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;_to_string&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;_to_string_copy&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Error&#39;</span>
 <span class="p">]</span>
 </pre></div>
 

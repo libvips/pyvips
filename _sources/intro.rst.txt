@@ -109,9 +109,9 @@ Use :meth:`.get_fields` to get a list of all the field names you can use with
 libvips caches and shares images between different parts of your program. This
 means that you can't modify an image unless you are certain that you have
 the only reference to it. You can make a private copy of an image with
-``copy``, for example:
+``copy``, for example::
 
-        new_image = image.copy(xres=12, yres=13)
+    new_image = image.copy(xres=12, yres=13)
 
 Now ``new_image`` is a private clone of ``image`` with ``xres`` and ``yres``
 changed.
@@ -333,11 +333,11 @@ Handlers are given a `progress` object containing a number of useful fields.
 For example::
 
    def eval_handler(image, progress):
-       print('run time so far (secs) = {}'.format(progress.run))
-       print('estimated time of arrival (secs) = {}'.format(progress.eta))
-       print('total number of pels to process = {}'.format(progress.tpels))
-       print('number of pels processed so far = {}'.format(progress.npels))
-       print('percent complete = {}'.format(progress.percent))
+       print(f'   run = {progress.run} (seconds of run time)')
+       print(f'   eta = {progress.eta} (estimated seconds left)')
+       print(f'   tpels = {progress.tpels} (total number of pels)')
+       print(f'   npels = {progress.npels} (number of pels computed so far)')
+       print(f'   percent = {progress.percent} (percent complete)')
 
 Use :meth:`.Image.set_kill` on the image to stop computation early. 
 

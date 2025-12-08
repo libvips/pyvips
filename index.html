@@ -1,22 +1,20 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyvips – Image processing with libvips &mdash; pyvips 2.2.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>pyvips – Image processing with libvips &mdash; pyvips 3.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/collapse.js"></script>
+      <script src="_static/documentation_options.js?v=dd1205ac"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/collapse.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -30,14 +28,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="#" class="icon icon-home"> pyvips
+
+          
+          
+          <a href="#" class="icon icon-home">
+            pyvips
           </a>
-              <div class="version">
-                2.2
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -75,8 +74,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
-      <li><cite>pyvips</cite> – Image processing with libvips</li>
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><cite>pyvips</cite> – Image processing with libvips</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com/libvips/pyvips/blob/master/doc/index.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -87,15 +86,15 @@
            <div itemprop="articleBody">
              
   <section id="module-pyvips">
-<span id="pyvips-image-processing-with-libvips"></span><h1><cite>pyvips</cite> – Image processing with libvips<a class="headerlink" href="#module-pyvips" title="Permalink to this heading">¶</a></h1>
+<span id="pyvips-image-processing-with-libvips"></span><h1><cite>pyvips</cite> – Image processing with libvips<a class="headerlink" href="#module-pyvips" title="Link to this heading">¶</a></h1>
 <section id="contents">
-<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this heading">¶</a></h2>
+<h2>Contents<a class="headerlink" href="#contents" title="Link to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="README.html">README</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="README.html#how-it-works">How it works</a></li>
-<li class="toctree-l2"><a class="reference internal" href="README.html#conda-install">conda Install</a></li>
-<li class="toctree-l2"><a class="reference internal" href="README.html#non-conda-install">Non-conda install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#binary-installation">Binary installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#local-installation">Local installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="README.html#example">Example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="README.html#notes">Notes</a></li>
 </ul>
@@ -123,24 +122,132 @@
 <li class="toctree-l2"><a class="reference internal" href="vimage.html#autogenerated-methods">Autogenerated methods</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="base.html">Base definitions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="error.html"><code class="docutils literal notranslate"><span class="pre">Error</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="enums.html">The libvips enums</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vconnection.html"><code class="docutils literal notranslate"><span class="pre">Connection</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="vsource.html"><code class="docutils literal notranslate"><span class="pre">Source</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="vtarget.html"><code class="docutils literal notranslate"><span class="pre">Target</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="vsourcecustom.html"><code class="docutils literal notranslate"><span class="pre">SourceCustom</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="vtargetcustom.html"><code class="docutils literal notranslate"><span class="pre">TargetCustom</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="vinterpolate.html"><code class="docutils literal notranslate"><span class="pre">Interpolate</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="gvalue.html"><code class="docutils literal notranslate"><span class="pre">GValue</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="gobject.html"><code class="docutils literal notranslate"><span class="pre">GObject</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="voperation.html"><code class="docutils literal notranslate"><span class="pre">Operation</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="vobject.html"><code class="docutils literal notranslate"><span class="pre">VipsObject</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">Base definitions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="base.html#pyvips.base.leak_set"><code class="docutils literal notranslate"><span class="pre">leak_set()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="base.html#pyvips.base.shutdown"><code class="docutils literal notranslate"><span class="pre">shutdown()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="base.html#pyvips.base.version"><code class="docutils literal notranslate"><span class="pre">version()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="base.html#pyvips.base.at_least_libvips"><code class="docutils literal notranslate"><span class="pre">at_least_libvips()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="base.html#pyvips.base.type_find"><code class="docutils literal notranslate"><span class="pre">type_find()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="base.html#pyvips.base.nickname_find"><code class="docutils literal notranslate"><span class="pre">nickname_find()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="base.html#pyvips.base.get_suffixes"><code class="docutils literal notranslate"><span class="pre">get_suffixes()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="base.html#pyvips.base.type_name"><code class="docutils literal notranslate"><span class="pre">type_name()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="base.html#pyvips.base.type_map"><code class="docutils literal notranslate"><span class="pre">type_map()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="base.html#pyvips.base.type_from_name"><code class="docutils literal notranslate"><span class="pre">type_from_name()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="base.html#pyvips.base.values_for_enum"><code class="docutils literal notranslate"><span class="pre">values_for_enum()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="base.html#pyvips.base.values_for_flag"><code class="docutils literal notranslate"><span class="pre">values_for_flag()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="base.html#pyvips.base.enum_dict"><code class="docutils literal notranslate"><span class="pre">enum_dict()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="base.html#pyvips.base.flags_dict"><code class="docutils literal notranslate"><span class="pre">flags_dict()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="error.html"><code class="docutils literal notranslate"><span class="pre">Error</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="error.html#pyvips.error.Error"><code class="docutils literal notranslate"><span class="pre">Error</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="enums.html">The libvips enums</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.BandFormat"><code class="docutils literal notranslate"><span class="pre">BandFormat</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.BlendMode"><code class="docutils literal notranslate"><span class="pre">BlendMode</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.Coding"><code class="docutils literal notranslate"><span class="pre">Coding</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.Interpretation"><code class="docutils literal notranslate"><span class="pre">Interpretation</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.OperationRelational"><code class="docutils literal notranslate"><span class="pre">OperationRelational</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.OperationBoolean"><code class="docutils literal notranslate"><span class="pre">OperationBoolean</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.OperationMath2"><code class="docutils literal notranslate"><span class="pre">OperationMath2</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.OperationComplex2"><code class="docutils literal notranslate"><span class="pre">OperationComplex2</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.OperationMath"><code class="docutils literal notranslate"><span class="pre">OperationMath</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.OperationRound"><code class="docutils literal notranslate"><span class="pre">OperationRound</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.OperationComplex"><code class="docutils literal notranslate"><span class="pre">OperationComplex</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.OperationComplexget"><code class="docutils literal notranslate"><span class="pre">OperationComplexget</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.Combine"><code class="docutils literal notranslate"><span class="pre">Combine</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.Access"><code class="docutils literal notranslate"><span class="pre">Access</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.Extend"><code class="docutils literal notranslate"><span class="pre">Extend</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.CompassDirection"><code class="docutils literal notranslate"><span class="pre">CompassDirection</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.Direction"><code class="docutils literal notranslate"><span class="pre">Direction</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.Align"><code class="docutils literal notranslate"><span class="pre">Align</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.Interesting"><code class="docutils literal notranslate"><span class="pre">Interesting</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.Angle"><code class="docutils literal notranslate"><span class="pre">Angle</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.Angle45"><code class="docutils literal notranslate"><span class="pre">Angle45</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.Precision"><code class="docutils literal notranslate"><span class="pre">Precision</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.TextWrap"><code class="docutils literal notranslate"><span class="pre">TextWrap</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.SdfShape"><code class="docutils literal notranslate"><span class="pre">SdfShape</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.FailOn"><code class="docutils literal notranslate"><span class="pre">FailOn</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.ForeignPdfPageBox"><code class="docutils literal notranslate"><span class="pre">ForeignPdfPageBox</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.ForeignPpmFormat"><code class="docutils literal notranslate"><span class="pre">ForeignPpmFormat</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.ForeignSubsample"><code class="docutils literal notranslate"><span class="pre">ForeignSubsample</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.ForeignDzLayout"><code class="docutils literal notranslate"><span class="pre">ForeignDzLayout</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.ForeignDzDepth"><code class="docutils literal notranslate"><span class="pre">ForeignDzDepth</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.ForeignDzContainer"><code class="docutils literal notranslate"><span class="pre">ForeignDzContainer</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.RegionShrink"><code class="docutils literal notranslate"><span class="pre">RegionShrink</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.ForeignWebpPreset"><code class="docutils literal notranslate"><span class="pre">ForeignWebpPreset</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.ForeignTiffCompression"><code class="docutils literal notranslate"><span class="pre">ForeignTiffCompression</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.ForeignTiffPredictor"><code class="docutils literal notranslate"><span class="pre">ForeignTiffPredictor</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.ForeignTiffResunit"><code class="docutils literal notranslate"><span class="pre">ForeignTiffResunit</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.ForeignHeifCompression"><code class="docutils literal notranslate"><span class="pre">ForeignHeifCompression</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.ForeignHeifEncoder"><code class="docutils literal notranslate"><span class="pre">ForeignHeifEncoder</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.Size"><code class="docutils literal notranslate"><span class="pre">Size</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.Intent"><code class="docutils literal notranslate"><span class="pre">Intent</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.Kernel"><code class="docutils literal notranslate"><span class="pre">Kernel</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.PCS"><code class="docutils literal notranslate"><span class="pre">PCS</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.OperationMorphology"><code class="docutils literal notranslate"><span class="pre">OperationMorphology</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.CombineMode"><code class="docutils literal notranslate"><span class="pre">CombineMode</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.ForeignKeep"><code class="docutils literal notranslate"><span class="pre">ForeignKeep</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#pyvips.enums.ForeignPngFilter"><code class="docutils literal notranslate"><span class="pre">ForeignPngFilter</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vconnection.html"><code class="docutils literal notranslate"><span class="pre">Connection</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vconnection.html#pyvips.vconnection.Connection"><code class="docutils literal notranslate"><span class="pre">Connection</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vsource.html"><code class="docutils literal notranslate"><span class="pre">Source</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vsource.html#pyvips.vsource.Source"><code class="docutils literal notranslate"><span class="pre">Source</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vtarget.html"><code class="docutils literal notranslate"><span class="pre">Target</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vtarget.html#pyvips.vtarget.Target"><code class="docutils literal notranslate"><span class="pre">Target</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vsourcecustom.html"><code class="docutils literal notranslate"><span class="pre">SourceCustom</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vsourcecustom.html#pyvips.vsourcecustom.SourceCustom"><code class="docutils literal notranslate"><span class="pre">SourceCustom</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vtargetcustom.html"><code class="docutils literal notranslate"><span class="pre">TargetCustom</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vtargetcustom.html#pyvips.vtargetcustom.TargetCustom"><code class="docutils literal notranslate"><span class="pre">TargetCustom</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vinterpolate.html"><code class="docutils literal notranslate"><span class="pre">Interpolate</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vinterpolate.html#pyvips.vinterpolate.Interpolate"><code class="docutils literal notranslate"><span class="pre">Interpolate</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gvalue.html"><code class="docutils literal notranslate"><span class="pre">GValue</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gvalue.html#pyvips.gvalue.GValue"><code class="docutils literal notranslate"><span class="pre">GValue</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gobject.html"><code class="docutils literal notranslate"><span class="pre">GObject</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gobject.html#pyvips.gobject.GObject"><code class="docutils literal notranslate"><span class="pre">GObject</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="voperation.html"><code class="docutils literal notranslate"><span class="pre">Operation</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="voperation.html#pyvips.voperation.Introspect"><code class="docutils literal notranslate"><span class="pre">Introspect</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="voperation.html#pyvips.voperation.Operation"><code class="docutils literal notranslate"><span class="pre">Operation</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="voperation.html#pyvips.voperation.cache_set_max"><code class="docutils literal notranslate"><span class="pre">cache_set_max()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="voperation.html#pyvips.voperation.cache_set_max_mem"><code class="docutils literal notranslate"><span class="pre">cache_set_max_mem()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="voperation.html#pyvips.voperation.cache_set_max_files"><code class="docutils literal notranslate"><span class="pre">cache_set_max_files()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="voperation.html#pyvips.voperation.cache_set_trace"><code class="docutils literal notranslate"><span class="pre">cache_set_trace()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="voperation.html#pyvips.voperation.cache_get_max"><code class="docutils literal notranslate"><span class="pre">cache_get_max()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="voperation.html#pyvips.voperation.cache_get_max_mem"><code class="docutils literal notranslate"><span class="pre">cache_get_max_mem()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="voperation.html#pyvips.voperation.cache_get_max_files"><code class="docutils literal notranslate"><span class="pre">cache_get_max_files()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="voperation.html#pyvips.voperation.cache_get_size"><code class="docutils literal notranslate"><span class="pre">cache_get_size()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="voperation.html#pyvips.voperation.block_untrusted_set"><code class="docutils literal notranslate"><span class="pre">block_untrusted_set()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="voperation.html#pyvips.voperation.operation_block_set"><code class="docutils literal notranslate"><span class="pre">operation_block_set()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vobject.html"><code class="docutils literal notranslate"><span class="pre">VipsObject</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vobject.html#pyvips.vobject.VipsObject"><code class="docutils literal notranslate"><span class="pre">VipsObject</span></code></a></li>
+</ul>
+</li>
 </ul>
 </div>
 </section>
 <section id="indicies">
-<h2>Indicies<a class="headerlink" href="#indicies" title="Permalink to this heading">¶</a></h2>
+<h2>Indicies<a class="headerlink" href="#indicies" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>

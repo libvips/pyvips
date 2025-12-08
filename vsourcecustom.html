@@ -1,22 +1,20 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SourceCustom &mdash; pyvips 2.2.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>SourceCustom &mdash; pyvips 3.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/collapse.js"></script>
+      <script src="_static/documentation_options.js?v=dd1205ac"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/collapse.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -31,14 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> pyvips
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyvips
           </a>
-              <div class="version">
-                2.2
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -54,7 +53,14 @@
 <li class="toctree-l1"><a class="reference internal" href="vconnection.html"><code class="docutils literal notranslate"><span class="pre">Connection</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="vsource.html"><code class="docutils literal notranslate"><span class="pre">Source</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="vtarget.html"><code class="docutils literal notranslate"><span class="pre">Target</span></code></a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">SourceCustom</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">SourceCustom</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pyvips.vsourcecustom.SourceCustom"><code class="docutils literal notranslate"><span class="pre">SourceCustom</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pyvips.vsourcecustom.SourceCustom.on_read"><code class="docutils literal notranslate"><span class="pre">SourceCustom.on_read()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyvips.vsourcecustom.SourceCustom.on_seek"><code class="docutils literal notranslate"><span class="pre">SourceCustom.on_seek()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="vtargetcustom.html"><code class="docutils literal notranslate"><span class="pre">TargetCustom</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="vinterpolate.html"><code class="docutils literal notranslate"><span class="pre">Interpolate</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="gvalue.html"><code class="docutils literal notranslate"><span class="pre">GValue</span></code></a></li>
@@ -76,8 +82,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><code class="docutils literal notranslate"><span class="pre">SourceCustom</span></code></li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><code class="docutils literal notranslate"><span class="pre">SourceCustom</span></code></li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com/libvips/pyvips/blob/master/doc/vsourcecustom.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -88,17 +94,17 @@
            <div itemprop="articleBody">
              
   <section id="module-pyvips.vsourcecustom">
-<span id="sourcecustom"></span><h1><code class="docutils literal notranslate"><span class="pre">SourceCustom</span></code><a class="headerlink" href="#module-pyvips.vsourcecustom" title="Permalink to this heading">¶</a></h1>
+<span id="sourcecustom"></span><h1><code class="docutils literal notranslate"><span class="pre">SourceCustom</span></code><a class="headerlink" href="#module-pyvips.vsourcecustom" title="Link to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyvips.vsourcecustom.SourceCustom">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyvips.vsourcecustom.</span></span><span class="sig-name descname"><span class="pre">SourceCustom</span></span><a class="reference internal" href="_modules/pyvips/vsourcecustom.html#SourceCustom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.vsourcecustom.SourceCustom" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyvips.vsourcecustom.</span></span><span class="sig-name descname"><span class="pre">SourceCustom</span></span><a class="reference internal" href="_modules/pyvips/vsourcecustom.html#SourceCustom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.vsourcecustom.SourceCustom" title="Link to this definition">¶</a></dt>
 <dd><p>Custom sources allow reading data from otherwise unsupported sources.
 Requires libvips <cite>&gt;= 8.9.0</cite>.</p>
 <p>To use, create a SourceCustom object, then provide callbacks to
 <a class="reference internal" href="#pyvips.vsourcecustom.SourceCustom.on_read" title="pyvips.vsourcecustom.SourceCustom.on_read"><code class="xref py py-meth docutils literal notranslate"><span class="pre">on_read()</span></code></a> and <a class="reference internal" href="#pyvips.vsourcecustom.SourceCustom.on_seek" title="pyvips.vsourcecustom.SourceCustom.on_seek"><code class="xref py py-meth docutils literal notranslate"><span class="pre">on_seek()</span></code></a>.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyvips.vsourcecustom.SourceCustom.on_read">
-<span class="sig-name descname"><span class="pre">on_read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vsourcecustom.html#SourceCustom.on_read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.vsourcecustom.SourceCustom.on_read" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">on_read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vsourcecustom.html#SourceCustom.on_read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.vsourcecustom.SourceCustom.on_read" title="Link to this definition">¶</a></dt>
 <dd><p>Attach a read handler.</p>
 <p>The interface is exactly as io.read(). The handler is given a number
 of bytes to fetch, and should return a bytes-like object containing up
@@ -108,7 +114,7 @@ return None.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyvips.vsourcecustom.SourceCustom.on_seek">
-<span class="sig-name descname"><span class="pre">on_seek</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vsourcecustom.html#SourceCustom.on_seek"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.vsourcecustom.SourceCustom.on_seek" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">on_seek</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vsourcecustom.html#SourceCustom.on_seek"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.vsourcecustom.SourceCustom.on_seek" title="Link to this definition">¶</a></dt>
 <dd><p>Attach a seek handler.</p>
 <p>The interface is the same as io.seek(), so the handler is passed
 parameters for offset and whence with the same meanings.</p>

@@ -1,22 +1,20 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Connection &mdash; pyvips 2.2.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>Connection &mdash; pyvips 3.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/collapse.js"></script>
+      <script src="_static/documentation_options.js?v=dd1205ac"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/collapse.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -31,14 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> pyvips
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyvips
           </a>
-              <div class="version">
-                2.2
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -51,7 +50,14 @@
 <li class="toctree-l1"><a class="reference internal" href="base.html">Base definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="error.html"><code class="docutils literal notranslate"><span class="pre">Error</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="enums.html">The libvips enums</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">Connection</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">Connection</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pyvips.vconnection.Connection"><code class="docutils literal notranslate"><span class="pre">Connection</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pyvips.vconnection.Connection.filename"><code class="docutils literal notranslate"><span class="pre">Connection.filename()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyvips.vconnection.Connection.nick"><code class="docutils literal notranslate"><span class="pre">Connection.nick()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="vsource.html"><code class="docutils literal notranslate"><span class="pre">Source</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="vtarget.html"><code class="docutils literal notranslate"><span class="pre">Target</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="vsourcecustom.html"><code class="docutils literal notranslate"><span class="pre">SourceCustom</span></code></a></li>
@@ -76,8 +82,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><code class="docutils literal notranslate"><span class="pre">Connection</span></code></li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><code class="docutils literal notranslate"><span class="pre">Connection</span></code></li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com/libvips/pyvips/blob/master/doc/vconnection.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -88,21 +94,21 @@
            <div itemprop="articleBody">
              
   <section id="module-pyvips.vconnection">
-<span id="connection"></span><h1><code class="docutils literal notranslate"><span class="pre">Connection</span></code><a class="headerlink" href="#module-pyvips.vconnection" title="Permalink to this heading">¶</a></h1>
+<span id="connection"></span><h1><code class="docutils literal notranslate"><span class="pre">Connection</span></code><a class="headerlink" href="#module-pyvips.vconnection" title="Link to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyvips.vconnection.Connection">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyvips.vconnection.</span></span><span class="sig-name descname"><span class="pre">Connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pointer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vconnection.html#Connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.vconnection.Connection" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyvips.vconnection.</span></span><span class="sig-name descname"><span class="pre">Connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pointer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vconnection.html#Connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.vconnection.Connection" title="Link to this definition">¶</a></dt>
 <dd><p>The abstract base Connection class.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyvips.vconnection.Connection.filename">
-<span class="sig-name descname"><span class="pre">filename</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vconnection.html#Connection.filename"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.vconnection.Connection.filename" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">filename</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vconnection.html#Connection.filename"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.vconnection.Connection.filename" title="Link to this definition">¶</a></dt>
 <dd><p>Get the filename associated with a connection. Return None if there
 is no associated file.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyvips.vconnection.Connection.nick">
-<span class="sig-name descname"><span class="pre">nick</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vconnection.html#Connection.nick"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.vconnection.Connection.nick" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">nick</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/vconnection.html#Connection.nick"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.vconnection.Connection.nick" title="Link to this definition">¶</a></dt>
 <dd><p>Make a human-readable name for a connection suitable for error
 messages.</p>
 </dd></dl>

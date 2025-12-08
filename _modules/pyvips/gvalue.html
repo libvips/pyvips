@@ -1,21 +1,19 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyvips.gvalue &mdash; pyvips 2.2.1 documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>pyvips.gvalue &mdash; pyvips 3.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../../../_static/collapse.js"></script>
+      <script src="../../_static/documentation_options.js?v=dd1205ac"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/collapse.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -28,14 +26,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> pyvips
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pyvips
           </a>
-              <div class="version">
-                2.2
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -73,9 +72,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>pyvips.gvalue</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pyvips.gvalue</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -85,26 +84,22 @@
            <div itemprop="articleBody">
              
   <h1>Source code for pyvips.gvalue</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">unicode_literals</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numbers</span>
 
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">numbers</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-
-<span class="kn">import</span> <span class="nn">pyvips</span>
-<span class="kn">from</span> <span class="nn">pyvips</span> <span class="kn">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="p">,</span> \
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyvips</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyvips</span><span class="w"> </span><span class="kn">import</span> <span class="n">ffi</span><span class="p">,</span> <span class="n">vips_lib</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="p">,</span> \
     <span class="n">glib_lib</span><span class="p">,</span> <span class="n">Error</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">,</span> <span class="n">_to_string</span><span class="p">,</span> <span class="n">type_name</span><span class="p">,</span> <span class="n">type_from_name</span><span class="p">,</span> \
     <span class="n">at_least_libvips</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
-<span class="n">_is_PY2</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">==</span> <span class="mi">2</span>
 
+<div class="viewcode-block" id="GValue">
+<a class="viewcode-back" href="../../gvalue.html#pyvips.gvalue.GValue">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">GValue</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-<div class="viewcode-block" id="GValue"><a class="viewcode-back" href="../../gvalue.html#pyvips.gvalue.GValue">[docs]</a><span class="k">class</span> <span class="nc">GValue</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-
-    <span class="sd">&quot;&quot;&quot;Wrap GValue in a Python class.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrap GValue in a Python class.</span>
 
 <span class="sd">    This class wraps :class:`.GValue` in a convenient interface. You can use</span>
 <span class="sd">    instances of this class to get and set :class:`.GObject` properties.</span>
@@ -163,9 +158,11 @@
         <span class="n">target_type</span><span class="p">:</span> <span class="s1">&#39;Target&#39;</span><span class="p">,</span>
     <span class="p">}</span>
 
-<div class="viewcode-block" id="GValue.gtype_to_python"><a class="viewcode-back" href="../../gvalue.html#pyvips.gvalue.GValue.gtype_to_python">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">gtype_to_python</span><span class="p">(</span><span class="n">gtype</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Map a gtype to the name of the Python type we use to represent it.</span>
+<div class="viewcode-block" id="GValue.gtype_to_python">
+<a class="viewcode-back" href="../../gvalue.html#pyvips.gvalue.GValue.gtype_to_python">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gtype_to_python</span><span class="p">(</span><span class="n">gtype</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Map a gtype to the name of the Python type we use to represent it.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -177,20 +174,23 @@
             <span class="n">name</span> <span class="o">=</span> <span class="n">type_name</span><span class="p">(</span><span class="n">gtype</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;Vips&#39;</span><span class="p">):</span>
                 <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span>
-            <span class="k">return</span> <span class="s2">&quot;Union[str, </span><span class="si">%s</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="n">name</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Union[str, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">]&quot;</span>
         <span class="k">if</span> <span class="n">gtype</span> <span class="ow">in</span> <span class="n">GValue</span><span class="o">.</span><span class="n">_gtype_to_python</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">GValue</span><span class="o">.</span><span class="n">_gtype_to_python</span><span class="p">[</span><span class="n">gtype</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">fundamental</span> <span class="ow">in</span> <span class="n">GValue</span><span class="o">.</span><span class="n">_gtype_to_python</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">GValue</span><span class="o">.</span><span class="n">_gtype_to_python</span><span class="p">[</span><span class="n">fundamental</span><span class="p">]</span>
         <span class="k">return</span> <span class="s1">&#39;&lt;unknown type&gt;&#39;</span></div>
 
-<div class="viewcode-block" id="GValue.to_enum"><a class="viewcode-back" href="../../gvalue.html#pyvips.gvalue.GValue.to_enum">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">to_enum</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Turn a string into an enum value ready to be passed into libvips.</span>
+
+<div class="viewcode-block" id="GValue.to_enum">
+<a class="viewcode-back" href="../../gvalue.html#pyvips.gvalue.GValue.to_enum">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_enum</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Turn a string into an enum value ready to be passed into libvips.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">basestring</span> <span class="k">if</span> <span class="n">_is_PY2</span> <span class="k">else</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">enum_value</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_enum_from_nick</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;pyvips&#39;</span><span class="p">,</span> <span class="n">gtype</span><span class="p">,</span>
                                                       <span class="n">_to_bytes</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">enum_value</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -201,9 +201,12 @@
 
         <span class="k">return</span> <span class="n">enum_value</span></div>
 
-<div class="viewcode-block" id="GValue.from_enum"><a class="viewcode-back" href="../../gvalue.html#pyvips.gvalue.GValue.from_enum">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">from_enum</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">enum_value</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Turn an int back into an enum string.</span>
+
+<div class="viewcode-block" id="GValue.from_enum">
+<a class="viewcode-back" href="../../gvalue.html#pyvips.gvalue.GValue.from_enum">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_enum</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">enum_value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Turn an int back into an enum string.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -213,7 +216,28 @@
 
         <span class="k">return</span> <span class="n">_to_string</span><span class="p">(</span><span class="n">pointer</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GValue.to_flag">
+<a class="viewcode-back" href="../../gvalue.html#pyvips.gvalue.GValue.to_flag">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_flag</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Turn a string into a flag value ready to be passed into libvips.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">flag_value</span> <span class="o">=</span> <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_flags_from_nick</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;pyvips&#39;</span><span class="p">,</span> <span class="n">gtype</span><span class="p">,</span>
+                                                       <span class="n">_to_bytes</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">flag_value</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;no value </span><span class="si">{0}</span><span class="s1"> in gtype </span><span class="si">{1}</span><span class="s1"> (</span><span class="si">{2}</span><span class="s1">)&#39;</span><span class="o">.</span>
+                            <span class="nb">format</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">type_name</span><span class="p">(</span><span class="n">gtype</span><span class="p">),</span> <span class="n">gtype</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">flag_value</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="n">flag_value</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># allocate memory for the gvalue which will be freed on GC</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;GValue *&#39;</span><span class="p">)</span>
         <span class="c1"># logger.debug(&#39;GValue.__init__: pointer = %s&#39;, self.pointer)</span>
@@ -222,8 +246,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">gvalue</span> <span class="o">=</span> <span class="n">ffi</span><span class="o">.</span><span class="n">gc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span> <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_value_unset</span><span class="p">)</span>
         <span class="c1"># logger.debug(&#39;GValue.__init__: gvalue = %s&#39;, self.gvalue)</span>
 
-<div class="viewcode-block" id="GValue.set_type"><a class="viewcode-back" href="../../gvalue.html#pyvips.gvalue.GValue.set_type">[docs]</a>    <span class="k">def</span> <span class="nf">set_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gtype</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set the type of a GValue.</span>
+<div class="viewcode-block" id="GValue.set_type">
+<a class="viewcode-back" href="../../gvalue.html#pyvips.gvalue.GValue.set_type">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gtype</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the type of a GValue.</span>
 
 <span class="sd">        GValues have a set type, fixed at creation time. Use set_type to set</span>
 <span class="sd">        the type of a GValue before assigning to it.</span>
@@ -235,8 +261,11 @@
 
         <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_value_init</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gvalue</span><span class="p">,</span> <span class="n">gtype</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GValue.set"><a class="viewcode-back" href="../../gvalue.html#pyvips.gvalue.GValue.set">[docs]</a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set a GValue.</span>
+
+<div class="viewcode-block" id="GValue.set">
+<a class="viewcode-back" href="../../gvalue.html#pyvips.gvalue.GValue.set">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set a GValue.</span>
 
 <span class="sd">        The value is converted to the type of the GValue, if possible, and</span>
 <span class="sd">        assigned.</span>
@@ -260,7 +289,8 @@
             <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_value_set_enum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gvalue</span><span class="p">,</span>
                                          <span class="n">GValue</span><span class="o">.</span><span class="n">to_enum</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
         <span class="k">elif</span> <span class="n">fundamental</span> <span class="o">==</span> <span class="n">GValue</span><span class="o">.</span><span class="n">gflags_type</span><span class="p">:</span>
-            <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_value_set_flags</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gvalue</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_value_set_flags</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gvalue</span><span class="p">,</span>
+                                          <span class="n">GValue</span><span class="o">.</span><span class="n">to_flag</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
         <span class="k">elif</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GValue</span><span class="o">.</span><span class="n">gstr_type</span><span class="p">:</span>
             <span class="n">gobject_lib</span><span class="o">.</span><span class="n">g_value_set_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gvalue</span><span class="p">,</span> <span class="n">_to_bytes</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
         <span class="k">elif</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GValue</span><span class="o">.</span><span class="n">refstr_type</span><span class="p">:</span>
@@ -295,42 +325,26 @@
             <span class="n">memory</span> <span class="o">=</span> <span class="n">glib_lib</span><span class="o">.</span><span class="n">g_malloc</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
             <span class="n">ffi</span><span class="o">.</span><span class="n">memmove</span><span class="p">(</span><span class="n">memory</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
 
-            <span class="c1"># this is horrible!</span>
-            <span class="c1">#</span>
-            <span class="c1"># * in API mode, we must have 8.6+ and use set_blob_free to</span>
-            <span class="c1">#   attach the metadata to avoid leaks</span>
-            <span class="c1"># * pre-8.6, we just pass a NULL free pointer and live with the</span>
-            <span class="c1">#   leak</span>
-            <span class="c1">#</span>
-            <span class="c1"># this is because in API mode you can&#39;t pass a builtin (what</span>
-            <span class="c1"># vips_lib.g_free() becomes) as a parameter to ffi.callback(), and</span>
-            <span class="c1"># vips_value_set_blob() needs a callback for arg 2</span>
-            <span class="c1">#</span>
-            <span class="c1"># additionally, you can&#39;t make a py def which calls g_free() and</span>
-            <span class="c1"># then use the py def in the callback, since libvips will trigger</span>
-            <span class="c1"># these functions during cleanup, and py will have shut down by</span>
-            <span class="c1"># then and you&#39;ll get a segv</span>
-
-            <span class="k">if</span> <span class="n">at_least_libvips</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
+            <span class="c1"># In API mode, we use set_blob_free in a backwards compatible way.</span>
+            <span class="c1"># For pre-8.6 libvipses, in ABI mode, we declare the type of the</span>
+            <span class="c1"># free func in set_blob incorrectly so that we can pass g_free</span>
+            <span class="c1"># at runtime without triggering an exception.</span>
+            <span class="k">if</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">API_mode</span> <span class="ow">or</span> <span class="n">at_least_libvips</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
                 <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_value_set_blob_free</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gvalue</span><span class="p">,</span>
                                                   <span class="n">memory</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># we declare the type of the free func in set_blob incorrectly</span>
-                <span class="c1"># so that we can pass g_free at runtime without triggering an</span>
-                <span class="c1"># exception</span>
-                <span class="k">if</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">API_mode</span><span class="p">:</span>
-                    <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_value_set_blob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gvalue</span><span class="p">,</span>
-                                                 <span class="n">ffi</span><span class="o">.</span><span class="n">NULL</span><span class="p">,</span> <span class="n">memory</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_value_set_blob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gvalue</span><span class="p">,</span>
-                                                 <span class="n">glib_lib</span><span class="o">.</span><span class="n">g_free</span><span class="p">,</span>
-                                                 <span class="n">memory</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+                <span class="n">vips_lib</span><span class="o">.</span><span class="n">vips_value_set_blob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gvalue</span><span class="p">,</span>
+                                             <span class="n">glib_lib</span><span class="o">.</span><span class="n">g_free</span><span class="p">,</span>
+                                             <span class="n">memory</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unsupported gtype for set </span><span class="si">{0}</span><span class="s1">, fundamental </span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span>
                         <span class="nb">format</span><span class="p">(</span><span class="n">type_name</span><span class="p">(</span><span class="n">gtype</span><span class="p">),</span> <span class="n">type_name</span><span class="p">(</span><span class="n">fundamental</span><span class="p">)))</span></div>
 
-<div class="viewcode-block" id="GValue.get"><a class="viewcode-back" href="../../gvalue.html#pyvips.gvalue.GValue.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get the contents of a GValue.</span>
+
+<div class="viewcode-block" id="GValue.get">
+<a class="viewcode-back" href="../../gvalue.html#pyvips.gvalue.GValue.get">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the contents of a GValue.</span>
 
 <span class="sd">        The contents of the GValue are read out as a Python type.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -413,7 +427,9 @@
             <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s1">&#39;unsupported gtype for get </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span>
                         <span class="nb">format</span><span class="p">(</span><span class="n">type_name</span><span class="p">(</span><span class="n">gtype</span><span class="p">)))</span>
 
-        <span class="k">return</span> <span class="n">result</span></div></div>
+        <span class="k">return</span> <span class="n">result</span></div>
+</div>
+
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;GValue&#39;</span><span class="p">]</span>

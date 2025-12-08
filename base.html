@@ -1,22 +1,20 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Base definitions &mdash; pyvips 2.2.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>Base definitions &mdash; pyvips 3.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/collapse.js"></script>
+      <script src="_static/documentation_options.js?v=dd1205ac"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/collapse.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -31,14 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> pyvips
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyvips
           </a>
-              <div class="version">
-                2.2
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -48,7 +47,23 @@
 <li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vimage.html"><code class="docutils literal notranslate"><span class="pre">Image</span></code></a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Base definitions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Base definitions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pyvips.base.leak_set"><code class="docutils literal notranslate"><span class="pre">leak_set()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pyvips.base.shutdown"><code class="docutils literal notranslate"><span class="pre">shutdown()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pyvips.base.version"><code class="docutils literal notranslate"><span class="pre">version()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pyvips.base.at_least_libvips"><code class="docutils literal notranslate"><span class="pre">at_least_libvips()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pyvips.base.type_find"><code class="docutils literal notranslate"><span class="pre">type_find()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pyvips.base.nickname_find"><code class="docutils literal notranslate"><span class="pre">nickname_find()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pyvips.base.get_suffixes"><code class="docutils literal notranslate"><span class="pre">get_suffixes()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pyvips.base.type_name"><code class="docutils literal notranslate"><span class="pre">type_name()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pyvips.base.type_map"><code class="docutils literal notranslate"><span class="pre">type_map()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pyvips.base.type_from_name"><code class="docutils literal notranslate"><span class="pre">type_from_name()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pyvips.base.values_for_enum"><code class="docutils literal notranslate"><span class="pre">values_for_enum()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pyvips.base.values_for_flag"><code class="docutils literal notranslate"><span class="pre">values_for_flag()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pyvips.base.enum_dict"><code class="docutils literal notranslate"><span class="pre">enum_dict()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pyvips.base.flags_dict"><code class="docutils literal notranslate"><span class="pre">flags_dict()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="error.html"><code class="docutils literal notranslate"><span class="pre">Error</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="enums.html">The libvips enums</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vconnection.html"><code class="docutils literal notranslate"><span class="pre">Connection</span></code></a></li>
@@ -76,8 +91,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Base definitions</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Base definitions</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com/libvips/pyvips/blob/master/doc/base.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -88,29 +103,35 @@
            <div itemprop="articleBody">
              
   <section id="base-definitions">
-<h1>Base definitions<a class="headerlink" href="#base-definitions" title="Permalink to this heading">¶</a></h1>
+<h1>Base definitions<a class="headerlink" href="#base-definitions" title="Link to this heading">¶</a></h1>
 <p>Basic utility stuff.</p>
-<span class="target" id="module-pyvips.base"></span><dl class="py function">
+<dl class="py function" id="module-pyvips.base">
 <dt class="sig sig-object py" id="pyvips.base.leak_set">
-<span class="sig-prename descclassname"><span class="pre">pyvips.base.</span></span><span class="sig-name descname"><span class="pre">leak_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">leak</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#leak_set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.base.leak_set" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyvips.base.</span></span><span class="sig-name descname"><span class="pre">leak_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">leak</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#leak_set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.base.leak_set" title="Link to this definition">¶</a></dt>
 <dd><p>Enable or disable libvips leak checking.</p>
 <p>With this enabled, libvips will check for object and area leaks on exit.
 Enabling this option will make libvips run slightly more slowly.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="pyvips.base.shutdown">
+<span class="sig-prename descclassname"><span class="pre">pyvips.base.</span></span><span class="sig-name descname"><span class="pre">shutdown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#shutdown"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.base.shutdown" title="Link to this definition">¶</a></dt>
+<dd><p>Shut libvips down.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="pyvips.base.version">
-<span class="sig-prename descclassname"><span class="pre">pyvips.base.</span></span><span class="sig-name descname"><span class="pre">version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.base.version" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyvips.base.</span></span><span class="sig-name descname"><span class="pre">version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.base.version" title="Link to this definition">¶</a></dt>
 <dd><p>Get the major, minor or micro version number of the libvips library.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>flag</strong> (<em>int</em>) – Pass flag 0 to get the major version number, flag 1 to
 get minor, flag 2 to get micro.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The version number,</p>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>.Error</strong> – </p>
 </dd>
 </dl>
@@ -118,13 +139,13 @@ get minor, flag 2 to get micro.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyvips.base.at_least_libvips">
-<span class="sig-prename descclassname"><span class="pre">pyvips.base.</span></span><span class="sig-name descname"><span class="pre">at_least_libvips</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#at_least_libvips"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.base.at_least_libvips" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyvips.base.</span></span><span class="sig-name descname"><span class="pre">at_least_libvips</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#at_least_libvips"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.base.at_least_libvips" title="Link to this definition">¶</a></dt>
 <dd><p>Is this at least libvips x.y?</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyvips.base.type_find">
-<span class="sig-prename descclassname"><span class="pre">pyvips.base.</span></span><span class="sig-name descname"><span class="pre">type_find</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">basename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nickname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#type_find"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.base.type_find" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyvips.base.</span></span><span class="sig-name descname"><span class="pre">type_find</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">basename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nickname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#type_find"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.base.type_find" title="Link to this definition">¶</a></dt>
 <dd><p>Get the GType for a name.</p>
 <p>Looks up the GType for a nickname. Types below basename in the type
 hierarchy are searched.</p>
@@ -132,16 +153,16 @@ hierarchy are searched.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyvips.base.nickname_find">
-<span class="sig-prename descclassname"><span class="pre">pyvips.base.</span></span><span class="sig-name descname"><span class="pre">nickname_find</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gtype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#nickname_find"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.base.nickname_find" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyvips.base.</span></span><span class="sig-name descname"><span class="pre">nickname_find</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gtype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#nickname_find"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.base.nickname_find" title="Link to this definition">¶</a></dt>
 <dd><p>Return the nickname for a GType.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyvips.base.get_suffixes">
-<span class="sig-prename descclassname"><span class="pre">pyvips.base.</span></span><span class="sig-name descname"><span class="pre">get_suffixes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#get_suffixes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.base.get_suffixes" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyvips.base.</span></span><span class="sig-name descname"><span class="pre">get_suffixes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#get_suffixes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.base.get_suffixes" title="Link to this definition">¶</a></dt>
 <dd><p>Get a list of all the filename suffixes supported by libvips.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>[string]</p>
 </dd>
 </dl>
@@ -149,32 +170,44 @@ hierarchy are searched.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyvips.base.type_name">
-<span class="sig-prename descclassname"><span class="pre">pyvips.base.</span></span><span class="sig-name descname"><span class="pre">type_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gtype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#type_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.base.type_name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyvips.base.</span></span><span class="sig-name descname"><span class="pre">type_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gtype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#type_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.base.type_name" title="Link to this definition">¶</a></dt>
 <dd><p>Return the name for a GType.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyvips.base.type_map">
-<span class="sig-prename descclassname"><span class="pre">pyvips.base.</span></span><span class="sig-name descname"><span class="pre">type_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#type_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.base.type_map" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyvips.base.</span></span><span class="sig-name descname"><span class="pre">type_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#type_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.base.type_map" title="Link to this definition">¶</a></dt>
 <dd><p>Map fn over all child types of gtype.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyvips.base.type_from_name">
-<span class="sig-prename descclassname"><span class="pre">pyvips.base.</span></span><span class="sig-name descname"><span class="pre">type_from_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#type_from_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.base.type_from_name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyvips.base.</span></span><span class="sig-name descname"><span class="pre">type_from_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#type_from_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.base.type_from_name" title="Link to this definition">¶</a></dt>
 <dd><p>Return the GType for a name.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyvips.base.values_for_enum">
-<span class="sig-prename descclassname"><span class="pre">pyvips.base.</span></span><span class="sig-name descname"><span class="pre">values_for_enum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gtype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#values_for_enum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.base.values_for_enum" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get all values for a enum (gtype).</p>
+<span class="sig-prename descclassname"><span class="pre">pyvips.base.</span></span><span class="sig-name descname"><span class="pre">values_for_enum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gtype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#values_for_enum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.base.values_for_enum" title="Link to this definition">¶</a></dt>
+<dd><p>Deprecated.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyvips.base.values_for_flag">
-<span class="sig-prename descclassname"><span class="pre">pyvips.base.</span></span><span class="sig-name descname"><span class="pre">values_for_flag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gtype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#values_for_flag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.base.values_for_flag" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get all values for a flag (gtype).</p>
+<span class="sig-prename descclassname"><span class="pre">pyvips.base.</span></span><span class="sig-name descname"><span class="pre">values_for_flag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gtype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#values_for_flag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.base.values_for_flag" title="Link to this definition">¶</a></dt>
+<dd><p>Deprecated.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyvips.base.enum_dict">
+<span class="sig-prename descclassname"><span class="pre">pyvips.base.</span></span><span class="sig-name descname"><span class="pre">enum_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gtype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#enum_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.base.enum_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Get name -&gt; value dict for a enum (gtype).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyvips.base.flags_dict">
+<span class="sig-prename descclassname"><span class="pre">pyvips.base.</span></span><span class="sig-name descname"><span class="pre">flags_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gtype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyvips/base.html#flags_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvips.base.flags_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Get name -&gt; value dict for a flags (gtype).</p>
 </dd></dl>
 
 </section>

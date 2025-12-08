@@ -1,21 +1,19 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyvips.enums &mdash; pyvips 2.2.1 documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>pyvips.enums &mdash; pyvips 3.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../../../_static/collapse.js"></script>
+      <script src="../../_static/documentation_options.js?v=dd1205ac"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/collapse.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -28,14 +26,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> pyvips
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pyvips
           </a>
-              <div class="version">
-                2.2
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -73,9 +72,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>pyvips.enums</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pyvips.enums</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -86,15 +85,18 @@
              
   <h1>Source code for pyvips.enums</h1><div class="highlight"><pre>
 <span></span><span class="c1"># libvips enums -- this file is generated automatically</span>
+<span class="c1"># flake8: noqa: E501</span>
 
 
-<div class="viewcode-block" id="BandFormat"><a class="viewcode-back" href="../../enums.html#pyvips.enums.BandFormat">[docs]</a><span class="k">class</span> <span class="nc">BandFormat</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;BandFormat.</span>
+<div class="viewcode-block" id="BandFormat">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.BandFormat">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BandFormat</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;BandFormat.</span>
 
 <span class="sd">The format used for each band element.</span>
 
 <span class="sd">Each corresponds to a native C type for the current machine. For example,</span>
-<span class="sd">#VIPS_FORMAT_USHORT is &lt;type&gt;unsigned short&lt;/type&gt;.</span>
+<span class="sd">:class:`.enums.BandFormat.USHORT` is `unsigned short`.</span>
 
 <span class="sd">Attributes:</span>
 
@@ -135,15 +137,17 @@
     <span class="n">DPCOMPLEX</span> <span class="o">=</span> <span class="s1">&#39;dpcomplex&#39;</span></div>
 
 
-<div class="viewcode-block" id="BlendMode"><a class="viewcode-back" href="../../enums.html#pyvips.enums.BlendMode">[docs]</a><span class="k">class</span> <span class="nc">BlendMode</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;BlendMode.</span>
 
-<span class="sd">The various Porter-Duff and PDF blend modes. See vips_composite(),</span>
+<div class="viewcode-block" id="BlendMode">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.BlendMode">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BlendMode</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;BlendMode.</span>
+
+<span class="sd">The various Porter-Duff and PDF blend modes. See :meth:`.Image.composite`,</span>
 <span class="sd">for example.</span>
 
-<span class="sd">The Cairo docs have a nice explanation of all the blend modes:</span>
-
-<span class="sd">https://www.cairographics.org/operators</span>
+<span class="sd">The Cairo docs have [a nice explanation of all the blend</span>
+<span class="sd">modes](https://www.cairographics.org/operators).</span>
 
 <span class="sd">The non-separable modes are not implemented.</span>
 
@@ -228,8 +232,11 @@
     <span class="n">EXCLUSION</span> <span class="o">=</span> <span class="s1">&#39;exclusion&#39;</span></div>
 
 
-<div class="viewcode-block" id="Coding"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Coding">[docs]</a><span class="k">class</span> <span class="nc">Coding</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Coding.</span>
+
+<div class="viewcode-block" id="Coding">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.Coding">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Coding</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Coding.</span>
 
 <span class="sd">How pixels are coded.</span>
 
@@ -256,11 +263,14 @@
     <span class="n">RAD</span> <span class="o">=</span> <span class="s1">&#39;rad&#39;</span></div>
 
 
-<div class="viewcode-block" id="Interpretation"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Interpretation">[docs]</a><span class="k">class</span> <span class="nc">Interpretation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Interpretation.</span>
+
+<div class="viewcode-block" id="Interpretation">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.Interpretation">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Interpretation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Interpretation.</span>
 
 <span class="sd">How the values in an image should be interpreted. For example, a</span>
-<span class="sd">three-band float image of type #VIPS_INTERPRETATION_LAB should have its</span>
+<span class="sd">three-band float image of type :class:`.enums.Interpretation.LAB` should have its</span>
 <span class="sd">pixels interpreted as coordinates in CIE Lab space.</span>
 
 <span class="sd">RGB and sRGB are treated in the same way. Use the colourspace functions if</span>
@@ -283,7 +293,7 @@
 
 <span class="sd">    CMYK (str): the first four bands are in CMYK space</span>
 
-<span class="sd">    LABQ (str): implies #VIPS_CODING_LABQ</span>
+<span class="sd">    LABQ (str): implies :class:`.enums.Coding.LABQ`</span>
 
 <span class="sd">    RGB (str): generic RGB space</span>
 
@@ -309,6 +319,10 @@
 
 <span class="sd">    HSV (str): pixels are HSV</span>
 
+<span class="sd">    OKLAB (str): pixels are in Oklab colourspace</span>
+
+<span class="sd">    OKLCH (str): pixels are in Oklch colourspace</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">ERROR</span> <span class="o">=</span> <span class="s1">&#39;error&#39;</span>
@@ -330,77 +344,32 @@
     <span class="n">GREY16</span> <span class="o">=</span> <span class="s1">&#39;grey16&#39;</span>
     <span class="n">MATRIX</span> <span class="o">=</span> <span class="s1">&#39;matrix&#39;</span>
     <span class="n">SCRGB</span> <span class="o">=</span> <span class="s1">&#39;scrgb&#39;</span>
-    <span class="n">HSV</span> <span class="o">=</span> <span class="s1">&#39;hsv&#39;</span></div>
+    <span class="n">HSV</span> <span class="o">=</span> <span class="s1">&#39;hsv&#39;</span>
+    <span class="n">OKLAB</span> <span class="o">=</span> <span class="s1">&#39;oklab&#39;</span>
+    <span class="n">OKLCH</span> <span class="o">=</span> <span class="s1">&#39;oklch&#39;</span></div>
 
 
-<div class="viewcode-block" id="DemandStyle"><a class="viewcode-back" href="../../enums.html#pyvips.enums.DemandStyle">[docs]</a><span class="k">class</span> <span class="nc">DemandStyle</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;DemandStyle.</span>
 
-<span class="sd">See vips_image_pipelinev(). Operations can hint to the VIPS image IO</span>
-<span class="sd">system about the kind of demand geometry they prefer.</span>
+<div class="viewcode-block" id="OperationRelational">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.OperationRelational">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OperationRelational</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;OperationRelational.</span>
 
-<span class="sd">These demand styles are given below in order of increasing</span>
-<span class="sd">restrictiveness.  When demanding output from a pipeline,</span>
-<span class="sd">vips_image_generate()</span>
-<span class="sd">will use the most restrictive of the styles requested by the operations</span>
-<span class="sd">in the pipeline.</span>
-
-<span class="sd">#VIPS_DEMAND_STYLE_THINSTRIP --- This operation would like to output strips</span>
-<span class="sd">the width of the image and a few pels high. This is option suitable for</span>
-<span class="sd">point-to-point operations, such as those in the arithmetic package.</span>
-
-<span class="sd">This option is only efficient for cases where each output pel depends</span>
-<span class="sd">upon the pel in the corresponding position in the input image.</span>
-
-<span class="sd">#VIPS_DEMAND_STYLE_FATSTRIP --- This operation would like to output strips</span>
-<span class="sd">the width of the image and as high as possible. This option is suitable</span>
-<span class="sd">for area operations which do not violently transform coordinates, such</span>
-<span class="sd">as vips_conv().</span>
-
-<span class="sd">#VIPS_DEMAND_STYLE_SMALLTILE --- This is the most general demand format.</span>
-<span class="sd">Output is demanded in small (around 100x100 pel) sections. This style works</span>
-<span class="sd">reasonably efficiently, even for bizzare operations like 45 degree rotate.</span>
-
-<span class="sd">#VIPS_DEMAND_STYLE_ANY --- This image is not being demand-read from a disc</span>
-<span class="sd">file (even indirectly) so any demand style is OK. It&#39;s used for things like</span>
-<span class="sd">vips_black() where the pixels are calculated.</span>
-
-<span class="sd">See also: vips_image_pipelinev().</span>
+<span class="sd">See also: :meth:`.Image.relational`.</span>
 
 <span class="sd">Attributes:</span>
 
-<span class="sd">    SMALLTILE (str): demand in small (typically 64x64 pixel) tiles</span>
+<span class="sd">    EQUAL (str): `==`</span>
 
-<span class="sd">    FATSTRIP (str): demand in fat (typically 10 pixel high) strips</span>
+<span class="sd">    NOTEQ (str): `!=`</span>
 
-<span class="sd">    THINSTRIP (str): demand in thin (typically 1 pixel high) strips</span>
+<span class="sd">    LESS (str): `&lt;`</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    LESSEQ (str): `&lt;=`</span>
 
-    <span class="n">ERROR</span> <span class="o">=</span> <span class="s1">&#39;error&#39;</span>
-    <span class="n">SMALLTILE</span> <span class="o">=</span> <span class="s1">&#39;smalltile&#39;</span>
-    <span class="n">FATSTRIP</span> <span class="o">=</span> <span class="s1">&#39;fatstrip&#39;</span>
-    <span class="n">THINSTRIP</span> <span class="o">=</span> <span class="s1">&#39;thinstrip&#39;</span></div>
+<span class="sd">    MORE (str): `&gt;`</span>
 
-
-<div class="viewcode-block" id="OperationRelational"><a class="viewcode-back" href="../../enums.html#pyvips.enums.OperationRelational">[docs]</a><span class="k">class</span> <span class="nc">OperationRelational</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;OperationRelational.</span>
-
-<span class="sd">See also: vips_relational().</span>
-
-<span class="sd">Attributes:</span>
-
-<span class="sd">    EQUAL (str): ==</span>
-
-<span class="sd">    NOTEQ (str): !=</span>
-
-<span class="sd">    LESS (str): &lt;</span>
-
-<span class="sd">    LESSEQ (str): &lt;=</span>
-
-<span class="sd">    MORE (str): &gt;</span>
-
-<span class="sd">    MOREEQ (str): &gt;=</span>
+<span class="sd">    MOREEQ (str): `&gt;=`</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -412,22 +381,25 @@
     <span class="n">MOREEQ</span> <span class="o">=</span> <span class="s1">&#39;moreeq&#39;</span></div>
 
 
-<div class="viewcode-block" id="OperationBoolean"><a class="viewcode-back" href="../../enums.html#pyvips.enums.OperationBoolean">[docs]</a><span class="k">class</span> <span class="nc">OperationBoolean</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;OperationBoolean.</span>
 
-<span class="sd">See also: vips_boolean().</span>
+<div class="viewcode-block" id="OperationBoolean">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.OperationBoolean">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OperationBoolean</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;OperationBoolean.</span>
+
+<span class="sd">See also: :meth:`.Image.boolean`.</span>
 
 <span class="sd">Attributes:</span>
 
-<span class="sd">    AND (str): &amp;</span>
+<span class="sd">    AND (str): `&amp;`</span>
 
-<span class="sd">    OR (str): |</span>
+<span class="sd">    OR (str): `|`</span>
 
-<span class="sd">    EOR (str): ^</span>
+<span class="sd">    EOR (str): `^`</span>
 
-<span class="sd">    LSHIFT (str): &gt;&gt;</span>
+<span class="sd">    LSHIFT (str): `&gt;&gt;`</span>
 
-<span class="sd">    RSHIFT (str): &lt;&lt;</span>
+<span class="sd">    RSHIFT (str): `&lt;&lt;`</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -438,18 +410,21 @@
     <span class="n">RSHIFT</span> <span class="o">=</span> <span class="s1">&#39;rshift&#39;</span></div>
 
 
-<div class="viewcode-block" id="OperationMath2"><a class="viewcode-back" href="../../enums.html#pyvips.enums.OperationMath2">[docs]</a><span class="k">class</span> <span class="nc">OperationMath2</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;OperationMath2.</span>
 
-<span class="sd">See also: vips_math().</span>
+<div class="viewcode-block" id="OperationMath2">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.OperationMath2">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OperationMath2</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;OperationMath2.</span>
+
+<span class="sd">See also: :meth:`.Image.math`.</span>
 
 <span class="sd">Attributes:</span>
 
-<span class="sd">    POW (str): pow( left, right )</span>
+<span class="sd">    POW (str): `pow(left, right)`</span>
 
-<span class="sd">    WOP (str): pow( right, left )</span>
+<span class="sd">    WOP (str): `pow(right, left)`</span>
 
-<span class="sd">    ATAN2 (str): atan2( left, right )</span>
+<span class="sd">    ATAN2 (str): `atan2(left, right)`</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -458,10 +433,13 @@
     <span class="n">ATAN2</span> <span class="o">=</span> <span class="s1">&#39;atan2&#39;</span></div>
 
 
-<div class="viewcode-block" id="OperationComplex2"><a class="viewcode-back" href="../../enums.html#pyvips.enums.OperationComplex2">[docs]</a><span class="k">class</span> <span class="nc">OperationComplex2</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;OperationComplex2.</span>
 
-<span class="sd">See also: vips_complex2().</span>
+<div class="viewcode-block" id="OperationComplex2">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.OperationComplex2">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OperationComplex2</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;OperationComplex2.</span>
+
+<span class="sd">See also: :meth:`.Image.complex2`.</span>
 
 <span class="sd">Attributes:</span>
 
@@ -472,36 +450,27 @@
     <span class="n">CROSS_PHASE</span> <span class="o">=</span> <span class="s1">&#39;cross-phase&#39;</span></div>
 
 
-<div class="viewcode-block" id="OperationMath"><a class="viewcode-back" href="../../enums.html#pyvips.enums.OperationMath">[docs]</a><span class="k">class</span> <span class="nc">OperationMath</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;OperationMath.</span>
 
-<span class="sd">See also: vips_math().</span>
+<div class="viewcode-block" id="OperationMath">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.OperationMath">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OperationMath</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;OperationMath.</span>
+
+<span class="sd">See also: :meth:`.Image.math`.</span>
 
 <span class="sd">Attributes:</span>
 
-<span class="sd">    SIN (str): sin(), angles in degrees</span>
+<span class="sd">    SIN (str): `sin()`, angles in degrees</span>
 
-<span class="sd">    COS (str): cos(), angles in degrees</span>
+<span class="sd">    COS (str): `cos()`, angles in degrees</span>
 
-<span class="sd">    TAN (str): tan(), angles in degrees</span>
+<span class="sd">    TAN (str): `tan()`, angles in degrees</span>
 
-<span class="sd">    ASIN (str): asin(), angles in degrees</span>
+<span class="sd">    ASIN (str): `asin()`, angles in degrees</span>
 
-<span class="sd">    ACOS (str): acos(), angles in degrees</span>
+<span class="sd">    ACOS (str): `acos()`, angles in degrees</span>
 
-<span class="sd">    ATAN (str): atan(), angles in degrees</span>
-
-<span class="sd">    SINH (str): sinh(), angles in radians</span>
-
-<span class="sd">    COSH (str): cosh(), angles in radians</span>
-
-<span class="sd">    TANH (str): tanh(), angles in radians</span>
-
-<span class="sd">    ASINH (str): asinh(), angles in radians</span>
-
-<span class="sd">    ACOSH (str): acosh(), angles in radians</span>
-
-<span class="sd">    ATANH (str): atanh(), angles in radians</span>
+<span class="sd">    ATAN (str): `atan()`, angles in degrees</span>
 
 <span class="sd">    LOG (str): log base e</span>
 
@@ -511,6 +480,18 @@
 
 <span class="sd">    EXP10 (str): 10 to the something</span>
 
+<span class="sd">    SINH (str): `sinh()`, angles in radians</span>
+
+<span class="sd">    COSH (str): `cosh()`, angles in radians</span>
+
+<span class="sd">    TANH (str): `tanh()`, angles in radians</span>
+
+<span class="sd">    ASINH (str): `asinh()`, angles in radians</span>
+
+<span class="sd">    ACOSH (str): `acosh()`, angles in radians</span>
+
+<span class="sd">    ATANH (str): `atanh()`, angles in radians</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">SIN</span> <span class="o">=</span> <span class="s1">&#39;sin&#39;</span>
@@ -519,22 +500,25 @@
     <span class="n">ASIN</span> <span class="o">=</span> <span class="s1">&#39;asin&#39;</span>
     <span class="n">ACOS</span> <span class="o">=</span> <span class="s1">&#39;acos&#39;</span>
     <span class="n">ATAN</span> <span class="o">=</span> <span class="s1">&#39;atan&#39;</span>
+    <span class="n">LOG</span> <span class="o">=</span> <span class="s1">&#39;log&#39;</span>
+    <span class="n">LOG10</span> <span class="o">=</span> <span class="s1">&#39;log10&#39;</span>
+    <span class="n">EXP</span> <span class="o">=</span> <span class="s1">&#39;exp&#39;</span>
+    <span class="n">EXP10</span> <span class="o">=</span> <span class="s1">&#39;exp10&#39;</span>
     <span class="n">SINH</span> <span class="o">=</span> <span class="s1">&#39;sinh&#39;</span>
     <span class="n">COSH</span> <span class="o">=</span> <span class="s1">&#39;cosh&#39;</span>
     <span class="n">TANH</span> <span class="o">=</span> <span class="s1">&#39;tanh&#39;</span>
     <span class="n">ASINH</span> <span class="o">=</span> <span class="s1">&#39;asinh&#39;</span>
     <span class="n">ACOSH</span> <span class="o">=</span> <span class="s1">&#39;acosh&#39;</span>
-    <span class="n">ATANH</span> <span class="o">=</span> <span class="s1">&#39;atanh&#39;</span>
-    <span class="n">LOG</span> <span class="o">=</span> <span class="s1">&#39;log&#39;</span>
-    <span class="n">LOG10</span> <span class="o">=</span> <span class="s1">&#39;log10&#39;</span>
-    <span class="n">EXP</span> <span class="o">=</span> <span class="s1">&#39;exp&#39;</span>
-    <span class="n">EXP10</span> <span class="o">=</span> <span class="s1">&#39;exp10&#39;</span></div>
+    <span class="n">ATANH</span> <span class="o">=</span> <span class="s1">&#39;atanh&#39;</span></div>
 
 
-<div class="viewcode-block" id="OperationRound"><a class="viewcode-back" href="../../enums.html#pyvips.enums.OperationRound">[docs]</a><span class="k">class</span> <span class="nc">OperationRound</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;OperationRound.</span>
 
-<span class="sd">See also: vips_round().</span>
+<div class="viewcode-block" id="OperationRound">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.OperationRound">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OperationRound</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;OperationRound.</span>
+
+<span class="sd">See also: :meth:`.Image.round`.</span>
 
 <span class="sd">Attributes:</span>
 
@@ -551,10 +535,13 @@
     <span class="n">FLOOR</span> <span class="o">=</span> <span class="s1">&#39;floor&#39;</span></div>
 
 
-<div class="viewcode-block" id="OperationComplex"><a class="viewcode-back" href="../../enums.html#pyvips.enums.OperationComplex">[docs]</a><span class="k">class</span> <span class="nc">OperationComplex</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;OperationComplex.</span>
 
-<span class="sd">See also: vips_complex().</span>
+<div class="viewcode-block" id="OperationComplex">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.OperationComplex">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OperationComplex</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;OperationComplex.</span>
+
+<span class="sd">See also: :meth:`.Image.complex`.</span>
 
 <span class="sd">Attributes:</span>
 
@@ -571,10 +558,13 @@
     <span class="n">CONJ</span> <span class="o">=</span> <span class="s1">&#39;conj&#39;</span></div>
 
 
-<div class="viewcode-block" id="OperationComplexget"><a class="viewcode-back" href="../../enums.html#pyvips.enums.OperationComplexget">[docs]</a><span class="k">class</span> <span class="nc">OperationComplexget</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;OperationComplexget.</span>
 
-<span class="sd">See also: vips_complexget().</span>
+<div class="viewcode-block" id="OperationComplexget">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.OperationComplexget">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OperationComplexget</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;OperationComplexget.</span>
+
+<span class="sd">See also: :meth:`.Image.complexget`.</span>
 
 <span class="sd">Attributes:</span>
 
@@ -588,10 +578,13 @@
     <span class="n">IMAG</span> <span class="o">=</span> <span class="s1">&#39;imag&#39;</span></div>
 
 
-<div class="viewcode-block" id="Combine"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Combine">[docs]</a><span class="k">class</span> <span class="nc">Combine</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Combine.</span>
 
-<span class="sd">How to combine values. See vips_compass(), for example.</span>
+<div class="viewcode-block" id="Combine">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.Combine">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Combine</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Combine.</span>
+
+<span class="sd">How to combine values. See :meth:`.Image.compass`, for example.</span>
 
 <span class="sd">Attributes:</span>
 
@@ -608,15 +601,18 @@
     <span class="n">MIN</span> <span class="o">=</span> <span class="s1">&#39;min&#39;</span></div>
 
 
-<div class="viewcode-block" id="Access"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Access">[docs]</a><span class="k">class</span> <span class="nc">Access</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Access.</span>
 
-<span class="sd">The type of access an operation has to supply. See vips_tilecache()</span>
-<span class="sd">and #VipsForeign.</span>
+<div class="viewcode-block" id="Access">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.Access">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Access</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Access.</span>
 
-<span class="sd">@VIPS_ACCESS_RANDOM means requests can come in any order.</span>
+<span class="sd">The type of access an operation has to supply. See :meth:`.Image.tilecache`</span>
+<span class="sd">and :class:`.Foreign`.</span>
 
-<span class="sd">@VIPS_ACCESS_SEQUENTIAL means requests will be top-to-bottom, but with some</span>
+<span class="sd">:class:`.enums.Access.RANDOM` means requests can come in any order.</span>
+
+<span class="sd">:class:`.enums.Access.SEQUENTIAL` means requests will be top-to-bottom, but with some</span>
 <span class="sd">amount of buffering behind the read point for small non-local accesses.</span>
 
 <span class="sd">Attributes:</span>
@@ -625,6 +621,8 @@
 
 <span class="sd">    SEQUENTIAL (str): top-to-bottom reading only, but with a small buffer</span>
 
+<span class="sd">    SEQUENTIAL_UNBUFFERED (str): deprecated, use :class:`.enums.Access.SEQUENTIAL` instead</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">RANDOM</span> <span class="o">=</span> <span class="s1">&#39;random&#39;</span>
@@ -632,32 +630,36 @@
     <span class="n">SEQUENTIAL_UNBUFFERED</span> <span class="o">=</span> <span class="s1">&#39;sequential-unbuffered&#39;</span></div>
 
 
-<div class="viewcode-block" id="Extend"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Extend">[docs]</a><span class="k">class</span> <span class="nc">Extend</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Extend.</span>
 
-<span class="sd">See vips_embed(), vips_conv(), vips_affine() and so on.</span>
+<div class="viewcode-block" id="Extend">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.Extend">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Extend</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extend.</span>
+
+<span class="sd">See :meth:`.Image.embed`, :meth:`.Image.conv`, :meth:`.Image.affine` and so on.</span>
 
 <span class="sd">When the edges of an image are extended, you can specify</span>
 <span class="sd">how you want the extension done.</span>
 
-<span class="sd">#VIPS_EXTEND_BLACK --- new pixels are black, ie. all bits are zero.</span>
+<span class="sd">:class:`.enums.Extend.BLACK` -- new pixels are black, ie. all bits are zero.</span>
 
-<span class="sd">#VIPS_EXTEND_COPY --- each new pixel takes the value of the nearest edge</span>
+<span class="sd">:class:`.enums.Extend.COPY` -- each new pixel takes the value of the nearest edge</span>
 <span class="sd">pixel</span>
 
-<span class="sd">#VIPS_EXTEND_REPEAT --- the image is tiled to fill the new area</span>
+<span class="sd">:class:`.enums.Extend.REPEAT` -- the image is tiled to fill the new area</span>
 
-<span class="sd">#VIPS_EXTEND_MIRROR --- the image is reflected and tiled to reduce hash</span>
+<span class="sd">:class:`.enums.Extend.MIRROR` -- the image is reflected and tiled to reduce hash</span>
 <span class="sd">edges</span>
 
-<span class="sd">#VIPS_EXTEND_WHITE --- new pixels are white, ie. all bits are set</span>
+<span class="sd">:class:`.enums.Extend.WHITE` -- new pixels are white, ie. all bits are set</span>
 
-<span class="sd">#VIPS_EXTEND_BACKGROUND --- colour set from the @background property</span>
+<span class="sd">:class:`.enums.Extend.BACKGROUND` -- colour set from the @background property</span>
 
 <span class="sd">We have to specify the exact value of each enum member since we have to</span>
 <span class="sd">keep these frozen for back compat with vips7.</span>
 
-<span class="sd">See also: vips_embed().</span>
+<span class="sd">::: seealso</span>
+<span class="sd">    :meth:`.Image.embed`.</span>
 
 <span class="sd">Attributes:</span>
 
@@ -683,10 +685,13 @@
     <span class="n">BACKGROUND</span> <span class="o">=</span> <span class="s1">&#39;background&#39;</span></div>
 
 
-<div class="viewcode-block" id="CompassDirection"><a class="viewcode-back" href="../../enums.html#pyvips.enums.CompassDirection">[docs]</a><span class="k">class</span> <span class="nc">CompassDirection</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;CompassDirection.</span>
 
-<span class="sd">A direction on a compass. Used for vips_gravity(), for example.</span>
+<div class="viewcode-block" id="CompassDirection">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.CompassDirection">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CompassDirection</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;CompassDirection.</span>
+
+<span class="sd">A direction on a compass. Used for :meth:`.Image.gravity`, for example.</span>
 
 <span class="sd">Attributes:</span>
 
@@ -721,15 +726,19 @@
     <span class="n">NORTH_WEST</span> <span class="o">=</span> <span class="s1">&#39;north-west&#39;</span></div>
 
 
-<div class="viewcode-block" id="Direction"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Direction">[docs]</a><span class="k">class</span> <span class="nc">Direction</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Direction.</span>
 
-<span class="sd">See vips_flip(), vips_join() and so on.</span>
+<div class="viewcode-block" id="Direction">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.Direction">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Direction</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Direction.</span>
 
-<span class="sd">Operations like vips_flip() need to be told whether to flip left-right or</span>
+<span class="sd">See :meth:`.Image.flip`, :meth:`.Image.join` and so on.</span>
+
+<span class="sd">Operations like :meth:`.Image.flip` need to be told whether to flip left-right or</span>
 <span class="sd">top-bottom.</span>
 
-<span class="sd">See also: vips_flip(), vips_join().</span>
+<span class="sd">::: seealso</span>
+<span class="sd">    :meth:`.Image.flip`, :meth:`.Image.join`.</span>
 
 <span class="sd">Attributes:</span>
 
@@ -743,15 +752,19 @@
     <span class="n">VERTICAL</span> <span class="o">=</span> <span class="s1">&#39;vertical&#39;</span></div>
 
 
-<div class="viewcode-block" id="Align"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Align">[docs]</a><span class="k">class</span> <span class="nc">Align</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Align.</span>
 
-<span class="sd">See vips_join() and so on.</span>
+<div class="viewcode-block" id="Align">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.Align">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Align</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Align.</span>
 
-<span class="sd">Operations like vips_join() need to be told whether to align images on the</span>
+<span class="sd">See :meth:`.Image.join` and so on.</span>
+
+<span class="sd">Operations like :meth:`.Image.join` need to be told whether to align images on the</span>
 <span class="sd">low or high coordinate edge, or centre.</span>
 
-<span class="sd">See also: vips_join().</span>
+<span class="sd">::: seealso</span>
+<span class="sd">    :meth:`.Image.join`.</span>
 
 <span class="sd">Attributes:</span>
 
@@ -768,18 +781,22 @@
     <span class="n">HIGH</span> <span class="o">=</span> <span class="s1">&#39;high&#39;</span></div>
 
 
-<div class="viewcode-block" id="Interesting"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Interesting">[docs]</a><span class="k">class</span> <span class="nc">Interesting</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Interesting.</span>
+
+<div class="viewcode-block" id="Interesting">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.Interesting">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Interesting</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Interesting.</span>
 
 <span class="sd">Pick the algorithm vips uses to decide image &quot;interestingness&quot;. This is used</span>
-<span class="sd">by vips_smartcrop(), for example, to decide what parts of the image to</span>
+<span class="sd">by :meth:`.Image.smartcrop`, for example, to decide what parts of the image to</span>
 <span class="sd">keep.</span>
 
-<span class="sd">#VIPS_INTERESTING_NONE and #VIPS_INTERESTING_LOW mean the same -- the</span>
-<span class="sd">crop is positioned at the top or left. #VIPS_INTERESTING_HIGH positions at</span>
+<span class="sd">:class:`.enums.Interesting.NONE` and :class:`.enums.Interesting.LOW` mean the same -- the</span>
+<span class="sd">crop is positioned at the top or left. :class:`.enums.Interesting.HIGH` positions at</span>
 <span class="sd">the bottom or right.</span>
 
-<span class="sd">See also: vips_smartcrop().</span>
+<span class="sd">::: seealso</span>
+<span class="sd">    :meth:`.Image.smartcrop`.</span>
 
 <span class="sd">Attributes:</span>
 
@@ -808,14 +825,18 @@
     <span class="n">ALL</span> <span class="o">=</span> <span class="s1">&#39;all&#39;</span></div>
 
 
-<div class="viewcode-block" id="Angle"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Angle">[docs]</a><span class="k">class</span> <span class="nc">Angle</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Angle.</span>
 
-<span class="sd">See vips_rot() and so on.</span>
+<div class="viewcode-block" id="Angle">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.Angle">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Angle</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Angle.</span>
+
+<span class="sd">See :meth:`.Image.rot` and so on.</span>
 
 <span class="sd">Fixed rotate angles.</span>
 
-<span class="sd">See also: vips_rot().</span>
+<span class="sd">::: seealso</span>
+<span class="sd">    :meth:`.Image.rot`.</span>
 
 <span class="sd">Attributes:</span>
 
@@ -835,14 +856,18 @@
     <span class="n">D270</span> <span class="o">=</span> <span class="s1">&#39;d270&#39;</span></div>
 
 
-<div class="viewcode-block" id="Angle45"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Angle45">[docs]</a><span class="k">class</span> <span class="nc">Angle45</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Angle45.</span>
 
-<span class="sd">See vips_rot45() and so on.</span>
+<div class="viewcode-block" id="Angle45">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.Angle45">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Angle45</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Angle45.</span>
+
+<span class="sd">See :meth:`.Image.rot45` and so on.</span>
 
 <span class="sd">Fixed rotate angles.</span>
 
-<span class="sd">See also: vips_rot45().</span>
+<span class="sd">::: seealso</span>
+<span class="sd">    :meth:`.Image.rot45`.</span>
 
 <span class="sd">Attributes:</span>
 
@@ -874,8 +899,11 @@
     <span class="n">D315</span> <span class="o">=</span> <span class="s1">&#39;d315&#39;</span></div>
 
 
-<div class="viewcode-block" id="Precision"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Precision">[docs]</a><span class="k">class</span> <span class="nc">Precision</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Precision.</span>
+
+<div class="viewcode-block" id="Precision">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.Precision">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Precision</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Precision.</span>
 
 <span class="sd">How accurate an operation should be.</span>
 
@@ -894,14 +922,76 @@
     <span class="n">APPROXIMATE</span> <span class="o">=</span> <span class="s1">&#39;approximate&#39;</span></div>
 
 
-<div class="viewcode-block" id="FailOn"><a class="viewcode-back" href="../../enums.html#pyvips.enums.FailOn">[docs]</a><span class="k">class</span> <span class="nc">FailOn</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;FailOn.</span>
+
+<div class="viewcode-block" id="TextWrap">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.TextWrap">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TextWrap</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;TextWrap.</span>
+
+<span class="sd">Sets the word wrapping style for :meth:`.Image.text` when used with a maximum</span>
+<span class="sd">width.</span>
+
+<span class="sd">::: seealso</span>
+<span class="sd">    :meth:`.Image.text`.</span>
+
+<span class="sd">Attributes:</span>
+
+<span class="sd">    WORD (str): wrap at word boundaries</span>
+
+<span class="sd">    CHAR (str): wrap at character boundaries</span>
+
+<span class="sd">    WORD_CHAR (str): wrap at word boundaries, but fall back to character boundaries if there is not enough space for a full word</span>
+
+<span class="sd">    NONE (str): no wrapping</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">WORD</span> <span class="o">=</span> <span class="s1">&#39;word&#39;</span>
+    <span class="n">CHAR</span> <span class="o">=</span> <span class="s1">&#39;char&#39;</span>
+    <span class="n">WORD_CHAR</span> <span class="o">=</span> <span class="s1">&#39;word-char&#39;</span>
+    <span class="n">NONE</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="SdfShape">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.SdfShape">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SdfShape</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;SdfShape.</span>
+
+<span class="sd">The SDF to generate,</span>
+
+<span class="sd">::: seealso</span>
+<span class="sd">    :meth:`.Image.sdf`.</span>
+
+<span class="sd">Attributes:</span>
+
+<span class="sd">    CIRCLE (str): a circle at @a, radius @r</span>
+
+<span class="sd">    BOX (str): a box from @a to @b</span>
+
+<span class="sd">    ROUNDED_BOX (str): a box with rounded @corners from @a to @b</span>
+
+<span class="sd">    LINE (str): a line from @a to @b</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">CIRCLE</span> <span class="o">=</span> <span class="s1">&#39;circle&#39;</span>
+    <span class="n">BOX</span> <span class="o">=</span> <span class="s1">&#39;box&#39;</span>
+    <span class="n">ROUNDED_BOX</span> <span class="o">=</span> <span class="s1">&#39;rounded-box&#39;</span>
+    <span class="n">LINE</span> <span class="o">=</span> <span class="s1">&#39;line&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="FailOn">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.FailOn">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">FailOn</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;FailOn.</span>
 
 <span class="sd">How sensitive loaders are to errors, from never stop (very insensitive), to</span>
 <span class="sd">stop on the smallest warning (very sensitive).</span>
 
-<span class="sd">Each one implies the ones before it, so #VIPS_FAIL_ON_ERROR implies</span>
-<span class="sd">#VIPS_FAIL_ON_TRUNCATED.</span>
+<span class="sd">Each one implies the ones before it, so :class:`.enums.FailOn.ERROR` implies</span>
+<span class="sd">:class:`.enums.FailOn.TRUNCATED`.</span>
 
 <span class="sd">Attributes:</span>
 
@@ -921,18 +1011,57 @@
     <span class="n">WARNING</span> <span class="o">=</span> <span class="s1">&#39;warning&#39;</span></div>
 
 
-<div class="viewcode-block" id="ForeignPpmFormat"><a class="viewcode-back" href="../../enums.html#pyvips.enums.ForeignPpmFormat">[docs]</a><span class="k">class</span> <span class="nc">ForeignPpmFormat</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;ForeignPpmFormat.</span>
+
+<div class="viewcode-block" id="ForeignPdfPageBox">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.ForeignPdfPageBox">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ForeignPdfPageBox</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ForeignPdfPageBox.</span>
+
+<span class="sd">Each page of a PDF document can contain multiple page boxes,</span>
+<span class="sd">also known as boundary boxes or print marks.</span>
+
+<span class="sd">Each page box defines a region of the complete page that</span>
+<span class="sd">should be rendered. The default region is the crop box.</span>
+
+<span class="sd">Attributes:</span>
+
+<span class="sd">    MEDIA (str): media box</span>
+
+<span class="sd">    CROP (str): crop box</span>
+
+<span class="sd">    TRIM (str): trim box</span>
+
+<span class="sd">    BLEED (str): bleed box</span>
+
+<span class="sd">    ART (str): art box</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">MEDIA</span> <span class="o">=</span> <span class="s1">&#39;media&#39;</span>
+    <span class="n">CROP</span> <span class="o">=</span> <span class="s1">&#39;crop&#39;</span>
+    <span class="n">TRIM</span> <span class="o">=</span> <span class="s1">&#39;trim&#39;</span>
+    <span class="n">BLEED</span> <span class="o">=</span> <span class="s1">&#39;bleed&#39;</span>
+    <span class="n">ART</span> <span class="o">=</span> <span class="s1">&#39;art&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="ForeignPpmFormat">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.ForeignPpmFormat">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ForeignPpmFormat</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ForeignPpmFormat.</span>
 
 <span class="sd">The netpbm file format to save as.</span>
 
-<span class="sd">#VIPS_FOREIGN_PPM_FORMAT_PBM images are single bit.</span>
+<span class="sd">:class:`.enums.ForeignPpmFormat.PBM` images are single bit.</span>
 
-<span class="sd">#VIPS_FOREIGN_PPM_FORMAT_PGM images are 8, 16, or 32-bits, one band.</span>
+<span class="sd">:class:`.enums.ForeignPpmFormat.PGM` images are 8, 16, or 32-bits, one band.</span>
 
-<span class="sd">#VIPS_FOREIGN_PPM_FORMAT_PPM images are 8, 16, or 32-bits, three bands.</span>
+<span class="sd">:class:`.enums.ForeignPpmFormat.PPM` images are 8, 16, or 32-bits, three bands.</span>
 
-<span class="sd">#VIPS_FOREIGN_PPM_FORMAT_PFM images are 32-bit float pixels.</span>
+<span class="sd">:class:`.enums.ForeignPpmFormat.PFM` images are 32-bit float pixels.</span>
+
+<span class="sd">:class:`.enums.ForeignPpmFormat.PNM` images are anymap images -- the image format</span>
+<span class="sd">is used to pick the saver.</span>
 
 <span class="sd">Attributes:</span>
 
@@ -944,16 +1073,22 @@
 
 <span class="sd">    PFM (str): portable float map</span>
 
+<span class="sd">    PNM (str): portable anymap</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">PBM</span> <span class="o">=</span> <span class="s1">&#39;pbm&#39;</span>
     <span class="n">PGM</span> <span class="o">=</span> <span class="s1">&#39;pgm&#39;</span>
     <span class="n">PPM</span> <span class="o">=</span> <span class="s1">&#39;ppm&#39;</span>
-    <span class="n">PFM</span> <span class="o">=</span> <span class="s1">&#39;pfm&#39;</span></div>
+    <span class="n">PFM</span> <span class="o">=</span> <span class="s1">&#39;pfm&#39;</span>
+    <span class="n">PNM</span> <span class="o">=</span> <span class="s1">&#39;pnm&#39;</span></div>
 
 
-<div class="viewcode-block" id="ForeignSubsample"><a class="viewcode-back" href="../../enums.html#pyvips.enums.ForeignSubsample">[docs]</a><span class="k">class</span> <span class="nc">ForeignSubsample</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;ForeignSubsample.</span>
+
+<div class="viewcode-block" id="ForeignSubsample">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.ForeignSubsample">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ForeignSubsample</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ForeignSubsample.</span>
 
 <span class="sd">Set subsampling mode.</span>
 
@@ -972,8 +1107,11 @@
     <span class="n">OFF</span> <span class="o">=</span> <span class="s1">&#39;off&#39;</span></div>
 
 
-<div class="viewcode-block" id="ForeignDzLayout"><a class="viewcode-back" href="../../enums.html#pyvips.enums.ForeignDzLayout">[docs]</a><span class="k">class</span> <span class="nc">ForeignDzLayout</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;ForeignDzLayout.</span>
+
+<div class="viewcode-block" id="ForeignDzLayout">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.ForeignDzLayout">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ForeignDzLayout</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ForeignDzLayout.</span>
 
 <span class="sd">What directory layout and metadata standard to use.</span>
 
@@ -998,8 +1136,11 @@
     <span class="n">IIIF3</span> <span class="o">=</span> <span class="s1">&#39;iiif3&#39;</span></div>
 
 
-<div class="viewcode-block" id="ForeignDzDepth"><a class="viewcode-back" href="../../enums.html#pyvips.enums.ForeignDzDepth">[docs]</a><span class="k">class</span> <span class="nc">ForeignDzDepth</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;ForeignDzDepth.</span>
+
+<div class="viewcode-block" id="ForeignDzDepth">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.ForeignDzDepth">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ForeignDzDepth</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ForeignDzDepth.</span>
 
 <span class="sd">How many pyramid layers to create.</span>
 
@@ -1018,10 +1159,13 @@
     <span class="n">ONE</span> <span class="o">=</span> <span class="s1">&#39;one&#39;</span></div>
 
 
-<div class="viewcode-block" id="ForeignDzContainer"><a class="viewcode-back" href="../../enums.html#pyvips.enums.ForeignDzContainer">[docs]</a><span class="k">class</span> <span class="nc">ForeignDzContainer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;ForeignDzContainer.</span>
 
-<span class="sd">How many pyramid layers to create.</span>
+<div class="viewcode-block" id="ForeignDzContainer">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.ForeignDzContainer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ForeignDzContainer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ForeignDzContainer.</span>
+
+<span class="sd">What container format to use.</span>
 
 <span class="sd">Attributes:</span>
 
@@ -1038,10 +1182,19 @@
     <span class="n">SZI</span> <span class="o">=</span> <span class="s1">&#39;szi&#39;</span></div>
 
 
-<div class="viewcode-block" id="RegionShrink"><a class="viewcode-back" href="../../enums.html#pyvips.enums.RegionShrink">[docs]</a><span class="k">class</span> <span class="nc">RegionShrink</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;RegionShrink.</span>
+
+<div class="viewcode-block" id="RegionShrink">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.RegionShrink">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RegionShrink</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;RegionShrink.</span>
 
 <span class="sd">How to calculate the output pixels when shrinking a 2x2 region.</span>
+
+<span class="sd">Images with alpha (see :meth:`.Image.hasalpha`) always shrink with</span>
+<span class="sd">:class:`.enums.RegionShrink.MEAN` and pixels scaled by alpha to avoid fringing.</span>
+
+<span class="sd">Set the image interpretation to :class:`.enums.Interpretation.MULTIBAND` to</span>
+<span class="sd">treat all bands equally.</span>
 
 <span class="sd">Attributes:</span>
 
@@ -1067,8 +1220,11 @@
     <span class="n">NEAREST</span> <span class="o">=</span> <span class="s1">&#39;nearest&#39;</span></div>
 
 
-<div class="viewcode-block" id="ForeignWebpPreset"><a class="viewcode-back" href="../../enums.html#pyvips.enums.ForeignWebpPreset">[docs]</a><span class="k">class</span> <span class="nc">ForeignWebpPreset</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;ForeignWebpPreset.</span>
+
+<div class="viewcode-block" id="ForeignWebpPreset">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.ForeignWebpPreset">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ForeignWebpPreset</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ForeignWebpPreset.</span>
 
 <span class="sd">Tune lossy encoder settings for different image types.</span>
 
@@ -1096,8 +1252,11 @@
     <span class="n">TEXT</span> <span class="o">=</span> <span class="s1">&#39;text&#39;</span></div>
 
 
-<div class="viewcode-block" id="ForeignTiffCompression"><a class="viewcode-back" href="../../enums.html#pyvips.enums.ForeignTiffCompression">[docs]</a><span class="k">class</span> <span class="nc">ForeignTiffCompression</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;ForeignTiffCompression.</span>
+
+<div class="viewcode-block" id="ForeignTiffCompression">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.ForeignTiffCompression">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ForeignTiffCompression</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ForeignTiffCompression.</span>
 
 <span class="sd">The compression types supported by the tiff writer.</span>
 
@@ -1142,8 +1301,11 @@
     <span class="n">JP2K</span> <span class="o">=</span> <span class="s1">&#39;jp2k&#39;</span></div>
 
 
-<div class="viewcode-block" id="ForeignTiffPredictor"><a class="viewcode-back" href="../../enums.html#pyvips.enums.ForeignTiffPredictor">[docs]</a><span class="k">class</span> <span class="nc">ForeignTiffPredictor</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;ForeignTiffPredictor.</span>
+
+<div class="viewcode-block" id="ForeignTiffPredictor">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.ForeignTiffPredictor">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ForeignTiffPredictor</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ForeignTiffPredictor.</span>
 
 <span class="sd">The predictor can help deflate and lzw compression. The values are fixed by</span>
 <span class="sd">the tiff library.</span>
@@ -1163,8 +1325,11 @@
     <span class="n">FLOAT</span> <span class="o">=</span> <span class="s1">&#39;float&#39;</span></div>
 
 
-<div class="viewcode-block" id="ForeignTiffResunit"><a class="viewcode-back" href="../../enums.html#pyvips.enums.ForeignTiffResunit">[docs]</a><span class="k">class</span> <span class="nc">ForeignTiffResunit</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;ForeignTiffResunit.</span>
+
+<div class="viewcode-block" id="ForeignTiffResunit">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.ForeignTiffResunit">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ForeignTiffResunit</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ForeignTiffResunit.</span>
 
 <span class="sd">Use inches or centimeters as the resolution unit for a tiff file.</span>
 
@@ -1180,12 +1345,15 @@
     <span class="n">INCH</span> <span class="o">=</span> <span class="s1">&#39;inch&#39;</span></div>
 
 
-<div class="viewcode-block" id="ForeignHeifCompression"><a class="viewcode-back" href="../../enums.html#pyvips.enums.ForeignHeifCompression">[docs]</a><span class="k">class</span> <span class="nc">ForeignHeifCompression</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;ForeignHeifCompression.</span>
+
+<div class="viewcode-block" id="ForeignHeifCompression">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.ForeignHeifCompression">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ForeignHeifCompression</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ForeignHeifCompression.</span>
 
 <span class="sd">The compression format to use inside a HEIF container.</span>
 
-<span class="sd">This is assumed to use the same numbering as %heif_compression_format.</span>
+<span class="sd">This is assumed to use the same numbering as `heif_compression_format`.</span>
 
 <span class="sd">Attributes:</span>
 
@@ -1205,13 +1373,48 @@
     <span class="n">AV1</span> <span class="o">=</span> <span class="s1">&#39;av1&#39;</span></div>
 
 
-<div class="viewcode-block" id="Size"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Size">[docs]</a><span class="k">class</span> <span class="nc">Size</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Size.</span>
+
+<div class="viewcode-block" id="ForeignHeifEncoder">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.ForeignHeifEncoder">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ForeignHeifEncoder</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ForeignHeifEncoder.</span>
+
+<span class="sd">The selected encoder to use.</span>
+<span class="sd">If libheif hasn&#39;t been compiled with the selected encoder,</span>
+<span class="sd">we will fallback to the default encoder for the compression format.</span>
+
+<span class="sd">Attributes:</span>
+
+<span class="sd">    AUTO (str): auto</span>
+
+<span class="sd">    AOM (str): aom</span>
+
+<span class="sd">    RAV1E (str): RAV1E</span>
+
+<span class="sd">    SVT (str): SVT-AV1</span>
+
+<span class="sd">    X265 (str): x265</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">AUTO</span> <span class="o">=</span> <span class="s1">&#39;auto&#39;</span>
+    <span class="n">AOM</span> <span class="o">=</span> <span class="s1">&#39;aom&#39;</span>
+    <span class="n">RAV1E</span> <span class="o">=</span> <span class="s1">&#39;rav1e&#39;</span>
+    <span class="n">SVT</span> <span class="o">=</span> <span class="s1">&#39;svt&#39;</span>
+    <span class="n">X265</span> <span class="o">=</span> <span class="s1">&#39;x265&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="Size">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.Size">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Size</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Size.</span>
 
 <span class="sd">Controls whether an operation should upsize, downsize, both up and</span>
 <span class="sd">downsize, or force a size.</span>
 
-<span class="sd">See also: vips_thumbnail().</span>
+<span class="sd">::: seealso</span>
+<span class="sd">    :meth:`.Image.thumbnail`.</span>
 
 <span class="sd">Attributes:</span>
 
@@ -1231,11 +1434,14 @@
     <span class="n">FORCE</span> <span class="o">=</span> <span class="s1">&#39;force&#39;</span></div>
 
 
-<div class="viewcode-block" id="Intent"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Intent">[docs]</a><span class="k">class</span> <span class="nc">Intent</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Intent.</span>
 
-<span class="sd">The rendering intent. #VIPS_INTENT_ABSOLUTE is best for</span>
-<span class="sd">scientific work, #VIPS_INTENT_RELATIVE is usually best for</span>
+<div class="viewcode-block" id="Intent">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.Intent">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Intent</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Intent.</span>
+
+<span class="sd">The rendering intent. :class:`.enums.Intent.ABSOLUTE` is best for</span>
+<span class="sd">scientific work, :class:`.enums.Intent.RELATIVE` is usually best for</span>
 <span class="sd">accurate communication with other imaging libraries.</span>
 
 <span class="sd">Attributes:</span>
@@ -1248,32 +1454,42 @@
 
 <span class="sd">    ABSOLUTE (str): absolute colorimetric rendering intent</span>
 
+<span class="sd">    AUTO (str): the rendering intent that the profile suggests</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">PERCEPTUAL</span> <span class="o">=</span> <span class="s1">&#39;perceptual&#39;</span>
     <span class="n">RELATIVE</span> <span class="o">=</span> <span class="s1">&#39;relative&#39;</span>
     <span class="n">SATURATION</span> <span class="o">=</span> <span class="s1">&#39;saturation&#39;</span>
-    <span class="n">ABSOLUTE</span> <span class="o">=</span> <span class="s1">&#39;absolute&#39;</span></div>
+    <span class="n">ABSOLUTE</span> <span class="o">=</span> <span class="s1">&#39;absolute&#39;</span>
+    <span class="n">AUTO</span> <span class="o">=</span> <span class="s1">&#39;auto&#39;</span></div>
 
 
-<div class="viewcode-block" id="Kernel"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Kernel">[docs]</a><span class="k">class</span> <span class="nc">Kernel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Kernel.</span>
 
-<span class="sd">The resampling kernels vips supports. See vips_reduce(), for example.</span>
+<div class="viewcode-block" id="Kernel">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.Kernel">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Kernel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Kernel.</span>
+
+<span class="sd">The resampling kernels vips supports. See :meth:`.Image.reduce`, for example.</span>
 
 <span class="sd">Attributes:</span>
 
-<span class="sd">    NEAREST (str): The nearest pixel to the point.</span>
+<span class="sd">    NEAREST (str): the nearest pixel to the point</span>
 
-<span class="sd">    LINEAR (str): Convolve with a triangle filter.</span>
+<span class="sd">    LINEAR (str): convolve with a triangle filter</span>
 
-<span class="sd">    CUBIC (str): Convolve with a cubic filter.</span>
+<span class="sd">    CUBIC (str): convolve with a cubic filter</span>
 
-<span class="sd">    MITCHELL (str): Convolve with a Mitchell kernel.</span>
+<span class="sd">    MITCHELL (str): convolve with a Mitchell kernel</span>
 
-<span class="sd">    LANCZOS2 (str): Convolve with a two-lobe Lanczos kernel.</span>
+<span class="sd">    LANCZOS2 (str): convolve with a two-lobe Lanczos kernel</span>
 
-<span class="sd">    LANCZOS3 (str): Convolve with a three-lobe Lanczos kernel.</span>
+<span class="sd">    LANCZOS3 (str): convolve with a three-lobe Lanczos kernel</span>
+
+<span class="sd">    MKS2013 (str): convolve with Magic Kernel Sharp 2013</span>
+
+<span class="sd">    MKS2021 (str): convolve with Magic Kernel Sharp 2021</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -1282,14 +1498,19 @@
     <span class="n">CUBIC</span> <span class="o">=</span> <span class="s1">&#39;cubic&#39;</span>
     <span class="n">MITCHELL</span> <span class="o">=</span> <span class="s1">&#39;mitchell&#39;</span>
     <span class="n">LANCZOS2</span> <span class="o">=</span> <span class="s1">&#39;lanczos2&#39;</span>
-    <span class="n">LANCZOS3</span> <span class="o">=</span> <span class="s1">&#39;lanczos3&#39;</span></div>
+    <span class="n">LANCZOS3</span> <span class="o">=</span> <span class="s1">&#39;lanczos3&#39;</span>
+    <span class="n">MKS2013</span> <span class="o">=</span> <span class="s1">&#39;mks2013&#39;</span>
+    <span class="n">MKS2021</span> <span class="o">=</span> <span class="s1">&#39;mks2021&#39;</span></div>
 
 
-<div class="viewcode-block" id="PCS"><a class="viewcode-back" href="../../enums.html#pyvips.enums.PCS">[docs]</a><span class="k">class</span> <span class="nc">PCS</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;PCS.</span>
 
-<span class="sd">Pick a Profile Connection Space for vips_icc_import() and</span>
-<span class="sd">vips_icc_export(). LAB is usually best, XYZ can be more convenient in some</span>
+<div class="viewcode-block" id="PCS">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.PCS">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PCS</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;PCS.</span>
+
+<span class="sd">Pick a Profile Connection Space for :meth:`.Image.icc_import` and</span>
+<span class="sd">:meth:`.Image.icc_export`. LAB is usually best, XYZ can be more convenient in some</span>
 <span class="sd">cases.</span>
 
 <span class="sd">Attributes:</span>
@@ -1304,12 +1525,16 @@
     <span class="n">XYZ</span> <span class="o">=</span> <span class="s1">&#39;xyz&#39;</span></div>
 
 
-<div class="viewcode-block" id="OperationMorphology"><a class="viewcode-back" href="../../enums.html#pyvips.enums.OperationMorphology">[docs]</a><span class="k">class</span> <span class="nc">OperationMorphology</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;OperationMorphology.</span>
+
+<div class="viewcode-block" id="OperationMorphology">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.OperationMorphology">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OperationMorphology</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;OperationMorphology.</span>
 
 <span class="sd">More like hit-miss, really.</span>
 
-<span class="sd">See also: vips_morph().</span>
+<span class="sd">::: seealso</span>
+<span class="sd">    :meth:`.Image.morph`.</span>
 
 <span class="sd">Attributes:</span>
 
@@ -1323,15 +1548,19 @@
     <span class="n">DILATE</span> <span class="o">=</span> <span class="s1">&#39;dilate&#39;</span></div>
 
 
-<div class="viewcode-block" id="CombineMode"><a class="viewcode-back" href="../../enums.html#pyvips.enums.CombineMode">[docs]</a><span class="k">class</span> <span class="nc">CombineMode</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;CombineMode.</span>
 
-<span class="sd">See vips_draw_image() and so on.</span>
+<div class="viewcode-block" id="CombineMode">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.CombineMode">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CombineMode</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;CombineMode.</span>
 
-<span class="sd">Operations like vips_draw_image() need to be told how to combine images</span>
+<span class="sd">See :meth:`.Image.draw_image` and so on.</span>
+
+<span class="sd">Operations like :meth:`.Image.draw_image` need to be told how to combine images</span>
 <span class="sd">from two sources.</span>
 
-<span class="sd">See also: vips_join().</span>
+<span class="sd">::: seealso</span>
+<span class="sd">    :meth:`.Image.join`.</span>
 
 <span class="sd">Attributes:</span>
 
@@ -1345,63 +1574,76 @@
     <span class="n">ADD</span> <span class="o">=</span> <span class="s1">&#39;add&#39;</span></div>
 
 
-<div class="viewcode-block" id="Token"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Token">[docs]</a><span class="k">class</span> <span class="nc">Token</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Token.</span>
+
+<div class="viewcode-block" id="ForeignKeep">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.ForeignKeep">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ForeignKeep</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ForeignKeep.</span>
+
+<span class="sd">Which metadata to retain.</span>
 
 <span class="sd">Attributes:</span>
 
+<span class="sd">    NONE (int): don&#39;t attach metadata</span>
+
+<span class="sd">    EXIF (int): keep Exif metadata</span>
+
+<span class="sd">    XMP (int): keep XMP metadata</span>
+
+<span class="sd">    IPTC (int): keep IPTC metadata</span>
+
+<span class="sd">    ICC (int): keep ICC metadata</span>
+
+<span class="sd">    OTHER (int): keep other metadata (e.g. PNG comments)</span>
+
+<span class="sd">    GAINMAP (int): keep the gainmap metadata</span>
+
+<span class="sd">    ALL (int): keep all metadata</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">LEFT</span> <span class="o">=</span> <span class="s1">&#39;left&#39;</span>
-    <span class="n">RIGHT</span> <span class="o">=</span> <span class="s1">&#39;right&#39;</span>
-    <span class="n">STRING</span> <span class="o">=</span> <span class="s1">&#39;string&#39;</span>
-    <span class="n">EQUALS</span> <span class="o">=</span> <span class="s1">&#39;equals&#39;</span></div>
+    <span class="n">NONE</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">EXIF</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">XMP</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">IPTC</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">ICC</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="n">OTHER</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="n">GAINMAP</span> <span class="o">=</span> <span class="mi">32</span>
+    <span class="n">ALL</span> <span class="o">=</span> <span class="mi">63</span></div>
 
 
-<div class="viewcode-block" id="Saveable"><a class="viewcode-back" href="../../enums.html#pyvips.enums.Saveable">[docs]</a><span class="k">class</span> <span class="nc">Saveable</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Saveable.</span>
 
-<span class="sd">See also: #VipsForeignSave.</span>
+<div class="viewcode-block" id="ForeignPngFilter">
+<a class="viewcode-back" href="../../enums.html#pyvips.enums.ForeignPngFilter">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ForeignPngFilter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ForeignPngFilter.</span>
+
+<span class="sd">http://www.w3.org/TR/PNG-Filters.html</span>
+<span class="sd">The values mirror those of png.h in libpng.</span>
 
 <span class="sd">Attributes:</span>
 
-<span class="sd">    MONO (str): 1 band (eg. CSV)</span>
+<span class="sd">    NONE (int): no filtering</span>
 
-<span class="sd">    RGB (str): 1 or 3 bands (eg. PPM)</span>
+<span class="sd">    SUB (int): difference to the left</span>
 
-<span class="sd">    RGBA (str): 1, 2, 3 or 4 bands (eg. PNG)</span>
+<span class="sd">    UP (int): difference up</span>
 
-<span class="sd">    RGBA_ONLY (str): 3 or 4 bands (eg. WEBP)</span>
+<span class="sd">    AVG (int): average of left and up</span>
 
-<span class="sd">    RGB_CMYK (str): 1, 3 or 4 bands (eg. JPEG)</span>
+<span class="sd">    PAETH (int): pick best neighbor predictor automatically</span>
 
-<span class="sd">    ANY (str): any number of bands (eg. TIFF)</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">MONO</span> <span class="o">=</span> <span class="s1">&#39;mono&#39;</span>
-    <span class="n">RGB</span> <span class="o">=</span> <span class="s1">&#39;rgb&#39;</span>
-    <span class="n">RGBA</span> <span class="o">=</span> <span class="s1">&#39;rgba&#39;</span>
-    <span class="n">RGBA_ONLY</span> <span class="o">=</span> <span class="s1">&#39;rgba-only&#39;</span>
-    <span class="n">RGB_CMYK</span> <span class="o">=</span> <span class="s1">&#39;rgb-cmyk&#39;</span>
-    <span class="n">ANY</span> <span class="o">=</span> <span class="s1">&#39;any&#39;</span></div>
-
-
-<div class="viewcode-block" id="ImageType"><a class="viewcode-back" href="../../enums.html#pyvips.enums.ImageType">[docs]</a><span class="k">class</span> <span class="nc">ImageType</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;ImageType.</span>
-
-<span class="sd">Attributes:</span>
+<span class="sd">    ALL (int): adaptive</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">ERROR</span> <span class="o">=</span> <span class="s1">&#39;error&#39;</span>
-    <span class="n">NONE</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span>
-    <span class="n">SETBUF</span> <span class="o">=</span> <span class="s1">&#39;setbuf&#39;</span>
-    <span class="n">SETBUF_FOREIGN</span> <span class="o">=</span> <span class="s1">&#39;setbuf-foreign&#39;</span>
-    <span class="n">OPENIN</span> <span class="o">=</span> <span class="s1">&#39;openin&#39;</span>
-    <span class="n">MMAPIN</span> <span class="o">=</span> <span class="s1">&#39;mmapin&#39;</span>
-    <span class="n">MMAPINRW</span> <span class="o">=</span> <span class="s1">&#39;mmapinrw&#39;</span>
-    <span class="n">OPENOUT</span> <span class="o">=</span> <span class="s1">&#39;openout&#39;</span></div>
+    <span class="n">NONE</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="n">SUB</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="n">UP</span> <span class="o">=</span> <span class="mi">32</span>
+    <span class="n">AVG</span> <span class="o">=</span> <span class="mi">64</span>
+    <span class="n">PAETH</span> <span class="o">=</span> <span class="mi">128</span>
+    <span class="n">ALL</span> <span class="o">=</span> <span class="mi">248</span></div>
+
 </pre></div>
 
            </div>
