@@ -982,6 +982,29 @@ class Image(pyvips.VipsObject, metaclass=ImageType):
 
     # get/set metadata
 
+    def get_gainmap(self, name):
+        """Get the image gainmap, if any.
+
+        Get the gainmap associated with this image, or None for no gainmap.
+        After updating the gainmap, use :meth:`.set_type` to update the
+        `"gainmap"` metadata item.
+
+        Returns:
+            The gainmap image.
+
+        Raises:
+            None
+
+        """
+        if not at_least_libvips(8, 18):
+            return None
+        else:
+            pointer = vips_lib.vips_image_get_gainmap(self.pointer)
+            if pointer == ffi.NULL:
+                return None
+            else:
+                return pyvips.Image(pointer)
+
     def get_typeof(self, name):
         """Get the GType of an item of metadata.
 
@@ -1182,13 +1205,15 @@ class Image(pyvips.VipsObject, metaclass=ImageType):
     #
     #     return interface
 
-    def __array__(self, dtype=None):
+    def __array__(self, dtype=None, copy=None):
         """Conversion to a NumPy array.
 
         Args:
             dtype (str or numpy dtype, optional) The dtype to use for the
                 numpy array. If None, the default dtype of the image is used
                 as defined the global `FORMAT_TO_TYPESTR` dictionary.
+            copy (bool, optional) If True, always copy the data; if None, copy
+                if required; if False, never copy.
 
         Returns:
             numpy.ndarray: The array representation of the image.
@@ -1207,6 +1232,10 @@ class Image(pyvips.VipsObject, metaclass=ImageType):
         See Also `Image.new_from_array` for the inverse operation. #TODO
         """
         import numpy as np
+
+        # we always generate a new image, so if copy is False, we can't work
+        if not copy:
+            raise ValueError
 
         arr = (
             np.frombuffer(self.write_to_memory(),

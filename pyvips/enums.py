@@ -222,6 +222,10 @@ Attributes:
 
     HSV (str): pixels are HSV
 
+    OKLAB (str): pixels are in Oklab colourspace
+
+    OKLCH (str): pixels are in Oklch colourspace
+
     """
 
     ERROR = 'error'
@@ -244,6 +248,8 @@ Attributes:
     MATRIX = 'matrix'
     SCRGB = 'scrgb'
     HSV = 'hsv'
+    OKLAB = 'oklab'
+    OKLCH = 'oklch'
 
 
 class OperationRelational(object):
@@ -487,6 +493,8 @@ Attributes:
     RANDOM (str): can read anywhere
 
     SEQUENTIAL (str): top-to-bottom reading only, but with a small buffer
+
+    SEQUENTIAL_UNBUFFERED (str): deprecated, use :class:`.enums.Access.SEQUENTIAL` instead
 
     """
 
@@ -843,6 +851,36 @@ Attributes:
     WARNING = 'warning'
 
 
+class ForeignPdfPageBox(object):
+    """ForeignPdfPageBox.
+
+Each page of a PDF document can contain multiple page boxes,
+also known as boundary boxes or print marks.
+
+Each page box defines a region of the complete page that
+should be rendered. The default region is the crop box.
+
+Attributes:
+
+    MEDIA (str): media box
+
+    CROP (str): crop box
+
+    TRIM (str): trim box
+
+    BLEED (str): bleed box
+
+    ART (str): art box
+
+    """
+
+    MEDIA = 'media'
+    CROP = 'crop'
+    TRIM = 'trim'
+    BLEED = 'bleed'
+    ART = 'art'
+
+
 class ForeignPpmFormat(object):
     """ForeignPpmFormat.
 
@@ -949,7 +987,7 @@ Attributes:
 class ForeignDzContainer(object):
     """ForeignDzContainer.
 
-How many pyramid layers to create.
+What container format to use.
 
 Attributes:
 
@@ -970,6 +1008,12 @@ class RegionShrink(object):
     """RegionShrink.
 
 How to calculate the output pixels when shrinking a 2x2 region.
+
+Images with alpha (see :meth:`.Image.hasalpha`) always shrink with
+:class:`.enums.RegionShrink.MEAN` and pixels scaled by alpha to avoid fringing.
+
+Set the image interpretation to :class:`.enums.Interpretation.MULTIBAND` to
+treat all bands equally.
 
 Attributes:
 
@@ -1223,21 +1267,21 @@ The resampling kernels vips supports. See :meth:`.Image.reduce`, for example.
 
 Attributes:
 
-    NEAREST (str): The nearest pixel to the point.
+    NEAREST (str): the nearest pixel to the point
 
-    LINEAR (str): Convolve with a triangle filter.
+    LINEAR (str): convolve with a triangle filter
 
-    CUBIC (str): Convolve with a cubic filter.
+    CUBIC (str): convolve with a cubic filter
 
-    MITCHELL (str): Convolve with a Mitchell kernel.
+    MITCHELL (str): convolve with a Mitchell kernel
 
-    LANCZOS2 (str): Convolve with a two-lobe Lanczos kernel.
+    LANCZOS2 (str): convolve with a two-lobe Lanczos kernel
 
-    LANCZOS3 (str): Convolve with a three-lobe Lanczos kernel.
+    LANCZOS3 (str): convolve with a three-lobe Lanczos kernel
 
-    MKS2013 (str): Convolve with Magic Kernel Sharp 2013.
+    MKS2013 (str): convolve with Magic Kernel Sharp 2013
 
-    MKS2021 (str): Convolve with Magic Kernel Sharp 2021.
+    MKS2021 (str): convolve with Magic Kernel Sharp 2021
 
     """
 
@@ -1330,7 +1374,9 @@ Attributes:
 
     ICC (int): keep ICC metadata
 
-    OTHER (int): keep other metadata (e.g. PNG comments and some TIFF tags)
+    OTHER (int): keep other metadata (e.g. PNG comments)
+
+    GAINMAP (int): keep the gainmap metadata
 
     ALL (int): keep all metadata
 
@@ -1342,7 +1388,8 @@ Attributes:
     IPTC = 4
     ICC = 8
     OTHER = 16
-    ALL = 31
+    GAINMAP = 32
+    ALL = 63
 
 
 class ForeignPngFilter(object):

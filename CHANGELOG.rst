@@ -1,6 +1,8 @@
-## Version 3.0.1 (git master)
+## Version 3.1.0 (released 8 December 2025)
 
 - fix glib DLL name with Conan [boussaffawalid]
+- update docs for libvips 8.18 [jcupitt]
+- add `get_gainmap()` [jcupitt]
 
 ## Version 3.0.0 (released 28 April 2025)
 

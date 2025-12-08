@@ -78,11 +78,12 @@ with:
     $ pip install "pyvips[binary]"
 
 This installs a self-contained package with the most commonly needed
-libraries. It should just work on most common platforms, including Linux,
-Windows and macOS, with x64 and ARM CPUs.
+libraries. It should just work on most platforms, including Linux,
+Windows and macOS, with 64 and 32 bit x64 and ARM CPUs. Note that this libvips
+is missing features like PDF load and OpenSlide support.
 
-If your platform is unsupported or the pre-built binary is
-unsuitable, you can install libvips separately instead.
+If your platform is unsupported or the pre-built binary is unsuitable, you
+can install libvips separately instead.
 
 Local installation
 ------------------

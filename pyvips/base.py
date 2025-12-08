@@ -119,9 +119,7 @@ def values_for_enum(gtype):
 
     result = [_to_string(g_enum_class.values[i].value_nick)
               for i in range(g_enum_class.n_values)]
-    # FIXME: remove after https://github.com/libvips/libvips/pull/4520
-    if 'last' in result:
-        result.remove('last')
+
     return result
 
 
@@ -144,8 +142,7 @@ def enum_dict(gtype):
     result = {_to_string(g_enum_class.values[i].value_nick):
               g_enum_class.values[i].value
               for i in range(g_enum_class.n_values)}
-    # FIXME: remove after https://github.com/libvips/libvips/pull/4520
-    result.pop('last', None)
+
     return result
 
 

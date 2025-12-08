@@ -455,6 +455,12 @@ def cdefs(features):
 
         '''
 
+    if _at_least(features, 8, 18):
+        code += '''
+            VipsImage *vips_image_get_gainmap(VipsImage *image);
+
+        '''
+
     # we must only define these in API mode ... in ABI mode we need to call
     # these things earlier
     if features['api']:
