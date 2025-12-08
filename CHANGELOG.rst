@@ -3,6 +3,7 @@
 - fix glib DLL name with Conan [boussaffawalid]
 - update docs for libvips 8.18 [jcupitt]
 - add `get_gainmap()` [jcupitt]
+- remove redundant `revalidate` flags from docs [kleisauke]
 
 ## Version 3.0.0 (released 28 April 2025)
 

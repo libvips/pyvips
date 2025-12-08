@@ -17,6 +17,7 @@ _DEPRECATED = 64
 _MODIFY = 128
 
 # for VipsOperationFlags
+_OPERATION_NOCACHE = 4
 _OPERATION_DEPRECATED = 8
 
 
@@ -417,6 +418,13 @@ class Operation(pyvips.VipsObject):
             raise Error('No such operator.',
                         f'operator "{operation_name}" is deprecated')
 
+        # drop "revalidate" flag from buffer loaders and operations marked
+        # "nocache" as they are already uncached
+        doc_optional_input = [name for name in intro.doc_optional_input if
+                              name != 'revalidate' or
+                              ('_buffer' not in operation_name and
+                               (intro.flags & _OPERATION_NOCACHE) == 0)]
+
         if intro.member_x is not None:
             result = '.. method:: '
         else:
@@ -424,7 +432,7 @@ class Operation(pyvips.VipsObject):
         args = []
         args += intro.method_args
         args += [x + '=' + GValue.gtype_to_python(intro.details[x]['type'])
-                 for x in intro.doc_optional_input]
+                 for x in doc_optional_input]
         args += [x + '=bool'
                  for x in intro.doc_optional_output]
         result += operation_name + '(' + ", ".join(args) + ')\n\n'
@@ -443,11 +451,11 @@ class Operation(pyvips.VipsObject):
         args = []
         args += intro.method_args
         args += [x + '=' + GValue.gtype_to_python(intro.details[x]['type'])
-                 for x in intro.doc_optional_input]
+                 for x in doc_optional_input]
         result += ', '.join(args)
         result += ')\n\n'
 
-        for name in intro.method_args + intro.doc_optional_input:
+        for name in intro.method_args + doc_optional_input:
             details = intro.details[name]
             result += f':param {name}: {details["blurb"]}\n'
             result += (f':type {name}: '
