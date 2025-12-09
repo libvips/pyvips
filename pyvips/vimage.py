@@ -982,7 +982,7 @@ class Image(pyvips.VipsObject, metaclass=ImageType):
 
     # get/set metadata
 
-    def get_gainmap(self, name):
+    def get_gainmap(self):
         """Get the image gainmap, if any.
 
         Get the gainmap associated with this image, or None for no gainmap.
@@ -1234,7 +1234,7 @@ class Image(pyvips.VipsObject, metaclass=ImageType):
         import numpy as np
 
         # we always generate a new image, so if copy is False, we can't work
-        if not copy:
+        if copy is False:
             raise ValueError
 
         arr = (

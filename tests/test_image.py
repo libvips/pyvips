@@ -2,7 +2,7 @@
 
 import pyvips
 import pytest
-from helpers import JPEG_FILE
+from helpers import JPEG_FILE, UHDR_FILE, skip_if_no
 
 
 class TestImage:
@@ -393,3 +393,26 @@ class TestImage:
         assert im.height == pim.height
         assert im.min() == 0
         assert im.max() == 0
+
+    @skip_if_no('uhdrload')
+    @pytest.mark.skipif(not pyvips.at_least_libvips(8, 18),
+                        reason="requires libvips >= 8.18")
+    def test_gainmap(self):
+        def crop_gainmap(image):
+            gainmap = image.get_gainmap()
+
+            if gainmap:
+                new_gainmap = gainmap.crop(0, 0, 10, 10)
+                image = image.copy()
+                image.set_type(pyvips.GValue.image_type,
+                               "gainmap", new_gainmap)
+
+            return image
+
+        image = pyvips.Image.new_from_file(UHDR_FILE)
+        image = crop_gainmap(image)
+        buf = image.write_to_buffer(".jpg")
+        new_image = pyvips.Image.new_from_buffer(buf, "")
+        new_gainmap = new_image.get_gainmap()
+
+        assert new_gainmap.width == 10

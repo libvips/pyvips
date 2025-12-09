@@ -10,6 +10,7 @@ IMAGES = os.path.join(os.path.dirname(__file__), os.pardir, 'images')
 JPEG_FILE = os.path.join(IMAGES, "sample.jpg")
 WEBP_FILE = os.path.join(IMAGES, "sample.webp")
 SVG_FILE = os.path.join(IMAGES, "logo.svg")
+UHDR_FILE = os.path.join(IMAGES, "ultra-hdr.jpg")
 
 
 # an expanding zip ... if either of the args is a scalar or a one-element list,

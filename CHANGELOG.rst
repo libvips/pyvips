@@ -1,3 +1,9 @@
+## Version 3.1.1 (released 9 December 2025)
+
+- fix get_gainmap arguments [jcupitt]
+- fix __array__ copy argument test [jcupitt]
+- add a test [jcupitt]
+
 ## Version 3.1.0 (released 8 December 2025)
 
 - fix glib DLL name with Conan [boussaffawalid]
