@@ -395,8 +395,6 @@ class TestImage:
         assert im.max() == 0
 
     @skip_if_no('uhdrload')
-    @pytest.mark.skipif(not pyvips.at_least_libvips(8, 18),
-                        reason="requires libvips >= 8.18")
     def test_gainmap(self):
         def crop_gainmap(image):
             gainmap = image.get_gainmap()
