@@ -32,6 +32,11 @@ jobs:
           pip install flake8
           flake8 .
 
+      - name: Type check with mypy
+        run: |
+          pip install mypy
+          mypy pyvips/__init__.pyi --no-error-summary
+
       - name: Install tox and any other packages
         run: pip install tox
 
