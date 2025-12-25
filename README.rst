@@ -228,6 +228,30 @@ Stylecheck:
 
     $ flake8
 
+Stylecheck:
+
+.. code-block:: shell
+
+    $ flake8
+
+Type checking:
+
+pyvips includes type hints via PEP 561 type stub files (``pyvips/__init__.pyi``).
+To enable type checking in your project, install a type checker like mypy:
+
+.. code-block:: shell
+
+    $ pip install mypy pyvips
+
+Then run mypy on your code:
+
+.. code-block:: shell
+
+    $ mypy your_script.py
+
+Note: ``pyvips`` methods accept arbitrary keyword arguments for libvips options,
+which may not be fully covered by type hints.
+
 Generate HTML docs in ``doc/build/html``:
 
 .. code-block:: shell
@@ -245,6 +269,16 @@ then
       ./gen-enums.py ~/GIT/libvips/build/libvips/Vips-8.0.gir > enums.py
 
 Then check and move `enums.py` into `pyvips/`.
+
+Regenerate type stubs:
+
+After adding new libvips operations or updating libvips itself, regenerate type stubs:
+
+.. code-block:: shell
+
+    $ python pyvips/generate_type_stubs.py
+
+This updates ``pyvips/__init__.pyi`` with the latest operations.
 
 Regenerate autodocs:
 
