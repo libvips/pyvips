@@ -35,6 +35,7 @@ from pyvips import (
     at_least_libvips,
 )
 from pyvips import ffi, Error, _to_bytes, _to_string
+from pyvips.voperation import _OPERATION_DEPRECATED
 
 
 def gtype_to_python_type(gtype: int) -> str:
@@ -118,7 +119,7 @@ def generate_method_signature(operation_name: str) -> str:
     """Generate type signature for an operation method."""
     intro = Introspect.get(operation_name)
 
-    if (intro.flags & 4) != 0:  # _OPERATION_DEPRECATED
+    if (intro.flags & _OPERATION_DEPRECATED) != 0:
         return None
 
     args_list = []
