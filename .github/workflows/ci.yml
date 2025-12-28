@@ -36,7 +36,9 @@ jobs:
         run: |
           pip install mypy
           mypy pyvips/__init__.pyi --no-error-summary
-          mypy examples/affine.py examples/convolve.py examples/try5.py examples/watermark.py --no-error-summary
+          mypy examples/affine.py examples/convolve.py examples/try5.py examples/watermark.py \
+                examples/annotate-animation.py examples/join-animation.py examples/progress.py \
+                --no-error-summary
 
       - name: Install tox and any other packages
         run: pip install tox
