@@ -276,7 +276,7 @@ After adding new libvips operations or updating libvips itself, regenerate type 
 
 .. code-block:: shell
 
-    $ python pyvips/generate_type_stubs.py
+    $ python examples/generate_type_stubs.py
 
 This updates ``pyvips/__init__.pyi`` with the latest operations.
 
