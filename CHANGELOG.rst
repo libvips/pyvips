@@ -3,7 +3,7 @@
 - fix get_gainmap arguments [jcupitt]
 - fix __array__ copy argument test [jcupitt]
 - add a test [jcupitt]
-- add type stub generation script with support for all libvips operations [AI Assistant]
+- add type stub generation script with support for all libvips operations [JoshCLWren]
 
 ## Version 3.1.0 (released 8 December 2025)
 
