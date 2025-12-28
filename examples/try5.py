@@ -46,7 +46,7 @@ b = a * 12
 b = a * [12, 1, 1]
 b = a * b
 b = 12 * a
-b = [12, 1, 1] * a  # type: ignore[assignment, operator]
+b = [12, 1, 1] * a  # type: ignore
 
 b = a / 12
 b = a / [12, 1, 1]

@@ -204,7 +204,7 @@ def generate_all_image_operations() -> str:
     all_names.sort()
 
     # remove operations we have to wrap by hand
-    exclude = ["scale", "ifthenelse", "bandjoin", "bandrank", "composite"]
+    exclude = ["scale", "ifthenelse", "bandjoin", "bandrank", "composite", "copy"]
     all_names = [(name, sig) for name, sig in all_names if name not in exclude]
 
     return "\n".join([sig for _, sig in all_names])
@@ -261,10 +261,40 @@ def get_all_enum_names() -> list[str]:
             "Precision",
             "FailOn",
             "BlendMode",
+            "ForeignDzLayout",
+            "ForeignDzDepth",
+            "ForeignDzContainer",
+            "RegionShrink",
+            "ForeignHeifCompression",
+            "ForeignSubsample",
+            "ForeignHeifEncoder",
+            "ForeignPpmFormat",
+            "ForeignTiffCompression",
+            "ForeignTiffPredictor",
+            "ForeignTiffResunit",
+            "ForeignWebpPreset",
+            "Size",
         ]
     )
 
     return sorted(enum_names)
+
+
+def generate_enum_class(name: str) -> str:
+    """Generate type stub for a single enum class."""
+    if name == "Direction":
+        return """class Direction:
+    HORIZONTAL: str
+    VERTICAL: str
+"""
+    elif name == "Align":
+        return """class Align:
+    LOW: str
+    CENTRE: str
+    HIGH: str
+"""
+    else:
+        return f"class {name}: ..."
 
 
 def generate_stub() -> str:
@@ -273,7 +303,7 @@ def generate_stub() -> str:
     # Get all enum names
     enum_names = get_all_enum_names()
 
-    enum_classes = "\n".join([f"class {name}: ..." for name in enum_names])
+    enum_classes = "\n".join([generate_enum_class(name) for name in enum_names])
 
     stub = f'''"""Type stubs for pyvips.
 
@@ -299,18 +329,53 @@ from typing import Dict, List, Optional, Tuple, TypeVar, Union, overload
 class Error(Exception): ...
 
 # GObject base classes
-class GObject: ...
-class GValue: ...
+class GObject:
+    def signal_connect(self, name: str, callback: object) -> None: ...
+
+class VipsObject(GObject): ...
+
+class GValue:
+    gbool_type: int
+    gint_type: int
+    guint64_type: int
+    gdouble_type: int
+    gstr_type: int
+    genum_type: int
+    gflags_type: int
+    gobject_type: int
+    image_type: int
+    array_int_type: int
+    array_double_type: int
+    array_image_type: int
+    refstr_type: int
+    blob_type: int
+    source_type: int
+    target_type: int
+    format_type: int
+    blend_mode_type: int
+    ...
 
 # Connection classes
-class Source: ...
-class Target: ...
+class Source:
+    @staticmethod
+    def new_from_descriptor(descriptor: int) -> Source: ...
+class SourceCustom(Source):
+    def on_read(self, handler: object) -> None: ...
+    def on_seek(self, handler: object) -> None: ...
+class Target:
+    @staticmethod
+    def new_to_descriptor(descriptor: int) -> Target: ...
+
+# Interpolator class
+class Interpolate:
+    @staticmethod
+    def new(name: str) -> Interpolate: ...
 
 # Enum classes
 {enum_classes}
 
 
-class Image:
+class Image(VipsObject):
     """Wrap a VipsImage object."""
 
     # Properties
@@ -387,7 +452,13 @@ class Image:
     def composite(self, other: Union[Image, List[Image]], mode: Union[str, BlendMode, List[Union[str, BlendMode]]], **kwargs: object) -> Image: ...
     def ifthenelse(self, in1: Union[Image, float, int], in2: Union[Image, float, int], **kwargs: object) -> Image: ...
     def hasalpha(self) -> bool: ...
+    def get_n_pages(self) -> int: ...
     def get_page_height(self) -> int: ...
+    def pagesplit(self) -> List[Image]: ...
+    def pagejoin(self, other: Union[Image, List[Image]]) -> Image: ...
+    def scaleimage(self, **kwargs: object) -> Image: ...
+    def erode(self, mask: Union[Image, List[List[int]]]) -> Image: ...
+    def dilate(self, mask: Union[Image, List[List[int]]]) -> Image: ...
 
     # Dynamically generated operations
 '''
@@ -448,6 +519,9 @@ def cache_get_max_mem() -> int: ...
 def cache_get_max_files() -> int: ...
 def block_untrusted_set(state: bool) -> None: ...
 def operation_block_set(name: str, state: bool) -> None: ...
+def leak_set(leak: bool) -> None: ...
+def shutdown() -> None: ...
+def call(operation_name: str, *args: object, **kwargs: object) -> Union[Image, tuple[Image, Dict[str, Union[bool, int, float, str, Image, list[int], list[float], list[Image]]]]]: ...
 
 # Module-level constants
 API_mode: bool

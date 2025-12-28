@@ -34,5 +34,6 @@ def test_type_stubs_basic():
 
     # Test get returns union type
     metadata = img.get("xres")
+    assert isinstance(metadata, float)
 
     print("Type stubs test passed!")

@@ -14,7 +14,7 @@ text = pyvips.Image.text(
 )
 
 # scale the alpha down to make the text semi-transparent
-text = (text * [1, 1, 1, 0.3]).cast("uchar")  # type: ignore[operator]
+text = (text * [1, 1, 1, 0.3]).cast("uchar")  # type: ignore
 
 text = text.rotate(45)
 

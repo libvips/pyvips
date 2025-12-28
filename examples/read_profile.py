@@ -11,5 +11,5 @@ a = pyvips.Image.new_from_file(sys.argv[1])
 
 profile = a.get("icc-profile-data")
 
-with open('x.icm', 'w') as f:
-    f.write(profile)
+with open("x.icm", "w") as f:
+    f.write(profile)  # type: ignore[arg-type]

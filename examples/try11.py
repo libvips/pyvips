@@ -8,6 +8,6 @@ import pyvips
 
 a = pyvips.Image.new_from_file(sys.argv[1])
 ipct = a.get("ipct-data")
-print("ipct = ", ipct.get())
+print("ipct = ", ipct.get())  # type: ignore[union-attr, call-arg]
 a.remove("ipct-data")
 a.write_to_file("x.jpg")
