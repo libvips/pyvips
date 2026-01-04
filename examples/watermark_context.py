@@ -21,7 +21,8 @@ def avgze(image):
     histze = image.hist_find().insert(pyvips.Image.black(1, 1), 0, 0)
 
     # number of non-zero pixels in each band
-    nnz = [histze[i].avg() * histze.width * histze.height for i in range(histze.bands)]
+    nnz = [histze[i].avg() * histze.width * histze.height
+           for i in range(histze.bands)]
 
     # multiply by the identity function and we get the sum of non-zero
     # pixels ... for 16-bit images, we need a larger identity
@@ -29,10 +30,8 @@ def avgze(image):
     totalze = histze * pyvips.Image.identity(ushort=histze.width > 256)
 
     # find average value in each band
-    avgze = [
-        totalze[i].avg() * histze.width * histze.height / nnz[i]
-        for i in range(totalze.bands)
-    ]
+    avgze = [totalze[i].avg() * histze.width * histze.height / nnz[i]
+             for i in range(totalze.bands)]
 
     return avgze
 
@@ -55,7 +54,7 @@ def oppose(value, mx):
 im = pyvips.Image.new_from_file(sys.argv[1])
 
 text = pyvips.Image.text(sys.argv[3], width=500, dpi=300, align="centre")
-text = text.rotate(45)  # type: ignore[union-attr]
+text = text.rotate(45)
 
 # the position of the overlay in the image
 left = 100
