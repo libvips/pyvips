@@ -229,8 +229,7 @@ def setup(app):
                         items.append(name)
                 public = [
                     x for x in items
-                          if x in include_public or not x.startswith('_')]
-                          if x in include_public or not x.startswith('_')]
+                    if x in include_public or not x.startswith('_')
                 ]
                 return public, items
 
