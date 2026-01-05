@@ -34,7 +34,9 @@ jobs:
 
       - name: Type check with mypy
         run: |
-          pip install mypy
+          # Pin mypy to <1.19 due to librt dependency in 1.19+
+          # which is not available on PyPy 3.9
+          pip install "mypy<1.19"
           mypy pyvips/__init__.pyi --no-error-summary
           mypy examples/affine.py examples/convolve.py examples/try5.py examples/watermark.py \
                 examples/annotate-animation.py examples/join-animation.py examples/progress.py \
