@@ -16,7 +16,12 @@ To regenerate after libvips updates:
 """
 
 from __future__ import annotations
-from typing import Dict, List, Optional, Tuple, TypeVar, Union, overload
+from typing import Dict, List, Optional, Tuple, TypeVar, Union, overload, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from PIL.Image import Image as PILImage  # type: ignore
+else:
+    class PILImage: ...
 
 # Exception classes
 class Error(Exception): ...
@@ -184,6 +189,7 @@ class Image(VipsObject):
     # numpy is optional dependency - use TYPE_CHECKING guard
     def __array__(self, dtype: Optional[str] = None, copy: Optional[bool] = None) -> object: ...
     def numpy(self, dtype: Optional[str] = None) -> object: ...
+    def pil(self) -> PILImage: ...
 
     # Hand-written bindings with type hints
     def floor(self) -> Image: ...

@@ -1,7 +1,9 @@
 # wrap VipsImage
 
+import array
 import numbers
 import struct
+import sys
 
 import pyvips
 from pyvips import ffi, glib_lib, vips_lib, Error, _to_bytes, \
@@ -1278,6 +1280,56 @@ class Image(pyvips.VipsObject, metaclass=ImageType):
               strings to numpy dtype strings.
         """
         return self.__array__(dtype=dtype)
+
+    def pil(self):
+        """Convert the image to a PIL Image.
+
+        This uses :meth:`PIL.Image.fromarray` for most formats and falls back
+        to raw-mode conversion for formats not natively supported by that method.
+
+        Notes:
+
+        - Pillow stores RGB/RGBA data as 8-bit, so 16-bit inputs will be
+          converted by keeping the high byte of each channel.
+        - Pillow expands LA inputs to RGBA by duplicating the L channel into RGB.
+
+        PIL is a runtime dependency of this function.
+        """
+        try:
+            from PIL import Image as PILImage
+        except ImportError as err:
+            raise ImportError('PIL not available') from err
+
+        if self.bands == 1 or self.format != 'ushort':
+            return PILImage.fromarray(self.numpy())
+
+        data = self.write_to_memory()
+
+        if self.bands == 2:
+            mode = 'RGBA'
+            rawmode = 'LA;16B'
+            # Pillow only accepts LA;16B. Byteswap on little-endian systems.
+            if sys.byteorder == 'little':
+                swapped = array.array('H')
+                swapped.frombytes(data)
+                swapped.byteswap()
+                data = swapped.tobytes()
+        elif self.bands == 3:
+            mode = 'RGB'
+            rawmode = 'RGB;16L' if sys.byteorder == 'little' else 'RGB;16B'
+        elif self.bands == 4:
+            mode = 'RGBA'
+            rawmode = 'RGBA;16L' if sys.byteorder == 'little' else 'RGBA;16B'
+        else:
+            raise ValueError('PIL does not support 16-bit images with more than 4 bands')
+
+        return PILImage.frombytes(
+            mode,
+            (self.width, self.height),
+            data,
+            'raw',
+            rawmode
+        )
 
     def __repr__(self):
         if (
