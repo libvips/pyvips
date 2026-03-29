@@ -186,6 +186,12 @@ def _remove_log_handler():
 
 atexit.register(_remove_log_handler)
 
+# shut down libvips on exit to drain the thread pool, preventing
+# segfaults from worker threads accessing unmapped memory during
+# Python's final GC pass
+_shutdown = vips_lib.vips_shutdown
+atexit.register(_shutdown)
+
 from .enums import *
 from .base import *
 from .gobject import *
