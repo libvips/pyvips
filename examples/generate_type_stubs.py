@@ -22,55 +22,22 @@ This approach follows the existing pattern used for:
 - Documentation generation (pyvips.Operation.generate_sphinx_all())
 """
 
-import typing
-from typing import Any, Optional, Union
+import inspect
 
 import pyvips
-from pyvips import (
-    GValue,
-    Introspect,
-    type_map,
-    type_from_name,
-    nickname_find,
-    at_least_libvips,
-)
+from pyvips import GValue, Introspect, type_map, type_from_name, nickname_find
 from pyvips import ffi, Error
 from pyvips.voperation import _OPERATION_DEPRECATED
 
 
-def gtype_to_python_type(gtype: int) -> str:
+def gtype_to_python_type(name: str, gtype: int) -> str:
     """Map a gtype to Python type annotation string."""
-    fundamental = pyvips.gobject_lib.g_type_fundamental(gtype)
-
-    if fundamental == GValue.genum_type:
-        name = pyvips.type_name(gtype)
-        if name.startswith("Vips"):
-            name = name[4:]
-        return f"Union[str, {name}]"
-
-    type_mapping = {
-        GValue.gbool_type: "bool",
-        GValue.gint_type: "int",
-        GValue.guint64_type: "int",
-        GValue.gdouble_type: "float",
-        GValue.gstr_type: "str",
-        GValue.refstr_type: "str",
-        GValue.gflags_type: "int",
-        GValue.gobject_type: "GObject",
-        GValue.image_type: "Image",
-        GValue.array_int_type: "list[int]",
-        GValue.array_double_type: "list[float]",
-        GValue.array_image_type: "list[Image]",
-        GValue.blob_type: "str",
-        GValue.source_type: "Source",
-        GValue.target_type: "Target",
-    }
-
-    if gtype in type_mapping:
-        return type_mapping[gtype]
-    if fundamental in type_mapping:
-        return type_mapping[fundamental]
-    return "Any"
+    if (
+        name in ("filename", "input_profile", "output_profile", "profile")
+        and gtype == GValue.gstr_type
+    ):
+        return "str | Path"
+    return GValue.gtype_to_python(gtype)
 
 
 PYTHON_KEYWORDS = {
@@ -115,7 +82,7 @@ def escape_parameter_name(name: str) -> str:
     return name
 
 
-def generate_method_signature(operation_name: str) -> str:
+def generate_method_signature(operation_name: str) -> str | None:
     """Generate type signature for an operation method."""
     intro = Introspect.get(operation_name)
 
@@ -133,12 +100,12 @@ def generate_method_signature(operation_name: str) -> str:
 
     # Required args (excluding member_x for instance methods)
     for name in intro.method_args:
-        py_type = gtype_to_python_type(intro.details[name]["type"])
+        py_type = gtype_to_python_type(name, intro.details[name]["type"])
         args_list.append(f"{escape_parameter_name(name)}: {py_type}")
 
     # Optional args (excluding deprecated)
     for name in intro.doc_optional_input:
-        py_type = gtype_to_python_type(intro.details[name]["type"])
+        py_type = gtype_to_python_type(name, intro.details[name]["type"])
         args_list.append(f"{escape_parameter_name(name)}: {py_type} = ...")
 
     # Optional output args
@@ -148,7 +115,7 @@ def generate_method_signature(operation_name: str) -> str:
     args_str = ", ".join(args_list)
     # Return type
     output_types = [
-        gtype_to_python_type(intro.details[name]["type"])
+        gtype_to_python_type(name, intro.details[name]["type"])
         for name in intro.required_output
     ]
 
@@ -210,100 +177,22 @@ def generate_all_image_operations() -> str:
     return "\n".join([sig for _, sig in all_names])
 
 
-def get_all_enum_names() -> list[str]:
-    """Get all enum type names from introspection."""
-
-    enum_names = set()
-
-    def add_enums(gtype, a, b):
-        fundamental = pyvips.gobject_lib.g_type_fundamental(gtype)
-        if fundamental == GValue.genum_type:
-            name = pyvips.type_name(gtype)
-            if name.startswith("Vips"):
-                name = name[4:]
-            enum_names.add(name)
-        type_map(gtype, add_enums)
-        return ffi.NULL
-
-    type_map(type_from_name("VipsOperation"), add_enums)
-
-    # Also add base enums
-    enum_names.update(
-        [
-            "BandFormat",
-            "Interpretation",
-            "Kernel",
-            "Coding",
-            "Extend",
-            "Align",
-            "Direction",
-            "Angle",
-            "Angle45",
-            "Access",
-            "Shrink",
-            "Intent",
-            "PCS",
-            "OperationBoolean",
-            "OperationComplex",
-            "OperationComplex2",
-            "OperationComplexget",
-            "OperationMath",
-            "OperationMath2",
-            "OperationMorphology",
-            "OperationRelational",
-            "OperationRound",
-            "Interesting",
-            "SdfShape",
-            "TextWrap",
-            "Combine",
-            "CombineMode",
-            "CompassDirection",
-            "Precision",
-            "FailOn",
-            "BlendMode",
-            "ForeignDzLayout",
-            "ForeignDzDepth",
-            "ForeignDzContainer",
-            "RegionShrink",
-            "ForeignHeifCompression",
-            "ForeignSubsample",
-            "ForeignHeifEncoder",
-            "ForeignPpmFormat",
-            "ForeignTiffCompression",
-            "ForeignTiffPredictor",
-            "ForeignTiffResunit",
-            "ForeignWebpPreset",
-            "Size",
-        ]
-    )
-
-    return sorted(enum_names)
-
-
-def generate_enum_class(name: str) -> str:
-    """Generate type stub for a single enum class."""
-    if name == "Direction":
-        return """class Direction:
-    HORIZONTAL: str
-    VERTICAL: str
-"""
-    elif name == "Align":
-        return """class Align:
-    LOW: str
-    CENTRE: str
-    HIGH: str
-"""
-    else:
-        return f"class {name}: ..."
-
-
 def generate_stub() -> str:
     """Generate complete pyvips type stub."""
 
     # Get all enum names
-    enum_names = get_all_enum_names()
+    enum_names = sorted(n for n in dir(pyvips.enums) if not n.startswith("__"))
+    enum_dict = dict(inspect.getmembers(pyvips.enums))
+    enum_defs: list[str] = []
+    for e in enum_names:
+        et = enum_dict[e]
+        emems = [(m, mval) for m, mval in et.__dict__.items() if not m.startswith("__")]
+        enum_def = f"class {e}:\n" + "\n".join(
+            f"    {name}: {type(value).__name__} = {value!r}" for name, value in emems
+        )
+        enum_defs.append(enum_def)
 
-    enum_classes = "\n".join([generate_enum_class(name) for name in enum_names])
+    enum_classes = "\n\n".join(enum_defs)
 
     stub = f'''"""Type stubs for pyvips.
 
@@ -323,7 +212,8 @@ To regenerate after libvips updates:
 """
 
 from __future__ import annotations
-from typing import Dict, List, Optional, Tuple, TypeVar, Union, overload
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Type, Union
 
 # Exception classes
 class Error(Exception): ...
@@ -374,7 +264,6 @@ class Interpolate:
 # Enum classes
 {enum_classes}
 
-
 class Image(VipsObject):
     """Wrap a VipsImage object."""
 
@@ -409,13 +298,13 @@ class Image(VipsObject):
 
     # Constructors
     @staticmethod
-    def new_from_file(vips_filename: str, **kwargs: object) -> Image: ...
+    def new_from_file(vips_filename: str | Path, **kwargs: object) -> Image: ...
     @staticmethod
     def new_from_buffer(data: Union[bytes, bytearray, memoryview], options: str, **kwargs: object) -> Image: ...
     @staticmethod
     def new_from_list(array: List[List[float]], scale: float =1.0, offset: float = 0.0) -> Image: ...
     @classmethod
-    def new_from_array(cls, obj: Union[List, bytes, bytearray, memoryview], scale: float = 1.0, offset: float = 0.0, interpretation: Optional[Union[str, Interpretation]] = None) -> Image: ...
+    def new_from_array(cls, obj: Union[List[List[float]], bytes, bytearray, memoryview], scale: float = 1.0, offset: float = 0.0, interpretation: Optional[Union[str, Interpretation]] = None) -> Image: ...
     @staticmethod
     def new_from_memory(data: Union[bytes, bytearray, memoryview], width: int, height: int, bands: int, format: Union[str, BandFormat]) -> Image: ...
     @staticmethod
@@ -426,7 +315,7 @@ class Image(VipsObject):
     def copy_memory(self) -> Image: ...
 
     # Writers
-    def write_to_file(self, vips_filename: str, **kwargs: object) -> None: ...
+    def write_to_file(self, vips_filename: str | Path, **kwargs: object) -> None: ...
     def write_to_buffer(self, format_string: str, **kwargs: object) -> bytes: ...
     def write_to_target(self, target: Target, format_string: str, **kwargs: object) -> None: ...
     def write_to_memory(self) -> bytes: ...
@@ -504,9 +393,44 @@ class Image(VipsObject):
     def __call__(self, x: int, y: int) -> List[float]: ...
     def __repr__(self) -> str: ...
 
+class Operation(pyvips.VipsObject):
+    @staticmethod
+    def new_from_name(operation_name: str) -> "Operation": ...
+    def set(
+        self,
+        name: str,
+        flags: int,
+        match_image: Optional[pyvips.Image],
+        value: Any,
+    ) -> None: ...
+    @staticmethod
+    def call(operation_name: str, *args: Any, **kwargs: Any) -> Any: ...
+    @staticmethod
+    def generate_docstring(operation_name: str) -> str: ...
+    @staticmethod
+    def generate_sphinx(operation_name: str) -> str: ...
+    @staticmethod
+    def generate_sphinx_all() -> None: ...
 
-class Operation: ...
-class Introspect: ...
+class Introspect(object):
+    description: str
+    flags: int
+    details: Dict[str, Dict[str, Any]]
+
+    required_input: List[str]
+    optional_input: List[str]
+    required_output: List[str]
+    optional_output: List[str]
+
+    doc_optional_input: List[str]
+    doc_optional_output: List[str]
+
+    member_x: Optional[str]
+    method_args: List[str]
+
+    def __init__(self, operation_name: str) -> None: ...
+    @classmethod
+    def get(cls: Type["Introspect"], operation_name: str) -> "Introspect": ...
 
 # Global functions
 def cache_set_max(mx: int) -> None: ...

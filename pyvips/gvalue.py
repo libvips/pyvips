@@ -54,7 +54,7 @@ class GValue(object):
     _gtype_to_python = {
         gbool_type: 'bool',
         gint_type: 'int',
-        guint64_type: 'long',  # Note: int and long are unified in Python 3
+        guint64_type: 'int',
         gdouble_type: 'float',
         gstr_type: 'str',
         refstr_type: 'str',
@@ -65,7 +65,7 @@ class GValue(object):
         array_int_type: 'list[int]',
         array_double_type: 'list[float]',
         array_image_type: 'list[Image]',
-        blob_type: 'str',
+        blob_type: 'bytes',
         source_type: 'Source',
         target_type: 'Target',
     }

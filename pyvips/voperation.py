@@ -338,6 +338,15 @@ class Operation(pyvips.VipsObject):
         return result
 
     @staticmethod
+    def _argtype_to_python(name: str, type):
+        if (
+            name in ("filename", "input_profile", "output_profile", "profile")
+            and type == GValue.gstr_type
+        ):
+            return "str | Path"
+        return GValue.gtype_to_python(type)
+
+    @staticmethod
     def generate_docstring(operation_name):
         """Make a google-style docstring.
 
@@ -365,7 +374,7 @@ class Operation(pyvips.VipsObject):
 
         args = []
         args += intro.method_args
-        args += [x + '=' + GValue.gtype_to_python(intro.details[x]['type'])
+        args += [x + '=' + Operation._argtype_to_python(x, intro.details[x]['type'])
                  for x in intro.doc_optional_input]
         args += [x + '=bool'
                  for x in intro.doc_optional_output]
@@ -375,7 +384,7 @@ class Operation(pyvips.VipsObject):
             details = intro.details[name]
             return (u'    {0} ({1}): {2}\n'.
                     format(name,
-                           GValue.gtype_to_python(details['type']),
+                           Operation._argtype_to_python(name, details['type']),
                            details['blurb']))
 
         result += '\nReturns:\n'
@@ -431,7 +440,7 @@ class Operation(pyvips.VipsObject):
             result = '.. staticmethod:: '
         args = []
         args += intro.method_args
-        args += [x + '=' + GValue.gtype_to_python(intro.details[x]['type'])
+        args += [x + '=' + Operation._argtype_to_python(x, intro.details[x]['type'])
                  for x in doc_optional_input]
         args += [x + '=bool'
                  for x in intro.doc_optional_output]
@@ -450,7 +459,7 @@ class Operation(pyvips.VipsObject):
             result += 'pyvips.Image.' + operation_name + '('
         args = []
         args += intro.method_args
-        args += [x + '=' + GValue.gtype_to_python(intro.details[x]['type'])
+        args += [x + '=' + Operation._argtype_to_python(x, intro.details[x]['type'])
                  for x in doc_optional_input]
         result += ', '.join(args)
         result += ')\n\n'
@@ -459,13 +468,13 @@ class Operation(pyvips.VipsObject):
             details = intro.details[name]
             result += f':param {name}: {details["blurb"]}\n'
             result += (f':type {name}: '
-                       f'{GValue.gtype_to_python(details["type"])}\n')
+                       f'{Operation._argtype_to_python(name, details["type"])}\n')
         for name in intro.doc_optional_output:
             result += (f':param {name}: '
                        f'enable output: {intro.details[name]["blurb"]}\n')
             result += f':type {name}: bool\n'
 
-        output_types = [GValue.gtype_to_python(intro.details[name]['type'])
+        output_types = [Operation._argtype_to_python(name, intro.details[name]['type'])
                         for name in intro.required_output]
         if len(output_types) == 1:
             output_type = output_types[0]
