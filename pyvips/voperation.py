@@ -374,8 +374,10 @@ class Operation(pyvips.VipsObject):
 
         args = []
         args += intro.method_args
-        args += [x + '=' + Operation._argtype_to_python(x, intro.details[x]['type'])
-                 for x in intro.doc_optional_input]
+        args += [
+            x + '=' + Operation._argtype_to_python(x, intro.details[x]['type'])
+            for x in intro.doc_optional_input
+        ]
         args += [x + '=bool'
                  for x in intro.doc_optional_output]
         result += ", ".join(args) + ')\n'
@@ -440,8 +442,10 @@ class Operation(pyvips.VipsObject):
             result = '.. staticmethod:: '
         args = []
         args += intro.method_args
-        args += [x + '=' + Operation._argtype_to_python(x, intro.details[x]['type'])
-                 for x in doc_optional_input]
+        args += [
+            x + '=' + Operation._argtype_to_python(x, intro.details[x]['type'])
+            for x in doc_optional_input
+        ]
         args += [x + '=bool'
                  for x in intro.doc_optional_output]
         result += operation_name + '(' + ", ".join(args) + ')\n\n'
@@ -459,23 +463,29 @@ class Operation(pyvips.VipsObject):
             result += 'pyvips.Image.' + operation_name + '('
         args = []
         args += intro.method_args
-        args += [x + '=' + Operation._argtype_to_python(x, intro.details[x]['type'])
-                 for x in doc_optional_input]
+        args += [
+            x + '=' + Operation._argtype_to_python(x, intro.details[x]['type'])
+            for x in doc_optional_input
+        ]
         result += ', '.join(args)
         result += ')\n\n'
 
         for name in intro.method_args + doc_optional_input:
             details = intro.details[name]
             result += f':param {name}: {details["blurb"]}\n'
-            result += (f':type {name}: '
-                       f'{Operation._argtype_to_python(name, details["type"])}\n')
+            result += (
+                f':type {name}: '
+                f'{Operation._argtype_to_python(name, details["type"])}\n'
+            )
         for name in intro.doc_optional_output:
             result += (f':param {name}: '
                        f'enable output: {intro.details[name]["blurb"]}\n')
             result += f':type {name}: bool\n'
 
-        output_types = [Operation._argtype_to_python(name, intro.details[name]['type'])
-                        for name in intro.required_output]
+        output_types = [
+            Operation._argtype_to_python(name, intro.details[name]['type'])
+            for name in intro.required_output
+        ]
         if len(output_types) == 1:
             output_type = output_types[0]
         else:
