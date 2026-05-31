@@ -957,14 +957,14 @@ class Image(VipsObject):
     def __call__(self, x: int, y: int) -> List[float]: ...
     def __repr__(self) -> str: ...
 
-class Operation(pyvips.VipsObject):
+class Operation(VipsObject):
     @staticmethod
     def new_from_name(operation_name: str) -> "Operation": ...
     def set(
         self,
         name: str,
         flags: int,
-        match_image: Optional[pyvips.Image],
+        match_image: Optional[Image],
         value: Any,
     ) -> None: ...
     @staticmethod
