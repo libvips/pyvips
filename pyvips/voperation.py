@@ -144,7 +144,7 @@ class Introspect(object):
             self.method_args = self.required_input
 
     # a hash mapping operation names to introspection data
-    _introspect_cache = {}
+    _introspect_cache = {}  # type: ignore[var-annotated]
 
     @classmethod
     def get(cls, operation_name):
@@ -179,7 +179,7 @@ class Operation(pyvips.VipsObject):
     __slots__ = ()
 
     # cache nickname -> docstring here
-    _docstring_cache = {}
+    _docstring_cache = {}  # type: ignore[var-annotated]
 
     def __init__(self, pointer):
         # logger.debug('Operation.__init__: pointer = %s', pointer)

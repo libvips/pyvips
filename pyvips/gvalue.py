@@ -84,7 +84,7 @@ class GValue(object):
             name = type_name(gtype)
             if name.startswith('Vips'):
                 name = name[4:]
-            return f"Union[str, {name}]"
+            return f"str | {name}"
         if gtype in GValue._gtype_to_python:
             return GValue._gtype_to_python[gtype]
         if fundamental in GValue._gtype_to_python:

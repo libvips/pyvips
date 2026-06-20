@@ -25,8 +25,8 @@ def shepards(image: pyvips.Image, couples: List[Couple]) -> pyvips.Image:
     """
 
     index = pyvips.Image.xyz(image.width, image.height)
-    deltas = []
-    weights = []
+    deltas: list[pyvips.Image] = []
+    weights: list[pyvips.Image] = []
     for p1, p2 in couples:
         diff = index - list(p2)
 
@@ -35,7 +35,7 @@ def shepards(image: pyvips.Image, couples: List[Couple]) -> pyvips.Image:
 
         weight = 1.0 / distance
 
-        delta = [(p1[0] - p2[0]), (p1[1] - p2[1])] * weight
+        delta = weight * [(p1[0] - p2[0]), (p1[1] - p2[1])]
 
         weights.append(weight)
         deltas.append(delta)

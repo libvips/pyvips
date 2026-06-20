@@ -7,6 +7,7 @@ a = pyvips.Image.new_from_file(sys.argv[1])
 
 try:
     orientation = a.get('exif-ifd0-Orientation')
+    assert isinstance(orientation, str)
     a.set('orientation', int(orientation.split()[0]))
 except Exception:
     a.set('orientation', 0)
