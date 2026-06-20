@@ -36,7 +36,7 @@ jobs:
         run: |
           # Pin mypy to <1.19 due to librt dependency in 1.19+
           # which is not available on PyPy 3.9
-          pip install "mypy<1.19"
+          pip install "mypy<1.19" "numpy" "pillow" "requests" "types-requests"
           mypy pyvips/__init__.pyi --no-error-summary
           mypy examples/*.py --no-error-summary
 
