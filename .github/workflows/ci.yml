@@ -11,7 +11,7 @@ jobs:
       matrix:
         # Only test supported Python versions:
         # https://endoflife.date/python
-        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14", "pypy3.9"]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14", "pypy3.10"]
 
     steps:
       - name: Checkout code
@@ -36,11 +36,9 @@ jobs:
         run: |
           # Pin mypy to <1.19 due to librt dependency in 1.19+
           # which is not available on PyPy 3.9
-          pip install "mypy<1.19"
+          pip install "mypy<1.19" "numpy" "pillow" "requests" "types-requests"
           mypy pyvips/__init__.pyi --no-error-summary
-          mypy examples/affine.py examples/convolve.py examples/try5.py examples/watermark.py \
-                examples/annotate-animation.py examples/join-animation.py examples/progress.py \
-                --no-error-summary
+          mypy examples/*.py --no-error-summary
 
       - name: Install tox and any other packages
         run: pip install tox
