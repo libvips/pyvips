@@ -399,12 +399,12 @@ class TestImage:
 
     def test_to_PIL_16bit(self):
         try:
-            import PIL.Image
+            import PIL.Image        # noqa: F401
         except ImportError:
             pytest.skip('PIL not available')
 
         try:
-            import numpy as np
+            import numpy as np      # noqa: F401
         except ImportError:
             pytest.skip('numpy not available')
 
@@ -433,7 +433,7 @@ class TestImage:
             pytest.skip('PIL not available')
 
         try:
-            import numpy as np
+            import numpy as np      # noqa: F401
         except ImportError:
             pytest.skip('numpy not available')
 
@@ -445,7 +445,8 @@ class TestImage:
 
         monkeypatch.setattr(PILImage, "frombytes", fake_frombytes)
 
-        data = struct.pack('6H', 0x1234, 0x5678, 0x9ABC, 0xDEF0, 0x1111, 0x2222)
+        data = struct.pack('6H', 0x1234, 0x5678, 0x9ABC, 0xDEF0,
+                           0x1111, 0x2222)
         im = pyvips.Image.new_from_memory(data, 2, 1, 3, 'ushort')
         im.pil()
 
@@ -461,12 +462,12 @@ class TestImage:
 
     def test_to_PIL_8bit_modes(self):
         try:
-            import PIL.Image
+            import PIL.Image        # noqa: F401
         except ImportError:
             pytest.skip('PIL not available')
 
         try:
-            import numpy as np
+            import numpy as np      # noqa: F401
         except ImportError:
             pytest.skip('numpy not available')
 
@@ -501,12 +502,12 @@ class TestImage:
 
     def test_to_PIL_16bit_la(self):
         try:
-            import PIL.Image
+            import PIL.Image        # noqa: F401
         except ImportError:
             pytest.skip('PIL not available')
 
         try:
-            import numpy as np
+            import numpy as np      # noqa: F401
         except ImportError:
             pytest.skip('numpy not available')
 
@@ -528,12 +529,12 @@ class TestImage:
 
     def test_to_PIL_16bit_rgba(self):
         try:
-            import PIL.Image
+            import PIL.Image        # noqa: F401
         except ImportError:
             pytest.skip('PIL not available')
 
         try:
-            import numpy as np
+            import numpy as np      # noqa: F401
         except ImportError:
             pytest.skip('numpy not available')
 
@@ -559,12 +560,12 @@ class TestImage:
 
     def test_to_PIL_16bit_l(self):
         try:
-            import PIL.Image
+            import PIL.Image        # noqa: F401
         except ImportError:
             pytest.skip('PIL not available')
 
         try:
-            import numpy as np
+            import numpy as np      # noqa: F401
         except ImportError:
             pytest.skip('numpy not available')
 
@@ -579,12 +580,12 @@ class TestImage:
 
     def test_to_PIL_16bit_5band_unsupported(self):
         try:
-            import PIL.Image
+            import PIL.Image        # noqa: F401
         except ImportError:
             pytest.skip('PIL not available')
 
         try:
-            import numpy as np
+            import numpy as np      # noqa: F401
         except ImportError:
             pytest.skip('numpy not available')
 

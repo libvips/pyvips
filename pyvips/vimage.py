@@ -1285,14 +1285,14 @@ class Image(pyvips.VipsObject, metaclass=ImageType):
         """Convert the image to a PIL Image.
 
         This uses :meth:`PIL.Image.fromarray` for most formats and falls back
-        to raw-mode conversion for formats not natively supported by that 
+        to raw-mode conversion for formats not natively supported by that
         method.
 
         Notes:
 
         - Pillow stores RGB/RGBA data as 8-bit, so 16-bit inputs will be
           converted by keeping the high byte of each channel.
-        - Pillow expands LA inputs to RGBA by duplicating the L channel into 
+        - Pillow expands LA inputs to RGBA by duplicating the L channel into
           RGB.
 
         PIL is a runtime dependency of this function.
@@ -1323,7 +1323,8 @@ class Image(pyvips.VipsObject, metaclass=ImageType):
             mode = 'RGBA'
             rawmode = 'RGBA;16L' if sys.byteorder == 'little' else 'RGBA;16B'
         else:
-            raise ValueError('PIL does not support 16-bit images with more than 4 bands')
+            raise ValueError('PIL does not support 16-bit images ' +
+                             'with more than 4 bands')
 
         return PILImage.frombytes(mode,
                                   (self.width, self.height),
