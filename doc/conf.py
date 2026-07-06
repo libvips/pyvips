@@ -56,9 +56,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'pyvips'
-copyright = '2019, John Cupitt'
-author = 'John Cupitt'
+project = u'pyvips'
+copyright = u'2019, John Cupitt'
+author = u'John Cupitt'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -73,7 +73,7 @@ release = u'3.2.0'
 # for a list of supported languages.
 #
 # This is also used if you do content translation via gettext catalogs.
-# Usually you set 'language' from the command line for these cases.
+# Usually you set "language" from the command line for these cases.
 language = None
 
 # List of patterns, relative to source directory, that match files and
@@ -104,7 +104,7 @@ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
-# so a file named 'default.css' will overwrite the builtin 'default.css'.
+# so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
 # Custom sidebar templates, must be a dictionary that maps document names
@@ -142,12 +142,15 @@ latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
     #
     # 'papersize': 'letterpaper',
+
     # The font size ('10pt', '11pt' or '12pt').
     #
     # 'pointsize': '10pt',
+
     # Additional stuff for the LaTeX preamble.
     #
     # 'preamble': '',
+
     # Latex figure (float) alignment
     #
     # 'figure_align': 'htbp',
@@ -157,7 +160,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'pyvips.tex', 'pyvips Documentation', 'john', 'manual'),
+    (master_doc, 'pyvips.tex', u'pyvips Documentation', u'john', 'manual'),
 ]
 
 
@@ -165,7 +168,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, 'pyvips', 'pyvips Documentation', [author], 1)]
+man_pages = [(master_doc, 'pyvips', u'pyvips Documentation', [author], 1)]
 
 
 # -- Options for Texinfo output -------------------------------------------
@@ -177,7 +180,7 @@ texinfo_documents = [
     (
         master_doc,
         'pyvips',
-        'pyvips Documentation',
+        u'pyvips Documentation',
         author,
         'pyvips',
         'One line description of project.',
@@ -193,7 +196,7 @@ texinfo_documents = [
 # try to exclude deprecated
 def skip_deprecated(app, what, name, obj, skip, options):
     if hasattr(obj, "func_dict") and "__deprecated__" in obj.func_dict:
-        print('skipping ' + name)
+        print("skipping " + name)
         return True
     return skip or False
 
@@ -227,10 +230,8 @@ def setup(app):
                         continue
                     if documenter.objtype == typ:
                         items.append(name)
-                public = [
-                    x for x in items
-                    if x in include_public or not x.startswith('_')
-                ]
+                public = [x for x in items
+                          if x in include_public or not x.startswith('_')]
                 return public, items
 
             def run(self):
@@ -244,21 +245,17 @@ def setup(app):
                         _, methods = self.get_members(c,
                                                       'method', ['__init__'])
 
-                        self.content = [
-                            '~%s.%s' % (clazz, method)
-                            for method in methods
-                            if not method.startswith('_')
-                        ]
+                        self.content = ['~%s.%s' % (clazz, method)
+                                        for method in methods
+                                        if not method.startswith('_')]
                     if 'attributes' in self.options:
                         _, attribs = self.get_members(c, 'attribute')
-                        self.content = [
-                            '~%s.%s' % (clazz, attrib)
-                            for attrib in attribs
-                            if not attrib.startswith('_')
-                        ]
+                        self.content = ['~%s.%s' % (clazz, attrib)
+                                        for attrib in attribs
+                                        if not attrib.startswith('_')]
                 finally:
                     return super(AutoAutoSummary, self).run()
 
-        app.add_directive("autoautosummary", AutoAutoSummary)
+        app.add_directive('autoautosummary', AutoAutoSummary)
     except BaseException as e:
         raise e
