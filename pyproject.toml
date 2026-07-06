@@ -67,10 +67,8 @@ include-package-data = false
 version = {attr = "pyvips.version.__version__"}
 
 [tool.setuptools.packages.find]
-exclude = [
-    "doc*",
-    "examples*",
-    "tests*",
+include = [
+    "pyvips",
 ]
 
 [project.optional-dependencies]
