@@ -4,6 +4,7 @@
 - add operator overload type hints with array support (int, float, list[int], list[float]) [JoshCLWren]
 - add hand-written binding type hints for common methods [JoshCLWren]
 - add test coverage for type stubs [JoshCLWren]
+- add `Image.pil()` to convert to a PIL image [jonashaag]
 
 ## Version 3.1.1 (released 9 December 2025)
 

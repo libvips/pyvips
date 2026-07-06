@@ -1,5 +1,8 @@
 # vim: set fileencoding=utf-8 :
 
+import struct
+import sys
+
 import pyvips
 import pytest
 from helpers import JPEG_FILE, UHDR_FILE, skip_if_no
@@ -393,6 +396,203 @@ class TestImage:
         assert im.height == pim.height
         assert im.min() == 0
         assert im.max() == 0
+
+    def test_to_PIL_16bit(self):
+        try:
+            import PIL.Image
+        except ImportError:
+            pytest.skip('PIL not available')
+
+        try:
+            import numpy as np
+        except ImportError:
+            pytest.skip('numpy not available')
+
+        endian = '<' if sys.byteorder == 'little' else '>'
+        data = struct.pack(
+            f'{endian}6H',
+            0x1234,
+            0x5678,
+            0x9ABC,
+            0xDEF0,
+            0x1111,
+            0x2222
+        )
+        im = pyvips.Image.new_from_memory(data, 2, 1, 3, 'ushort')
+
+        pim = im.pil()
+        assert pim.mode == 'RGB'
+        assert pim.size == (2, 1)
+        assert pim.getpixel((0, 0)) == (0x12, 0x56, 0x9A)
+        assert pim.getpixel((1, 0)) == (0xDE, 0x11, 0x22)
+
+    def test_to_PIL_16bit_rawmode_rgb_rgba(self, monkeypatch):
+        try:
+            import PIL.Image as PILImage
+        except ImportError:
+            pytest.skip('PIL not available')
+
+        try:
+            import numpy as np
+        except ImportError:
+            pytest.skip('numpy not available')
+
+        seen = []
+
+        def fake_frombytes(mode, size, data, decoder_name, rawmode):
+            seen.append((mode, rawmode))
+            return PILImage.new(mode, size)
+
+        monkeypatch.setattr(PILImage, "frombytes", fake_frombytes)
+
+        data = struct.pack('6H', 0x1234, 0x5678, 0x9ABC, 0xDEF0, 0x1111, 0x2222)
+        im = pyvips.Image.new_from_memory(data, 2, 1, 3, 'ushort')
+        im.pil()
+
+        data = struct.pack('8H', 0x1234, 0x5678, 0x9ABC, 0xDEF0,
+                           0x1111, 0x2222, 0x3333, 0x4444)
+        im = pyvips.Image.new_from_memory(data, 2, 1, 4, 'ushort')
+        im.pil()
+
+        assert seen[0][0] == 'RGB'
+        assert seen[1][0] == 'RGBA'
+        assert seen[0][1] in ('RGB;16L', 'RGB;16B')
+        assert seen[1][1] in ('RGBA;16L', 'RGBA;16B')
+
+    def test_to_PIL_8bit_modes(self):
+        try:
+            import PIL.Image
+        except ImportError:
+            pytest.skip('PIL not available')
+
+        try:
+            import numpy as np
+        except ImportError:
+            pytest.skip('numpy not available')
+
+        im = pyvips.Image.new_from_memory(bytes([0, 128, 255, 64]),
+                                          2, 2, 1, 'uchar')
+        pim = im.pil()
+        assert pim.mode == 'L'
+        assert pim.size == (2, 2)
+        assert pim.getpixel((0, 0)) == 0
+        assert pim.getpixel((1, 0)) == 128
+
+        im = pyvips.Image.new_from_memory(bytes([10, 20, 30, 40]),
+                                          2, 1, 2, 'uchar')
+        pim = im.pil()
+        assert pim.mode == 'LA'
+        assert pim.getpixel((0, 0)) == (10, 20)
+        assert pim.getpixel((1, 0)) == (30, 40)
+
+        im = pyvips.Image.new_from_memory(bytes([1, 2, 3, 4, 5, 6]),
+                                          2, 1, 3, 'uchar')
+        pim = im.pil()
+        assert pim.mode == 'RGB'
+        assert pim.getpixel((0, 0)) == (1, 2, 3)
+        assert pim.getpixel((1, 0)) == (4, 5, 6)
+
+        im = pyvips.Image.new_from_memory(bytes([1, 2, 3, 4, 5, 6, 7, 8]),
+                                          2, 1, 4, 'uchar')
+        pim = im.pil()
+        assert pim.mode == 'RGBA'
+        assert pim.getpixel((0, 0)) == (1, 2, 3, 4)
+        assert pim.getpixel((1, 0)) == (5, 6, 7, 8)
+
+    def test_to_PIL_16bit_la(self):
+        try:
+            import PIL.Image
+        except ImportError:
+            pytest.skip('PIL not available')
+
+        try:
+            import numpy as np
+        except ImportError:
+            pytest.skip('numpy not available')
+
+        endian = '<' if sys.byteorder == 'little' else '>'
+        data = struct.pack(
+            f'{endian}4H',
+            0x1234,
+            0x5678,
+            0x9ABC,
+            0xDEF0
+        )
+        im = pyvips.Image.new_from_memory(data, 2, 1, 2, 'ushort')
+
+        pim = im.pil()
+        assert pim.mode == 'RGBA'
+        assert pim.size == (2, 1)
+        assert pim.getpixel((0, 0)) == (0x12, 0x12, 0x12, 0x56)
+        assert pim.getpixel((1, 0)) == (0x9A, 0x9A, 0x9A, 0xDE)
+
+    def test_to_PIL_16bit_rgba(self):
+        try:
+            import PIL.Image
+        except ImportError:
+            pytest.skip('PIL not available')
+
+        try:
+            import numpy as np
+        except ImportError:
+            pytest.skip('numpy not available')
+
+        endian = '<' if sys.byteorder == 'little' else '>'
+        data = struct.pack(
+            f'{endian}8H',
+            0x1234,
+            0x5678,
+            0x9ABC,
+            0xDEF0,
+            0x1111,
+            0x2222,
+            0x3333,
+            0x4444
+        )
+        im = pyvips.Image.new_from_memory(data, 2, 1, 4, 'ushort')
+
+        pim = im.pil()
+        assert pim.mode == 'RGBA'
+        assert pim.size == (2, 1)
+        assert pim.getpixel((0, 0)) == (0x12, 0x56, 0x9A, 0xDE)
+        assert pim.getpixel((1, 0)) == (0x11, 0x22, 0x33, 0x44)
+
+    def test_to_PIL_16bit_l(self):
+        try:
+            import PIL.Image
+        except ImportError:
+            pytest.skip('PIL not available')
+
+        try:
+            import numpy as np
+        except ImportError:
+            pytest.skip('numpy not available')
+
+        endian = '<' if sys.byteorder == 'little' else '>'
+        data = struct.pack(f'{endian}2H', 0x1234, 0x9ABC)
+        im = pyvips.Image.new_from_memory(data, 2, 1, 1, 'ushort')
+
+        pim = im.pil()
+        assert pim.size == (2, 1)
+        assert pim.getpixel((0, 0)) == 0x1234
+        assert pim.getpixel((1, 0)) == 0x9ABC
+
+    def test_to_PIL_16bit_5band_unsupported(self):
+        try:
+            import PIL.Image
+        except ImportError:
+            pytest.skip('PIL not available')
+
+        try:
+            import numpy as np
+        except ImportError:
+            pytest.skip('numpy not available')
+
+        data = struct.pack('5H', 0x1111, 0x2222, 0x3333, 0x4444, 0x5555)
+        im = pyvips.Image.new_from_memory(data, 1, 1, 5, 'ushort')
+
+        with pytest.raises(ValueError):
+            im.pil()
 
     @skip_if_no('uhdrload')
     def test_gainmap(self):
