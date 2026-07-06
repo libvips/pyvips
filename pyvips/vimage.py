@@ -1673,8 +1673,8 @@ class Image(pyvips.VipsObject, metaclass=ImageType):
     def get_n_pages(self):
         """Get the number of pages in an image file, or 1.
 
-        This is the number of pages in the file the image was loaded from, not
-        the number of pages in the image.
+        This is the number of pages in the image file, not the number of pages
+        that have been loaded into image.
 
         To get the number of pages in an image, divide the image height by
         the page height.
