@@ -19,7 +19,7 @@ text = (text * [1, 1, 1, 0.3]).cast("uchar")  # type: ignore
 text = text.rotate(45)
 
 # tile to the size of the image page, then tile again to the full image size
-text = text.embed(10, 10, text.width + 20, text.width + 20)
+text = text.embed(10, 10, text.width + 20, text.width + 20)     # noqa: W291
 page_height = im.get_page_height()
 text = text.replicate(
     int(1 + im.width / text.width), int(1 + page_height / text.height)
