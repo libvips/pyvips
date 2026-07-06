@@ -1,7 +1,9 @@
 ## Version 3.2.0 (released TBA)
 
-- add comprehensive type hints for all pyvips operations via generated stubs [JoshCLWren]
-- add operator overload type hints with array support (int, float, list[int], list[float]) [JoshCLWren]
+- add comprehensive type hints for all pyvips operations via generated 
+  stubs [JoshCLWren]
+- add operator overload type hints with array support (int, float, list[int], 
+  list[float]) [JoshCLWren]
 - add hand-written binding type hints for common methods [JoshCLWren]
 - add test coverage for type stubs [JoshCLWren]
 
