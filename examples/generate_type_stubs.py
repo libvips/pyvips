@@ -228,6 +228,8 @@ from typing import Any, Callable, Protocol, TypeAlias
 
 import numpy as np  # type: ignore[import-not-found]
 
+from PIL.Image import Image as PILImage  # type: ignore
+
 from .enums import {enums}
 
 class _ArrayInterface(Protocol):
@@ -257,6 +259,7 @@ ffi: Any
 glib_lib: Any
 vips_lib: Any
 gobject_lib: Any
+
 
 # Exception classes
 class Error(Exception): ...
@@ -406,6 +409,7 @@ class Image(VipsObject):
     def tolist(self) -> list[list[float]]: ...
     def __array__(self, dtype: np.dtype | str | None = None, copy: bool | None = None) -> np.ndarray: ...
     def numpy(self, dtype: np.dtype | str | None = None) -> np.ndarray: ...
+    def pil(self) -> PILImage: ...
 
     # Hand-written bindings with type hints
     def floor(self) -> Image: ...

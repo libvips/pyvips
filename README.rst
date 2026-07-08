@@ -236,8 +236,9 @@ Stylecheck:
 
 Type checking:
 
-pyvips includes type hints via PEP 561 type stub files (``pyvips/__init__.pyi``).
-To enable type checking in your project, install a type checker like mypy:
+pyvips includes type hints via PEP 561 type stub files 
+(``pyvips/__init__.pyi``). To enable type checking in your project, 
+install a type checker like mypy:
 
 .. code-block:: shell
 

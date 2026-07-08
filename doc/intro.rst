@@ -154,13 +154,11 @@ many image formats::
 
     assert np.array_equal(a1, a2)
     
-The :meth:`PIL.Image.fromarray` method can be used to convert a pyvips image
-to a PIL image via a NumPy array::
+Use :meth:`.pil` to convert a pyvips image to a PIL image::
 
     import pyvips
-    import PIL.Image
     image = pyvips.Image.black(100, 100, bands=3)
-    pil_image = PIL.Image.fromarray(image.numpy())
+    pil_image = image.pil()
 
 
 Calling libvips operations
@@ -415,4 +413,3 @@ where possible, so you won't have 100 copies in memory.
 
 If you want to avoid the copies, you'll need to call drawing operations
 yourself.
-
