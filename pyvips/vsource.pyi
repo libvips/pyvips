@@ -1,5 +1,4 @@
 import logging
-from collections.abc import Buffer
 from typing import Any
 
 from .vconnection import Connection
@@ -13,6 +12,6 @@ class Source(Connection):
     @staticmethod
     def new_from_file(filename: str) -> "Source": ...
     @staticmethod
-    def new_from_memory(data: Buffer | memoryview | bytes | bytearray) -> "Source": ...
+    def new_from_memory(data: bytes | bytearray | memoryview) -> "Source": ...
 
     _references: list[Any]
