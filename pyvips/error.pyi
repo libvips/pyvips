@@ -1,0 +1,16 @@
+import logging
+from pathlib import Path
+from typing import Any
+
+logger: logging.Logger
+
+def _to_bytes(x: str | Path | bytes | Any) -> bytes: ...
+def _to_string(x: Any) -> str: ...
+def _to_string_copy(x: Any) -> str: ...
+
+class Error(Exception):
+    message: str
+    detail: str
+
+    def __init__(self, message: str, detail: str | None = None) -> None: ...
+    def __str__(self) -> str: ...
