@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 
 # Shepard's distortion, from https://github.com/tourtiere/light-distortion
 # with kind permission.

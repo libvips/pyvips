@@ -1,4 +1,5 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
+
 """
 example pyvips code to run thumbnail on a dir full of images
 

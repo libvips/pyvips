@@ -1,4 +1,5 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
+
 """ example pyvips code to convolve an image with a 3x3 mask
 
 args: inputfile outputfile
@@ -8,6 +9,7 @@ here we use a scale of 1 (no scaling - see libvips conv docs)
 https://www.libvips.org/API/current/libvips-convolution.html#vips-conv
 and offset of 128 so zero output is mid-grey
 """
+
 import pyvips
 import sys
 

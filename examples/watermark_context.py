@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 
 # watermark an image, but do it in a context-sensitive way, so we will write
 # black if the area we are overlaying the text on is white, for example

@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 
 import sys
 import pyvips
@@ -52,5 +52,5 @@ def to_rectangular(image):
 
 a = pyvips.Image.new_from_file(sys.argv[1])
 a = to_polar(a)
-a = to_rectangular(a)
+# a = to_rectangular(a)
 a.write_to_file(sys.argv[2])
