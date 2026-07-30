@@ -619,6 +619,16 @@ def operation_block_set(name, state):
         vips_lib.vips_operation_block_set(_to_bytes(name), state)
 
 
+def concurrency_set(concurrency):
+    """Set the maxium threadpool size."""
+    vips_lib.vips_concurrency_set(concurrency)
+
+
+def concurrency_get():
+    """Get the maxium threadpool size."""
+    return vips_lib.vips_concurrency_get()
+
+
 __all__ = [
     'Introspect',
     'Operation',
@@ -631,5 +641,7 @@ __all__ = [
     'cache_get_max_files',
     'cache_get_size',
     'block_untrusted_set',
-    'operation_block_set'
+    'operation_block_set',
+    'concurrency_set',
+    'concurrency_get',
 ]

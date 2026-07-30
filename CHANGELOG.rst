@@ -7,6 +7,7 @@
 - add hand-written binding type hints for common methods [JoshCLWren]
 - add test coverage for type stubs [JoshCLWren]
 - add `Image.pil()` to convert to a PIL image [jonashaag]
+- add `pyvips.concurrency_set()`, `pyvips.concurrency_get()` [NewUserHa]
 
 ## Version 3.1.1 (released 9 December 2025)
 

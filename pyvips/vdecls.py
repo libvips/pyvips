@@ -356,6 +356,9 @@ def cdefs(features):
         size_t vips_cache_get_max_mem();
         int vips_cache_get_max_files();
 
+        void vips_concurrency_set(int concurrency);
+        int vips_concurrency_get(void);
+
     '''
 
     # we must only define this in ABI mode ... in API mode we use
