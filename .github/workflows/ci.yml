@@ -36,7 +36,7 @@ jobs:
         if: "!contains(matrix.python-version, 'pypy')"
         run: |
           pip install mypy numpy pillow requests types-requests
-          mypy pyvips/__init__.pyi --no-error-summary
+          mypy pyvips/*.pyi --no-error-summary
           mypy examples/*.py --no-error-summary
 
       - name: Install tox and any other packages
