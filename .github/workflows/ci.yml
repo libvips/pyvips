@@ -4,8 +4,8 @@ on: [push, pull_request]
 
 jobs:
   CI:
-    name: "Linux x64 (Ubuntu 22.04) - Python ${{ matrix.python-version }}"
-    runs-on: ubuntu-22.04
+    name: "Linux x64 (Ubuntu 26.04) - Python ${{ matrix.python-version }}"
+    runs-on: ubuntu-26.04
     strategy:
       fail-fast: false
       matrix:
