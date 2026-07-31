@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """ example pyvips code to convolve an image with a 3x3 mask
 
