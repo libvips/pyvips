@@ -33,10 +33,9 @@ jobs:
           flake8 .
 
       - name: Type check with mypy
+        if: "!contains(matrix.python-version, 'pypy')"
         run: |
-          # Pin mypy to <1.19 due to librt dependency in 1.19+
-          # which is not available on PyPy 3.9
-          pip install "mypy<1.19" "numpy" "pillow" "requests" "types-requests"
+          pip install mypy numpy pillow requests types-requests
           mypy pyvips/__init__.pyi --no-error-summary
           mypy examples/*.py --no-error-summary
 
