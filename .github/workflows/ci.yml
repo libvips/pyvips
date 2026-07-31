@@ -4,8 +4,8 @@ on: [push, pull_request]
 
 jobs:
   CI:
-    name: "Linux x64 (Ubuntu 22.04) - Python ${{ matrix.python-version }}"
-    runs-on: ubuntu-22.04
+    name: "Linux x64 (Ubuntu 26.04) - Python ${{ matrix.python-version }}"
+    runs-on: ubuntu-26.04
     strategy:
       fail-fast: false
       matrix:
@@ -15,10 +15,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -33,11 +33,10 @@ jobs:
           flake8 .
 
       - name: Type check with mypy
+        if: "!contains(matrix.python-version, 'pypy')"
         run: |
-          # Pin mypy to <1.19 due to librt dependency in 1.19+
-          # which is not available on PyPy 3.9
-          pip install "mypy<1.19" "numpy" "pillow" "requests" "types-requests"
-          mypy pyvips/__init__.pyi --no-error-summary
+          pip install mypy numpy pillow requests types-requests
+          mypy pyvips/*.pyi --no-error-summary
           mypy examples/*.py --no-error-summary
 
       - name: Install tox and any other packages
