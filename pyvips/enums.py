@@ -58,8 +58,6 @@ for example.
 The Cairo docs have [a nice explanation of all the blend
 modes](https://www.cairographics.org/operators).
 
-The non-separable modes are not implemented.
-
 Attributes:
 
     CLEAR (str): where the second object is drawn, the first is removed
@@ -112,6 +110,14 @@ Attributes:
 
     EXCLUSION (str): somewhat like DIFFERENCE, but lower-contrast
 
+    HUE (str): hue of the second, saturation and luminosity of the first
+
+    SATURATION (str): saturation of the second, hue and luminosity of the first
+
+    COLOUR (str): hue and saturation of the second, luminosity of the first
+
+    LUMINOSITY (str): luminosity of the second, hue and saturation of the first
+
     """
 
     CLEAR = 'clear'
@@ -139,6 +145,10 @@ Attributes:
     SOFT_LIGHT = 'soft-light'
     DIFFERENCE = 'difference'
     EXCLUSION = 'exclusion'
+    HUE = 'hue'
+    SATURATION = 'saturation'
+    COLOUR = 'colour'
+    LUMINOSITY = 'luminosity'
 
 
 class Coding(object):
@@ -294,9 +304,9 @@ Attributes:
 
     EOR (str): `^`
 
-    LSHIFT (str): `>>`
+    LSHIFT (str): `<<`
 
-    RSHIFT (str): `<<`
+    RSHIFT (str): `>>`
 
     """
 
@@ -672,6 +682,8 @@ Attributes:
 
     ALL (str): everything is interesting
 
+    SPECIFIC (str): use the specified point of interest
+
     """
 
     NONE = 'none'
@@ -681,6 +693,7 @@ Attributes:
     LOW = 'low'
     HIGH = 'high'
     ALL = 'all'
+    SPECIFIC = 'specific'
 
 
 class Angle(object):
@@ -1293,6 +1306,76 @@ Attributes:
     LANCZOS3 = 'lanczos3'
     MKS2013 = 'mks2013'
     MKS2021 = 'mks2021'
+
+
+class CICPColourPrimaries(object):
+    """CICPColourPrimaries.
+
+Attributes:
+
+    """
+
+    BT709 = 'bt709'
+    UNSPECIFIED = 'unspecified'
+    BT470M = 'bt470m'
+    BT470BG = 'bt470bg'
+    BT601 = 'bt601'
+    SMPTE240 = 'smpte240'
+    GENERIC_FILM = 'generic-film'
+    BT2020 = 'bt2020'
+    SMPTE428 = 'smpte428'
+    DCI_P3 = 'dci-p3'
+    DISPLAY_P3 = 'display-p3'
+    EBU3213 = 'ebu3213'
+
+
+class CICPTransferCharacteristics(object):
+    """CICPTransferCharacteristics.
+
+Attributes:
+
+    """
+
+    BT709 = 'bt709'
+    UNSPECIFIED = 'unspecified'
+    BT470M = 'bt470m'
+    BT470BG = 'bt470bg'
+    BT601 = 'bt601'
+    SMPTE240 = 'smpte240'
+    LINEAR = 'linear'
+    LOG_100 = 'log-100'
+    LOG_100_SQRT10 = 'log-100-sqrt10'
+    IEC61966 = 'iec61966'
+    BT1361 = 'bt1361'
+    SRGB = 'srgb'
+    BT2020_10BIT = 'bt2020-10bit'
+    BT2020_12BIT = 'bt2020-12bit'
+    PQ = 'pq'
+    SMPTE428 = 'smpte428'
+    HLG = 'hlg'
+
+
+class CICPMatrixCoefficients(object):
+    """CICPMatrixCoefficients.
+
+Attributes:
+
+    """
+
+    RGB = 'rgb'
+    BT709 = 'bt709'
+    UNSPECIFIED = 'unspecified'
+    FCC = 'fcc'
+    BT470BG = 'bt470bg'
+    BT601 = 'bt601'
+    SMPTE240 = 'smpte240'
+    YCGCO = 'ycgco'
+    BT2020_NCL = 'bt2020-ncl'
+    BT2020_CL = 'bt2020-cl'
+    SMPTE2085 = 'smpte2085'
+    CHROMA_NCL = 'chroma-ncl'
+    CHROMA_CL = 'chroma-cl'
+    ICTCP = 'ictcp'
 
 
 class PCS(object):
