@@ -99,7 +99,7 @@ def cdefs(features):
             GType gtype, const char* str);
         int vips_flags_from_nick (const char* domain,
             GType gtype, const char* nick);
-        const char *vips_enum_nick (GType gtype, int value);
+        const char* vips_enum_nick (GType gtype, int value);
 
         void g_value_set_boolean (GValue* value, int v_boolean);
         void g_value_set_int (GValue* value, int i);
@@ -108,13 +108,14 @@ def cdefs(features):
         void g_value_set_enum (GValue* value, int e);
         void g_value_set_flags (GValue* value, unsigned int f);
         void g_value_set_string (GValue* value, const char* str);
+        void g_value_set_pointer (GValue* value, void* v_pointer);
         void vips_value_set_ref_string (GValue* value, const char* str);
         void g_value_set_object (GValue* value, void* object);
         void vips_value_set_array_double (GValue* value,
             const double* array, int n );
         void vips_value_set_array_int (GValue* value,
             const int* array, int n );
-        void vips_value_set_array_image (GValue *value, int n);
+        void vips_value_set_array_image (GValue* value, int n);
 
         int g_value_get_boolean (const GValue* value);
         int g_value_get_int (GValue* value);
@@ -123,6 +124,7 @@ def cdefs(features):
         int g_value_get_enum (GValue* value);
         unsigned int g_value_get_flags (GValue* value);
         const char* g_value_get_string (GValue* value);
+        void* g_value_get_pointer (GValue* value);
         const char* vips_value_get_ref_string (const GValue* value,
             size_t* length);
         void* g_value_get_object (GValue* value);
@@ -143,14 +145,14 @@ def cdefs(features):
         } GTypeClass;
 
         typedef struct _GTypeInstance {
-            GTypeClass *g_class;
+            GTypeClass* g_class;
         } GTypeInstance;
 
         typedef struct _GObject {
             GTypeInstance g_type_instance;
 
             unsigned int ref_count;
-            GData *qdata;
+            GData* qdata;
         } GObject;
 
         typedef struct _GParamSpec {
@@ -173,8 +175,8 @@ def cdefs(features):
         typedef struct _GEnumValue {
             int value;
 
-            const char *value_name;
-            const char *value_nick;
+            const char* value_name;
+            const char* value_nick;
         } GEnumValue;
 
         typedef struct _GEnumClass {
@@ -183,14 +185,14 @@ def cdefs(features):
             int minimum;
             int maximum;
             unsigned int n_values;
-            GEnumValue *values;
+            GEnumValue* values;
         } GEnumClass;
 
         typedef struct _GFlagsValue {
             unsigned int value;
 
-            const char *value_name;
-            const char *value_nick;
+            const char* value_name;
+            const char* value_nick;
         } GFlagsValue;
 
         typedef struct _GFlagsClass {
@@ -198,7 +200,7 @@ def cdefs(features):
 
             unsigned int mask;
             unsigned int n_values;
-            GFlagsValue *values;
+            GFlagsValue* values;
         } GFlagsClass;
 
         void* g_type_class_ref (GType type);
@@ -208,14 +210,14 @@ def cdefs(features):
         void g_object_unref (void* object);
 
         void g_object_set_property (GObject* object,
-            const char *name, GValue* value);
+            const char* name, GValue* value);
         void g_object_get_property (GObject* object,
             const char* name, GValue* value);
 
         void vips_image_invalidate_all (VipsImage* image);
 
-        typedef void (*GCallback)(void);
-        typedef void (*GClosureNotify)(void* data, struct _GClosure *);
+        typedef void (*GCallback) (void);
+        typedef void (*GClosureNotify) (void* data, struct _GClosure* );
         long g_signal_connect_data (GObject* object,
             const char* detailed_signal,
             GCallback c_handler,
@@ -247,7 +249,7 @@ def cdefs(features):
         typedef ... VipsObjectClass;
 
         typedef struct _VipsArgument {
-            GParamSpec *pspec;
+            GParamSpec* pspec;
         } VipsArgument;
 
         typedef struct _VipsArgumentInstance {
@@ -271,14 +273,14 @@ def cdefs(features):
         typedef struct _VipsArgumentClass {
             VipsArgument parent;
 
-            VipsObjectClass *object_class;
+            VipsObjectClass* object_class;
             VipsArgumentFlags flags;
             int priority;
             unsigned int offset;
         } VipsArgumentClass;
 
         int vips_object_get_argument (VipsObject* object,
-            const char *name, GParamSpec** pspec,
+            const char* name, GParamSpec** pspec,
             VipsArgumentClass** argument_class,
             VipsArgumentInstance** argument_instance);
 
@@ -365,7 +367,7 @@ def cdefs(features):
     # vips_value_set_blob_free in a backwards compatible way
     if not features['api']:
         code += '''
-            typedef void (*FreeFn)(void* a);
+            typedef void (*FreeFn) (void* a);
             void vips_value_set_blob (GValue* value,
                 FreeFn free_fn, void* data, size_t length);
         '''
@@ -443,7 +445,7 @@ def cdefs(features):
             extern "Python" void _marshal_finish (VipsTarget*,
                 void*);
 
-            const char* vips_foreign_find_load_source (VipsSource *source);
+            const char* vips_foreign_find_load_source (VipsSource* source);
             const char* vips_foreign_find_save_target (const char* suffix);
 
         '''
@@ -454,14 +456,21 @@ def cdefs(features):
                 void*);
 
             void vips_block_untrusted_set (int state);
-            void vips_operation_block_set (const char *name, int state);
+            void vips_operation_block_set (const char* name, int state);
 
         '''
 
     if _at_least(features, 8, 18):
         code += '''
-            VipsImage *vips_image_get_gainmap(VipsImage *image);
+            VipsImage* vips_image_get_gainmap(VipsImage* image);
 
+        '''
+
+    if _at_least(features, 8, 19):
+        code += '''
+            typedef unsigned char VipsPel;
+            typedef void (*VipsDrawPoint) (VipsImage* image, VipsPel* ink,
+                int x, int y, void* client);
         '''
 
     # we must only define these in API mode ... in ABI mode we need to call

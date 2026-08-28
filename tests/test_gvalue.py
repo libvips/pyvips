@@ -78,6 +78,14 @@ class TestGValue:
         value = gv.get()
         assert value == 'banana'
 
+    def test_pointer(self):
+        pointer = pyvips.ffi.new_handle(42)
+        gv = pyvips.GValue()
+        gv.set_type(pyvips.GValue.gpointer_type)
+        gv.set(pointer)
+        value = gv.get()
+        assert pyvips.ffi.from_handle(value) == 42
+
     def test_array_int(self):
         gv = pyvips.GValue()
         gv.set_type(pyvips.GValue.array_int_type)
