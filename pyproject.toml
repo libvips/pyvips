@@ -18,7 +18,7 @@ readme = "README.rst"
 keywords = [
     "image processing",
 ]
-license = "MIT"
+license = {text = "MIT"}
 requires-python = ">=3.7"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
