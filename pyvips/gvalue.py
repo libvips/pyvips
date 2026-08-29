@@ -31,6 +31,7 @@ class GValue(object):
     guint64_type = type_from_name('guint64')
     gdouble_type = type_from_name('gdouble')
     gstr_type = type_from_name('gchararray')
+    gpointer_type = type_from_name('gpointer')
     genum_type = type_from_name('GEnum')
     gflags_type = type_from_name('GFlags')
     gobject_type = type_from_name('GObject')
@@ -57,6 +58,7 @@ class GValue(object):
         guint64_type: 'int',
         gdouble_type: 'float',
         gstr_type: 'str',
+        gpointer_type: 'ffi.CData',
         refstr_type: 'str',
         genum_type: 'str',
         gflags_type: 'int',
@@ -188,6 +190,8 @@ class GValue(object):
                                           GValue.to_flag(gtype, value))
         elif gtype == GValue.gstr_type:
             gobject_lib.g_value_set_string(self.gvalue, _to_bytes(value))
+        elif gtype == GValue.gpointer_type:
+            gobject_lib.g_value_set_pointer(self.gvalue, value)
         elif gtype == GValue.refstr_type:
             vips_lib.vips_value_set_ref_string(self.gvalue, _to_bytes(value))
         elif fundamental == GValue.gobject_type:
@@ -266,6 +270,8 @@ class GValue(object):
 
             if pointer != ffi.NULL:
                 result = _to_string(pointer)
+        elif gtype == GValue.gpointer_type:
+            result = gobject_lib.g_value_get_pointer(self.gvalue)
         elif gtype == GValue.refstr_type:
             psize = ffi.new('size_t *')
             pointer = vips_lib.vips_value_get_ref_string(self.gvalue, psize)

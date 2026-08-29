@@ -13,6 +13,7 @@ class GValue(object):
     guint64_type: ClassVar[int]
     gdouble_type: ClassVar[int]
     gstr_type: ClassVar[int]
+    gpointer_type: ClassVar[int]
     genum_type: ClassVar[int]
     gflags_type: ClassVar[int]
     gobject_type: ClassVar[int]
