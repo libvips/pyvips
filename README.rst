@@ -85,8 +85,8 @@ is missing features like PDF load and OpenSlide support.
 If your platform is unsupported or the pre-built binary is unsuitable, you
 can install libvips separately instead.
 
-Local installation
-------------------
+Installation with your own libvips binary
+-----------------------------------------
 
 You need the libvips shared library on your library search path, version 8.2
 or later, though at least version 8.9 is required for all features to work.

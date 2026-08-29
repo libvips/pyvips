@@ -1,4 +1,4 @@
-## Version 3.2.0 (released TBA)
+## Version 3.2.0 (released 29 Aug 2026)
 
 - add comprehensive type hints for all pyvips operations via generated 
   stubs [JoshCLWren]
