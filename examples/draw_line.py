@@ -16,4 +16,5 @@ cb = ffi.callback('VipsDrawPoint', custom_draw)
 client = ffi.new_handle(42)
 
 im = pyvips.Image.black(100, 100)
-im = im.draw_line([100], 0, 0, 100, 0, draw_point=cb, client=client)
+im = im.draw_line([100], 0, 0, 100, 0,
+                  draw_point=cb, client=client)  # type: ignore[call-arg]
