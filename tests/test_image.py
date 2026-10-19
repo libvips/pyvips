@@ -309,6 +309,43 @@ class TestImage:
         t = torch.from_numpy(np.asarray(im))
         assert t[2, 2] == 1.
 
+    @pytest.mark.parametrize('interpretation', [None, 'auto', 'lab'])
+    @pytest.mark.parametrize('dtype,shape', [
+        ('uint8', (3, 4, 3)),
+        ('uint16', (3, 4, 3)),
+        ('float32', (3, 4, 3)),
+        ('float32', (3, 4)),
+    ])
+    def test_from_array_only_interpretation(
+            self, interpretation, dtype, shape):
+        np = pytest.importorskip('numpy')
+        array = np.arange(np.prod(shape), dtype=dtype).reshape(shape)
+
+        class ArrayOnly:
+            def __array__(self):
+                return array
+
+        expected = pyvips.Image.new_from_array(
+            array, interpretation=interpretation)
+        image = pyvips.Image.new_from_array(
+            ArrayOnly(), interpretation=interpretation)
+
+        assert image.interpretation == expected.interpretation
+        np.testing.assert_array_equal(image.numpy(), array)
+
+    @pytest.mark.parametrize('interpretation', [None, 'auto', 'lab'])
+    def test_from_torch_interpretation(self, interpretation):
+        np = pytest.importorskip('numpy')
+        torch = pytest.importorskip('torch')
+        tensor = torch.arange(36, dtype=torch.float32).reshape(3, 4, 3)
+        expected = pyvips.Image.new_from_array(
+            tensor.numpy(), interpretation=interpretation)
+        image = pyvips.Image.new_from_array(
+            tensor, interpretation=interpretation)
+
+        assert image.interpretation == expected.interpretation
+        np.testing.assert_array_equal(image.numpy(), tensor.numpy())
+
     def test_from_numpy(self):
         try:
             import numpy as np
