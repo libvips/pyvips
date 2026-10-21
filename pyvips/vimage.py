@@ -546,7 +546,9 @@ class Image(pyvips.VipsObject, metaclass=ImageType):
 
         elif hasattr(obj, '__array__'):
             # make it into something that *does* define __array_interface__
-            return cls.new_from_array(obj.__array__())
+            return cls \
+                .new_from_array(obj.__array__(), interpretation=interpretation)
+
         else:
             raise TypeError('does not define __array_interface__ '
                             'or __array__')

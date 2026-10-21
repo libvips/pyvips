@@ -1,3 +1,7 @@
+## master
+
+- new_from_array() propagate interpretation into array interfaces [BSAIPF]
+
 ## Version 3.2.0 (released 29 Aug 2026)
 
 - add comprehensive type hints for all pyvips operations via generated 
