@@ -284,6 +284,7 @@ To regenerate after libvips updates:
 """
 
 from pathlib import Path
+from pyvips import ffi
 from types import TracebackType
 from typing import Any, Protocol, TypeAlias
 
